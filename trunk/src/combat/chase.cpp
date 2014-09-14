@@ -597,7 +597,16 @@ void evasivedrive()
       {
          int v=id_getcar(activesquad->squad[p]->carid);
          yourrolls.push_back(driveskill(*activesquad->squad[p],*(vehicle[v]))+LCSrandom(DRIVING_RANDOMNESS));
-         activesquad->squad[p]->train(SKILL_DRIVING,LCSrandom(20));
+         
+         switch (fieldskillrate)
+         {
+            case FIELDSKILLRATE_FAST:
+               activesquad->squad[p]->train(SKILL_DRIVING,LCSrandom(20));break;
+            case FIELDSKILLRATE_CLASSIC:
+               activesquad->squad[p]->train(SKILL_DRIVING,LCSrandom(20));break;
+            case FIELDSKILLRATE_HARD:
+               activesquad->squad[p]->train(SKILL_DRIVING,LCSrandom(MAX(1, 20 - activesquad->squad[p]->get_skill(SKILL_DRIVING))));break;
+         }
          if(yourworst>yourrolls.back()) yourworst=yourrolls.back();
       }
    }

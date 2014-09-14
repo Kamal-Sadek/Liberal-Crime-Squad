@@ -72,12 +72,13 @@
 // Allow experimental, incomplete Stalinist Comrade Squad mode to be chosen for new games
 #define ALLOWSTALIN
 
-#ifndef PACKAGE_VERSION
-#define PACKAGE_VERSION "4.07.5 beta"
-#endif
+//PACKAGE_VERSION defined in config.h
+//#ifndef PACKAGE_VERSION
+//#define PACKAGE_VERSION "4.07.6 beta"
+//#endif
 
-const int version=40705;
-const int lowestloadversion=40705;
+const int version=40706;
+const int lowestloadversion=40706;
 const int lowestloadscoreversion=31203;
 
 #include "common.h" /* include this prior to checking if WIN32 is defined */
@@ -582,6 +583,12 @@ enum WinConditions
 {
 	WINCONDITION_ELITE,
 	WINCONDITION_EASY
+};
+enum FieldSkillRates
+{
+	FIELDSKILLRATE_FAST,
+	FIELDSKILLRATE_CLASSIC,
+	FIELDSKILLRATE_HARD
 };
 
 enum Views

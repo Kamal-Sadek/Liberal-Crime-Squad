@@ -208,6 +208,53 @@ void setup_newgame()
       }
       break;
    }
+   
+   
+   clear();
+   while(true)
+   {
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(4,6);
+      addstr("New Game of Liberal Crime Squad: Field Learning (affects Security, Stealth, Disguise and Driving)");
+      move(7,0);
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      if(fieldskillrate==FIELDSKILLRATE_FAST)
+         addstr("[X]");
+      else addstr("[ ]");
+      addstr(" A - Fast skills - Grinding is Conservative!");
+      move(10,0);
+      if(fieldskillrate==FIELDSKILLRATE_CLASSIC)
+         addstr("[X]");
+      else addstr("[ ]");
+      addstr(" B - Classic - Excellence requires practice.");
+      move(13,0);
+      if(fieldskillrate==FIELDSKILLRATE_HARD)
+         addstr("[X]");
+      else addstr("[ ]");
+      addstr(" C - Hard Mode - Learn from the best, or face arrest!");
+      move(15,4);
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      addstr("Press any other key to continue...");
+
+      int c=getkey();
+
+      if(c=='a')
+      {
+         fieldskillrate=FIELDSKILLRATE_FAST;
+         continue;
+      }
+      if(c=='b')
+      {
+         fieldskillrate=FIELDSKILLRATE_CLASSIC;
+         continue;
+      }
+      if(c=='c')
+      {
+         fieldskillrate=FIELDSKILLRATE_HARD;
+         continue;
+      }
+      break;
+   }
 }
 
 enum recruits

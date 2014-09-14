@@ -1644,7 +1644,10 @@ void mode_site()
                      {
                         if(activesquad->squad[i])
                         {
-                           if(!(activesquad->squad[i]->skill_check(SKILL_STEALTH,DIFFICULTY_HARD)))
+                           int roll = activesquad->squad[i]->skill_roll(SKILL_STEALTH);
+                           if(roll + 1 == DIFFICULTY_HARD && fieldskillrate == FIELDSKILLRATE_HARD)
+                              activesquad->squad[i]->train(SKILL_STEALTH, 10);
+                           if(roll < DIFFICULTY_HARD)
                            {
                               breakout=true;
                               break;
@@ -1662,7 +1665,15 @@ void mode_site()
                   {
                      if(activesquad->squad[i]!=NULL)
                      {
-                        activesquad->squad[i]->train(SKILL_STEALTH,10);
+                        switch (fieldskillrate)
+                        {
+                           case FIELDSKILLRATE_FAST:
+                              activesquad->squad[i]->train(SKILL_STEALTH, 40);break;
+                           case FIELDSKILLRATE_CLASSIC:
+                              activesquad->squad[i]->train(SKILL_STEALTH, 10);break;
+                           case FIELDSKILLRATE_HARD:
+                              activesquad->squad[i]->train(SKILL_STEALTH, 0);break;
+                        }
                      }
                   }
                   clearmessagearea();

@@ -2574,7 +2574,15 @@ bool stealcar(Creature &cr,char &clearformess)
          {
             if(cr.skill_check(SKILL_SECURITY,DIFFICULTY_AVERAGE))
             {
-               cr.train(SKILL_SECURITY,MAX(5-cr.get_skill(SKILL_SECURITY),0));
+               switch (fieldskillrate)
+               {
+                  case FIELDSKILLRATE_FAST:
+                     cr.train(SKILL_SECURITY, 25);break;
+                  case FIELDSKILLRATE_CLASSIC:
+                     cr.train(SKILL_SECURITY, MAX(5 - cr.get_skill(SKILL_SECURITY), 0));break;
+                  case FIELDSKILLRATE_HARD:
+                     cr.train(SKILL_SECURITY, 0);break;
+               }
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(16,0);
                addstr(cr.name, gamelog);
@@ -2748,7 +2756,15 @@ bool stealcar(Creature &cr,char &clearformess)
          {
             if(cr.skill_check(SKILL_SECURITY,DIFFICULTY_CHALLENGING))
             {
-               cr.train(SKILL_SECURITY,MAX(10-cr.get_skill(SKILL_SECURITY),0));
+               switch (fieldskillrate)
+               {
+                  case FIELDSKILLRATE_FAST:
+                     cr.train(SKILL_SECURITY, 50);break;
+                  case FIELDSKILLRATE_CLASSIC:
+                     cr.train(SKILL_SECURITY, MAX(10 - cr.get_skill(SKILL_SECURITY), 0));break;
+                  case FIELDSKILLRATE_HARD:
+                     cr.train(SKILL_SECURITY, 0);break;
+               }
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(y++,0);
                addstr(cr.name, gamelog);

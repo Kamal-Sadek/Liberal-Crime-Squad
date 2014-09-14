@@ -279,7 +279,17 @@ void advanceday(char &clearformess,char canseethings)
          if(squad[sq]->activity.arg!=squad[sq]->squad[0]->base)
             for(int i=0;i<6;i++)
                if(squad[sq]->squad[i]&&squad[sq]->squad[i]->carid!=-1&&squad[sq]->squad[i]->is_driver)
-                  squad[sq]->squad[i]->train(SKILL_DRIVING,5);
+               {
+                  switch (fieldskillrate)
+                  {
+                     case FIELDSKILLRATE_FAST:
+                        squad[sq]->squad[i]->train(SKILL_DRIVING,5);break;
+                     case FIELDSKILLRATE_CLASSIC:
+                        squad[sq]->squad[i]->train(SKILL_DRIVING,5);break;
+                     case FIELDSKILLRATE_HARD:
+                        squad[sq]->squad[i]->train(SKILL_DRIVING, MAX(0, 5 - squad[sq]->squad[i]->get_skill(SKILL_DRIVING)));break;
+                  }
+               }
 
          //GO PLACES
          // Identify the "travel location" -- top level in multi-city play,

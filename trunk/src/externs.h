@@ -96,6 +96,7 @@ extern char loaded;
 
 extern short mode;
 extern short wincondition;
+extern short fieldskillrate;
 
 extern bool notermlimit;
 extern bool nocourtpurge;
