@@ -117,7 +117,7 @@ void mode_site(short loc)
    }
    else
    {
-      music.play(MUSIC_HEAVYCOMBAT);
+      music.play(MUSIC_DEFENSE);
       sitealarm=1;
 
       location[loc]->siege.attacktime=0;
@@ -286,6 +286,7 @@ void mode_site()
 
       if(location[cursite]->siege.siege)
       {
+         music.play(MUSIC_DEFENSE);
          set_color(COLOR_RED,COLOR_BLACK,1);
          move(0,0);
          addstr(location[cursite]->getname(-1,true));
@@ -497,6 +498,27 @@ void mode_site()
       }
       else
       {
+         //DESTROY ALL CARS BROUGHT ALONG WITH PARTY
+         if(!location[cursite]->siege.siege)
+         {
+            for(int p=0;p<6;p++)
+            {
+               if(!activesquad->squad[p]) continue;
+               if(activesquad->squad[p]->carid!=-1)
+                  delete_and_remove(vehicle,id_getcar(activesquad->squad[p]->carid));
+            }
+         }
+
+         for(int p=0;p<6;p++)
+         {
+            if(!activesquad->squad[p]) continue;
+
+            activesquad->squad[p]->die();
+            activesquad->squad[p]->location=-1;
+            activesquad->squad[p]=NULL;
+         }
+         endcheck(-2); // play the right music in case we're dead
+
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(9,1);
          addstr("C - Reflect on your Conservative ineptitude");
@@ -562,26 +584,6 @@ void mode_site()
 
       if(partyalive==0&&c=='c')
       {
-         //DESTROY ALL CARS BROUGHT ALONG WITH PARTY
-         if(!location[cursite]->siege.siege)
-         {
-            for(int p=0;p<6;p++)
-            {
-               if(!activesquad->squad[p]) continue;
-               if(activesquad->squad[p]->carid!=-1)
-                  delete_and_remove(vehicle,id_getcar(activesquad->squad[p]->carid));
-            }
-         }
-
-         for(int p=0;p<6;p++)
-         {
-            if(!activesquad->squad[p]) continue;
-
-            activesquad->squad[p]->die();
-            activesquad->squad[p]->location=-1;
-            activesquad->squad[p]=NULL;
-         }
-
          //END OF GAME CHECK
          if(!endcheck())
          {
@@ -984,7 +986,8 @@ void mode_site()
                               set_color(COLOR_BLACK,COLOR_BLACK,1);
                            else set_color(COLOR_YELLOW,COLOR_BLACK,0);
 
-                           if(levelmap[x+1][y][locz].flag & SITEBLOCK_BLOCK)
+                           if((levelmap[x+1][y][locz].flag & SITEBLOCK_BLOCK)||
+                              (levelmap[x-1][y][locz].flag & SITEBLOCK_BLOCK))
                               addch(CH_BOX_DRAWINGS_DOUBLE_HORIZONTAL);
                            else addch(CH_BOX_DRAWINGS_DOUBLE_VERTICAL);
                         }
@@ -1879,6 +1882,7 @@ void mode_site()
                !location[cursite]->siege.siege &&
                location[cursite]->renting==RENTING_CCS)
             {
+               music.play(MUSIC_CONQUER);
                //DEAL WITH PRISONERS AND STOP BLEEDING
                for(p=0;p<6;p++)
                {
@@ -2164,6 +2168,7 @@ void mode_site()
                   location[cursite]->siege.tanks==0&&
                   location[cursite]->siege.siege)
                {
+                  music.play(MUSIC_CONQUER);
                   if(location[cursite]->siege.underattack)sitestory->type=NEWSSTORY_SQUAD_DEFENDED;
                   else sitestory->type=NEWSSTORY_SQUAD_BROKESIEGE;
 

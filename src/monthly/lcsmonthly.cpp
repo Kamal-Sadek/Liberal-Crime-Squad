@@ -33,6 +33,7 @@ This file is part of Liberal Crime Squad.                                       
 /* monthly - reports the guardian's power to the player */
 void guardianupdate(char size, char power)
 {
+   music.play(MUSIC_NEWSPAPER);
    erase();
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -159,6 +160,7 @@ int choosespecialedition(char &clearformess)
    //PICK ONE
    while(true)
    {
+      music.play(MUSIC_NEWSPAPER);
       erase();
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -262,6 +264,7 @@ int choosespecialedition(char &clearformess)
 /* monthly - guardian - prints liberal guardian special editions */
 void printnews(short li,short newspaper)
 {
+   music.play(MUSIC_NEWSPAPER);
    if(law[LAW_FREESPEECH]==-2)offended_firemen=1;
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);

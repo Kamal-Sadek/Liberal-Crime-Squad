@@ -277,6 +277,7 @@ void passmonth(char &clearformess,char canseethings)
    #if defined(SHOWMECHANICS) || defined(SHOWWAIT)
    if(canseethings)
    {
+      music.play(MUSIC_ELECTIONS);
       erase();
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       mvaddstr(0,23,"LCS MONTHLY INTELLIGENCE REPORT");
@@ -351,6 +352,7 @@ void passmonth(char &clearformess,char canseethings)
    //CONTROL LONG DISBANDS
    if(disbanding&&year-disbandtime>=50)
    {
+      music.play(MUSIC_DEFEAT);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
 
       erase();

@@ -44,6 +44,7 @@ void youattack()
       if(activesquad->squad[p]==NULL) continue;
       if(!activesquad->squad[p]->alive) continue;
 
+      vector<int> super_enemies;
       vector<int> dangerous_enemies;
       vector<int> enemies;
       vector<int> non_enemies;
@@ -54,8 +55,22 @@ void youattack()
          {
             if(encounter[e].enemy())
             {
-               if(encounter[e].is_armed() &&
-                  encounter[e].blood>=40)
+               if(encounter[e].animalgloss==ANIMALGLOSS_TANK&&
+                  encounter[e].stunned==0)
+                  super_enemies.push_back(e);
+               else if((encounter[e].is_armed()||
+                       (encounter[e].type==CREATURE_COP&&encounter[e].align==ALIGN_MODERATE)||
+                        encounter[e].type==CREATURE_SCIENTIST_EMINENT||
+                        encounter[e].type==CREATURE_JUDGE_LIBERAL||
+                        encounter[e].type==CREATURE_JUDGE_CONSERVATIVE||
+                        encounter[e].type==CREATURE_CORPORATE_CEO||
+                        encounter[e].type==CREATURE_POLITICIAN||
+                        encounter[e].type==CREATURE_RADIOPERSONALITY||
+                        encounter[e].type==CREATURE_NEWSANCHOR||
+                        encounter[e].type==CREATURE_MILITARYOFFICER||
+                        encounter[e].specialattack!=-1)&&
+                        encounter[e].blood>=40&&
+                        encounter[e].stunned==0)
                   dangerous_enemies.push_back(e);
                else enemies.push_back(e);
             }
@@ -63,14 +78,30 @@ void youattack()
          }
       }
 
-      if(!(len(dangerous_enemies)+len(enemies))) return;
+      if(!(len(super_enemies)+len(dangerous_enemies)+len(enemies))) return;
 
       int target;
-      // If there are "dangerous enemies", shoot at one of them
-      if(len(dangerous_enemies))
+      // If there are "super enemies", shoot at one of them unless we're using a persuasion-based attack
+      if(len(super_enemies)&&
+       ((activesquad->squad[p]->type!=CREATURE_SCIENTIST_EMINENT&&
+         activesquad->squad[p]->type!=CREATURE_JUDGE_LIBERAL&&
+         activesquad->squad[p]->type!=CREATURE_JUDGE_CONSERVATIVE&&
+         activesquad->squad[p]->type!=CREATURE_CORPORATE_CEO&&
+         activesquad->squad[p]->type!=CREATURE_POLITICIAN&&
+         activesquad->squad[p]->type!=CREATURE_RADIOPERSONALITY&&
+         activesquad->squad[p]->type!=CREATURE_NEWSANCHOR&&
+         activesquad->squad[p]->type!=CREATURE_MILITARYOFFICER&&
+        !activesquad->squad[p]->get_weapon().has_musical_attack())||
+       (!activesquad->squad[p]->get_weapon().has_musical_attack()&&
+         activesquad->squad[p]->is_armed())))
+         target=pickrandom(super_enemies);
+      // Else, if there are "dangerous enemies", shoot at one of them
+      else if(len(dangerous_enemies))
          target=pickrandom(dangerous_enemies);
-      // Else, shoot at one of the other enemies
-      else target=pickrandom(enemies);
+      // Else, if there are regular enemies, shoot at one of them
+      else if(len(enemies)) target=pickrandom(enemies);
+      // Else, we skipped a "super enemy" because it we're using a persuasion-based attack but it's the only enemy left so we have to pick it
+      else target=pickrandom(super_enemies);
 
       char mistake=0;
       // 1% chance to accidentally hit bystanders

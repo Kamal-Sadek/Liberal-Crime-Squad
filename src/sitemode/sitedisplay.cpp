@@ -395,6 +395,12 @@ void printwall(int x, int y, int z, int px, int py)
             if(dir==WALL_RIGHT||dir==WALL_LEFT)
                for(int i=0;i<3;i++) mvaddstr(y++,x,"º");
             else for(int i=0;i<5;i++) mvaddstr(y,x++,"Í");
+
+            // Corners are possible if walls nearby are blown away, although this is rare
+            if((dir==WALL_LEFT&&visible[WALL_UP])||(dir==WALL_UP&&visible[WALL_LEFT])) mvaddstr(py,px,"É");
+            if((dir==WALL_RIGHT&&visible[WALL_UP])||(dir==WALL_UP&&visible[WALL_RIGHT])) mvaddstr(py,px+4,"»");
+            if((dir==WALL_LEFT&&visible[WALL_DOWN])||(dir==WALL_DOWN&&visible[WALL_LEFT])) mvaddstr(py+2,px,"È");
+            if((dir==WALL_RIGHT&&visible[WALL_DOWN])||(dir==WALL_DOWN&&visible[WALL_RIGHT])) mvaddstr(py+2,px+4,"¼");
          }
       }
    }

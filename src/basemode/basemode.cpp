@@ -301,9 +301,11 @@ void mode_base()
       if(sieged)
       {
          underattack=siege->underattack;
-         if(!disbanding) music.play(MUSIC_SIEGE);
+         if(!forcewait) music.play(MUSIC_SIEGE);
+         else music.play(MUSIC_DISBANDED);
       }
-      else if(!disbanding) music.play(MUSIC_BASEMODE);
+      else if(!forcewait) music.play(MUSIC_BASEMODE);
+      else music.play(MUSIC_DISBANDED);
 
       char haveflag=0;
       if(loc) haveflag=loc->haveflag;

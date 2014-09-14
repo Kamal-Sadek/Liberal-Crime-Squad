@@ -26,6 +26,40 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
+// Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
+// (The same character set used by Liberal Crime Squad when it is running)
+// Certain special characters won't display correctly unless your text editor is
+// set to use that character set, such as this e with an accent: ‚
+
+// In Windows Notepad with the Terminal font, OEM/DOS encoding it should work fine.
+// You can set this in Notepad by going to Format->Font and choosing the Terminal font,
+// then choosing OEM/DOS in the Script dropdown box.
+
+// In Notepad++ go to the Encoding menu, Character sets, Western European, OEM-US... easy!
+
+// In Code::Blocks's editor go to Settings->Editor->the Other Settings tab and
+// then pick WINDOWS-437 from the dropdown box and then choose the radio button
+// to make this the default encoding and disable auto-detection of the encoding.
+// Then close the file and reopen it (since Code::Blocks detects the encoding
+// when it opens the file and it can't be changed after that; what we changed was
+// how it detects encoding for files it opens in the future, not files already open).
+
+// In Microsoft Visual C++, right-click the file in the Solution Explorer,
+// select "Open With...", choose "C++ Source Code Editor (with encoding)",
+// then choose "OEM United States - Codepage 437".
+
+// In MS-DOS Editor (included with Windows as EDIT.COM in your system32 directory),
+// the codepage will be correct already since it's running in a console window just
+// like Liberal Crime Squad. Well OK, the encoding might be wrong, but then it's wrong
+// in Liberal Crime Squad TOO, and to fix it, go to Control Panel, Regional and Language Settings,
+// Advanced tab, and choose English (United States) from the dropdown box as the encoding
+// for non-Unicode applications, then press OK.
+
+// If you have a Linux or other UNIX-based system you are obviously smart enough
+// to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
+// your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
+// it out for yourself.
+
 #include <externs.h>
 
 /* TODO
@@ -236,6 +270,7 @@ void siegecheck(char canseethings)
 
             if(numpres>0)
             {
+               music.play(MUSIC_SIEGE);
                erase();
                set_color(COLOR_WHITE,COLOR_BLACK,1);
 
@@ -375,6 +410,7 @@ void siegecheck(char canseethings)
          else if(location[l]->siege.timeuntilcorps>0)location[l]->siege.timeuntilcorps--; // Corp raid countdown!
          else if(location[l]->siege.timeuntilcorps==0&&!location[l]->siege.siege&&offended_corps&&numpres>0)
          {
+            music.play(MUSIC_SIEGE);
             location[l]->siege.timeuntilcorps=-1;
             // Corps raid!
             erase();
@@ -435,6 +471,7 @@ void siegecheck(char canseethings)
             else if(location[l]->siege.timeuntilccs>0)location[l]->siege.timeuntilccs--; // CCS raid countdown!
             else if(location[l]->siege.timeuntilccs==0&&!location[l]->siege.siege&&numpres>0)
             {
+               music.play(MUSIC_SIEGE);
                location[l]->siege.timeuntilccs=-1;
                // CCS raid!
                erase();
@@ -581,6 +618,7 @@ void siegecheck(char canseethings)
          else if(location[l]->siege.timeuntilcia>0)location[l]->siege.timeuntilcia--; // CIA raid countdown!
          else if(location[l]->siege.timeuntilcia==0&&!location[l]->siege.siege&&offended_cia&&numpres>0)
          {
+            music.play(MUSIC_SIEGE);
             location[l]->siege.timeuntilcia=-1;
             // CIA raids!
             erase();
@@ -628,6 +666,7 @@ void siegecheck(char canseethings)
             //HICKS
          if(!location[l]->siege.siege&&offended_amradio&&attitude[VIEW_AMRADIO]<=35&&!LCSrandom(600)&&numpres>0)
          {
+            music.play(MUSIC_SIEGE);
             erase();
             set_color(COLOR_WHITE,COLOR_BLACK,1);
 
@@ -650,6 +689,7 @@ void siegecheck(char canseethings)
          }
          if(!location[l]->siege.siege&&offended_cablenews&&attitude[VIEW_CABLENEWS]<=35&&!LCSrandom(600)&&numpres>0)
          {
+            music.play(MUSIC_SIEGE);
             erase();
             set_color(COLOR_WHITE,COLOR_BLACK,1);
 
@@ -702,6 +742,7 @@ void siegecheck(char canseethings)
          } else if(location[l]->siege.timeuntilfiremen>0) location[l]->siege.timeuntilfiremen--;
          else if(law[LAW_FREESPEECH]==-2 && location[l]->siege.timeuntilfiremen==0 && !location[l]->siege.siege&&numpres>0)
          {
+            music.play(MUSIC_SIEGE);
             location[l]->siege.timeuntilfiremen=-1;
             // Firemen raid!
             erase();
@@ -1423,6 +1464,7 @@ void giveup()
    if(location[loc]->siege.siegetype==SIEGE_POLICE ||
       location[loc]->siege.siegetype==SIEGE_FIREMEN)
    {
+      music.play(MUSIC_SIEGE);
       int polsta=find_police_station(loc);
 
       //END SIEGE
@@ -1625,6 +1667,7 @@ void giveup()
       addstr(location[loc]->getname(), gamelog);
       addstr(" is slain.", gamelog);
       gamelog.newline();
+      if(!endcheck(-2)) music.play(MUSIC_SIEGE); // play correct music for if we lost the game or didn't lose it
 
       getkey();
 
@@ -1711,7 +1754,7 @@ char sally_forth_aux(int loc)
    }
 
    mode=GAMEMODE_CHASEFOOT;
-   music.play(MUSIC_FOOTCHASE);
+   music.play(MUSIC_DEFENSE);
    bool ranaway = false;
 
    while(true)
@@ -1768,6 +1811,7 @@ char sally_forth_aux(int loc)
       }
       else
       {
+         endcheck(-2); // play the right music in case we're dead
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(9,1);
          addstr("C - Reflect on your Conservative judgment.");
@@ -1848,6 +1892,7 @@ char sally_forth_aux(int loc)
             mode=GAMEMODE_BASE;
             if(ranaway)
             {
+               music.play(MUSIC_CONQUER);
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                clearmessagearea();
                move(16,1);
@@ -1861,6 +1906,7 @@ char sally_forth_aux(int loc)
             }
             else
             {
+               music.play(MUSIC_CONQUER);
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                clearmessagearea();
                move(16,1);
@@ -1883,6 +1929,7 @@ char sally_forth_aux(int loc)
 /* siege - prepares for exiting the siege to fight the attackers head on */
 void sally_forth()
 {  //GIVE INFO SCREEN
+   music.play(MUSIC_DEFENSE);
    erase();
    set_color(COLOR_RED,COLOR_BLACK,1);
    move(1,26);
@@ -1985,6 +2032,7 @@ void sally_forth()
 /* siege - prepares for entering site mode to fight the siege */
 void escape_engage()
 {
+   music.play(MUSIC_DEFENSE);
    //GIVE INFO SCREEN
    erase();
    set_color(COLOR_RED,COLOR_BLACK,1);
@@ -2108,6 +2156,7 @@ void escapesiege(char won)
    //TEXT IF DIDN'T WIN
    if(!won)
    {
+      music.play(MUSIC_CONQUER);
       //GIVE INFO SCREEN
       erase();
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
@@ -2204,6 +2253,7 @@ void escapesiege(char won)
 void conquertext()
 {
    //GIVE INFO SCREEN
+   music.play(MUSIC_CONQUER);
    erase();
    set_color(COLOR_GREEN,COLOR_BLACK,1);
    move(1,26);
@@ -2214,24 +2264,23 @@ void conquertext()
    {
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(3,16);
-      addstr("The Conservative automatons have been driven back -- for ", gamelog);
+      addstr("The Conservative automatons have been driven back ÄÄ for ", gamelog);
       move(4,11);
       addstr("the time being.  While they are regrouping, you might consider ", gamelog);
       move(5,11);
       addstr("abandoning this safe house for a safer location.", gamelog);
-      gamelog.nextMessage();
    }
    else
    {
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(3,16);
-      addstr("The Conservative automatons have been driven back. ", gamelog);
+      addstr("The Conservative automatons have been driven back.  ", gamelog);
       move(4,11);
       addstr("Unfortunately, you will never truly be safe from ", gamelog);
       move(5,11);
       addstr("this filth until the Liberal Agenda is realized.", gamelog);
-      gamelog.nextMessage();
    }
+   gamelog.nextMessage();
 
    move(7,19);
    addstr("Press C to Continue Liberally.");
@@ -2244,11 +2293,13 @@ void conquertext()
 /* siege - flavor text when you crush a CCS safe house */
 void conquertextccs()
 {
+   music.play(MUSIC_CONQUER);
    //GIVE INFO SCREEN
    erase();
    set_color(COLOR_GREEN,COLOR_BLACK,1);
    move(1,26);
-   addstr("* * * * *   VICTORY   * * * * *");
+   addstr("* * * * *   VICTORY   * * * * *", gamelog);
+   gamelog.newline();
 
    if(ccs_kills<3)
    {
@@ -2256,58 +2307,61 @@ void conquertextccs()
       move(3,16);
       if(ccs_siege_kills>10)
       {
-         addstr("Gunfire still ringing in their ears, the squad revels in");
+         addstr("Gunfire still ringing in their ears, the squad revels in ", gamelog);
          move(4,11);
-         addstr("their victory.  ");
+         addstr("their victory.  ", gamelog);
       }
       else
       {
-         addstr("The CCS Lieutenant lying dead at their feet, the squad");
+         addstr("The CCS Lieutenant lying dead at their feet, the squad ", gamelog);
          move(4,11);
          addstr("slips away.  ");
       }
-      addstr("The CCS Founder wasn't here, but for now, their");
+      addstr("The CCS Founder wasn't here, but for now, their ", gamelog);
       move(5,11);
-      addstr("power has been severely weakened.  Once the safehouse cools off,");
+      addstr("power has been severely weakened.  Once the safehouse cools off, ", gamelog);
       move(6,11);
-      addstr("this will make a fine base for future Liberal operations.");
+      addstr("this will make a fine base for future Liberal operations.", gamelog);
    }
    else
    {
       move(3,16);
       if(ccs_siege_kills>10)
       {
-         addstr("Gunfire still ringing in their ears, the squad revels in");
+         addstr("Gunfire still ringing in their ears, the squad revels in ", gamelog);
          move(4,11);
-         addstr("their final victory.  ");
+         addstr("their final victory.  ", gamelog);
 
          move(6,16);
-         addstr("As your Liberals pick through the remains of the safehouse,");
+         addstr("As your Liberals pick through the remains of the safehouse, ", gamelog);
          move(7,11);
-         addstr("it is increasingly clear that this was the CCS's last safehouse.");
+         addstr("it is increasingly clear that this was the CCS's last safehouse.", gamelog);
       }
       else
       {
-         addstr("The CCS Founder lying dead at their feet, the squad");
+         addstr("The CCS Founder lying dead at their feet, the squad ", gamelog);
          move(4,11);
-         addstr("slips away.  ");
+         addstr("slips away.  ", gamelog);
 
          move(6,16);
-         addstr("With its Founder killed in the heart of their own base,");
+         addstr("With its Founder killed in the heart of their own base, ", gamelog);
          move(7,11);
-         addstr("the last of the enemy's morale and confidence is shattered.");
+         addstr("the last of the enemy's morale and confidence is shattered.", gamelog);
       }
+      gamelog.newline();
 
       move(9,16);
-      addstr("The CCS has been completely destroyed.  Now wasn't there a");
+      addstr("The CCS has been completely destroyed.  Now wasn't there a ", gamelog);
       move(10,16);
-      addstr("revolution to attend to?");
+      addstr("revolution to attend to?", gamelog);
+      gamelog.newline();
 
       move(12,5);
-      addstr("+200 JUICE TO EVERYONE FOR ERADICATING THE CONSERVATIVE CRIME SQUAD");
+      addstr("+200 JUICE TO EVERYONE FOR ERADICATING THE CONSERVATIVE CRIME SQUAD", gamelog);
 
       for(int p=0;p<len(pool);p++) addjuice(*pool[p],200,1000);
    }
+   gamelog.nextMessage();
 
    move(15,19);
    addstr("Press C to Continue Liberally.");
@@ -2320,6 +2374,7 @@ void conquertextccs()
 /* siege - "you are wanted for _______ and other crimes..." */
 void statebrokenlaws(int loc)
 {
+   music.play(MUSIC_SIEGE);
    short breakercount[LAWFLAGNUM]={0};
    int typenum=0,criminalcount=0,kidnapped=0;
    char kname[100];
