@@ -503,7 +503,11 @@ void MusicClass::init()
    // alarmed.ogg or .mid - 5th Symphony, 1st Movement by Ludwig van Beethoven
    loadsong(MUSIC_ALARMED,"alarmed"); // load alarmed music
    // heavycombat.ogg or .mid - 6th Symphony "Pastorale", 4th Movement by Ludwig van Beethoven
-   loadsong(MUSIC_HEAVYCOMBAT,"heavycombat"); // load massive Conservative response or escaping/engaging a siege music
+   loadsong(MUSIC_HEAVYCOMBAT,"heavycombat"); // load massive Conservative response music
+   // defense.ogg or .mid - Danse Macabre by Camille Saint-Saens
+   loadsong(MUSIC_DEFENSE,"defense"); // load escaping/engaging a siege music
+   // conquer.ogg or .mid - Infernal Galop / Can-Can from Orpheus in the Underworld by Jacques Offenbach
+   loadsong(MUSIC_CONQUER,"conquer"); // load success in conquering a siege or safehouse or the CCS music
    // carchase.ogg or .mid - The William Tell Overture by Gioacchino Antonio Rossini
    loadsong(MUSIC_CARCHASE,"carchase"); // load car chase music
    // footchase.ogg or .mid - The Maple Leaf Rag by Scott Joplin

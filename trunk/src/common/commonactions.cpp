@@ -37,10 +37,16 @@ char endcheck(char cause)
        !(pool[p]->flag&CREATUREFLAG_SLEEPER&&pool[p]->hireid!=-1)) // Allow sleepers to lead LCS without losing
          dead=false;
 
-   if(dead)
-   {
+   if(dead) // Did we just lose the game?
+   {  // Game Over
+      if(cause==-2)
+      {  // just checking for game over ahead of time but going back to the code for more stuff
+         music.play(MUSIC_DEFEAT); // we were defeated, so play the right music
+         return true; // go back to code, it has more text to display before we REALLY end the game
+      }
+      // OK if we didn't return yet it's REALLY Game Over, right now, but we need to find out why
       if(cause==-1)
-      {
+      {  // got killed, possibly in a siege but maybe not, find out the reason we lost
          if(location[cursite]->siege.siege)
          {
             switch(location[cursite]->siege.siegetype)
@@ -55,15 +61,15 @@ char endcheck(char cause)
          }
          else savehighscore(END_DEAD);
       }
-      else savehighscore(cause);
-
+      else savehighscore(cause); // the reason we lost was specified in the function call
+      // You just lost the game!
       reset();
       viewhighscores();
       end_game();
       return true;
    }
 
-   return false;
+   return false; // Hey, we're still alive! We get to keep playing!
 }
 
 /* common - tests if the person is a wanted criminal */

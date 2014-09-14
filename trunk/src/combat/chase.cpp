@@ -190,6 +190,19 @@ bool chasesequence()
       }
       else
       {
+         //DESTROY ALL CARS BROUGHT ALONG WITH PARTY
+         delete_and_clear(chaseseq.friendcar,vehicle);
+
+         for(p=0;p<6;p++)
+         {
+            if(activesquad->squad[p]==NULL) continue;
+
+            activesquad->squad[p]->die();
+            activesquad->squad[p]->location=-1;
+            activesquad->squad[p]=NULL;
+         }
+         endcheck(-2); // play the right music in case we're dead
+
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(9,1);
          addstr("C - Reflect on your lack of skill.");
@@ -202,18 +215,6 @@ bool chasesequence()
 
       if(partyalive==0&&c=='c')
       {
-         //DESTROY ALL CARS BROUGHT ALONG WITH PARTY
-         delete_and_clear(chaseseq.friendcar,vehicle);
-
-         for(p=0;p<6;p++)
-         {
-            if(activesquad->squad[p]==NULL) continue;
-
-            activesquad->squad[p]->die();
-            activesquad->squad[p]->location=-1;
-            activesquad->squad[p]=NULL;
-         }
-
          if(!endcheck())
          {
             mode=GAMEMODE_BASE;
@@ -455,6 +456,19 @@ bool footchase()
       }
       else
       {
+         //DESTROY ALL CARS BROUGHT ALONG WITH PARTY
+         delete_and_clear(chaseseq.friendcar,vehicle);
+
+         for(p=0;p<6;p++)
+         {
+            if(activesquad->squad[p]==NULL)continue;
+
+            activesquad->squad[p]->die();
+            activesquad->squad[p]->location=-1;
+            activesquad->squad[p]=NULL;
+         }
+         endcheck(-2); // play the right music in case we're dead
+
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(9,1);
          addstr("C - Reflect on your lack of skill.");
@@ -471,18 +485,6 @@ bool footchase()
 
       if(partyalive==0&&c=='c')
       {
-         //DESTROY ALL CARS BROUGHT ALONG WITH PARTY
-         delete_and_clear(chaseseq.friendcar,vehicle);
-
-         for(p=0;p<6;p++)
-         {
-            if(activesquad->squad[p]==NULL)continue;
-
-            activesquad->squad[p]->die();
-            activesquad->squad[p]->location=-1;
-            activesquad->squad[p]=NULL;
-         }
-
          if(!endcheck())
          {
             mode=GAMEMODE_BASE;

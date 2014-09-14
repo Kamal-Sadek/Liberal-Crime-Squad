@@ -493,6 +493,7 @@ void makearmor(Creature &cr,char &clearformess)
 /* search for polls */
 void survey(Creature *cr)
 {
+   music.play(MUSIC_ELECTIONS);
    static const char SURVEY_PAGE_SIZE=14;
 
    int v,creatureskill=cr->skill_roll(SKILL_COMPUTERS);

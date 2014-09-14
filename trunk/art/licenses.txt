@@ -287,6 +287,31 @@ Since MIDI files are compositions and not performances and this composition is k
 this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
 See https://creativecommons.org/publicdomain/mark/1.0/ for details.
 
+/art/ogg/defense.ogg is Danse Macabre by Camille Saint-Saëns (a public domain composition).
+It was performed by Kevin MacLeod in 2008.
+The copyright holder for this performance is Kevin MacLeod (incompetech.com).
+It is licensed under the Creative Commons Attribution 3.0 Unported license.
+See https://creativecommons.org/licenses/by/3.0/ for details.
+Source: http://en.wikipedia.org/wiki/File:Saint-Saens,_Camille_-_Danse_macabre_Opus_40_-_Computer_generated,_transcribed_by_MacLeod.ogg
+Wikipedia’s source: http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1100546
+
+/art/midi/defense.mid is Danse Macabre by Camille Saint-Saëns (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
+/art/ogg/conquer.ogg is the Infernal Galop / Can-Can from Orpheus in the Underworld by Jacques Offenbach (a public domain composition).
+It was performed by the European Archive for the Musopen project.
+Musopen released it into the public domain, and it is available under the CC0 public domain license.
+See http://creativecommons.org/publicdomain/zero/1.0/ for details.
+Source: http://en.wikipedia.org/wiki/File:Offenbach_-_Orpheus_in_the_Underworld_-_Overture.ogg
+Wikipedia’s source: https://musopen.org/music/1382/jacques-offenbach/famous-overtures-no3/
+
+/art/midi/conquer.mid is the Infernal Galop/Can-Can from Orpheus in the Underworld by Jacques Offenbach (a public domain composition).
+Since MIDI files are compositions and not performances and this composition is known to be public domain,
+this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
+See https://creativecommons.org/publicdomain/mark/1.0/ for details.
+
 /art/ogg/carchase.ogg is The William Tell Overture by Gioacchino Antonio Rossini (a public domain composition).
 It was performed by the U.S. Marine Corps band on Sunday, Jan. 6, 2013, conducted by Colonel Michael J. Colburn.
 As a work of the U.S. federal government, it is public domain as certified with the Creative Commons Public Domain Mark 1.0.
@@ -489,6 +514,7 @@ a mod, you should read this next bit of documentation.
 
 Sites with free (as in freedom) music (for future reference if we ever want to add more music):
 https://archive.org/
+http://www.audioblocks.com/
 http://cylinders.library.ucsb.edu/
 http://freemusicarchive.org/
 http://www.ibiblio.org/pandora/
