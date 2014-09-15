@@ -693,7 +693,7 @@ void evasivedrive()
             gamelog.newline(); //New line.
             break;
          case 3:
-            addstr(" breaks hard and nearly crashes!", gamelog);
+            addstr(" brakes hard and nearly crashes!", gamelog);
             gamelog.newline(); //New line.
             break;
          }
