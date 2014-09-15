@@ -235,7 +235,7 @@ void siegecheck(char canseethings)
                addstr(".", gamelog);
                gamelog.newline();
 
-               if(location[l]->siege.escalationstate>=2)
+               if(location[l]->siege.escalationstate>=1)
                {
                   move(11,1);
                   addstr("The fighting force will be composed of national guard troops.", gamelog);

@@ -72,13 +72,14 @@
 // Allow experimental, incomplete Stalinist Comrade Squad mode to be chosen for new games
 #define ALLOWSTALIN
 
-//PACKAGE_VERSION defined in config.h
-//#ifndef PACKAGE_VERSION
-//#define PACKAGE_VERSION "4.07.6 beta"
-//#endif
+//PACKAGE_VERSION must be defined here or the game won't compile on Windows! Don't remove it!!!
+//The last beta version released was 4.07.4 beta, and 4.07.5 beta hasn't been released yet,
+//so we should keep using 4.07.5 beta for SVN versions until 4.07.5 beta is officially released.
+// -- yetisyny
+#define PACKAGE_VERSION "4.07.5 beta"
 
-const int version=40706;
-const int lowestloadversion=40706;
+const int version=40705;
+const int lowestloadversion=40705;
 const int lowestloadscoreversion=31203;
 
 #include "common.h" /* include this prior to checking if WIN32 is defined */
@@ -1756,7 +1757,7 @@ void updateworld_laws(short *law,short *oldlaw);
  lcsmonthly.cpp
 */
 /* monthly - reports the guardian's power to the player */
-void guardianupdate(char size,char power);
+void guardianupdate(char size,int power);
 /* monthly - lets the player choose a special edition for the guardian */
 int choosespecialedition(char &clearformess);
 /* monthly - guardian - prints liberal guardian special editions */

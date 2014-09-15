@@ -2042,7 +2042,7 @@ newsstoryst* ccs_exposure_story()
 {
    newsstoryst* ns=new newsstoryst;
    ns->type=NEWSSTORY_CCS_NOBACKERS;
-   ns->priority = 800;
+   ns->priority=8000;
    ccsexposure=CCSEXPOSURE_NOBACKERS;
    // arrest seventeen representatives and eight senators
    int arrestsleft = 8;
@@ -2079,7 +2079,7 @@ newsstoryst* ccs_fbi_raid_story()
 {
    newsstoryst* ns=new newsstoryst;
    ns->type=NEWSSTORY_CCS_DEFEATED;
-   ns->priority=800;
+   ns->priority=8000;
    endgamestate=ENDGAME_CCS_DEFEATED;
    // arrest or kill ccs sleepers
    for(int p=0;p<len(pool);p++)

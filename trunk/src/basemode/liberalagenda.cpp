@@ -508,7 +508,7 @@ bool liberalagenda(signed char won)
                   else addstr("Free speech is sacrosanct and diverse points of view are celebrated.");
                   break;
                case LAW_FLAGBURNING:
-                  if(won==-2)addstr("Flags of the old American regime are burnt primarily as as fuel.");
+                  if(won==-2)addstr("Flags of the old American regime are burnt primarily as fuel.");
                   else if(won==-1)addstr("Images or words describing flag burning are punished by death.");
                   else if(law[l]==ALIGN_ARCHCONSERVATIVE)
                      addstr("Burning the flag is a crime on par with murder.");

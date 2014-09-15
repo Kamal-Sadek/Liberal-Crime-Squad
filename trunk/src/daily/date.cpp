@@ -386,8 +386,16 @@ char completevacation(datest &d,int p,char &clearformess)
    addstr(" is back from vacation.", gamelog);
    gamelog.nextMessage();
 
+   // Temporarily make the date Conservative so that high-juice liberals aren't trivial to seduce
+   int datealignment=d.date[e]->align;
+   d.date[e]->align=-1;
+
    short aroll=pool[p]->skill_roll(SKILL_SEDUCTION)*2;
    short troll=d.date[e]->attribute_roll(ATTRIBUTE_WISDOM);
+
+   // Attribute roll over; reset date's alignment to what it should be
+   d.date[e]->align=datealignment;
+
    pool[p]->train(SKILL_SEDUCTION,LCSrandom(11)+15);
 
    int thingsincommon=0;
@@ -623,6 +631,10 @@ char completedate(datest &d,int p,char &clearformess)
          short troll=d.date[e]->attribute_roll(ATTRIBUTE_WISDOM);
          if(d.date[e]->align==ALIGN_CONSERVATIVE)
             troll+=troll*(d.date[e]->juice/100);
+         // Even liberals and moderates shouldn't be TOO easy to seduce! -- SlatersQuest
+         else if(d.date[e]->align==ALIGN_MODERATE)
+            troll+=troll*(d.date[e]->juice/150);
+         else troll+=troll*(d.date[e]->juice/200);
 
          char test=0;
 		   aroll += thingsincommon * 3;

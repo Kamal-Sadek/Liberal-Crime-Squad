@@ -44,13 +44,13 @@ void setup_newgame()
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(4,6);
       addstr("New Game of Liberal Crime Squad: Advanced Gameplay Options");
-      move(6,0);
+      move(7,0);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       if(classicmode)
          addstr("[X]");
       else addstr("[ ]");
       addstr(" A - Classic Mode: No Conservative Crime Squad.");
-      move(8,0);
+      move(9,0);
       if(!classicmode)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -58,32 +58,33 @@ void setup_newgame()
          addstr("[X]");
       else addstr("[ ]");
       addstr(" B - We Didn't Start The Fire: The CCS starts active and extremely strong.");
-      move(10,0);
+      move(11,0);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       if(nightmarelaws)
          addstr("[X]");
       else addstr("[ ]");
       addstr(" C - Nightmare Mode: Liberalism is forgotten. Is it too late to fight back?");
-      move(12,0);
+      move(13,0);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       if(multipleCityMode)
          addstr("[X]");
       else addstr("[ ]");
       addstr(" D - National LCS: Advanced play across multiple cities.");
-      move(14,0);
+      move(15,0);
       if(nocourtpurge)
          addstr("[X]");
       else addstr("[ ]");
       addstr(" E - Marathon Mode: Prevent Liberals from amending the Constitution.");
       #ifdef ALLOWSTALIN
-      move(16,0);
+      move(17,0);
       if(stalinmode)
          addstr("[X]");
       else addstr("[ ]");
       addstr(" F - Stalinist Mode: Enable Stalinist Comrade Squad (not fully implemented).");
-      #endif
-
-      move(20,4);
+      move(21,4);
+      #else // ALLOWSTALIN
+      move(19,4);
+      #endif // ALLOWSTALIN
       addstr("Press any other key to continue...");
 
       int c=getkey();
@@ -182,7 +183,7 @@ void setup_newgame()
          addstr("[X]");
       else addstr("[ ]");
       addstr(" A - No Compromise Classic - I will make all our laws Elite Liberal!");
-      move(10,0);
+      move(9,0);
       if(!classicmode)
          set_color(COLOR_WHITE,COLOR_BLACK,0);
       else set_color(COLOR_BLACK,COLOR_BLACK,1);
@@ -190,7 +191,7 @@ void setup_newgame()
          addstr("[X]");
       else addstr("[ ]");
       addstr(" B - Democrat Mode - Most laws must be Elite Liberal, some can be Liberal.");
-      move(15,4);
+      move(13,4);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       addstr("Press any other key to continue...");
 
@@ -208,16 +209,17 @@ void setup_newgame()
       }
       break;
    }
-   
-   
+
    clear();
    while(true)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(4,6);
-      addstr("New Game of Liberal Crime Squad: Field Learning (affects Security, Stealth, Disguise and Driving)");
-      move(7,0);
+      addstr("New Game of Liberal Crime Squad: Field Learning");
       set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(5,6);
+      addstr("(affects Security, Stealth, Disguise, & Driving)");
+      move(8,0);
       if(fieldskillrate==FIELDSKILLRATE_FAST)
          addstr("[X]");
       else addstr("[ ]");
@@ -227,12 +229,12 @@ void setup_newgame()
          addstr("[X]");
       else addstr("[ ]");
       addstr(" B - Classic - Excellence requires practice.");
-      move(13,0);
+      move(12,0);
       if(fieldskillrate==FIELDSKILLRATE_HARD)
          addstr("[X]");
       else addstr("[ ]");
       addstr(" C - Hard Mode - Learn from the best, or face arrest!");
-      move(15,4);
+      move(16,4);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       addstr("Press any other key to continue...");
 
@@ -336,22 +338,22 @@ void makecharacter()
       move(4,6);
       addstr("The Founder of the Liberal Crime Squad");
 
-      move(6,2);
+      move(7,2);
       addstr("FIRST NAME: ");
       addstr(first[(int)gender]);
-      move(6,30);
+      move(7,30);
       set_color(COLOR_BLACK,COLOR_BLACK,1);
       addstr(" (Press A to have your parents reconsider)");
 
-      move(8,2);
+      move(9,2);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       addstr("LAST NAME: ");
       addstr(last);
-      move(8,30);
+      move(9,30);
       set_color(COLOR_BLACK,COLOR_BLACK,1);
       addstr(" (Press B to be born to a different family)");
 
-      move(10,2);
+      move(11,2);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       addstr("SEX: ");
       if(newcr->gender_conservative == GENDER_MALE)
@@ -369,11 +371,11 @@ void makecharacter()
          set_color(COLOR_YELLOW,COLOR_BLACK,1);
          addstr("It's Complicated");
       }
-      move(10,30);
+      move(11,30);
       set_color(COLOR_BLACK,COLOR_BLACK,1);
       addstr(" (Press C to change your sex at birth)");
 
-      move(12,2);
+      move(13,2);
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       addstr("HISTORY: ");
       if(choices)
@@ -386,22 +388,22 @@ void makecharacter()
          set_color(COLOR_RED,COLOR_BLACK,1);
          addstr("Let Fate Decide");
       }
-      move(12,30);
+      move(13,30);
       set_color(COLOR_BLACK,COLOR_BLACK,1);
       addstr(" (Press D to toggle childhood)");
 
       if(!multipleCityMode)
       {
-         move(14,2);
+         move(15,2);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          addstr("CITY: ");
          addstr(lcityname);
-         move(14,30);
+         move(15,30);
          set_color(COLOR_BLACK,COLOR_BLACK,1);
          addstr(" (Press E to relocate)");
       }
 
-      move(17,4);
+      move(19-multipleCityMode*2,4);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       addstr("Press any other key when ready to begin...");
 
@@ -424,10 +426,10 @@ void makecharacter()
       if(c=='c')
       {
          if((newcr->gender_conservative == GENDER_FEMALE && !male) ||
-				(newcr->gender_conservative == GENDER_NEUTRAL && male))
+            (newcr->gender_conservative == GENDER_NEUTRAL && male))
             newcr->gender_conservative = GENDER_MALE;
          else if((newcr->gender_conservative == GENDER_MALE && !male) ||
-				(newcr->gender_conservative == GENDER_FEMALE && male))
+            (newcr->gender_conservative == GENDER_FEMALE && male))
             newcr->gender_conservative = GENDER_NEUTRAL;
          else
             newcr->gender_conservative = GENDER_FEMALE;
@@ -1397,7 +1399,7 @@ void makecharacter()
       lawyer->hireid=newcr->id;
       pool.push_back(lawyer);
       lawyer->location=lawyer->base=lawyer->worklocation;
-
-      uniqueCreatures.initialize();
    }
+
+   uniqueCreatures.initialize();
 }

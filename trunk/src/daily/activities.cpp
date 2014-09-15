@@ -662,8 +662,8 @@ void survey(Creature *cr)
             else addstr("protecting the Second Amendment.");
             break;
          case VIEW_MILITARY:
-            if(attitude[VIEW_MILITARY]>50) addstr("the large military.");
-            else addstr("strengthening the military.");
+            if(attitude[VIEW_MILITARY]>50) addstr("military imperialism.");
+            else addstr("defending the nation.");
             break;
          case VIEW_LIBERALCRIMESQUAD:
          case VIEW_LIBERALCRIMESQUADPOS:
@@ -1930,13 +1930,17 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
             }
             case 8:
             {
-               //In extreme corporate culture cases this should give a flag burning charge! -- kviiri
                addstr("burned a corporate symbol and denounced capitalism!", gamelog);
                change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
                change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,mod,0,70);
                public_interest[VIEW_CORPORATECULTURE]+=mod;
                background_liberal_influence[VIEW_CORPORATECULTURE]+=mod;
-               juiceval=1;
+               if(law[LAW_CORPORATE]==-2)
+               {               // In extreme corporate culture cases this should give a flag burning charge! -- kviiri
+                  juiceval=2;  // Done -- SlatersQuest
+                  crime=LAWFLAG_BURNFLAG;
+               }
+               else juiceval=1;
                done=1;
                break;
             }
