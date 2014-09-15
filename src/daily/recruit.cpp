@@ -391,6 +391,24 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
             getkey();
          }
 
+         // Liberals with juice increase difficulty as if their Wisdom were increased by said juice
+         if(r.recruit->juice>=10)
+         {
+            if(r.recruit->juice<50) //Activist
+               difficulty+=1;
+            else if(r.recruit->juice<100) //Socialist Threat
+               difficulty+=2+0.1*r.recruit->get_attribute(ATTRIBUTE_WISDOM, false);
+            else if(r.recruit->juice<200) //Revolutionary
+               difficulty+=3+0.2*r.recruit->get_attribute(ATTRIBUTE_WISDOM, false);
+            else if(r.recruit->juice<500) //Urban Commando
+               difficulty+=4+0.3*r.recruit->get_attribute(ATTRIBUTE_WISDOM, false);
+            else if(r.recruit->juice<1000) //Liberal Guardian
+               difficulty+=5+0.4*r.recruit->get_attribute(ATTRIBUTE_WISDOM, false);
+            else //Elite Liberal
+               difficulty+=6+0.5*r.recruit->get_attribute(ATTRIBUTE_WISDOM, false);
+         }
+         if(difficulty>18) difficulty=18; // difficulty above 18 is impossible, we don't want that
+
          if(pool[p]->skill_check(SKILL_PERSUASION,difficulty))
          {
             set_color(COLOR_CYAN,COLOR_BLACK,1);

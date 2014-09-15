@@ -127,10 +127,10 @@ string Location::city_description()
    case SITE_CITY_LOS_ANGELES: return "Hollywood and Trade.";
    case SITE_CITY_NEW_YORK: return "Wall Street and Big Media.";
    case SITE_CITY_WASHINGTON_DC: return "The Nation's Capital.";
-   case SITE_CITY_CHICAGO:
-   case SITE_CITY_DETROIT:
-   case SITE_CITY_ATLANTA:
-   case SITE_CITY_MIAMI:
+   case SITE_CITY_CHICAGO: return "Mafia Headquarters.";
+   case SITE_CITY_DETROIT: return "Murder Capital of America.";
+   case SITE_CITY_ATLANTA: return "The Pride of the South.";
+   case SITE_CITY_MIAMI: return "A Tropical Paradise.";
    default: return "";
    }
 }

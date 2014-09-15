@@ -1439,7 +1439,7 @@ void reeducation(Creature &g)
 	   " sings songs with prisoners of all political persuasions.",
 	   " is encouraged to befriend Conservatives in prison.",
 	   " puts on an anti-crime performance in prison.",
-	   " sees an video in prison by victims of political crime."
+	   " sees a video in prison by victims of political crime."
 	};
 
    erase();
