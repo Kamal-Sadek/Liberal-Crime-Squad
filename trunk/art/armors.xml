@@ -723,6 +723,24 @@
         <qualitylevels>3</qualitylevels>
     </armortype>
 
+    <armortype idname="ARMOR_HARDHAT">
+        <make_difficulty>6</make_difficulty>
+        <make_price>100</make_price>
+        <armor>
+            <head>2</head>
+        </armor>
+        <body_covering>
+           <head>true</head>
+        </body_covering>
+        <name>Safety Vest &amp; Hardhat</name>
+        <shortname>Vest&amp;Hardhat</shortname>
+        <fencevalue>100</fencevalue>
+        <professionalism>2</professionalism>
+        <stealth_value>0</stealth_value>
+        <qualitylevels>1</qualitylevels>
+        <durability>20</durability>
+    </armortype>
+
     <armortype idname="ARMOR_WIFEBEATER">
         <make_difficulty>2</make_difficulty>
         <make_price>5</make_price>
@@ -747,24 +765,6 @@
         <professionalism>2</professionalism>
         <stealth_value>1</stealth_value>
         <qualitylevels>2</qualitylevels>
-    </armortype>
-
-    <armortype idname="ARMOR_HARDHAT">
-        <make_difficulty>6</make_difficulty>
-        <make_price>100</make_price>
-        <armor>
-            <head>2</head>
-        </armor>
-        <body_covering>
-           <head>true</head>
-        </body_covering>
-        <name>Safety Vest &amp; Hardhat</name>
-        <shortname>Vest&amp;Hardhat</shortname>
-        <fencevalue>100</fencevalue>
-        <professionalism>2</professionalism>
-        <stealth_value>0</stealth_value>
-        <qualitylevels>1</qualitylevels>
-        <durability>20</durability>
     </armortype>
 
 </armors>
