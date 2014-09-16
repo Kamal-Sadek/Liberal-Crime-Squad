@@ -1712,7 +1712,7 @@ void congress(char clearformess,char canseethings)
             addstr(yesvotes_s);
             addstr(" Yea");
 
-            if(l==HOUSENUM-1&&yesvotes_s==SENATENUM-1&&yeswin_s)
+            if(l==HOUSENUM-1&&yesvotes_s==SENATEMAJORITY-1&&yeswin_s)
             {
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(c*3+2,78);
@@ -1726,7 +1726,7 @@ void congress(char clearformess,char canseethings)
             addstr(s-yesvotes_s);
             addstr(" Nay");
 
-            if(l==HOUSENUM-1&&yesvotes_s==SENATENUM-1&&!yeswin_s)
+            if(l==HOUSENUM-1&&yesvotes_s==SENATEMAJORITY-1&&!yeswin_s)
             {
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                move(c*3+3,78);
