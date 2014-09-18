@@ -75,7 +75,7 @@ To get SVN:
   Open XCode, then go to the Downloads tab of the preferences menu
   Click the 'install' button next to "Command Line Tools"
 To get autoconf: (in terminal):
-  ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   brew install automake
 To build LCS:
   svn co http://svn.code.sf.net/p/lcsgame/code/trunk lcsgame
