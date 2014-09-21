@@ -201,7 +201,7 @@ Since MIDI files are compositions and not performances and this composition is k
 this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
 See https://creativecommons.org/publicdomain/mark/1.0/ for details.
 
-/art/ogg/cartheft.ogg is The Ride of the Valkyries by Richard Wanger (a public domain composition).
+/art/ogg/cartheft.ogg is The Ride of the Valkyries by Richard Wagner (a public domain composition).
 Although the words to this song are in German, this is an instrumental version with no words.
 It was performed by the Daniel Bautista as track 6 of his album Download Ör Die in 2014, as a metal arrangement.
 The copyright holder for this performance is Daniel Bautista.
@@ -209,7 +209,7 @@ It is licensed under the Creative Commons Attribution 3.0 Unported license.
 See http://creativecommons.org/licenses/by/3.0/ for details.
 Source: https://www.jamendo.com/en/track/1127050/ride-of-the-valkyries-wagner
 
-/art/midi/cartheft.mid is The Ride of the Valkyries by Richard Wanger (a public domain composition).
+/art/midi/cartheft.mid is The Ride of the Valkyries by Richard Wagner (a public domain composition).
 Since MIDI files are compositions and not performances and this composition is known to be public domain,
 this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
 See https://creativecommons.org/publicdomain/mark/1.0/ for details.
@@ -479,14 +479,14 @@ Since MIDI files are compositions and not performances and this composition is k
 this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
 See https://creativecommons.org/publicdomain/mark/1.0/ for details.
 
-/art/ogg/reagainified.ogg is Dixie, The Confederate National Anthem by Daniel Decatur Emmett (a public domain composition).
+/art/ogg/reaganified.ogg is Dixie, The Confederate National Anthem by Daniel Decatur Emmett (a public domain composition).
 The words to the song are in English and are the Confederate War Song lyrics for Dixie.
 It was performed by Tennessee Ernie Ford.
 This recording is public domain as certified with the Creative Commons Public Domain Mark 1.0.
 See https://creativecommons.org/publicdomain/mark/1.0/ for details.
 Source: https://archive.org/details/TennesseeErnieFord-01-52
 
-/art/midi/reagainified.mid is Dixie, The Confederate National Anthem by Daniel Decatur Emmett (a public domain composition).
+/art/midi/reaganified.mid is Dixie, The Confederate National Anthem by Daniel Decatur Emmett (a public domain composition).
 Since MIDI files are compositions and not performances and this composition is known to be public domain,
 this file is public domain as certified with the Creative Commons Public Domain Mark 1.0.
 See https://creativecommons.org/publicdomain/mark/1.0/ for details.
