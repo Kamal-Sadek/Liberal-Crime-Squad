@@ -87,7 +87,8 @@ void activate_sleepers()
          else if(temppool[p]->infiltration > 0.1f)
             set_color(COLOR_WHITE,COLOR_BLACK,0);
          else set_color(COLOR_GREEN,COLOR_BLACK,0);
-         addstr(temppool[p]->infiltration*100+0.5); // gets rounded to nearest integer
+		 long infiltration_long = static_cast<long>(temppool[p]->infiltration*100+0.5); // gets rounded to nearest integer
+         addstr(infiltration_long);
          addstr("%");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);

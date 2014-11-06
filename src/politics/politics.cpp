@@ -1304,7 +1304,7 @@ void supremecourt(char clearformess,char canseethings)
          getkey();
       }
 
-      float president=(exec[EXEC_PRESIDENT]==ALIGN_STALINIST?-3:exec[EXEC_PRESIDENT]);
+      float president=static_cast<float>(exec[EXEC_PRESIDENT]==ALIGN_STALINIST?-3:exec[EXEC_PRESIDENT]);
       float sen=0;
       for(int s=0;s<100;s++) sen+=(senate[s]==ALIGN_STALINIST?-3:senate[s]);
       sen/=100.0f;

@@ -1008,11 +1008,12 @@ int Creature::skill_roll(int skill) const
    // Skills that should depend on clothing:
    case SKILL_STEALTH:
       {
-         float stealth = get_armor().get_stealth_value();
-         for (int i=1; i < get_armor().get_quality();i++) stealth *= 0.8;
+         float stealth = static_cast<float>(get_armor().get_stealth_value());
+         for (int i=1; i < get_armor().get_quality();i++) stealth *= 0.8f;
          if (get_armor().is_damaged()) stealth *= 0.5;
 
-         return_value *= stealth;
+		 int stealth_int = static_cast<int>(stealth);
+		 return_value *= stealth_int;
          return_value /= 2;
          // Shredded clothes get you no stealth.
          if (get_armor().get_quality() > get_armor().get_quality_levels())
