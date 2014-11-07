@@ -1178,9 +1178,9 @@ void penalize(Creature &g,char lenient)
          move(8,1);
          if(lenient)
          {
-			int oldsen,newsen;
-			oldsen = ABS(oldsentence);
-			newsen = ABS(g.sentence);
+         int oldsen,newsen;
+         oldsen = ABS(oldsentence);
+         newsen = ABS(g.sentence);
             if(oldsen > newsen)
                g.sentence=oldsentence;
             addstr("to be served concurrently", gamelog);
@@ -1222,43 +1222,43 @@ void imprison(Creature &g)
 //RETURNS IF SCREEN WAS ERASED
 char prison(Creature &g)
 {
-	static const char *cruel_and_unusual_execution_methods[] =
-	{
-		"beheading",
-		"drawing and quartering",
-		"disemboweling",
-		"one thousand cuts",
-		"feeding the lions",
-		"repeated gladiatorial death matches",
-		"burning",
-		"crucifixion",
-		"head-squishing",
-		"piranha tank swimming exhibition",
-		"forced sucking of Ronald Reagan's ass",
-		"covering with peanut butter and letting rats eat",
-		"burying up to the neck in a fire ant nest",
-		"running truck over the head",
-		"drowning in a sewage digester vat",
-		"chipper-shredder",
-		"use in lab research",
-		"blood draining",
-		"chemical weapons test",
-		"sale to a furniture maker",
-		"sale to a CEO as a personal pleasure toy",
-		"sale to foreign slave traders",
-		"exposure to degenerate Bay 12 Curses games"
-	};
+   static const char *cruel_and_unusual_execution_methods[] =
+   {
+      "beheading",
+      "drawing and quartering",
+      "disemboweling",
+      "one thousand cuts",
+      "feeding the lions",
+      "repeated gladiatorial death matches",
+      "burning",
+      "crucifixion",
+      "head-squishing",
+      "piranha tank swimming exhibition",
+      "forced sucking of Ronald Reagan's ass",
+      "covering with peanut butter and letting rats eat",
+      "burying up to the neck in a fire ant nest",
+      "running truck over the head",
+      "drowning in a sewage digester vat",
+      "chipper-shredder",
+      "use in lab research",
+      "blood draining",
+      "chemical weapons test",
+      "sale to a furniture maker",
+      "sale to a CEO as a personal pleasure toy",
+      "sale to foreign slave traders",
+      "exposure to degenerate Bay 12 Curses games"
+   };
 
-	static const char *standard_execution_methods[] =
-	{
-		"lethal injection",
-		"hanging",
-		"firing squad",
-		"electrocution"
-	};
+   static const char *standard_execution_methods[] =
+   {
+      "lethal injection",
+      "hanging",
+      "firing squad",
+      "electrocution"
+   };
 
-	static const char *supposedly_painless_execution_method =
-		"lethal injection";
+   static const char *supposedly_painless_execution_method =
+      "lethal injection";
 
    char showed=0;
 
@@ -1322,9 +1322,9 @@ char prison(Creature &g)
             move(10,1);
             addstr("by ", gamelog);
             if(law[LAW_DEATHPENALTY]==-2)
-            	addstr(pickrandom(cruel_and_unusual_execution_methods), gamelog);
+               addstr(pickrandom(cruel_and_unusual_execution_methods), gamelog);
             else if(law[LAW_DEATHPENALTY]==-1||law[LAW_DEATHPENALTY]==0)
-            	addstr(pickrandom(standard_execution_methods), gamelog);
+               addstr(pickrandom(standard_execution_methods), gamelog);
             else
                addstr(supposedly_painless_execution_method, gamelog);
             addstr(".", gamelog);
@@ -1433,17 +1433,17 @@ char prison(Creature &g)
 
 void reeducation(Creature &g)
 {
-	static const char *reeducation_experiences[] =
-	{
-	   " is subjected to rehabilitative therapy in prison.",
-	   " works on a prison mural about political diversity.",
-	   " routinely sees a Liberal therapist in prison.",
-	   " participates in a group therapy session in prison.",
-	   " sings songs with prisoners of all political persuasions.",
-	   " is encouraged to befriend Conservatives in prison.",
-	   " puts on an anti-crime performance in prison.",
-	   " sees a video in prison by victims of political crime."
-	};
+   static const char *reeducation_experiences[] =
+   {
+      " is subjected to rehabilitative therapy in prison.",
+      " works on a prison mural about political diversity.",
+      " routinely sees a Liberal therapist in prison.",
+      " participates in a group therapy session in prison.",
+      " sings songs with prisoners of all political persuasions.",
+      " is encouraged to befriend Conservatives in prison.",
+      " puts on an anti-crime performance in prison.",
+      " sees a video in prison by victims of political crime."
+   };
 
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -1535,16 +1535,16 @@ void laborcamp(Creature &g)
       experience = " consumes drugs that simulate death, and is thrown out with the trash!";
    }
 
-	static const char *labor_camp_experiences[] =
-	{
-		" is forced to operate dangerous machinery in prison.",
-		" is beaten by sadistic prison guards.",
-		" carries heavy burdens back and forth in prison labor camp.",
-		" does back-breaking work all month in prison.",
-		" gets in a brutal fight with another prisoner.",
-		" participates in a quickly-suppressed prison riot.",
-		" participates in a quickly-suppressed prison riot."
-	};
+   static const char *labor_camp_experiences[] =
+   {
+      " is forced to operate dangerous machinery in prison.",
+      " is beaten by sadistic prison guards.",
+      " carries heavy burdens back and forth in prison labor camp.",
+      " does back-breaking work all month in prison.",
+      " gets in a brutal fight with another prisoner.",
+      " participates in a quickly-suppressed prison riot.",
+      " participates in a quickly-suppressed prison riot."
+   };
 
    if(!escaped)experience=pickrandom(labor_camp_experiences);
 
@@ -1669,20 +1669,20 @@ void prisonscene(Creature &g)
    };
    static const char *bad_experiences[] =
    {
-	   " gets sick for a few days from nasty prison food.",
-	   " spends too much time working out at the prison gym.",
-	   " is raped by another prison inmate, repeatedly.",
+      " gets sick for a few days from nasty prison food.",
+      " spends too much time working out at the prison gym.",
+      " is raped by another prison inmate, repeatedly.",
       " writes a letter to the warden swearing off political activism.",
       " rats out one of the other inmates in exchange for benefits."
    };
-	static const char *general_experiences[] =
-	{
-	   " mouths off to a prison guard and ends up in solitary.",
-	   " gets high off drugs smuggled into the prison.",
-	   " does nothing but read books at the prison library.",
-	   " gets into a fight and is punished with latrine duty.",
-	   " constantly tries thinking how to escape from prison."
-	};
+   static const char *general_experiences[] =
+   {
+      " mouths off to a prison guard and ends up in solitary.",
+      " gets high off drugs smuggled into the prison.",
+      " does nothing but read books at the prison library.",
+      " gets into a fight and is punished with latrine duty.",
+      " constantly tries thinking how to escape from prison."
+   };
 
    if(escaped==0)
    {
