@@ -379,15 +379,15 @@ void Creature::creatureinit()
    birthday_month=LCSrandom(12)+1;
    switch(birthday_month)
    {
-	case 4:
-	case 6:
-	case 9:
-	case 11:
+   case 4:
+   case 6:
+   case 9:
+   case 11:
       birthday_day=LCSrandom(30)+1;
       break;
-	case 2:
+   case 2:
       birthday_day=LCSrandom(28)+1;
-		break;
+      break;
    default:
       birthday_day=LCSrandom(31)+1;
       break;
@@ -1008,12 +1008,12 @@ int Creature::skill_roll(int skill) const
    // Skills that should depend on clothing:
    case SKILL_STEALTH:
       {
-         float stealth = static_cast<float>(get_armor().get_stealth_value());
-         for (int i=1; i < get_armor().get_quality();i++) stealth *= 0.8f;
+         float stealth = get_armor().get_stealth_value();
+         for (int i=1; i < get_armor().get_quality();i++) stealth *= 0.8;
          if (get_armor().is_damaged()) stealth *= 0.5;
 
-		 int stealth_int = static_cast<int>(stealth);
-		 return_value *= stealth_int;
+       int stealth_int = static_cast<int>(stealth);
+       return_value *= stealth_int;
          return_value /= 2;
          // Shredded clothes get you no stealth.
          if (get_armor().get_quality() > get_armor().get_quality_levels())
@@ -1192,10 +1192,10 @@ void nameCCSMember(Creature &cr)
       switch(LCSrandom(7))
       {
          case 0:strcpy(cr.name,"Country Boy");break;
-		 case 1:strcpy(cr.name,"Good ol' Boy");break;
-		 case 2:strcpy(cr.name,"Hick");break;
-		 case 3:strcpy(cr.name,"Hillbilly");break;
-		 case 4:strcpy(cr.name,"Redneck");break;
+       case 1:strcpy(cr.name,"Good ol' Boy");break;
+       case 2:strcpy(cr.name,"Hick");break;
+       case 3:strcpy(cr.name,"Hillbilly");break;
+       case 4:strcpy(cr.name,"Redneck");break;
          case 5:strcpy(cr.name,"Rube");break;
          case 6:strcpy(cr.name,"Yokel");break;
       }
@@ -1211,7 +1211,7 @@ void nameCCSMember(Creature &cr)
       case 6: strcpy(cr.name,"Mailman");break;
       case 7: strcpy(cr.name,"Musician");break;
       case 8: strcpy(cr.name,"Hairstylist");break;
-	  case 9: strcpy(cr.name,"Bartender");break;
+     case 9: strcpy(cr.name,"Bartender");break;
       }
 }
 
