@@ -67,7 +67,7 @@
 			<Add option="-lSDL2main" />
 			<Add option="-lSDL2" />
 			<Add option="-lSDL2_mixer" />
-			<Add library="..\src\pdcurses\pdcurses.lib" />
+			<Add library="../src/pdcurses/pdcurses.lib" />
 			<Add directory="../src" />
 			<Add directory="../src/pdcurses" />
 			<Add directory="../src/sdl" />
