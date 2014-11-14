@@ -1012,8 +1012,7 @@ int Creature::skill_roll(int skill) const
          for (int i=1; i < get_armor().get_quality();i++) stealth *= 0.8;
          if (get_armor().is_damaged()) stealth *= 0.5;
 
-       int stealth_int = static_cast<int>(stealth);
-       return_value *= stealth_int;
+         return_value *= static_cast<int>(stealth);
          return_value /= 2;
          // Shredded clothes get you no stealth.
          if (get_armor().get_quality() > get_armor().get_quality_levels())
@@ -1191,13 +1190,13 @@ void nameCCSMember(Creature &cr)
    else if(cr.get_weapon().get_itemtypename()=="WEAPON_SHOTGUN_PUMP"||LCSrandom(2))
       switch(LCSrandom(7))
       {
-         case 0:strcpy(cr.name,"Country Boy");break;
-       case 1:strcpy(cr.name,"Good ol' Boy");break;
-       case 2:strcpy(cr.name,"Hick");break;
-       case 3:strcpy(cr.name,"Hillbilly");break;
-       case 4:strcpy(cr.name,"Redneck");break;
-         case 5:strcpy(cr.name,"Rube");break;
-         case 6:strcpy(cr.name,"Yokel");break;
+      case 0:strcpy(cr.name,"Country Boy");break;
+      case 1:strcpy(cr.name,"Good ol' Boy");break;
+      case 2:strcpy(cr.name,"Hick");break;
+      case 3:strcpy(cr.name,"Hillbilly");break;
+      case 4:strcpy(cr.name,"Redneck");break;
+      case 5:strcpy(cr.name,"Rube");break;
+      case 6:strcpy(cr.name,"Yokel");break;
       }
    else
       switch(LCSrandom(10))
@@ -1211,7 +1210,7 @@ void nameCCSMember(Creature &cr)
       case 6: strcpy(cr.name,"Mailman");break;
       case 7: strcpy(cr.name,"Musician");break;
       case 8: strcpy(cr.name,"Hairstylist");break;
-     case 9: strcpy(cr.name,"Bartender");break;
+      case 9: strcpy(cr.name,"Bartender");break;
       }
 }
 

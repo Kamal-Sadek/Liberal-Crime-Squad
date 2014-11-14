@@ -1178,10 +1178,7 @@ void penalize(Creature &g,char lenient)
          move(8,1);
          if(lenient)
          {
-         int oldsen,newsen;
-         oldsen = ABS(oldsentence);
-         newsen = ABS(g.sentence);
-            if(oldsen > newsen)
+            if(ABS(oldsentence)>ABS(g.sentence))
                g.sentence=oldsentence;
             addstr("to be served concurrently", gamelog);
          }
