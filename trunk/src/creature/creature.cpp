@@ -1361,13 +1361,13 @@ string UniqueCreatures::showXml() const
    return xml.GetDoc();
 }
 
-const char* Creature::heshe() const
+const char* Creature::heshe(bool capitalize) const
 {  // subject pronoun (nominative case)
    switch(gender_liberal)
    {
-   case GENDER_MALE: return "he";
-   case GENDER_FEMALE: return "she";
-   default: return "xe"; // Elite Liberal gender-neutral pronoun... it is pronounced "zee" rhyming with "he" and "she"
+   case GENDER_MALE: return capitalize?"He":"he";
+   case GENDER_FEMALE: return capitalize?"She":"she";
+   default: return capitalize?"Xe":"xe"; // Elite Liberal gender-neutral pronoun... it is pronounced "zee" rhyming with "he" and "she"
    // see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html (great reference on this)
    // or http://en.wiktionary.org/wiki/xe or http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary (wiki references)
    // or http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it being used in text)
@@ -1384,13 +1384,13 @@ const char* Creature::heshe() const
    }
 }
 
-const char* Creature::hisher() const
+const char* Creature::hisher(bool capitalize) const
 {  // pronominal adjective (possessive determiner)
    switch(gender_liberal)
    {
-   case GENDER_MALE: return "his";
-   case GENDER_FEMALE: return "her";
-   default: return "xyr"; // Elite Liberal gender-neutral pronoun... it is pronounced "zur" rhyming with "her"
+   case GENDER_MALE: return capitalize?"His":"his";
+   case GENDER_FEMALE: return capitalize?"Her":"her";
+   default: return capitalize?"Xyr":"xyr"; // Elite Liberal gender-neutral pronoun... it is pronounced "zur" rhyming with "her"
    // see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html (great reference on this)
    // or http://en.wiktionary.org/wiki/xyr or http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary (wiki references)
    // or http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it being used in text)
@@ -1399,13 +1399,13 @@ const char* Creature::hisher() const
    // his -> his, her -> hers, their -> theirs, and likewise xyr -> xyrs... just add "s" at the end if it doesn't already have an "s" at the end
    }
 }
-const char* Creature::himher() const
+const char* Creature::himher(bool capitalize) const
 {  // object pronoun (oblique case)
    switch(gender_liberal)
    {
-   case GENDER_MALE: return "him";
-   case GENDER_FEMALE: return "her";
-   default: return "xem"; // Elite Liberal gender-neutral pronoun... it is pronounced "zem" rhyming with "them"
+   case GENDER_MALE: return capitalize?"Him":"him";
+   case GENDER_FEMALE: return capitalize?"Her":"her";
+   default: return capitalize?"Xem":"xem"; // Elite Liberal gender-neutral pronoun... it is pronounced "zem" rhyming with "them"
    // see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html (great reference on this)
    // or http://en.wiktionary.org/wiki/xem or http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary (wiki references)
    // or http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it being used in text)
