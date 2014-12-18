@@ -292,7 +292,6 @@ private:
    class Attribute attributes[ATTNUM];
    class Skill skills[SKILLNUM];
    int skill_experience[SKILLNUM];
-   static int roll_check(int skill);
    static Weapon& weapon_none();
    static Armor& armor_none();
    Weapon* weapon;
@@ -309,6 +308,8 @@ public:
    int skill_roll(int skill) const;
    bool skill_check(int skill, int difficulty) const;
 
+   static int roll_check(int skill);
+   
    char name[CREATURE_NAMELEN];
    char propername[CREATURE_NAMELEN];
    char gender_conservative;
@@ -435,9 +436,9 @@ public:
    bool reports_to_police() const;
    /* returns the creature's maximum level in the given skill */
    int skill_cap(int skill, bool use_juice) const { return get_attribute(Skill::get_associated_attribute(skill),use_juice); }
-   const char* heshe() const;
-   const char* hisher() const;
-   const char* himher() const;
+   const char* heshe(bool capitalize=false) const;
+   const char* hisher(bool capitalize=false) const;
+   const char* himher(bool capitalize=false) const;
 };
 
 enum uniqueCreatureData
