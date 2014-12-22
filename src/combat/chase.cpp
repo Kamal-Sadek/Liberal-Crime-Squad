@@ -362,7 +362,7 @@ bool chasesequence()
                for(int w=0;w<BODYPARTNUM;w++)
                   pool[p]->wound[w]&=~WOUND_BLEEDING;
             mode=GAMEMODE_BASE;
-            //Make sure all possible exist of the chase have the nextMessage() call
+            //Make sure all possible exits of the chase have the nextMessage() call
             //to ensure that the gamelog is split properly into blocks.
             gamelog.nextMessage();
             return 1;
@@ -1006,11 +1006,73 @@ void evasiverun()
 
 int driveskill(Creature &cr,Vehicle &v)
 {
-   int driveskill=cr.get_skill(SKILL_DRIVING)*(3+v.drivebonus());
+   int driveskill=cr.skill_roll(PSEUDOSKILL_ESCAPEDRIVE);
    healthmodroll(driveskill,cr);
    if(driveskill<0) driveskill=0;
    driveskill*=static_cast<int>(cr.blood/50.0);
    return driveskill;
+}
+
+Vehicle* getChaseVehicle(Creature c)
+{
+   Vehicle* found = NULL;
+   int v2 = 0;
+   //addstr("Searching for chase vehicle for ", gamelog);
+   //addstr(c.name, gamelog);
+   if (mode==GAMEMODE_CHASECAR && c.carid != -1)
+   {
+      for(v2=0;v2<len(chaseseq.friendcar);v2++) 
+         if(chaseseq.friendcar[v2]->id()==c.carid)
+         {
+            //addstr_fl(gamelog,"  Found friendcar with ID %d at index %d",c.carid, v2);
+            found = chaseseq.friendcar[v2]; 
+            break;
+         }
+
+      for(v2=0;v2<len(chaseseq.enemycar);v2++) 
+         if(chaseseq.enemycar[v2]->id()==c.carid) 
+         {
+            //addstr_fl(gamelog,"  Found enemycar with ID %d at index %d",c.carid, v2);
+            found = chaseseq.enemycar[v2];
+            break;
+         }
+   }
+   //gamelog.newline();
+   return found;
+}
+Creature* getChaseDriver(Creature c)
+{
+   Creature* found = NULL;
+   
+   if (mode==GAMEMODE_CHASECAR && c.carid != -1)
+   {
+      //addstr_fl(gamelog,"Searching for %s's driver.  ", c.name);
+      int v = c.carid;
+      // Check to see if the car we are in is being driven by an LCS member
+      for (int p=0;p<6;p++)
+      {
+         if(activesquad->squad[p]==NULL) continue;
+         if (activesquad->squad[p]->carid == v
+             && activesquad->squad[p]->is_driver)
+         {
+            //addstr_fl(gamelog,"  Found LCS driver %s in carID %d",activesquad->squad[p]->name, v);
+            found = activesquad->squad[p];
+         }
+      }
+      // Check to see if the car we are in is being driven by an encounter creature.
+      for(int p=0;p<ENCMAX;p++)
+      {
+         if (!encounter[p].exists) continue;
+         if (encounter[p].carid == v
+             && encounter[p].is_driver)
+         {
+            //addstr_fl(gamelog,"  Found encounter driver %s in carID %d",encounter[p].name, v);
+            found = &encounter[p];
+         }
+      }
+   }
+   //gamelog.newline();
+   return found;
 }
 
 bool drivingupdate(short &obstacle)
@@ -1401,12 +1463,14 @@ bool dodgedrive()
       }
 
       if(driver!=-1)
-         if(!activesquad->squad[driver]->skill_check(SKILL_DRIVING,DIFFICULTY_EASY))
+      {
+         if(!activesquad->squad[driver]->skill_check(PSEUDOSKILL_ESCAPEDRIVE, DIFFICULTY_EASY))
          {
             crashfriendlycar(v);
             sitestory->crime.push_back(CRIME_CARCHASE);
             return 1;
          }
+      }
    }
 
    for(v=len(chaseseq.enemycar)-1;v>=0;v--)
@@ -1426,7 +1490,7 @@ bool dodgedrive()
       }
 
       if(driver!=-1)
-         if(!encounter[driver].skill_check(SKILL_DRIVING,DIFFICULTY_EASY))
+         if(!encounter[driver].skill_check(PSEUDOSKILL_ESCAPEDRIVE, DIFFICULTY_EASY))
          {
             crashenemycar(v);
             sitestory->crime.push_back(CRIME_CARCHASE);
@@ -1503,7 +1567,7 @@ void crashfriendlycar(int v)
                move(16,1);
                addstr(activesquad->squad[p]->prisoner->name, gamelog);
                addstr(pickrandom(car_crash_fatalities), gamelog);
-	            gamelog.newline(); //New line.
+               gamelog.newline(); //New line.
                printparty();
 
                getkey();

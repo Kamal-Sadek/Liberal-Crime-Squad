@@ -3,6 +3,36 @@
 
 #include "includes.h"
 
+enum carparts
+{
+   CARPART_BODY,
+   CARPART_WINDOW,
+   CARPARTNUM
+};
+
+enum SpecialCarDamage
+{  // TODO
+   SPECIALCARDAMAGE_LIGHTS, // Reduced visibility, penalty to road hazards.
+   SPECIALCARDAMAGE_FUELTANK, // Starts countdown timer on chase - forced bail out if out of gas
+   SPECIALCARDAMAGE_ENGINE, // Lose drivebonus, or forced bail out
+   SPECIALCARDAMAGE_TIRES, // Extra drive check each turn or crash
+   SPECIALCARDAMAGE_WINDOWS, // Lose upper armor protection
+   SPECIALCARDAMAGE_COSMETIC, // Extra hassling by conservatives when driving around town.
+   SPECIALCARDAMAGENUM
+};
+
+enum CarUpgrades
+{  // TODO
+   CARUPGRADE_BODYARMOR, // ++ to body protection, -- drivebonus
+   CARUPGRADE_BULLETPROOFGLASS, // ++ to window protection, -- drivebonus
+   CARUPGRADE_NITRO, // ++ escape chance on open-road chase event
+   CARUPGRADE_WHEELS, // chance to avoid losing tires when shot.
+   CARUPGRADE_ROLLCAGE, // reduced passenger injuries when the car crashes.
+   CARUPGRADE_PAINTJOB, // -- to conservative hassling during car trips.
+   CARUPGRADE_TINTEDWINDOWS, // -- to conservative hassling when carrying weapons
+   CARUPGRADESNUM
+};
+
 // These 2 declarations are for stuff that isn't in vehicle.cpp or the Vehicle class.
 // They're just needed by this header and implemented elsewhere.
 extern vector<VehicleType *> vehicletype;
@@ -52,7 +82,12 @@ public:
    bool displayscolor() const { return vehicletype[getvehicletype(vtypeidname_)]->displayscolor(); }
    int myear() const { return myear_; }
    long id() const { return id_; }
-   int drivebonus() const { return vehicletype[getvehicletype(vtypeidname_)]->drivebonus(); }
+   int modifieddriveskill(int skillLevel);
+   int modifieddodgeskill(int skillLevel);
+   int attackbonus(bool isDriver) const { return vehicletype[getvehicletype(vtypeidname_)]->attackbonus(isDriver); }
+   int gethitlocation(int bodypart) { return vehicletype[getvehicletype(vtypeidname_)]->gethitlocation(bodypart); }
+   string getpartname(int hitlocation) { return vehicletype[getvehicletype(vtypeidname_)]->getpartname(hitlocation); }
+   int armorbonus(int hitlocation) const { return vehicletype[getvehicletype(vtypeidname_)]->armorbonus(hitlocation); }
    const string& longname() const { return vehicletype[getvehicletype(vtypeidname_)]->longname(); }
    const string& shortname() const { return vehicletype[getvehicletype(vtypeidname_)]->shortname(); }
    int steal_difficultytofind() const { return vehicletype[getvehicletype(vtypeidname_)]->steal_difficultytofind(); }

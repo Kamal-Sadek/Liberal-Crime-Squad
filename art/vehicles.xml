@@ -20,7 +20,36 @@
             <color> (string) A string used when the vehicle's colour is printed.
                     Default: Translucent (only if no color is defined)
         </colors>
-        <drivebonus> (integer) A bonus given to the driver's driving skill.
+        <drivebonus>
+            <base>  (integer) A bonus given to the driver's driving skill for pursuit purposes.
+                              This should be higher for easy-to-drive cars, and lower for powerful cars
+                     Default: 0
+            <skillfactor> (integer) A multiplier to skill effect.
+                              This should be higher for powerful cars, and lower for easy cars
+                     Default: 1
+            <softlimit> (integer) Bonus+Skill above this level provides half benefit
+                              This should be higher for powerful cars, and lower for slow cars
+                     Default: 8
+            <hardlimit> (integer) Total effective skill level cannot exceed this value.
+                              This should be unlimited (99) for powerful cars, and low for slow cars
+                     Default: 99
+        <dodgebonus> 
+            <base>  (integer) A bonus given to the driver's driving skill for combat purposes.
+                              This should be higher for easy-to-drive cars, and lower for nimble cars
+                     Default: 0
+            <skillfactor> (integer) A multiplier to skill effect.
+                              This should be higher for nimble cars, and lower for easy cars
+                     Default: 1
+            <softlimit> (integer) Bonus+Skill above this level provides half benefit
+                              This should be higher for nimble cars, and low for heavy/unstable cars.
+                     Default: 8
+            <hardlimit> (integer) Total effective skill level cannot exceed this value.
+                              This should be unlimited (99) for nimble cars and low for heavy/unstable cars.
+                     Default: 99
+        <attackbonus> 
+            <driver>(integer) A bonus/penalty given to the drivers' skill for firing weapons while driving.
+                     Default: -2
+            <passenger>(integer) A bonus/penalty given to the passengers' skill for firing weapons.
                      Default: 0
         <longname> (string) The name of the vehicle type.
                    Default: UNDEFINED
@@ -38,6 +67,17 @@
             <touch_alarm_chance> (integer) Chance the car will have a touch alarm (of 100).
                                  Default: 0
         </stealing>
+        <armor>
+            <low_armor_min> (integer) Range of armor protection given vs hits to passengers' legs/lower body (IE: car panels/seats)
+            <low_armor_max> (integer) Default: 4-6
+            <high_armor_min> (integer) Range of armor protection given vs hits to passengers' upper body/head (IE: windows)
+            <high_armor_max> (integer) Default: 0-2
+            <armor_midpoint> (integer; 0-100)  Percent chance for arm and body shots to hit the low armor (instead of the high armor).
+                              Default: 50
+        </armor>
+        <size> (integer) Bonus given to attacks that fail to injure passengers, when rolling to see if they hit the car harmlessly.
+                        NOTE: Currently it is purely cosmetic, but will matter when vehicle health is added.
+               Default: 2
         <available_at_dealership> (boolean) If true then the car can be bought at the car dealership.
                                   Default: true
         <price> (integer) Price to buy it at the car dealership. Sell price is 80% (if no heat on vehicle).
@@ -63,7 +103,30 @@
             <color>Beige</color>
             <color>Black</color>
         </colors>
-        <drivebonus>0</drivebonus>
+        <drivebonus>
+            <base>6</base>
+            <skillfactor>.5</skillfactor>
+            <softlimit>7</softlimit> <!-- easy for beginners, but masters won't get much out of it -->
+            <hardlimit>10</hardlimit>
+        </drivebonus>
+        <dodgebonus>
+            <base>3</base>
+            <skillfactor>.5</skillfactor>
+            <softlimit>4</softlimit> <!-- ok for beginners, but doesn't improve much -->
+            <hardlimit>6</hardlimit> 
+        </dodgebonus>
+        <attackbonus>
+            <driver>-3</driver> <!-- cramped and difficult to shoot from -->
+            <passenger>-2</passenger>
+        </attackbonus>
+        <armor>
+            <low_armor_min>5</low_armor_min> <!-- Classic steel frame for a bit more protection-->
+            <low_armor_max>7</low_armor_max>
+            <high_armor_min>0</high_armor_min>
+            <high_armor_max>2</high_armor_max>
+            <armor_midpoint>60</armor_midpoint>
+        </armor>
+        <size>1</size>
         <longname>Bug</longname>
         <shortname>Bug</shortname>
         <stealing>
@@ -88,7 +151,30 @@
             <color>Beige</color>
             <color>Green</color>
         </colors>
-        <drivebonus>0</drivebonus>
+        <drivebonus>
+            <base>1</base>
+            <skillfactor>1</skillfactor> <!-- beginners will struggle, but it gets better -->
+            <softlimit>6</softlimit>
+            <hardlimit>12</hardlimit>
+        </drivebonus>
+        <dodgebonus>
+            <base>0</base>
+            <skillfactor>1</skillfactor>
+            <softlimit>5</softlimit>
+            <hardlimit>12</hardlimit>
+        </dodgebonus>
+        <attackbonus>
+            <driver>-2</driver>
+            <passenger>1</passenger> <!-- designed to help passengers shoot back-->
+        </attackbonus>
+        <armor>
+            <low_armor_min>6</low_armor_min> <!-- Tough car -->
+            <low_armor_max>8</low_armor_max>
+            <high_armor_min>0</high_armor_min>
+            <high_armor_max>2</high_armor_max>
+            <armor_midpoint>90</armor_midpoint> <!-- Small windows - Go for the headshots-->
+        </armor>
+        <size>4</size> <!-- but easy to hit car -->
         <longname>HMMWV</longname>
         <shortname>Humvee</shortname>
         <stealing>
@@ -115,7 +201,30 @@
             <color>Beige</color>
             <color>Black</color>
         </colors>
-        <drivebonus>1</drivebonus>
+        <drivebonus>
+            <base>2</base>
+            <skillfactor>1</skillfactor>
+            <softlimit>6</softlimit> <!-- Midrange vehicle -->
+            <hardlimit>15</hardlimit>
+        </drivebonus>
+        <dodgebonus>
+            <base>3</base>
+            <skillfactor>0.67</skillfactor> <!-- dodging is difficult -->
+            <softlimit>6</softlimit>
+            <hardlimit>15</hardlimit>
+        </dodgebonus>
+        <attackbonus>
+            <driver>-1</driver> <!-- open concept makes it easier to shoot from -->
+            <passenger>2</passenger>
+        </attackbonus>
+        <armor>
+            <low_armor_min>2</low_armor_min> <!-- Bit exposed in places -->
+            <low_armor_max>6</low_armor_max>
+            <high_armor_min>0</high_armor_min>
+            <high_armor_max>0</high_armor_max> <!-- open top -->
+            <armor_midpoint>30</armor_midpoint>
+        </armor>
+        <size>1</size>
         <longname>Jeep</longname>
         <shortname>Jeep</shortname>
         <stealing>
@@ -142,7 +251,30 @@
             <color>Beige</color>
             <color>Black</color>
         </colors>
-        <drivebonus>1</drivebonus>
+        <drivebonus>
+            <base>3</base>
+            <skillfactor>0.67</skillfactor>
+            <softlimit>6</softlimit> <!-- midrange, but tougher to just drive away -->
+            <hardlimit>15</hardlimit>
+        </drivebonus>
+        <dodgebonus>
+            <base>2</base>
+            <skillfactor>1</skillfactor>
+            <softlimit>6</softlimit> <!-- midrange -->
+            <hardlimit>15</hardlimit>
+        </dodgebonus>
+        <attackbonus>
+            <driver>-1</driver> <!-- not too roomy, but probably comes with a gun rack for the driver -->
+            <passenger>-1</passenger>
+        </attackbonus>
+        <armor>
+            <low_armor_min>4</low_armor_min>
+            <low_armor_max>6</low_armor_max>
+            <high_armor_min>0</high_armor_min>
+            <high_armor_max>2</high_armor_max>
+            <armor_midpoint>65</armor_midpoint>
+        </armor>
+        <size>3</size>
         <longname>Pickup Truck</longname>
         <shortname>Pickup</shortname>
         <stealing>
@@ -167,7 +299,30 @@
             <display_color>false</display_color>
             <color>Police-Marked</color>
         </colors>
-        <drivebonus>2</drivebonus>
+        <drivebonus>
+            <base>1</base>
+            <skillfactor>1.5</skillfactor> <!-- easy and powerful -->
+            <softlimit>11</softlimit>
+            <hardlimit>99</hardlimit>
+        </drivebonus>
+        <dodgebonus>
+            <base>1</base>
+            <skillfactor>1.5</skillfactor> <!-- bit better at driving than dodging -->
+            <softlimit>8</softlimit>
+            <hardlimit>99</hardlimit>
+        </dodgebonus>
+        <attackbonus>
+            <driver>-2</driver>
+            <passenger>0</passenger>
+        </attackbonus>
+        <armor>
+            <low_armor_min>5</low_armor_min>
+            <low_armor_max>7</low_armor_max>
+            <high_armor_min>1</high_armor_min> <!--Hardened glass-->
+            <high_armor_max>3</high_armor_max>
+            <armor_midpoint>50</armor_midpoint>
+        </armor>
+        <size>2</size>
         <longname>Police Cruiser</longname>
         <shortname>Cruiser</shortname>
         <stealing>
@@ -190,7 +345,30 @@
         <colors>
             <color>Black</color>
         </colors>
-        <drivebonus>3</drivebonus>
+        <drivebonus>
+            <base>0</base>
+            <skillfactor>2</skillfactor>
+            <softlimit>15</softlimit> <!-- suped-up awesomeness -->
+            <hardlimit>99</hardlimit>
+        </drivebonus>
+        <dodgebonus>
+            <base>0</base>
+            <skillfactor>2</skillfactor>
+            <softlimit>15</softlimit>
+            <hardlimit>99</hardlimit>
+        </dodgebonus>
+        <attackbonus>
+            <driver>-1</driver>
+            <passenger>0</passenger>
+        </attackbonus>
+        <armor>
+            <low_armor_min>6</low_armor_min>
+            <low_armor_max>8</low_armor_max>
+            <high_armor_min>2</high_armor_min><!-- Bullet "proof" glass-->
+            <high_armor_max>4</high_armor_max>
+            <armor_midpoint>30</armor_midpoint>
+        </armor>
+        <size>2</size>
         <longname>Sportscar</longname>
         <shortname>Sport</shortname>
         <stealing> <!-- Stealing isn't possible for agentcars -->
@@ -217,7 +395,30 @@
             <color>Beige</color>
             <color>Black</color>
         </colors>
-        <drivebonus>3</drivebonus>
+        <drivebonus>
+            <base>-4</base> <!-- not forgiving of noobs, but if you're good you can get a lot out of it. -->
+            <skillfactor>2</skillfactor>
+            <softlimit>15</softlimit>
+            <hardlimit>99</hardlimit>
+        </drivebonus>
+        <dodgebonus>
+            <base>-4</base>
+            <skillfactor>2</skillfactor>
+            <softlimit>15</softlimit>
+            <hardlimit>99</hardlimit>
+        </dodgebonus>
+        <attackbonus>
+            <driver>0</driver> <!-- open and clear LoS -->
+            <passenger>3</passenger>
+        </attackbonus>
+        <armor>
+            <low_armor_min>2</low_armor_min>
+            <low_armor_max>5</low_armor_max>
+            <high_armor_min>0</high_armor_min> <!-- Cruisin' with the top down-->
+            <high_armor_max>0</high_armor_max>
+            <armor_midpoint>30</armor_midpoint>
+        </armor>
+        <size>2</size>
         <longname>Sportscar</longname>
         <shortname>Sport</shortname>
         <stealing>
@@ -245,7 +446,30 @@
             <color>Beige</color>
             <color>Black</color>
         </colors>
-        <drivebonus>0</drivebonus>
+        <drivebonus>
+            <base>5</base>
+            <skillfactor>0.5</skillfactor>
+            <softlimit>7</softlimit> <!-- A beginner's car - you won't crash it much, but its got a sad top-end -->
+            <hardlimit>10</hardlimit>
+        </drivebonus>
+        <dodgebonus>
+            <base>0</base>
+            <skillfactor>0.5</skillfactor> <!-- you won't be dodging in this boat of a vehicle -->
+            <softlimit>4</softlimit>
+            <hardlimit>9</hardlimit>
+        </dodgebonus>
+        <attackbonus>
+            <driver>-2</driver>
+            <passenger>1</passenger>  <!-- roomy for passengers -->
+        </attackbonus>
+        <armor>
+            <low_armor_min>4</low_armor_min>
+            <low_armor_max>6</low_armor_max>
+            <high_armor_min>0</high_armor_min>
+            <high_armor_max>2</high_armor_max>
+            <armor_midpoint>60</armor_midpoint>
+        </armor>
+        <size>4</size>
         <longname>Station Wagon</longname>
         <shortname>Wagon</shortname>
         <stealing>
@@ -274,7 +498,30 @@
             <color>Beige</color>
             <color>Black</color>
         </colors>
-        <drivebonus>1</drivebonus>
+        <drivebonus>
+            <base>2</base>
+            <skillfactor>1</skillfactor>
+            <softlimit>3</softlimit> <!-- Midrange vehicle -->
+            <hardlimit>12</hardlimit>
+        </drivebonus>
+        <dodgebonus>
+            <base>1</base>
+            <skillfactor>1</skillfactor>
+            <softlimit>4</softlimit>  <!-- Midrange -->
+            <hardlimit>12</hardlimit>
+        </dodgebonus>
+        <attackbonus>
+            <driver>-2</driver>
+            <passenger>0</passenger>
+        </attackbonus>
+        <armor>
+            <low_armor_min>5</low_armor_min>
+            <low_armor_max>7</low_armor_max>
+            <high_armor_min>0</high_armor_min>
+            <high_armor_max>2</high_armor_max>
+            <armor_midpoint>50</armor_midpoint>
+        </armor>
+        <size>3</size>
         <longname>SUV</longname>
         <shortname>SUV</shortname>
         <stealing>
@@ -299,7 +546,30 @@
             <display_color>false</display_color>
             <color>Taxi-Striped</color>
         </colors>
-        <drivebonus>1</drivebonus>
+        <drivebonus>
+            <base>2</base>
+            <skillfactor>1.34</skillfactor>
+            <softlimit>4</softlimit> <!-- fairly forgiving, plus blends into traffic well if you know what you're doing -->
+            <hardlimit>12</hardlimit>
+        </drivebonus>
+        <dodgebonus>
+            <base>2</base>
+            <skillfactor>1.34</skillfactor>
+            <softlimit>6</softlimit>
+            <hardlimit>12</hardlimit>
+        </dodgebonus>
+        <attackbonus>
+            <driver>-2</driver>
+            <passenger>0</passenger>
+        </attackbonus>
+        <armor>
+            <low_armor_min>4</low_armor_min>
+            <low_armor_max>6</low_armor_max>
+            <high_armor_min>0</high_armor_min>
+            <high_armor_max>2</high_armor_max>
+            <armor_midpoint>50</armor_midpoint>
+        </armor>
+        <size>2</size>
         <longname>Taxicab</longname>
         <shortname>Taxicab</shortname>
         <stealing>
@@ -326,7 +596,31 @@
             <color>Beige</color>
             <color>Black</color>
         </colors>
-        <drivebonus>0</drivebonus>
+        <drivebonus>
+            <base>2</base>
+            <skillfactor>1</skillfactor>
+            <softlimit>4</softlimit> <!-- pretty pathetic really -->
+            <hardlimit>7</hardlimit>
+        </drivebonus>
+        <dodgebonus>
+            <base>0</base>
+            <skillfactor>1</skillfactor>
+            <softlimit>0</softlimit> <!-- big slow target -->
+            <hardlimit>6</hardlimit>
+        </dodgebonus>
+        <attackbonus>
+            <driver>-4</driver>  <!-- bad visibility from driver's seat, but roomy.  Don't drive it alone -->
+            <passenger>3</passenger>
+        </attackbonus>
+        <size>1</size>
+        <armor>
+            <low_armor_min>6</low_armor_min> <!-- at least you won't get hurt if you remember to wear a helmet -->
+            <low_armor_max>9</low_armor_max>
+            <high_armor_min>3</high_armor_min>
+            <high_armor_max>5</high_armor_max>
+            <armor_midpoint>95</armor_midpoint>
+        </armor>
+        <size>5</size>
         <longname>Van</longname>
         <shortname>Van</shortname>
         <stealing>

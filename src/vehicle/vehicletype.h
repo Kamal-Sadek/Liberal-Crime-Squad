@@ -17,7 +17,12 @@ class VehicleType
       bool displayscolor() const { return displaycolor_; }
       const string& longname() const { return longname_; }
       const string& shortname() const { return shortname_; }
-      int drivebonus() const { return drivebonus_; }
+      int modifieddriveskill(int skillLevel);
+      int modifieddodgeskill(int skillLevel);
+      int attackbonus(bool isDriving) const { return isDriving?attackbonus_driver_:attackbonus_passenger_; }
+      int gethitlocation(int bodypart);
+      string getpartname(int location);
+      int armorbonus(int location);
       
       int steal_difficultytofind() const { return steal_difficultytofind_; }
       int steal_juice() const { return steal_juice_; }
@@ -46,6 +51,21 @@ class VehicleType
       string longname_;
       string shortname_;
       int drivebonus_;
+      float drivebonus_factor_;
+      int drivebonus_limit1_;
+      int drivebonus_limit2_;
+      int dodgebonus_;
+      float dodgebonus_factor_;
+      int dodgebonus_limit1_;
+      int dodgebonus_limit2_;
+      int attackbonus_driver_;
+      int attackbonus_passenger_;
+      
+      int armormidpoint_;
+      int lowarmormin_;
+      int lowarmormax_;
+      int higharmormin_;
+      int higharmormax_;
       
       int steal_difficultytofind_;
       int steal_juice_;
@@ -55,7 +75,7 @@ class VehicleType
       
       bool availableatshop_;
       int price_;
-	  int sleeperprice_;
+      int sleeperprice_;
 };
 
 #endif //VEHICLE_TYPE_H

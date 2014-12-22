@@ -66,7 +66,9 @@ enum CreatureAttribute
 
 enum CreatureSkill
 {
-   SKILL_ART,
+   PSEUDOSKILL_ESCAPEDRIVE = -2,
+   PSEUDOSKILL_DODGEDRIVE,
+   SKILL_ART = 0,
    SKILL_AXE,
    SKILL_BUSINESS,
    SKILL_CLUB,
@@ -292,6 +294,7 @@ private:
    class Attribute attributes[ATTNUM];
    class Skill skills[SKILLNUM];
    int skill_experience[SKILLNUM];
+   static int roll_check(int skill);
    static Weapon& weapon_none();
    static Armor& armor_none();
    Weapon* weapon;
@@ -307,8 +310,6 @@ public:
    int get_skill(int skill) const { return MIN(skills[skill].value,MAXATTRIBUTE); }
    int skill_roll(int skill) const;
    bool skill_check(int skill, int difficulty) const;
-
-   static int roll_check(int skill);
    
    char name[CREATURE_NAMELEN];
    char propername[CREATURE_NAMELEN];
