@@ -67,13 +67,13 @@ string Vehicle::fullname(bool halffull) const
    int words=0;
    if(heat_)
    {
-	   s="Stolen ";
-	   words++;
+      s="Stolen ";
+      words++;
    }
    if(displayscolor())
    {
       s+=color_+" ";
-	   words++;
+      words++;
    }
    if (myear_!=-1&&words<2) //don't print year if that will make the name too long.
       s+=tostring(myear_)+" ";
@@ -81,4 +81,13 @@ string Vehicle::fullname(bool halffull) const
    else s+=longname();
 
    return s;
+}
+
+int Vehicle::modifieddriveskill(int skillLevel)
+{
+   return vehicletype[getvehicletype(vtypeidname_)]->modifieddriveskill(skillLevel); // Todo - add bonus if car is upgraded with nitro
+}
+int Vehicle::modifieddodgeskill(int skillLevel)
+{
+   return vehicletype[getvehicletype(vtypeidname_)]->modifieddodgeskill(skillLevel); // Todo - add bonus if car is upgraded
 }

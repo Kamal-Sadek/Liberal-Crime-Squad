@@ -1551,7 +1551,7 @@ void specialattack(Creature &a,Creature &t,char &actual);
 /* modifies a combat roll based on the creature's critical injuries */
 void healthmodroll(int &aroll,Creature &a);
 /* adjusts attack damage based on armor, other factors */
-void damagemod(Creature &t,char &damtype,int &damamount,char hitlocation,char armorpenetration,int &mod);
+void damagemod(Creature &t,char &damtype,int &damamount,char hitlocation,char armorpenetration,int mod,int extraarmor);
 /* destroys armor, masks, drops weapons based on severe damage */
 void severloot(Creature &cr,vector<Item *> &loot);
 /* damages the selected armor if it covers the body part specified */
@@ -1579,6 +1579,8 @@ bool footchase();
 void evasivedrive();
 void evasiverun();
 int driveskill(Creature &cr,Vehicle &v);
+Vehicle* getChaseVehicle(Creature c);
+Creature* getChaseDriver(Creature c);
 bool drivingupdate(short &obstacle);
 void makechasers(long sitetype,long sitecrime);
 bool obstacledrive(short obstacle,char choice);

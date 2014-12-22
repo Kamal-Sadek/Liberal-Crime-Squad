@@ -472,7 +472,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
 
    char str[200];
 
-   clearmessagearea(false);
+   clearmessagearea(true);  // erase the whole length and redraw map if applicable, since previous combat messages can be wider than 53 chars.
    if(goodguyattack) set_color(COLOR_GREEN,COLOR_BLACK,1);
    else set_color(COLOR_RED,COLOR_BLACK,1);
 
@@ -630,11 +630,6 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    {
       strcat(str," with a ");
       strcat(str,a.get_weapon().get_name(1));
-      //strcat(str," and ");
-   }
-   else
-   {
-      //strcat(str,"and ");
    }
    strcat(str,"!");
    addstr(str, gamelog);
@@ -644,16 +639,42 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
 
    if(goodguyattack) set_color(COLOR_GREEN,COLOR_BLACK,1);
    else set_color(COLOR_RED,COLOR_BLACK,1);
-   strcpy(str,a.name);
+   strcpy(str, a.heshe(true)); // capitalize=true. Shorten the string so it doesn't spill over as much; we already said attacker's name on the previous line anyways.
 
    int bonus=0; // Accuracy bonus or penalty that does NOT affect damage or counterattack chance
 
    //SKILL EFFECTS
    int wsk=attack_used->skill;
 
+   Creature* driver = getChaseDriver(t);
+   Vehicle* vehicle = getChaseVehicle(t);
+   Creature* adriver = getChaseDriver(a);
+   Vehicle* avehicle = getChaseVehicle(a);
+   
    // Basic roll
    int aroll=a.skill_roll(wsk);
-   int droll=t.skill_roll(SKILL_DODGE)/2;
+   // In a car chase, the driver provides the defence roll instead of the victim.
+   int droll= 0;
+   if (mode!=GAMEMODE_CHASECAR)
+   {
+      droll = t.skill_roll(SKILL_DODGE)/2;
+   }
+   else
+   {
+      if (driver!=NULL && vehicle!=NULL)
+      {  // without a vehicle or driver, you get a zero roll.
+         droll = driver->skill_roll(PSEUDOSKILL_DODGEDRIVE);
+      }
+      if (adriver!=NULL && avehicle!=NULL)
+      {
+         bonus += avehicle->attackbonus(adriver->id == a.id);  // Attack bonus depends on attacker's car and whether attacker is distracted by driving.
+      }
+      else // shouldn't happen
+      {
+         bonus -= 10; // You're on the wrong side of a drive-by shooting?!
+      }
+   }
+   
    if(sneak_attack)
    {
       droll=t.attribute_roll(ATTRIBUTE_WISDOM)/2;
@@ -662,7 +683,10 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    }
    else
    {
-      t.train(SKILL_DODGE,aroll*2);
+      if (driver!=NULL)
+         driver->train(SKILL_DRIVING, aroll/2);
+      else
+         t.train(SKILL_DODGE,aroll*2);
       a.train(wsk,droll*2+5);
    }
 
@@ -671,12 +695,25 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    if(a.prisoner!=NULL) aroll-=LCSrandom(10);
 
    //Injured people suck at attacking, are like fish in a barrel to attackers
-   healthmodroll(aroll,a);
-   healthmodroll(droll,t);
-
-   // If in a foot chance, double the debilitating effect of injuries
    if(mode==GAMEMODE_CHASEFOOT)
    {
+      // If in a foot chase, double the debilitating effect of injuries
+      healthmodroll(aroll,a);
+      healthmodroll(droll,t);
+      healthmodroll(droll,t);
+   }
+   else if (mode==GAMEMODE_CHASECAR)
+   {
+      // In a car chase, the driver is applying dodge rolls even for crippled people.
+      healthmodroll(aroll,a);
+      if (driver != NULL)
+      {// if there is no driver, we already rolled a zero, so don't worry about further penalties.
+         healthmodroll(droll,*driver);
+      }
+   }
+   else
+   {  
+      // Any other case (site fight) normal penalties.
       healthmodroll(aroll,a);
       healthmodroll(droll,t);
    }
@@ -703,12 +740,12 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    else
    {
       if(mode==GAMEMODE_SITE && LCSrandom(100) < attack_used->fire.chance_causes_debris)
-      {
+      {// TODO - In a car chase, debris should make driving harder for one round, or require a drive skill check to avoid damage
          sitechangest change(locx,locy,locz,SITEBLOCK_DEBRIS);
          location[cursite]->changes.push_back(change);
       }
       if(mode==GAMEMODE_SITE && LCSrandom(100) < attack_used->fire.chance)
-      {
+      {// TODO - In a car chase, apply vehicle damage, with drive skill check to partially mitigate
          // Fire!
          if(!(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_END) ||
             !(levelmap[locx][locy][locz].flag & SITEBLOCK_FIRE_PEAK) ||
@@ -752,8 +789,10 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    //HIT!
    if(aroll+bonus>droll)
    {
-      if(sneak_attack) strcat(str, " stabs the ");
-      else strcat(str," hits the ");
+      if(sneak_attack) strcat(str, " stabs ");
+      else strcat(str," hits ");
+      strcat(str,t.name);
+      strcat(str, "'s ");
       int w;
       bool canhit=false;
 
@@ -769,8 +808,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
       do
       {
          int offset=0;
-         if(aroll>droll+5 || mode==GAMEMODE_CHASECAR)
-            offset=4;  // NICE SHOT; MORE LIKELY TO HIT BODY/HEAD or it's a car chase and we don't want to hit the car too much
+         if(aroll>droll+5)
+            offset=4;  // NICE SHOT; MORE LIKELY TO HIT BODY/HEAD
          if(aroll>droll+10 &&
             (!(t.wound[BODYPART_HEAD]&(WOUND_CLEANOFF|WOUND_NASTYOFF)) ||
              !(t.wound[BODYPART_BODY]&(WOUND_CLEANOFF|WOUND_NASTYOFF))))
@@ -830,24 +869,8 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          case BODYPART_BODY:strcat(str,"body"); break;
          case BODYPART_ARM_RIGHT:strcat(str,"right arm"); break;
          case BODYPART_ARM_LEFT:strcat(str,"left arm"); break;
-         case BODYPART_LEG_RIGHT:
-            if(mode!=GAMEMODE_CHASECAR)
-               strcat(str,"right leg");
-            else
-            {
-               strcat(str,"car");
-               aroll=-20;
-            }
-            break;
-         case BODYPART_LEG_LEFT:
-            if(mode!=GAMEMODE_CHASECAR)
-               strcat(str,"left leg");
-            else
-            {
-               strcat(str,"car");
-               aroll=-20;
-            }
-            break;
+         case BODYPART_LEG_RIGHT:strcat(str,"right leg"); break;
+         case BODYPART_LEG_LEFT:strcat(str,"left leg");break;
          }
 
       // show multiple hits
@@ -882,6 +905,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
 
       char damagearmor=0;
       char armorpiercing=0;
+      int extraarmor=0;
 
       if (!a.is_armed())
       {
@@ -972,9 +996,39 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
 
       //Health and poor accuracy will only avoid critical hits, not stop low-damage attacks
       if(mod<0) mod=0;
+      
+      // In a car chase, the vehicle itself provides bonus armor
+      int vehicleHitLocation = 0;
+      if (mode==GAMEMODE_CHASECAR && vehicle != NULL)
+      {
+         vehicleHitLocation = vehicle->gethitlocation(w);
+         extraarmor = vehicle->armorbonus(vehicleHitLocation);
+         // TODO damage vehicle itself
+      }
 
-      damagemod(t,damtype,damamount,w,armorpiercing,mod);
-
+      int cardmg = damamount;
+      damagemod(t,damtype,damamount,w,armorpiercing,mod,extraarmor);
+      
+      // Report vehicle protection effect
+      if (mode==GAMEMODE_CHASECAR && vehicle != NULL && extraarmor > 0)
+      {
+         strcat(str, " through ");
+         // Could the vehicle have bounced that round on its own?
+         if (damamount==0)
+         {
+            Creature testDummy; // Spawn nude test dummy to see if body armor was needed to prevent damage
+            damagemod(testDummy,damtype,cardmg,w,armorpiercing,mod,extraarmor);
+            
+            if (cardmg < 2) //fudge factor of 1 armor level due to randomness
+            {
+               strcpy(str, "The attack bounces off ");
+            }
+         }
+         
+         strcat(str,"the "+vehicle->shortname()+"'s ");
+         strcat(str, vehicle->getpartname(vehicleHitLocation));
+      }
+      
       // Temporary debug output for the damage roll
       #ifdef SHOWMECHANICS
       {
@@ -986,10 +1040,12 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          getkey();
       }
       #endif
-
-      if(mode==GAMEMODE_CHASECAR && (w == BODYPART_LEG_LEFT || w == BODYPART_LEG_RIGHT))
-         damamount=0; // no damage to shots to the car body
-
+      // Bullets caught by armor should bruise instead of poke holes.
+      if(damamount<4 && damtype & WOUND_SHOT)
+      {
+         damtype &= ~(WOUND_SHOT|WOUND_BLEEDING);
+         damtype |= WOUND_BRUISED;
+      }
       if(damamount>0)
       {
          Creature *target=0;
@@ -1595,7 +1651,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          char actual_dummy;
          attack(t,a,0,actual_dummy,true);
          goodguyattack = !goodguyattack;
-      }
+      }//TODO if missed person, but vehicle is large, it might damage the car. 
       else
       {
          if(sneak_attack)
@@ -1610,18 +1666,59 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
              }
              sitealarm=1;
          }
-         else if(t.skill_check(SKILL_DODGE, DIFFICULTY_AVERAGE))         //Awesome dodge or regular one?
+         else
          {
-             strcpy(str, t.name);
-             switch(LCSrandom(4))
-             {
-                 case 0: strcat(str," gracefully dives to avoid the attack!"); break;
-                 case 1: strcat(str," does the Matrix-dodge!"); break;
-                 case 2: strcat(str," leaps for cover!"); break;
-                 default: strcat(str," avoids the attack with no difficulty at all!"); break;
-             }
+            if (mode==GAMEMODE_CHASECAR)
+            {
+               strcpy(str, driver->name);
+               switch(droll)
+               {
+                  case 1: strcpy(str, a.name); strcat(str," missed!"); break;
+                  case 2: strcpy(str, a.name); strcat(str," just barely missed!"); break;
+                  case 3: strcat(str," can't seem to keep the vehicle in either the lane or the line of fire!"); break;
+                  case 4: strcat(str," swerves randomly!"); break;
+                  case 5: strcat(str," cuts off another driver and the shot is blocked!"); break;
+                  case 6: strcat(str," drops behind a hill in the road!"); break;
+                  case 7: strcat(str," changes lanes at the last second!"); break;
+                  case 8: strcat(str," accelerates suddenly and the shot goes short!"); break;
+                  case 9: strcat(str," fakes a left, and goes right instead!"); break;
+                  case 10: strcat(str," fakes a right, and goes left instead!"); break;
+                  case 11: strcat(str," fakes with the brakes while powering ahead!"); break;
+                  case 12: strcat(str," swerves to the other side of a truck!"); break;
+                  case 13: strcat(str," weaves through a row of taxis!"); break;
+                  case 14: strcat(str," dodges behind a hot dog cart!"); break;
+                  case 15: strcat(str," squeezes between some bridge supports for cover!"); break;
+                  case 16: strcat(str," squeals around a corner and behind a building!"); break;
+                  case 17: strcat(str," power slides through a narrow gap in the traffic!"); break;
+                  case 18: strcat(str," rolls the car onto two wheels to dodge the shot!"); break;
+                  default: strcpy(str, a.name); strcat(str," misses completely!"); break; // You failed to hit someone who probably rolled a zero.  You should feel bad.
+               }
+            }else{
+               strcpy(str, t.name);
+               switch(droll)
+               {
+                  case 1: strcpy(str, a.name); strcat(str," missed!"); break;
+                  case 2: strcpy(str, a.name); strcat(str," just barely missed!"); break;
+                  case 3: strcat(str," tumbles out of the way!"); break;
+                  case 4: strcat(str," jumps aside at the last moment!"); break;
+                  case 5: strcat(str," leaps for cover!"); break;
+                  case 6: strcat(str," ducks back behind cover!"); break;
+                  case 7: strcat(str," wisely stays behind cover!"); break;
+                  case 8: strcat(str," rolls away from the attack!"); break;
+                  case 9: strcat(str," nimbly dodges away from the line of fire!"); break;
+                  case 10: strcat(str," leaps over the attack!"); break;
+                  case 11: strcat(str," gracefully dives to avoid the attack!"); break;
+                  case 12: strcat(str," twists to avoid the attack!"); break;
+                  case 13: strcat(str," spins to the side!"); break;
+                  case 14: strcat(str," does the Matrix-dodge!"); break; // You saying I can dodge bullets?
+                  case 15: strcat(str," avoids the attack with no difficulty at all!"); break;
+                  case 16: strcat(str," flexes slightly to avoid being hit!"); break;
+                  case 17: strcat(str," confidently allows the attack to miss!"); break;
+                  case 18: strcat(str," seems to avoid the attack with only an angry glare!"); break; //When you're ready, you won't have to.
+                  default: strcpy(str, a.name); strcat(str," misses completely!"); break; // You failed to hit someone who probably rolled a zero.  You should feel bad.
+               }
+            }
          }
-         else strcat(str," misses.");
          move(17,1);
          addstr(str, gamelog);
          gamelog.newline();
@@ -1674,7 +1771,7 @@ void healthmodroll(int &aroll,Creature &a)
 
 /* adjusts attack damage based on armor, other factors */
 void damagemod(Creature &t,char &damtype,int &damamount,
-               char hitlocation,char armorpenetration,int &mod)
+               char hitlocation,char armorpenetration,int mod,int extraarmor)
 {
    int armor=t.get_armor().get_armor(hitlocation);
 
@@ -1691,13 +1788,16 @@ void damagemod(Creature &t,char &damtype,int &damamount,
       armor-=1;
 
    if(armor<0) armor=0; // Possible from second-rate clothes
+   armor += extraarmor; // Add vehicle armor 
 
    int mod2=armor+LCSrandom(armor+1)-armorpenetration;
    if(mod2>0) mod-=mod2*2;
 
    if(mod>10) mod=10; // Cap damage multiplier (every 5 points adds 1x damage)
 
-   if(mod<=-8) damamount>>=6;
+   if(mod<=-20) damamount>>=8;  //Cars plus heavy armor can be really tough.
+   else if(mod<=-14) damamount>>=7;
+   else if(mod<=-8) damamount>>=6;
    else if(mod<=-6) damamount>>=5;
    else if(mod<=-4) damamount>>=4;
    else if(mod<=-3) damamount>>=3;

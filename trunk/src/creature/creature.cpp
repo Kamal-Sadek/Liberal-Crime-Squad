@@ -962,6 +962,25 @@ bool Creature::attribute_check(int attribute, int difficulty) const
 
 int Creature::skill_roll(int skill) const
 {
+   int pseudoskill = 0;
+   // Handle Pseudoskills
+   if (skill < 0)
+   {
+      switch (skill)
+      {
+      default:
+         set_color(COLOR_YELLOW,COLOR_RED,1);
+         addstr("-=ILLEGAL SKILL ROLL=-", gamelog);
+         gamelog.newline();
+         getkey();
+         break;
+      case PSEUDOSKILL_ESCAPEDRIVE:
+      case PSEUDOSKILL_DODGEDRIVE:
+         pseudoskill = skill;   // Remember the details.
+         skill = SKILL_DRIVING; // Base skill is driving.
+         break;
+      }
+   }
    // Take skill strength
    int skill_value = skills[skill].value;
    // plus the skill's associate attribute
@@ -980,6 +999,32 @@ int Creature::skill_roll(int skill) const
       break;
    }
 
+   Vehicle* v = getChaseVehicle(*this);
+   switch(pseudoskill)
+   {
+      case PSEUDOSKILL_ESCAPEDRIVE:
+         if (v != NULL)
+         {
+            skill_value = v->modifieddriveskill(skill_value+adjusted_attribute_value); // combine values and modify by vehicle stats
+            adjusted_attribute_value = 0;
+         }
+         else
+         {
+            skill_value = adjusted_attribute_value = 0; // Can't drive without a car
+         }
+         break;
+      case PSEUDOSKILL_DODGEDRIVE:
+         if (v != NULL)
+         {
+            skill_value = v->modifieddodgeskill(skill_value+adjusted_attribute_value); // combine values and modify by vehicle stats
+            adjusted_attribute_value = 0;
+         }
+         else
+         {
+            skill_value = adjusted_attribute_value = 0; // Can't drive without a car
+         }
+         break;
+   }
    // add the adjusted attribute and skill to get the adjusted skill total
    // that will be rolled on
    int return_value = roll_check(skill_value + adjusted_attribute_value);
