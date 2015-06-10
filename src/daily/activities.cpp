@@ -967,6 +967,7 @@ void funds_and_trouble(char &clearformess)
       case ACTIVITY_STUDY_MUSIC:
       case ACTIVITY_STUDY_WRITING:
       case ACTIVITY_STUDY_LOCKSMITHING:
+      case ACTIVITY_STUDY_COMPUTERS:
          students.push_back(pool[p]);
          break;
       case ACTIVITY_SLEEPER_JOINLCS:
@@ -1757,6 +1758,9 @@ void doActivityLearn(vector<Creature *> &students, char &clearformess)
 		  case ACTIVITY_STUDY_WRITING:
            skill[0] = SKILL_WRITING;
 			  break;
+         case ACTIVITY_STUDY_COMPUTERS:
+           skill[0] = SKILL_COMPUTERS;
+           break; 
 	   }
 	   bool worthcontinuing=false;
 	   for(int i=0; i<2; i++)

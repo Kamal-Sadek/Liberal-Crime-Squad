@@ -279,7 +279,7 @@
     </weapontype>
 
     <weapontype idname="WEAPON_SHOTGUN_AA12">
-        <name>AA-12 Auto Shotgun</name>
+        <name>AA-12 Shotgun</name>
         <name_future>Z-12 Chain Burstgun</name_future>
         <shortname>AA-12</shortname>
         <shortname_future>Z-12</shortname_future>

@@ -66,6 +66,7 @@
 //somebody claims squads don't move (sounds like older version bug, they haven't told me version)
 
 #include <includes.h>
+#include <ctime>
 
 Log gamelog; //The gamelog.
 Log xmllog; // Log for xml errors or bad values.
@@ -255,9 +256,15 @@ int main(int argc, char* argv[])
 
    //For formatting.
    //To let the user know a new instance of the program was started.
-   //TODO: Make this output the current date and time so that the user knows when they
-   //did the play session that follows.
-   gamelog.log("\n\n\n---------- PROGRAM STARTED ----------\n\n\n");
+   gamelog.log("\n\n\n---------- PROGRAM STARTED ----------\n");
+
+   //Date and time
+   time_t t = time(0);
+   struct tm *now = localtime(&t); //Do not need to deallocate this. Statically allocated by system
+   char datetime[41];
+   sprintf(datetime, "---------%i-%02i-%02i %02i:%02i:%02i---------\n\n\n", 
+      now->tm_year+1900, now->tm_mon+1, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec); //YYYY-MM-DD HH:MM:SS format
+   gamelog.log(datetime);
 
    music.play(MUSIC_TITLEMODE); // initialize music and play title mode song (do this BEFORE displaying anything on the screen, but AFTER initializing artdir and homedir)
 

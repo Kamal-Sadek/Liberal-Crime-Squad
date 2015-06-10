@@ -73,8 +73,6 @@
 #define ALLOWSTALIN
 
 //PACKAGE_VERSION must be defined here or the game won't compile on Windows! Don't remove it!!!
-//The last beta version released was 4.07.4 beta, and 4.07.5 beta hasn't been released yet,
-//so we should keep using 4.07.5 beta for SVN versions until 4.07.5 beta is officially released.
 // -- yetisyny
 #define PACKAGE_VERSION "4.07.5 beta"
 
@@ -295,6 +293,8 @@ enum Activity
    ACTIVITY_STUDY_ART,
    ACTIVITY_STUDY_TEACHING,
    ACTIVITY_STUDY_WRITING,
+   ACTIVITY_STUDY_LOCKSMITHING,
+   ACTIVITY_STUDY_COMPUTERS,
    ACTIVITY_CLINIC,
    ACTIVITY_HEAL,
    ACTIVITY_SLEEPER_LIBERAL,
@@ -305,7 +305,6 @@ enum Activity
    ACTIVITY_SLEEPER_EMBEZZLE,
    ACTIVITY_SLEEPER_STEAL,
    ACTIVITY_SLEEPER_JOINLCS,
-   ACTIVITY_STUDY_LOCKSMITHING,
    ACTIVITY_RECRUITING,
    ACTIVITYNUM
 };

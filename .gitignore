@@ -1,0 +1,17 @@
+Makefile*
+*.o
+aclocal.m4
+autom4te.cache/
+configure
+depcomp
+install-sh
+missing
+.deps/
+crimesquad
+stamp-h1
+compile
+config.log
+config.status
+config.h.in
+*~
+

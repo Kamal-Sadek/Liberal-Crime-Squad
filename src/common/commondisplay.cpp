@@ -177,6 +177,7 @@ void set_activity_color(long activity_type)
    case ACTIVITY_STUDY_TEACHING:
    case ACTIVITY_STUDY_WRITING:
    case ACTIVITY_STUDY_LOCKSMITHING:
+   case ACTIVITY_STUDY_COMPUTERS:
       set_color(COLOR_MAGENTA,COLOR_BLACK,1);
       break;
 

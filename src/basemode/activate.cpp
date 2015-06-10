@@ -256,13 +256,23 @@ void listclasses(Creature *cr)
       move(17,40);
       addstr("6 - Other classes");
    }
+   else if(classlist==3)
+   {
+      set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_STUDY_COMPUTERS);
+      move(12,40);
+      addstr("1 - Computers");
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(17,40);
+      addstr("6 - Other classes");
+   }
 }
 
 void updateclasschoice(Creature *cr, char choice)
 {
    if(choice=='6')
    {
-      classlist=(classlist+1)%3;
+      classlist=(classlist+1)%4;
       listclasses(cr);
    }
    else
@@ -298,6 +308,13 @@ void updateclasschoice(Creature *cr, char choice)
             case '3':cr->activity.type=ACTIVITY_STUDY_TEACHING;break;
             case '4':cr->activity.type=ACTIVITY_STUDY_MUSIC;break;
             case '5':cr->activity.type=ACTIVITY_STUDY_LOCKSMITHING;break;
+         }
+      }
+      else if(classlist==3)
+      {
+         switch(choice)
+         {
+            case '1':cr->activity.type=ACTIVITY_STUDY_COMPUTERS;break;
          }
       }
       listclasses(cr);
@@ -395,6 +412,7 @@ void activate(Creature *cr)
       case ACTIVITY_STUDY_MUSIC:
       case ACTIVITY_STUDY_TEACHING:
       case ACTIVITY_STUDY_LOCKSMITHING:
+      case ACTIVITY_STUDY_COMPUTERS:
          state='l';
          break;
       case ACTIVITY_CLINIC:
@@ -755,6 +773,7 @@ void activate(Creature *cr)
       case ACTIVITY_STUDY_MUSIC:
       case ACTIVITY_STUDY_TEACHING:
       case ACTIVITY_STUDY_LOCKSMITHING:
+      case ACTIVITY_STUDY_COMPUTERS:
          move(22,3);
          addstr(cr->name);
          addstr(" will attend classes in the University District");

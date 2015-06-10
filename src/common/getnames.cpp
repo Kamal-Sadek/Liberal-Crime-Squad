@@ -147,6 +147,7 @@ std::string getactivity(activityst &act)
    case ACTIVITY_STUDY_TEACHING:
    case ACTIVITY_STUDY_WRITING:
    case ACTIVITY_STUDY_LOCKSMITHING:
+   case ACTIVITY_STUDY_COMPUTERS:
       return "Attending Classes";
    case ACTIVITY_SLEEPER_LIBERAL:
       return "Promoting Liberalism";

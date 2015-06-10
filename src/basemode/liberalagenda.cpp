@@ -700,7 +700,7 @@ bool confirmdisband()                      // concerned should be (slightly) mor
    //SET UP THE DISBAND
    for(int p=len(pool)-1;p>=0;p--)
    {
-      if(!pool[p]->alive) delete_and_remove(pool,p);
+      if(!pool[p]->alive || pool[p]->flag&CREATUREFLAG_KIDNAPPED || pool[p]->flag&CREATUREFLAG_MISSING) delete_and_remove(pool,p);
       else if(!(pool[p]->flag&CREATUREFLAG_SLEEPER))
       {
          removesquadinfo(*pool[p]);
