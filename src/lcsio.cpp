@@ -107,6 +107,28 @@ bool LCSInitArtDir()
    return true;
 }
 
+void LCSRenameFile(const char* old_filename,const char* new_filename,int flags)
+{
+   if(!initialized)
+   {
+      LCSInitHomeDir();
+      LCSInitArtDir();
+      initialized=true;
+   }
+   std::string old_filepath;
+   std::string new_filepath;
+   if(flags & LCSIO_PRE_ART)
+      old_filepath=artdir;
+   else if(flags & LCSIO_PRE_HOME)
+      old_filepath=homedir;
+
+   new_filepath = old_filepath;
+   old_filepath.append(old_filename);
+   new_filepath.append(new_filename);
+
+   rename(old_filepath.c_str(), new_filepath.c_str());
+}
+
 FILE* LCSOpenFile(const char* filename,const char* mode,int flags)
 {
    if(!initialized)

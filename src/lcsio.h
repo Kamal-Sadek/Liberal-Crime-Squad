@@ -158,5 +158,6 @@ void LCSCloseFileCPP(std::fstream &file);
     flags Prefix flags. See enum LCSIO_FLAGS.
 */
 void LCSDeleteFile(const char* filename,int flags);
+void LCSRenameFile(const char* old_filename,const char* new_filename,int flags);
 
 #endif // LCSIO_H_INCLUDED

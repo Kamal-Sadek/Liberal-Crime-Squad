@@ -31,7 +31,18 @@ This file is part of Liberal Crime Squad.                                       
 // TODO: It would be really cool to be able to "export" characters.
 
 /* handles saving */
-void savegame(const char *str)
+
+bool file_exists(const std::string& filename)
+{
+   struct stat buf;
+   if (stat(filename.c_str(), &buf) != -1)
+   {
+      return false;
+   }
+   return true;
+}
+
+void savegame()
 {
 #ifdef NOSAVE
    return;
@@ -42,7 +53,17 @@ void savegame(const char *str)
    FILE *h;
    int l;
 
-   h=LCSOpenFile(str, "wb", LCSIO_PRE_HOME);
+   char old_filename[13];
+   char new_filename[13];
+   snprintf(old_filename, 13, "save_%03i.dat", NUMSAVES-1);
+   LCSDeleteFile(old_filename, LCSIO_PRE_HOME);
+   for(int x = NUMSAVES-1; x >= 1; x--) {
+      snprintf(old_filename, 13, "save_%03i.dat", x-1);
+      snprintf(new_filename, 13, "save_%03i.dat", x);
+      LCSRenameFile(old_filename, new_filename, LCSIO_PRE_HOME); 
+   }
+
+   h=LCSOpenFile("save_000.dat", "wb", LCSIO_PRE_HOME);
 
    if(h!=NULL)
    {
@@ -358,7 +379,7 @@ char load()
    long dummy_l;
    FILE *h;
 
-   h=LCSOpenFile("save.dat", "rb", LCSIO_PRE_HOME);
+   h=LCSOpenFile("save_000.dat", "rb", LCSIO_PRE_HOME);
    if(h!=NULL)
    {
       fread(&loadversion,sizeof(int),1,h);
@@ -367,8 +388,6 @@ char load()
       if(loadversion<lowestloadversion)
       {
          LCSCloseFile(h);
-
-         reset();
 
          return 0;
       }
@@ -818,10 +837,13 @@ char load()
    return 0;
 }
 
-
 /* deletes save.dat (used on endgame and for invalid save version) */
 void reset()
 {
-    LCSDeleteFile("save.dat",LCSIO_PRE_HOME);
+   char file_name[13];
+   for(int x = NUMSAVES-1; x >= 0; x--) {
+      snprintf(file_name, 13, "save_%03i.dat", x);
+      if(file_exists(file_name)) LCSDeleteFile(file_name ,LCSIO_PRE_HOME);
+   }
 }
 

@@ -75,6 +75,7 @@
 //PACKAGE_VERSION must be defined here or the game won't compile on Windows! Don't remove it!!!
 // -- yetisyny
 #define PACKAGE_VERSION "4.07.5 beta"
+#define NUMSAVES 3
 
 const int version=40705;
 const int lowestloadversion=40705;
@@ -1315,12 +1316,14 @@ void makecharacter();
 /*
  saveload.cpp
 */
-/* handles saving */
-void savegame(const char *str);
+/* saves the game to save.dat */
+void savegame();
 /* loads the game from save.dat */
 char load();
 /* deletes save.dat (used on endgame and for invalid save version) */
 void reset();
+/* check if file exists */ 
+bool file_exists(const std::string& filename);
 
 
 /*******************************************************************************
