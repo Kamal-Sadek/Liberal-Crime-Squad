@@ -389,6 +389,8 @@ char load()
       {
          LCSCloseFile(h);
 
+         reset();
+
          return 0;
       }
 

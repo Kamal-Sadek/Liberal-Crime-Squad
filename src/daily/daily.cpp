@@ -545,6 +545,9 @@ void advanceday(char &clearformess,char canseethings)
          else if(pool[p]->location!=-1&&location[pool[p]->location]->type==SITE_GOVERNMENT_POLICESTATION)
             criminalize(*pool[p],LAWFLAG_CARTHEFT);
          break;
+      case ACTIVITY_AUGMENTING:
+         augment(*pool[p], clearformess);
+         break;
       case ACTIVITY_POLLS:
          if(clearformess) erase();
          else makedelimiter();

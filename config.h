@@ -100,6 +100,9 @@
 /* Define to the home page for this package. */
 #define PACKAGE_URL ""
 
+/* Define to the version of this package. */
+#define PACKAGE_VERSION "4.07.5"
+
 /* Define as the return type of signal handlers (`int' or `void'). */
 #define RETSIGTYPE void
 
@@ -117,6 +120,9 @@
 
 /* Define to use libncursesw. */
 /* #undef USE_NCURSES_W */
+
+/* Version number of package */
+#define VERSION "4.07.5"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */

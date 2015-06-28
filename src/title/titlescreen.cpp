@@ -573,20 +573,23 @@ void mode_title()
    strcpy(str,"v" PACKAGE_VERSION " Maintained by the Open Source Community");
    move(15,39-((len(str)-1)>>1));
    addstr(str);
-   strcpy(str,"http://sourceforge.net/projects/lcsgame/");
+   strcpy(str,"https://github.com/Kamal-Sadek/Liberal-Crime-Squad");
    move(16,39-((len(str)-1)>>1));
    addstr(str);
-   strcpy(str,"http://www.bay12games.com/forum/index.php?board=3.0");
+   strcpy(str,"http://sourceforge.net/projects/lcsgame/");
    move(17,39-((len(str)-1)>>1));
    addstr(str);
-   strcpy(str,"http://lcs.wikidot.com/");
+   strcpy(str,"http://www.bay12games.com/forum/index.php?board=3.0");
    move(18,39-((len(str)-1)>>1));
    addstr(str);
-   strcpy(str,"Press ESC now to quit.  Quitting later causes your progress to be saved.");
-   move(20,39-((len(str)-1)>>1));
+   strcpy(str,"http://lcs.wikidot.com/");
+   move(19,39-((len(str)-1)>>1));
+   addstr(str);
+   strcpy(str,"Press ESC now to quit. Quitting later causes your progress to be saved.");
+   move(21,39-((len(str)-1)>>1));
    addstr(str);
    strcpy(str,"Press any other key to pursue your Liberal Agenda!");
-   move(22,39-((len(str)-1)>>1));
+   move(23,39-((len(str)-1)>>1));
    addstr(str);
    move(24,79);
    addstr("+");
@@ -597,7 +600,7 @@ void mode_title()
       if(c=='m') music.enableIf(!music.isEnabled());
       if(music.isEnabled()) strcpy(str,"Press M to turn off the Music.");
       else strcpy(str,"Press M to turn on some Music.");
-      move(21,39-((len(str)-1)>>1));
+      move(22,39-((len(str)-1)>>1));
       addstr(str);
       if(c==ESC) end_game();
 

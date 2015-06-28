@@ -216,6 +216,9 @@ void set_activity_color(long activity_type)
    case ACTIVITY_SLEEPER_JOINLCS:
       set_color(COLOR_RED,COLOR_BLACK,1);
       break;
+   case ACTIVITY_AUGMENTING:
+      set_color(COLOR_BLUE,COLOR_BLACK,1);
+      break;
 
    default: // This should not happen! Set a strange color to indicate an error!
       set_color(COLOR_YELLOW,COLOR_RED,1); // yellow on red background

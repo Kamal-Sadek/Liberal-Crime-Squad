@@ -424,6 +424,9 @@ void activate(Creature *cr)
       case ACTIVITY_BURY:
          state='z';
          break;
+      case ACTIVITY_AUGMENTING:
+         state='u';
+         break;
       case ACTIVITY_NONE:
          state='x';
          break;
@@ -483,11 +486,11 @@ void activate(Creature *cr)
       if(state=='a'||state=='b'||state=='c'||state=='d')
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         mvaddstr(19,40,"? - Help");
+         mvaddstr(20,40,"? - Help");
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);
-      mvaddstr(20,40,"Enter - Confirm Selection");
+      mvaddstr(21,40,"Enter - Confirm Selection");
 
       set_color(COLOR_WHITE,COLOR_BLACK,state=='x');
       mvaddstr(21,1,"X - Nothing for Now");
@@ -587,6 +590,13 @@ void activate(Creature *cr)
             else set_color(COLOR_BLACK,COLOR_BLACK,1);
             mvaddstr(13,40,"4 - Procure a Wheelchair");
          }
+
+         if(cr->get_skill(SKILL_SCIENCE)!=0)
+            set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_AUGMENTING);
+         else
+            set_color(COLOR_BLACK,COLOR_BLACK,1);
+         mvaddstr(14,40,"5 - Augment another Liberal");
+
          break;
       case 't':
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -757,6 +767,13 @@ void activate(Creature *cr)
          move(24,1);
          addstr("  Classes cost up to $100/day to conduct. All Liberals able will attend.");
          break;
+      case ACTIVITY_AUGMENTING:
+         move(22,3);
+         addstr(cr->name);
+         addstr(" will augment another Liberal to make them");
+         move(23,1);
+         addstr("physically superior.");
+         break;
       case ACTIVITY_STUDY_DEBATING:
       case ACTIVITY_STUDY_MARTIAL_ARTS:
       case ACTIVITY_STUDY_DRIVING:
@@ -893,6 +910,13 @@ void activate(Creature *cr)
                else if(!(cr->flag & CREATUREFLAG_WHEELCHAIR))
                   cr->activity.type=ACTIVITY_WHEELCHAIR;
                break;
+            case '5':            
+            if(cr->get_skill(SKILL_SCIENCE))
+            {
+               cr->activity.type=ACTIVITY_AUGMENTING;               
+            }
+            else state=oldstate;
+            break;
             default: break;
             }
             break;

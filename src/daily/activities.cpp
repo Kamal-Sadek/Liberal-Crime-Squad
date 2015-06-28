@@ -3127,3 +3127,19 @@ void getwheelchair(Creature &cr,char &clearformess)
 
    getkey();
 }
+
+void augment(Creature &cr,char &clearformess)
+{
+   int culloc=cr.location;
+   vector<Creature *> temppool;
+   for(int p=0;p<len(pool);p++)
+   if(pool[p]->is_active_liberal() && (pool[p]->location==culloc || culloc==-1))
+   {
+      temppool.push_back(pool[p]);
+   }
+   //for(int x=0;x<4;x++) { addstr(cr.augmentation[x], gamelog); addstr(" ", gamelog); }
+   //gamelog.newline();
+   for(int x=0;x<temppool.size();x++) { addstr(temppool[x]->name, gamelog); addstr(" ", gamelog); }
+   gamelog.newline();
+   
+}

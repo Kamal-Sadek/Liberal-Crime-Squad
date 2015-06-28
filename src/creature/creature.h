@@ -246,6 +246,51 @@ enum SpecialWounds
    SPECIALWOUNDNUM
 };
 
+enum SkinAugmentation
+{
+   SKIN_NOTHING,
+   SKIN_AUGMENTATION_CAMOUFLAGE,
+   SKIN_AUGMENTATIONNUM
+};
+
+enum ArmAugmentation
+{
+   ARM_NOTHING,
+   ARM_AUGMENTATION_STRENGTH,
+   ARM_ARMAUGMENTATIONNUM
+};
+
+enum LegAugmentation
+{
+   LEG_NOTHING,
+   LEG_AUGMENTATION_SPEED,
+   LEG_AUGMENTATIONNUM
+};
+
+enum HeadAugmentation
+{
+   HEAD_NOTHING,
+   HEAD_AUGMENTATION_SIGHT,
+   HEAD_AUGMENTATIONNUM
+};
+
+enum ChestAugmentation
+{
+   CHEST_NOTHING,
+   CHEST_AUGMENTATION_HEART,
+   CHEST_AUGMENTATIONNUM
+};
+
+enum Augmentations
+{
+   AUGMENTATION_SKIN,
+   AUGMENTATION_ARM,
+   AUGMENTATION_LEG,
+   AUGMENTATION_HEAD,
+   AUGMENTATION_CHEST,
+   AUGMENTATIONNUM
+};
+
 #define RIBNUM 10
 #define TOOTHNUM 32
 
@@ -287,12 +332,25 @@ public:
    static std::string get_name(int attribute_type);
 };
 
+class Augmentation //TODO FIX SAVE/LOAD/THIS STUFF HERE && MAKE THIS CLASS HAVE ONE AUG
+{
+private:
+   int augmentation;
+public:
+   Augmentation() { }
+   Augmentation(const std::string& inputXml);
+   string showXml() const;
+   void set_type(int aug_type) { augmentation=aug_type; }
+   static std::string get_name(int aug_type, int aug_num);
+};
+
 class Creature
 {
 private:
    void copy(const Creature& org);
    class Attribute attributes[ATTNUM];
    class Skill skills[SKILLNUM];
+   class Augmentation augmentation[AUGMENTATIONNUM];
    int skill_experience[SKILLNUM];
    static int roll_check(int skill);
    static Weapon& weapon_none();

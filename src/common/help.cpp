@@ -268,7 +268,7 @@ void HelpActivities(int activityType)
       move(4,0);
       addstr(" Income depends on tailoring and business skills.");
       move(5,0);
-      addstr("  The income is lower if the public mood is Liberal.");
+      addstr(" The income is lower if the public mood is Liberal.");
       move(7,0);
       addstr(" This activity trains tailoring and business and may.");
       move(8,0);

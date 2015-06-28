@@ -307,6 +307,7 @@ enum Activity
    ACTIVITY_SLEEPER_STEAL,
    ACTIVITY_SLEEPER_JOINLCS,
    ACTIVITY_RECRUITING,
+   ACTIVITY_AUGMENTING,
    ACTIVITYNUM
 };
 
@@ -1654,6 +1655,7 @@ bool stealcar(Creature &cr,char &clearformess);
 bool carselect(Creature &cr,short &cartype);
 /* get a wheelchair */
 void getwheelchair(Creature &cr,char &clearformess);
+void augment(Creature &cr,char &clearformess);
 
 /*
  shopsnstuff.cpp
