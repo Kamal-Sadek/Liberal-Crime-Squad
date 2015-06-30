@@ -3128,18 +3128,114 @@ void getwheelchair(Creature &cr,char &clearformess)
    getkey();
 }
 
+
+
 void augment(Creature &cr,char &clearformess)
 {
-   int culloc=cr.location;
-   vector<Creature *> temppool;
-   for(int p=0;p<len(pool);p++)
-   if(pool[p]->is_active_liberal() && (pool[p]->location==culloc || culloc==-1))
+   int at=cr.activity.arg;
+
+   int cost=armortype[at]->get_make_price();
+   int hcost=(cost>>1)+1;
+   int dif=armor_makedifficulty(*armortype[at],&cr);
+
+   if(ledger.get_funds()<hcost)
    {
-      temppool.push_back(pool[p]);
+      if(clearformess) erase();
+      else makedelimiter();
+
+      set_color(COLOR_WHITE,COLOR_BLACK,1);
+      move(8,1);
+      addstr(cr.name, gamelog);
+      addstr(" cannot afford material for clothing.", gamelog);
+      gamelog.nextMessage();
+
+      getkey();
+      return;
    }
-   //for(int x=0;x<4;x++) { addstr(cr.augmentation[x], gamelog); addstr(" ", gamelog); }
-   //gamelog.newline();
-   for(int x=0;x<temppool.size();x++) { addstr(temppool[x]->name, gamelog); addstr(" ", gamelog); }
-   gamelog.newline();
-   
+   else
+   {
+      char foundcloth=0;
+
+      if(cr.squadid!=-1)
+      {
+         int sq=getsquad(cr.squadid);
+         for(int l=0;l<len(squad[sq]->loot);l++)
+            if(squad[sq]->loot[l]->is_loot()&&
+               static_cast<Loot*>(squad[sq]->loot[l])->is_cloth()) //cast -XML
+            {
+               if(squad[sq]->loot[l]->get_number()==1)
+                  delete_and_remove(squad[sq]->loot,l);
+               else squad[sq]->loot[l]->decrease_number(1);
+               foundcloth=1;
+               break;
+            }
+      }
+      if(!foundcloth) for(int l=0;l<len(location[cr.location]->loot);l++)
+         if(location[cr.location]->loot[l]->is_loot()&&
+            static_cast<Loot*>(location[cr.location]->loot[l])->is_cloth()) //cast -XML
+         {
+            if(location[cr.location]->loot[l]->get_number()==1)
+               delete_and_remove(location[cr.location]->loot,l);
+            else location[cr.location]->loot[l]->decrease_number(1);
+            foundcloth=1;
+            break;
+         }
+
+      if(!foundcloth&&ledger.get_funds()<cost)
+      {
+         if(clearformess) erase();
+         else makedelimiter();
+
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         move(8,1);
+         addstr(cr.name, gamelog);
+         addstr(" cannot find enough cloth to reduce clothing costs.", gamelog);
+         gamelog.nextMessage();
+
+         getkey();
+      }
+      else
+      {
+         if(foundcloth) ledger.subtract_funds(hcost,EXPENSE_MANUFACTURE);
+         else ledger.subtract_funds(cost,EXPENSE_MANUFACTURE);
+
+         cr.train(SKILL_TAILORING,dif*2+1);
+
+         int quality = 1;
+         while (LCSrandom(10)<dif && quality <= armortype[at]->get_quality_levels())
+            quality++;
+
+         if(clearformess) erase();
+         else makedelimiter();
+
+         Item *it=new Armor(*armortype[at],quality);
+
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         move(8,1);
+         addstr(cr.name, gamelog);
+         if(quality <= ((Armor*)it)->get_quality_levels() )
+         {
+            addstr(" has made a ", gamelog);
+            switch(quality)
+            {
+               case 1:addstr("first-rate", gamelog);break;
+               case 2:addstr("second-rate", gamelog);break;
+               case 3:addstr("third-rate", gamelog);break;
+               case 4:addstr("fourth-rate", gamelog);break;
+               default:addstr(quality,gamelog);addstr("th-rate", gamelog); break;
+            }
+            location[cr.location]->loot.push_back(it);
+         }
+         else
+         {
+            addstr(" wasted the materials for a", gamelog);
+         }
+         addstr(" ", gamelog);
+         addstr(armortype[at]->get_name(), gamelog);
+         addstr(".", gamelog);
+         gamelog.nextMessage();
+
+         getkey();
+      }
+   }
 }

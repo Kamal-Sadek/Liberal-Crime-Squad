@@ -424,7 +424,7 @@ void activate(Creature *cr)
       case ACTIVITY_BURY:
          state='z';
          break;
-      case ACTIVITY_AUGMENTING:
+      case ACTIVITY_AUGMENT:
          state='u';
          break;
       case ACTIVITY_NONE:
@@ -592,7 +592,7 @@ void activate(Creature *cr)
          }
 
          if(cr->get_skill(SKILL_SCIENCE)!=0)
-            set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_AUGMENTING);
+            set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_AUGMENT);
          else
             set_color(COLOR_BLACK,COLOR_BLACK,1);
          mvaddstr(14,40,"5 - Augment another Liberal");
@@ -767,7 +767,7 @@ void activate(Creature *cr)
          move(24,1);
          addstr("  Classes cost up to $100/day to conduct. All Liberals able will attend.");
          break;
-      case ACTIVITY_AUGMENTING:
+      case ACTIVITY_AUGMENT:
          move(22,3);
          addstr(cr->name);
          addstr(" will augment another Liberal to make them");
@@ -909,15 +909,16 @@ void activate(Creature *cr)
                   cr->activity.type=ACTIVITY_STEALCARS;
                else if(!(cr->flag & CREATUREFLAG_WHEELCHAIR))
                   cr->activity.type=ACTIVITY_WHEELCHAIR;
-               break;
-            case '5':            
-            if(cr->get_skill(SKILL_SCIENCE))
-            {
-               cr->activity.type=ACTIVITY_AUGMENTING;               
-            }
-            else state=oldstate;
-            break;
-            default: break;
+               break;            
+            case '5': {
+               if(cr->get_skill(SKILL_SCIENCE)!=0) {
+                  activityst oact=cr->activity;
+                  cr->activity.type=ACTIVITY_NONE;
+                  select_augmentation(cr);
+                  if(cr->activity.type==ACTIVITY_AUGMENT) break;
+                  else cr->activity=oact;
+               }
+               break; }
             }
             break;
          case 't':
@@ -1609,6 +1610,84 @@ void recruitSelect(Creature &cr)
    }
 
    return;
+}
+
+void select_augmentation(Creature *cr) //TODO: Finish
+{
+   Creature *victim = 0;
+   int culloc=cr->location;
+   vector<Creature *> temppool;
+   for(int p=0;p<len(pool);p++) {
+      if(pool[p] == cr) continue;
+      if(pool[p]->is_active_liberal() && (pool[p]->location==culloc))
+      {
+         temppool.push_back(pool[p]);
+      }
+   }
+   int cur_step=0,page=0,c=0;
+
+   while(true)
+   {
+      erase();
+
+      int y=2;
+
+      switch(cur_step) {
+         case 0:
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         mvaddstr(0,0,"Select a Liberal to perform experiments on");
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         mvaddstr(1,0,"컴컴NAME컴컴컴컴컴컴컴컴컴컴컴횴EALTH컴컴컴컴컴컴HEART컴컴컴컴AGE컴컴컴컴컴컴컴�");
+         for(int p=page*19;p<len(temppool)&&p<page*19+19;p++,y++)
+         {
+            set_color(COLOR_WHITE,COLOR_BLACK,c==y+'a'-2); //0 25 33 42 57
+            move(y,0);
+            addchar(y+'A'-2);addstr(" - ");
+            addstr(temppool[p]->name);
+            mvaddstr(y,49,temppool[p]->get_attribute(ATTRIBUTE_HEART,true));
+            mvaddstr(y,62,temppool[p]->age);
+            printhealthstat(*temppool[p],y,31,TRUE);
+         }      
+
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(22,0);
+         addstr("Press a Letter to select a Liberal or X to rethink");
+         move(23,0);
+         addpagestr();
+
+         c = getkey();
+
+         //PAGE UP
+         if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+         //PAGE DOWN
+         if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<len(temppool))page++;
+
+         if(c>='a'&&c<='s')
+         {
+            int p=page*19+c-'a';
+            if(p<len(temppool))
+               victim = temppool[p];
+            else
+               victim = 0;
+         }
+
+         if(c=='x'||c==ESC) return;
+         else if((c==ENTER||c==SPACEBAR)) {
+            if(victim!=NULL) cur_step = 1;
+            else return;
+         }
+
+         break;
+         
+         case 1:
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         mvaddstr(0,0,"Select an Augmentation to perform on ");
+         mvaddstr(0,37,victim->name);
+         c = getkey();
+         if(c=='x'||c==ESC||c==ENTER||c==SPACEBAR) return;
+         //else if(c==ENTER||c==SPACEBAR) cur_step = 1;
+      }
+   }
 }
 
 /* base - activate - make clothing */

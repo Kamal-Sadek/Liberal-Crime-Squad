@@ -332,11 +332,12 @@ public:
    static std::string get_name(int attribute_type);
 };
 
-class Augmentation //TODO FIX SAVE/LOAD/THIS STUFF HERE && MAKE THIS CLASS HAVE ONE AUG
+class Augmentation
 {
 private:
    int augmentation;
 public:
+   int augmentation_type;
    Augmentation() { }
    Augmentation(const std::string& inputXml);
    string showXml() const;
@@ -350,7 +351,7 @@ private:
    void copy(const Creature& org);
    class Attribute attributes[ATTNUM];
    class Skill skills[SKILLNUM];
-   class Augmentation augmentation[AUGMENTATIONNUM];
+   class Augmentation augmentations[AUGMENTATIONNUM];
    int skill_experience[SKILLNUM];
    static int roll_check(int skill);
    static Weapon& weapon_none();

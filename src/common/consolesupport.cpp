@@ -29,8 +29,10 @@ This file is part of Liberal Crime Squad.                                       
 #define CONSOLE_SUPPORT // define this BEFORE including anything
 #include <externs.h>
 
-#ifdef NCURSES
+#if defined(USE_NCURSES)
 #include <term.h>
+#elif defined(USE_NCURSES_W)
+#include <ncursesw/term.h>
 #endif
 
 // These 4 variables to keep track of the current color are for

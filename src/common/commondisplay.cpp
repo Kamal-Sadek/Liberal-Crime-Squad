@@ -216,7 +216,7 @@ void set_activity_color(long activity_type)
    case ACTIVITY_SLEEPER_JOINLCS:
       set_color(COLOR_RED,COLOR_BLACK,1);
       break;
-   case ACTIVITY_AUGMENTING:
+   case ACTIVITY_AUGMENT:
       set_color(COLOR_BLUE,COLOR_BLACK,1);
       break;
 

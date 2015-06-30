@@ -60,19 +60,33 @@ string Skill::showXml() const
    return xml.GetDoc();
 }
 
-string Augmentation::showXml() const //TODO: FIX
+Augmentation::Augmentation(const std::string& inputXml)
 {
-   /*CMarkup xml;
-   xml.AddElem("augmentations");
+   CMarkup xml;
+   xml.SetDoc(inputXml);
+   xml.FindElem();
    xml.IntoElem();
-   xml.AddElem("skin_augmentation",    augmentation[AUGMENTATION_SKIN]);
-   xml.AddElem("arm_augmentation",     augmentation[AUGMENTATION_ARM]);
-   xml.AddElem("leg_augmentation",     augmentation[AUGMENTATION_LEG]);
-   xml.AddElem("head_augmentation",    augmentation[AUGMENTATION_HEAD]);
-   xml.AddElem("chest_augmentation",   augmentation[AUGMENTATION_CHEST]);
 
-   return xml.GetDoc();*/
-   return "FIX";
+   while(xml.FindElem())
+   {
+      std::string tag = xml.GetTagName();
+
+      if (tag == "augmentation")
+         augmentation = atoi(xml.GetData());
+      else if (tag == "augmentation_type")
+         augmentation_type = atoi(xml.GetData());
+   }
+}
+
+string Augmentation::showXml() const
+{
+   CMarkup xml;
+   xml.AddElem("augmentation");
+   xml.IntoElem();
+   xml.AddElem("augmentation", augmentation);
+   xml.AddElem("augmentation_type", augmentation_type);
+
+   return xml.GetDoc();
 }
 
 CreatureAttribute Skill::get_associated_attribute(int skill_type)
@@ -524,6 +538,8 @@ void Creature::creatureinit()
    meetings=0;
    strcpy(name,"Scruffy");
    strcpy(propername,"Scruffy");
+   for(int i=0;i<AUGMENTATIONNUM;i++)
+      augmentations[i].augmentation_type = i;
 }
 
 Creature::Creature(const std::string& inputXml)
@@ -534,7 +550,7 @@ Creature::Creature(const std::string& inputXml)
    xml.FindElem();
    xml.IntoElem();
 
-   int attributesi=0,skillsi=0,skill_experiencei=0,woundi=0,speciali=0,crimesi=0;
+   int attributesi=0,skillsi=0,skill_experiencei=0,woundi=0,speciali=0,crimesi=0,augmentationsi=0;
    while(xml.FindElem())
    {
       std::string tag = xml.GetTagName();
@@ -557,6 +573,8 @@ Creature::Creature(const std::string& inputXml)
          if (getarmortype(armor->get_itemtypename()) == -1) //Check armor is a valid type.
             delete_and_nullify(armor);
       }
+      else if (tag == "augmentation" && augmentationsi < AUGMENTATIONNUM)
+         augmentations[augmentationsi++] = Augmentation(xml.GetSubDoc());
       //else if (tag == "augmentation")
          //augmentation = Augmentation(xml.GetSubDoc());
       else if (tag == "name")
@@ -702,10 +720,11 @@ string Creature::showXml() const
    for(int i=0;i<SKILLNUM;i++)
       xml.AddSubDoc(skills[i].showXml());
    for(int i=0;i<SKILLNUM;i++)
-      xml.AddElem("skill_experience", skill_experience[i]); //Bad, relies on their order in the xml file. -XML
+      xml.AddElem("skill_experience", skill_experience[i]); //Bad, relies on their order in the xml file. -XML 
    if(weapon) xml.AddSubDoc(weapon->showXml());
    if(armor) xml.AddSubDoc(armor->showXml());
-   //xml.AddSubDoc(augmentations.showXml()); //TODO: FIX!!!
+   for(int i=0;i<AUGMENTATIONNUM;i++)
+      xml.AddSubDoc(augmentations[i].showXml());
 
    xml.AddElem("name", name);
    xml.AddElem("propername", propername);

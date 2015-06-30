@@ -307,7 +307,7 @@ enum Activity
    ACTIVITY_SLEEPER_STEAL,
    ACTIVITY_SLEEPER_JOINLCS,
    ACTIVITY_RECRUITING,
-   ACTIVITY_AUGMENTING,
+   ACTIVITY_AUGMENT,
    ACTIVITYNUM
 };
 
@@ -1386,6 +1386,8 @@ char* recruitName(int creatureType);
 void recruitSelect(Creature &cr);
 /* base - activate - make clothing */
 void select_makeclothing(Creature *cr);
+/* base - activate - augmentation */
+void select_augmentation(Creature *cr);
 int armor_makedifficulty(Armor& type,Creature *cr); //Replace with Armor class method? -XML
 int armor_makedifficulty(ArmorType& type,Creature *cr); //Replace with Armor class method? -XML
 /* base - activate - trouble */

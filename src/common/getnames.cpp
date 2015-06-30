@@ -165,7 +165,7 @@ std::string getactivity(activityst &act)
       return "Embezzling Funds";
    case ACTIVITY_SLEEPER_STEAL:
       return "Stealing Equipment";
-   case ACTIVITY_AUGMENTING:
+   case ACTIVITY_AUGMENT:
       return "Augmenting Liberal";
    default:
       return "Reporting Bugs to the Dev Team";
