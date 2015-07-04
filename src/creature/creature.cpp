@@ -28,6 +28,7 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <externs.h>
 
+
 Skill::Skill(const std::string& inputXml)
 {
    CMarkup xml;
@@ -87,6 +88,88 @@ string Augmentation::showXml() const
    xml.AddElem("augmentation_type", augmentation_type);
 
    return xml.GetDoc();
+}
+
+std::string Augmentation::get_name(int aug_type)
+{
+   switch(aug_type)
+   {
+   case AUGMENTATION_SKIN:	return "Skin";
+   case AUGMENTATION_ARM:	return "Arms";
+   case AUGMENTATION_LEG:	return "Legs";
+   case AUGMENTATION_HEAD:	return "Head";
+   case AUGMENTATION_CHEST:return "Chest";
+   return "Error Augmentation Name";
+	}
+}
+
+std::string Augmentation::get_name(int aug_type, int aug_num)
+{
+   switch(aug_type)
+   {
+   case AUGMENTATION_SKIN:
+      switch(aug_num)
+      {
+         case SKIN_AUGMENTATION_CAMOUFLAGE:	return "Camouflage";
+      }
+   case AUGMENTATION_ARM:
+      switch(aug_num)
+      {
+         case ARM_AUGMENTATION_STRENGTH:		return "Strength";
+      }
+   case AUGMENTATION_LEG:
+      switch(aug_num)
+      {
+         case LEG_AUGMENTATION_SPEED:        return "Speed";
+      }
+   case AUGMENTATION_HEAD:
+      switch(aug_num)
+      {
+         case HEAD_AUGMENTATION_SIGHT:       return "Sight";
+      }
+   case AUGMENTATION_CHEST:
+      switch(aug_num)
+      {
+         case CHEST_AUGMENTATION_HEART:      return "Heart";
+      }
+      return "Error Augmentation Name";
+   }
+   return "Error Augmentation Name";
+}
+
+std::string Augmentation::get_description(int aug_type, int aug_num)
+{
+   switch(aug_type)
+   {
+   case AUGMENTATION_SKIN:
+      switch(aug_num)
+      {
+         case SKIN_AUGMENTATION_CAMOUFLAGE:	
+				return "Increases something by something";
+      }
+   case AUGMENTATION_ARM:
+      switch(aug_num)
+      {
+         case ARM_AUGMENTATION_STRENGTH:		return "Strength";
+      }
+   case AUGMENTATION_LEG:
+      switch(aug_num)
+      {
+         case LEG_AUGMENTATION_SPEED:        return "Speed";
+      }
+   case AUGMENTATION_HEAD:
+      switch(aug_num)
+      {
+         case HEAD_AUGMENTATION_SIGHT:       return "Sight";
+      }
+   case AUGMENTATION_CHEST:
+      switch(aug_num)
+      {
+         case CHEST_AUGMENTATION_HEART:      return "Heart";
+      }
+      return "Error Augmentation Name";
+   }
+   return "Error Augmentation Name";
 }
 
 CreatureAttribute Skill::get_associated_attribute(int skill_type)
@@ -171,40 +254,6 @@ std::string Skill::get_name(int skill_type)
    case SKILL_DODGE:          return "Dodge";
    }
    return "Error Skill Name";
-}
-
-std::string Augmentation::get_name(int aug_type, int aug_num) //TODO: Make sure works
-{
-   switch(aug_type)
-   {
-   case AUGMENTATION_SKIN:
-      switch(aug_num)
-      {
-         case SKIN_AUGMENTATION_CAMOUFLAGE:  return "Camouflage";
-      }
-   case AUGMENTATION_ARM:
-      switch(aug_num)
-      {
-         case ARM_AUGMENTATION_STRENGTH:     return "Strength";
-      }
-   case AUGMENTATION_LEG:
-      switch(aug_num)
-      {
-         case LEG_AUGMENTATION_SPEED:        return "Speed";
-      }
-   case AUGMENTATION_HEAD:
-      switch(aug_num)
-      {
-         case HEAD_AUGMENTATION_SIGHT:       return "Sight";
-      }
-   case AUGMENTATION_CHEST:
-      switch(aug_num)
-      {
-         case CHEST_AUGMENTATION_HEART:      return "Heart";
-      }
-      return "Error Augmentation Name";
-   }
-   return "Error Augmentation Name";
 }
 
 Attribute::Attribute(const std::string& inputXml)

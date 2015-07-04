@@ -1624,13 +1624,13 @@ void select_augmentation(Creature *cr) //TODO: Finish
          temppool.push_back(pool[p]);
       }
    }
-   int cur_step=0,page=0,c=0;
+   int cur_step=0,page=0,c=0,aug_c=-1,aug_a=-1,aug_b=-1;
 
    while(true)
    {
       erase();
 
-      int y=2;
+      int y,p;
 
       switch(cur_step) {
          case 0:
@@ -1638,7 +1638,7 @@ void select_augmentation(Creature *cr) //TODO: Finish
          mvaddstr(0,0,"Select a Liberal to perform experiments on");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          mvaddstr(1,0,"컴컴NAME컴컴컴컴컴컴컴컴컴컴컴횴EALTH컴컴컴컴컴컴HEART컴컴컴컴AGE컴컴컴컴컴컴컴�");
-         for(int p=page*19;p<len(temppool)&&p<page*19+19;p++,y++)
+         for(p=page*19,y=2;p<len(temppool)&&p<page*19+19;p++,y++)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,c==y+'a'-2); //0 25 33 42 57
             move(y,0);
@@ -1681,11 +1681,56 @@ void select_augmentation(Creature *cr) //TODO: Finish
          
          case 1:
          set_color(COLOR_WHITE,COLOR_BLACK,1);
-         mvaddstr(0,0,"Select an Augmentation to perform on ");
-         mvaddstr(0,37,victim->name);
-         c = getkey();
-         if(c=='x'||c==ESC||c==ENTER||c==SPACEBAR) return;
+         mvaddstr(0,0,"Subject: ");
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         addstr(victim->name);addstr(", ");addstr(gettitle(*victim));
+         mvaddstr(1,0,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
+
+         mvaddstr(3,55,"Status");
+         printwoundstat(*victim,5,55);
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         mvaddstr(12,55,"Heart: ");mvaddstr(12,66,victim->get_attribute(ATTRIBUTE_HEART,true));
+         mvaddstr(13,55,"Age: ");mvaddstr(13,66,victim->age);
+
+         mvaddstr(3,1,"Select an Augmentation");
+         for(p=page*19,y=5;p<AUGMENTATIONNUM&&p<page*19+19;p++,y++)
+         {
+            set_color(COLOR_WHITE,COLOR_BLACK,c==y+'a'-5);
+            move(y,1);
+            addchar(y+'A'-5);addstr(" - ");
+            addstr(Augmentation::get_name(p));
+         }
+
+         switch(c)
+         {
+            case 'a':   aug_b=AUGMENTATION_HEAD;aug_a=HEAD_AUGMENTATIONNUM;   break;
+            case 'b':   aug_b=AUGMENTATION_CHEST;aug_a=CHEST_AUGMENTATIONNUM; break;
+            case 'c':   aug_b=AUGMENTATION_ARM;aug_a=ARM_AUGMENTATIONNUM;     break;
+            case 'd':   aug_b=AUGMENTATION_LEG;aug_a=LEG_AUGMENTATIONNUM;     break;
+            case 'e':   aug_b=AUGMENTATION_SKIN;aug_a=SKIN_AUGMENTATIONNUM;   break;
+            default:    aug_b=-1;aug_a=-1;   break;
+         }
+
+         for(p=page*19,y=5;p<aug_a-1&&p<page*19+19;p++,y++)
+         {
+            set_color(COLOR_WHITE,COLOR_BLACK,aug_c==y+'1'-5);
+            move(y,20);
+            addchar(y+'1'-5);addstr(" - ");
+            addstr(Augmentation::get_name(aug_b,y-4));
+         }
+
+         if(c>='a'&&c<='e'&&aug_c>='1'&&aug_c<='9')
+         {
+            move(21,3);
+            addstr(Augmentation::get_description(aug_b,aug_c-'1'));
+         }
+
+         aug_c = getkey();
+         if(aug_c>='a'&&aug_c<='e') c=aug_c;
+         else if(!(aug_c>='1'&&aug_c<='9'));
+         if(aug_c=='x'||aug_c==ESC||aug_c==ENTER||aug_c==SPACEBAR) return;
          //else if(c==ENTER||c==SPACEBAR) cur_step = 1;
+         break;
       }
    }
 }

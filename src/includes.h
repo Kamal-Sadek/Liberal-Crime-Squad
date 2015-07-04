@@ -981,8 +981,10 @@ void printliberalstats(Creature &cr);
 void printliberalcrimes(Creature &cr);
 /* draws a horizontal line across the screen */
 void makedelimiter(int y=8,int x=0);
-/* prints a character's health description (One Leg, Liberal, NearDETH...) */
+/* prints a character's general health description (One Leg, Liberal, NearDETH...) */
 void printhealthstat(Creature &g,int y,int x,char smll);
+/* prints a character's health description for each bodypart (Head, Body...) */
+void printwoundstat(Creature &cr,int y,int x);
 /* prints amount of money the player has, with optional formatting */
 void printfunds(int y=0,int offset=1,const char* prefix="Money: ");
 /* prints a short blurb showing how to page forward */

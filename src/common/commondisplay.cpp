@@ -1245,52 +1245,7 @@ void printliberalstats(Creature &cr)
       addstr(scheduleddates(cr));
    }
 
-   // Add wound status
-   for(int w=0;w<BODYPARTNUM;w++)
-   {
-      if(cr.wound[w] & WOUND_BLEEDING)set_color(COLOR_RED,COLOR_BLACK,1);
-      else set_color(COLOR_WHITE,COLOR_BLACK,0);
-
-      move(5+w,55);
-      switch(w)
-      {
-      case BODYPART_HEAD:addstr("Head:");break;
-      case BODYPART_BODY:addstr("Body:");break;
-      case BODYPART_ARM_RIGHT:addstr("Right Arm:");break;
-      case BODYPART_ARM_LEFT:addstr("Left Arm:");break;
-      case BODYPART_LEG_RIGHT:addstr("Right Leg:");break;
-      case BODYPART_LEG_LEFT:addstr("Left Leg:");break;
-      }
-
-      move(5+w,66);
-      if(cr.wound[w] & WOUND_NASTYOFF)addstr("Ripped off");
-      else if(cr.wound[w] & WOUND_CLEANOFF)addstr("Severed");
-      else
-      {
-         int sum=0;
-
-         if(cr.wound[w] & WOUND_SHOT)sum++;
-         if(cr.wound[w] & WOUND_CUT)sum++;
-         if(cr.wound[w] & WOUND_BRUISED)sum++;
-         if(cr.wound[w] & WOUND_BURNED)sum++;
-         if(cr.wound[w] & WOUND_TORN)sum++;
-
-         if(sum==0)
-         {
-            set_color(COLOR_GREEN,COLOR_BLACK,1);
-            if(cr.animalgloss==ANIMALGLOSS_ANIMAL)
-               addstr("Animal");
-            else addstr("Liberal");
-         }
-
-         if(cr.wound[w] & WOUND_SHOT){addstr("Shot");sum--;if(sum>0)addstr(",");}
-         if(cr.wound[w] & WOUND_BRUISED){addstr("Bruised");sum--;if(sum>0)addstr(",");}
-         if(cr.wound[w] & WOUND_CUT){addstr("Cut");sum--;if(sum>0)addstr(",");}
-         if(cr.wound[w] & WOUND_TORN){addstr("Torn");sum--;if(sum>0)addstr(",");}
-         if(cr.wound[w] & WOUND_BURNED){addstr("Burned");sum--;if(sum>0)addstr(",");}
-      }
-   }
-   set_color(COLOR_WHITE,COLOR_BLACK,0);
+	printwoundstat(cr,5,55);
 
    //SPECIAL WOUNDS
    set_color(COLOR_RED,COLOR_BLACK,0);
@@ -1461,6 +1416,55 @@ void makedelimiter(int y,int x)
       mvaddstr(y,x,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컫컴컴컴컴컴컴컴컴컴컴컴컴컫"); // 80 characters
    else // normal delimiter
       mvaddstr(y,x,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴"); // 80 characters
+}
+
+void printwoundstat(Creature &cr,int y,int x)
+{
+	// Add wound status
+   for(int w=0;w<BODYPARTNUM;w++)
+   {
+      if(cr.wound[w] & WOUND_BLEEDING)set_color(COLOR_RED,COLOR_BLACK,1);
+      else set_color(COLOR_WHITE,COLOR_BLACK,0);
+
+      move(y+w,x);
+      switch(w)
+      {
+      case BODYPART_HEAD:addstr("Head:");break;
+      case BODYPART_BODY:addstr("Body:");break;
+      case BODYPART_ARM_RIGHT:addstr("Right Arm:");break;
+      case BODYPART_ARM_LEFT:addstr("Left Arm:");break;
+      case BODYPART_LEG_RIGHT:addstr("Right Leg:");break;
+      case BODYPART_LEG_LEFT:addstr("Left Leg:");break;
+      }
+
+      move(y+w,x+11);
+      if(cr.wound[w] & WOUND_NASTYOFF)addstr("Ripped off");
+      else if(cr.wound[w] & WOUND_CLEANOFF)addstr("Severed");
+      else
+      {
+         int sum=0;
+
+         if(cr.wound[w] & WOUND_SHOT)sum++;
+         if(cr.wound[w] & WOUND_CUT)sum++;
+         if(cr.wound[w] & WOUND_BRUISED)sum++;
+         if(cr.wound[w] & WOUND_BURNED)sum++;
+         if(cr.wound[w] & WOUND_TORN)sum++;
+
+         if(sum==0)
+         {
+            set_color(COLOR_GREEN,COLOR_BLACK,1);
+            if(cr.animalgloss==ANIMALGLOSS_ANIMAL)
+               addstr("Animal");
+            else addstr("Liberal");
+         }
+
+         if(cr.wound[w] & WOUND_SHOT){addstr("Shot");sum--;if(sum>0)addstr(",");}
+         if(cr.wound[w] & WOUND_BRUISED){addstr("Bruised");sum--;if(sum>0)addstr(",");}
+         if(cr.wound[w] & WOUND_CUT){addstr("Cut");sum--;if(sum>0)addstr(",");}
+         if(cr.wound[w] & WOUND_TORN){addstr("Torn");sum--;if(sum>0)addstr(",");}
+         if(cr.wound[w] & WOUND_BURNED){addstr("Burned");sum--;if(sum>0)addstr(",");}
+      }
+   }
 }
 
 /* prints a character's health description (One Leg, Liberal, NearDETH...) */

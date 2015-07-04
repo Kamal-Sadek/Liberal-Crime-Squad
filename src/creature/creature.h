@@ -213,6 +213,66 @@ enum CreatureTypes
    CREATURENUM
 };
 
+enum SkinAugmentation
+{
+   SKIN_NOTHING,
+   SKIN_AUGMENTATION_CAMOUFLAGE,
+   SKIN_AUGMENTATIONNUM
+};
+
+enum ArmAugmentation
+{
+   ARM_NOTHING,
+   ARM_AUGMENTATION_STRENGTH,
+   ARM_AUGMENTATIONNUM
+};
+
+enum LegAugmentation
+{
+   LEG_NOTHING,
+   LEG_AUGMENTATION_SPEED,
+   LEG_AUGMENTATIONNUM
+};
+
+enum HeadAugmentation
+{
+   HEAD_NOTHING,
+   HEAD_AUGMENTATION_SIGHT,
+   HEAD_AUGMENTATIONNUM
+};
+
+enum ChestAugmentation
+{
+   CHEST_NOTHING,
+   CHEST_AUGMENTATION_HEART,
+   CHEST_AUGMENTATIONNUM
+};
+
+enum Augmentations
+{
+	AUGMENTATION_HEAD,
+   AUGMENTATION_CHEST,
+   AUGMENTATION_ARM,
+   AUGMENTATION_LEG,
+   AUGMENTATION_SKIN,
+   AUGMENTATIONNUM
+};
+
+class Augmentation
+{
+private:
+   int augmentation;
+public:
+   int augmentation_type;
+   Augmentation() { }
+   Augmentation(const std::string& inputXml);
+   string showXml() const;
+   void set_type(int aug_type) { augmentation=aug_type; }
+	static std::string get_name(int aug_type);
+	static std::string get_name(int aug_type, int aug_num);
+	static std::string get_description(int aug_type, int aug_num);
+};
+
 enum Bodyparts
 {
    BODYPART_HEAD,
@@ -244,51 +304,6 @@ enum SpecialWounds
    SPECIALWOUND_UPPERSPINE,
    SPECIALWOUND_LOWERSPINE,
    SPECIALWOUNDNUM
-};
-
-enum SkinAugmentation
-{
-   SKIN_NOTHING,
-   SKIN_AUGMENTATION_CAMOUFLAGE,
-   SKIN_AUGMENTATIONNUM
-};
-
-enum ArmAugmentation
-{
-   ARM_NOTHING,
-   ARM_AUGMENTATION_STRENGTH,
-   ARM_ARMAUGMENTATIONNUM
-};
-
-enum LegAugmentation
-{
-   LEG_NOTHING,
-   LEG_AUGMENTATION_SPEED,
-   LEG_AUGMENTATIONNUM
-};
-
-enum HeadAugmentation
-{
-   HEAD_NOTHING,
-   HEAD_AUGMENTATION_SIGHT,
-   HEAD_AUGMENTATIONNUM
-};
-
-enum ChestAugmentation
-{
-   CHEST_NOTHING,
-   CHEST_AUGMENTATION_HEART,
-   CHEST_AUGMENTATIONNUM
-};
-
-enum Augmentations
-{
-   AUGMENTATION_SKIN,
-   AUGMENTATION_ARM,
-   AUGMENTATION_LEG,
-   AUGMENTATION_HEAD,
-   AUGMENTATION_CHEST,
-   AUGMENTATIONNUM
 };
 
 #define RIBNUM 10
@@ -330,19 +345,6 @@ public:
    int value;
    void set_type(int attribute_type) { attribute=attribute_type; }
    static std::string get_name(int attribute_type);
-};
-
-class Augmentation
-{
-private:
-   int augmentation;
-public:
-   int augmentation_type;
-   Augmentation() { }
-   Augmentation(const std::string& inputXml);
-   string showXml() const;
-   void set_type(int aug_type) { augmentation=aug_type; }
-   static std::string get_name(int aug_type, int aug_num);
 };
 
 class Creature
