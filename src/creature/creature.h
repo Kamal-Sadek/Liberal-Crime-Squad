@@ -5,6 +5,7 @@
 #ifndef CREATURE_H_INCLUDED
 #define CREATURE_H_INCLUDED
 #include "common.h"
+#include "augmentation.h"
 
 #define CREATUREFLAG_WHEELCHAIR BIT1
 #define CREATUREFLAG_JUSTESCAPED BIT2
@@ -213,66 +214,6 @@ enum CreatureTypes
    CREATURENUM
 };
 
-enum SkinAugmentation
-{
-   SKIN_NOTHING,
-   SKIN_AUGMENTATION_CAMOUFLAGE,
-   SKIN_AUGMENTATIONNUM
-};
-
-enum ArmAugmentation
-{
-   ARM_NOTHING,
-   ARM_AUGMENTATION_STRENGTH,
-   ARM_AUGMENTATIONNUM
-};
-
-enum LegAugmentation
-{
-   LEG_NOTHING,
-   LEG_AUGMENTATION_SPEED,
-   LEG_AUGMENTATIONNUM
-};
-
-enum HeadAugmentation
-{
-   HEAD_NOTHING,
-   HEAD_AUGMENTATION_SIGHT,
-   HEAD_AUGMENTATIONNUM
-};
-
-enum ChestAugmentation
-{
-   CHEST_NOTHING,
-   CHEST_AUGMENTATION_HEART,
-   CHEST_AUGMENTATIONNUM
-};
-
-enum Augmentations
-{
-	AUGMENTATION_HEAD,
-   AUGMENTATION_CHEST,
-   AUGMENTATION_ARM,
-   AUGMENTATION_LEG,
-   AUGMENTATION_SKIN,
-   AUGMENTATIONNUM
-};
-
-class Augmentation
-{
-private:
-   int augmentation;
-public:
-   int augmentation_type;
-   Augmentation() { }
-   Augmentation(const std::string& inputXml);
-   string showXml() const;
-   void set_type(int aug_type) { augmentation=aug_type; }
-	static std::string get_name(int aug_type);
-	static std::string get_name(int aug_type, int aug_num);
-	static std::string get_description(int aug_type, int aug_num);
-};
-
 enum Bodyparts
 {
    BODYPART_HEAD,
@@ -282,6 +223,16 @@ enum Bodyparts
    BODYPART_LEG_RIGHT,
    BODYPART_LEG_LEFT,
    BODYPARTNUM
+};
+
+enum Augmentations
+{
+   AUGMENTATION_HEAD,
+   AUGMENTATION_BODY,
+   AUGMENTATION_ARMS,
+   AUGMENTATION_LEGS,
+	AUGMENTATION_SKIN,
+   AUGMENTATIONNUM
 };
 
 enum SpecialWounds

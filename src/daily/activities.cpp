@@ -3132,7 +3132,7 @@ void getwheelchair(Creature &cr,char &clearformess)
 
 void augment(Creature &cr,char &clearformess)
 {
-   int at=cr.activity.arg;
+   /*int at=cr.activity.arg;
 
    int cost=armortype[at]->get_make_price();
    int hcost=(cost>>1)+1;
@@ -3237,5 +3237,5 @@ void augment(Creature &cr,char &clearformess)
 
          getkey();
       }
-   }
+   }*/
 }

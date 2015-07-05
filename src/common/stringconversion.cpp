@@ -108,7 +108,7 @@ short creaturetype_string_to_enum(const std::string& ctname)
    else if (ctname == "CREATURE_BARISTA")
       return CREATURE_BARISTA;
    else if (ctname == "CREATURE_BARTENDER")
-	  return CREATURE_BARTENDER;
+	   return CREATURE_BARTENDER;
    else if (ctname == "CREATURE_TELEMARKETER")
       return CREATURE_TELEMARKETER;
    else if (ctname == "CREATURE_OFFICEWORKER")
@@ -318,6 +318,22 @@ int skill_string_to_enum(std::string skillname)
       return SKILL_DODGE;
    else if (skillname == "heavyweapons")
       return SKILL_HEAVYWEAPONS;
+   else
+      return -1;
+}
+
+int augment_string_to_enum(std::string& augmentname)
+{
+   if (augmentname == "HEAD")
+      return AUGMENTATION_HEAD;
+   else if (augmentname == "BODY")
+      return AUGMENTATION_BODY;
+   else if (augmentname == "ARMS")
+      return AUGMENTATION_ARMS;
+   else if (augmentname == "LEGS")
+      return AUGMENTATION_LEGS;
+   else if (augmentname == "SKIN")
+      return AUGMENTATION_SKIN;
    else
       return -1;
 }

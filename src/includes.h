@@ -434,6 +434,8 @@ private:
 #include "items/money.h"
 #include "creature/creature.h"
 #include "creature/creaturetype.h"
+#include "creature/augmentation.h"
+#include "creature/augmenttype.h"
 #include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 #include "locations/locations.h"
@@ -1216,6 +1218,7 @@ inline int atoi(const std::string& str) { return atoi(str.c_str()); }
 /* This wrapper allows atof to handle std::strings */
 inline double atof(const std::string& str) { return atof(str.c_str()); }
 short creaturetype_string_to_enum(const std::string& ctname);
+int augment_string_to_enum(std::string& augmentname);
 int attribute_string_to_enum(const std::string& attribute);
 int skill_string_to_enum(std::string skillname);
 int gender_string_to_enum(const std::string& gender);

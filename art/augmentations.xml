@@ -1,0 +1,29 @@
+<augmentations>
+   <!-- Clarification
+   <augmenttype idname="(string)"> idname is used to identify the augmentation type
+      <name> (string) The name of the weapon.
+         Default: UNDEFINED
+      <type> (HEAD/BODY/ARMS/LEGS/SKIN) which bodypart to install augmentation
+         Can only have one augmentation per bodypart
+      <attribute> (strength/intelligence/wisdom/agility/health/charisma/heart)
+         Which attribute gets boosted by augmentation (I'm planning on having
+         augmentations that have other effects besides boosting stats)
+      <effect> (int) how much the attribute gets boosted by
+   </augmenttype>
+   -->
+
+   <augmenttype idname="AUGMENTATION_SUPER_SIGHT">
+      <name>Super Sight</name>
+      <type>HEAD</type>
+      <attribute>agility</attribute>
+      <effect>5</effect>
+   </augmenttype>
+
+   <augmenttype idname="AUGMENTATION_SUPER_STRENGTH">
+      <name>Super Strength</name>
+      <type>ARMS</type>
+      <attribute>strength</attribute>
+      <effect>6</effect>
+   </augmenttype>
+
+</augmentations>

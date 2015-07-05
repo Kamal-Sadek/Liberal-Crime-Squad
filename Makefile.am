@@ -8,8 +8,8 @@ dist_art_DATA = art/abort.cmv art/anchor.cmv art/glamshow.cmv art/lacops.cmv\
  \
  art/largecap.cpc art/newspic.cpc art/newstops.cpc\
  \
- art/armors.xml art/armsdealer.xml art/clips.xml art/creatures.xml\
- art/deptstore.xml art/loot.xml art/masks.xml art/oubliette.xml\
+ art/armors.xml art/augmentations.xml art/armsdealer.xml art/clips.xml \
+ art/creatures.xml art/deptstore.xml art/loot.xml art/masks.xml art/oubliette.xml\
  art/pawnshop.xml art/vehicles.xml art/weapons.xml\
  \
  art/licenses.txt art/sitemaps.txt\

@@ -595,7 +595,7 @@ void activate(Creature *cr)
             set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_AUGMENT);
          else
             set_color(COLOR_BLACK,COLOR_BLACK,1);
-         mvaddstr(14,40,"5 - Augment another Liberal");
+         mvaddstr(14,40,"5 - Coming Soon!");//Augment another Liberal");
 
          break;
       case 't':
@@ -1614,7 +1614,7 @@ void recruitSelect(Creature &cr)
 
 void select_augmentation(Creature *cr) //TODO: Finish
 {
-   Creature *victim = 0;
+   /*Creature *victim = 0;
    int culloc=cr->location;
    vector<Creature *> temppool;
    for(int p=0;p<len(pool);p++) {
@@ -1732,7 +1732,7 @@ void select_augmentation(Creature *cr) //TODO: Finish
          //else if(c==ENTER||c==SPACEBAR) cur_step = 1;
          break;
       }
-   }
+   }*/
 }
 
 /* base - activate - make clothing */

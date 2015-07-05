@@ -3,7 +3,7 @@ crimesquad_SOURCES = game.cpp lcsio.cpp cursesmovie.cpp compat.cpp\
  cursesgraphics.cpp lcsio.h cursesmovie.h compat.h cursesgraphics.h includes.h\
  externs.h common/commondisplay.cpp common/commonactions.cpp\
  common/consolesupport.cpp common/getnames.cpp common/translateid.cpp\
- common/equipment.cpp creature/creature.cpp title/titlescreen.cpp\
+ common/equipment.cpp creature/augmentation.cpp creature/creature.cpp title/titlescreen.cpp\
  title/highscore.cpp title/newgame.cpp title/saveload.cpp basemode/basemode.cpp\
  basemode/baseactions.cpp basemode/activate.cpp basemode/reviewmode.cpp\
  sitemode/advance.cpp sitemode/mapspecials.cpp sitemode/newencounter.cpp\
@@ -18,9 +18,9 @@ crimesquad_SOURCES = game.cpp lcsio.cpp cursesmovie.cpp compat.cpp\
  news/majorevent.cpp news/squadstory_text.cpp sitemode/sitemap.h\
  sitemode/sitemap.cpp news/news.h\
  locationdef.h basemode/activate_sleepers.cpp monthly/sleeper_update.cpp\
- items/armor.cpp creature/creaturetypes.cpp basemode/liberalagenda.cpp\
- common/misc.cpp common/help.cpp creature/creature.h creature/creaturenames.cpp\
- cmarkup/Markup.cpp cmarkup/Markup.h vehicle/vehicle.cpp vehicle/vehicle.h\
+ items/armor.cpp creature/augmenttype.cpp creature/creaturetypes.cpp basemode/liberalagenda.cpp\
+ common/misc.cpp common/help.cpp creature/augmentation.h creature/creature.h\
+ creature/creaturenames.cpp cmarkup/Markup.cpp cmarkup/Markup.h vehicle/vehicle.cpp vehicle/vehicle.h\
  vehicle/vehicletype.cpp vehicle/vehicletype.h items/weapontype.h\
  items/armortype.cpp items/armortype.h items/clip.cpp items/clip.h\
  items/cliptype.cpp items/cliptype.h items/item.cpp items/item.h\
@@ -28,7 +28,7 @@ crimesquad_SOURCES = game.cpp lcsio.cpp cursesmovie.cpp compat.cpp\
  items/loottype.cpp items/loottype.h items/money.cpp items/money.h\
  items/weapon.cpp items/weapon.h items/weapontype.cpp items/armor.h\
  sitemode/shop.h sitemode/shop.cpp log/log.h log/log.cpp locations/locations.cpp\
- title/initfile.cpp locations/world.cpp locations/locations.h common.h\
+ title/initfile.cpp locations/world.cpp locations/locations.h common.h creature/augmenttype.h\
  creature/creaturetype.h creature/creaturetype.cpp common/stringconversion.cpp\
  sdl/SDL.h sdl/SDL_assert.h sdl/SDL_atomic.h sdl/SDL_audio.h sdl/SDL_bits.h\
  sdl/SDL_blendmode.h sdl/SDL_clipboard.h sdl/SDL_config.h\

@@ -30,7 +30,7 @@ void sexwho(char *str)
    case 4:strcat(str,"BiF");break;
    case 5:strcat(str,"BiM");break;
    case 6:strcat(str,"BBW");break;
-   case 7:strcat(str,"BMW");break; // lol big mexican woman
+   case 7:strcat(str,"BMW");break;
    case 8:strcat(str,"CD");break;
    case 9:strcat(str,"DWF");break;
    case 10:strcat(str,"DWM");break;

@@ -91,6 +91,7 @@ vector<WeaponType *> weapontype;
 vector<ArmorType *> armortype;
 vector<LootType *> loottype;
 vector<CreatureType *> creaturetype;
+vector<AugmentType *> augmenttype;
 vector<VehicleType *> vehicletype;
 
 template<class Type>
@@ -453,6 +454,7 @@ int main(int argc, char* argv[])
    xml_loaded_ok&=populate_masks_from_xml(armortype,"masks.xml",xmllog);
    xml_loaded_ok&=populate_from_xml(loottype,"loot.xml",xmllog);
    xml_loaded_ok&=populate_from_xml(creaturetype,"creatures.xml",xmllog);
+   xml_loaded_ok&=populate_from_xml(augmenttype,"augmentations.xml",xmllog);
    if(!xml_loaded_ok) end_game(EXIT_FAILURE);
 
    //addstr("Attempting to load saved game... ");
@@ -487,6 +489,7 @@ void end_game(int err)
    delete_and_clear(armortype);
    delete_and_clear(loottype);
    delete_and_clear(creaturetype);
+   delete_and_clear(augmenttype);
    delete_and_clear(vehicletype);
    delete_and_clear(vehicle);
    delete_and_clear(pool);
