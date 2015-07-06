@@ -4,7 +4,7 @@
 AC_PREREQ(2.6)
 
 #The following line has the program name, the program version, and the bug report address.
-AC_INIT([crimesquad], [4.07.5],[jonathansfox@users.sourceforge.net])
+AC_INIT([crimesquad], [4.07.5],[kamaljalals@gmail.com])
 AC_CONFIG_SRCDIR([src/cursesgraphics.cpp])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE

@@ -9,6 +9,8 @@
          Which attribute gets boosted by augmentation (I'm planning on having
          augmentations that have other effects besides boosting stats)
       <effect> (int) how much the attribute gets boosted by
+      <age_minimum> (int) TODO:IMPLEMENT
+      <age_maximum> (int) TODO:IMPLEMENT
    </augmenttype>
    -->
 

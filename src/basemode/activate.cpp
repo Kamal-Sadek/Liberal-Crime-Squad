@@ -1614,7 +1614,7 @@ void recruitSelect(Creature &cr)
 
 void select_augmentation(Creature *cr) //TODO: Finish
 {
-   /*Creature *victim = 0;
+   Creature *victim = 0;
    int culloc=cr->location;
    vector<Creature *> temppool;
    for(int p=0;p<len(pool);p++) {
@@ -1624,7 +1624,8 @@ void select_augmentation(Creature *cr) //TODO: Finish
          temppool.push_back(pool[p]);
       }
    }
-   int cur_step=0,page=0,c=0,aug_c=-1,aug_a=-1,aug_b=-1;
+   int cur_step=0,page=0,c=0,aug_c;
+   std::vector<AugmentType *> augtype;
 
    while(true)
    {
@@ -1640,7 +1641,7 @@ void select_augmentation(Creature *cr) //TODO: Finish
          mvaddstr(1,0,"컴컴NAME컴컴컴컴컴컴컴컴컴컴컴횴EALTH컴컴컴컴컴컴HEART컴컴컴컴AGE컴컴컴컴컴컴컴�");
          for(p=page*19,y=2;p<len(temppool)&&p<page*19+19;p++,y++)
          {
-            set_color(COLOR_WHITE,COLOR_BLACK,c==y+'a'-2); //0 25 33 42 57
+            set_color(COLOR_WHITE,COLOR_BLACK,0); //c==y+'a'-2);
             move(y,0);
             addchar(y+'A'-2);addstr(" - ");
             addstr(temppool[p]->name);
@@ -1651,7 +1652,7 @@ void select_augmentation(Creature *cr) //TODO: Finish
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(22,0);
-         addstr("Press a Letter to select a Liberal or X to rethink");
+         addstr("Press a Letter to select a Liberal");
          move(23,0);
          addpagestr();
 
@@ -1666,16 +1667,15 @@ void select_augmentation(Creature *cr) //TODO: Finish
          {
             int p=page*19+c-'a';
             if(p<len(temppool))
+            {
                victim = temppool[p];
+               cur_step = 1;
+            }
             else
                victim = 0;
          }
 
-         if(c=='x'||c==ESC) return;
-         else if((c==ENTER||c==SPACEBAR)) {
-            if(victim!=NULL) cur_step = 1;
-            else return;
-         }
+         if(c=='x'||c==ESC||c==SPACEBAR||c==ENTER) return;
 
          break;
          
@@ -1695,44 +1695,38 @@ void select_augmentation(Creature *cr) //TODO: Finish
          mvaddstr(3,1,"Select an Augmentation");
          for(p=page*19,y=5;p<AUGMENTATIONNUM&&p<page*19+19;p++,y++)
          {
-            set_color(COLOR_WHITE,COLOR_BLACK,c==y+'a'-5);
+            set_color(COLOR_WHITE,COLOR_BLACK,aug_c==y+'a'-5);
             move(y,1);
             addchar(y+'A'-5);addstr(" - ");
-            addstr(Augmentation::get_name(p));
+            addstr(Augmentation::get_name(y-5));
          }
 
-         switch(c)
+         if(aug_c>='a'&&aug_c<='e'&&c>='a'&&c<='e')
          {
-            case 'a':   aug_b=AUGMENTATION_HEAD;aug_a=HEAD_AUGMENTATIONNUM;   break;
-            case 'b':   aug_b=AUGMENTATION_CHEST;aug_a=CHEST_AUGMENTATIONNUM; break;
-            case 'c':   aug_b=AUGMENTATION_ARM;aug_a=ARM_AUGMENTATIONNUM;     break;
-            case 'd':   aug_b=AUGMENTATION_LEG;aug_a=LEG_AUGMENTATIONNUM;     break;
-            case 'e':   aug_b=AUGMENTATION_SKIN;aug_a=SKIN_AUGMENTATIONNUM;   break;
-            default:    aug_b=-1;aug_a=-1;   break;
+            augtype.clear();
+            for(int x=0,y=5;x<augmenttype.size();x++)
+            {
+               if(augmenttype[x]->get_type()==aug_c-'a')
+                  augtype.push_back(augmenttype[x]);
+            }
          }
 
-         for(p=page*19,y=5;p<aug_a-1&&p<page*19+19;p++,y++)
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+
+         for(int x=0,y=5;x<augtype.size();x++,y++)
          {
-            set_color(COLOR_WHITE,COLOR_BLACK,aug_c==y+'1'-5);
-            move(y,20);
-            addchar(y+'1'-5);addstr(" - ");
-            addstr(Augmentation::get_name(aug_b,y-4));
+            //set_color(COLOR_WHITE,COLOR_BLACK,c==y+'1'-5);
+            mvaddchar(y,26,y+'1'-5);addstr(" - ");
+            addstr(augtype[x]->get_name());
          }
 
-         if(c>='a'&&c<='e'&&aug_c>='1'&&aug_c<='9')
-         {
-            move(21,3);
-            addstr(Augmentation::get_description(aug_b,aug_c-'1'));
-         }
-
-         aug_c = getkey();
-         if(aug_c>='a'&&aug_c<='e') c=aug_c;
-         else if(!(aug_c>='1'&&aug_c<='9'));
-         if(aug_c=='x'||aug_c==ESC||aug_c==ENTER||aug_c==SPACEBAR) return;
-         //else if(c==ENTER||c==SPACEBAR) cur_step = 1;
-         break;
+         if(aug_c>='a'&&aug_c<='e'&&c>='1'&&c<='0'+augtype.size());
+         c = getkey();
+         if(c>='a'&&c<='e') aug_c=c;
+         else if(c=='x'||c==ESC)return; 
+         else if(c==SPACEBAR||c==ENTER) cur_step=0;
       }
-   }*/
+   }
 }
 
 /* base - activate - make clothing */
