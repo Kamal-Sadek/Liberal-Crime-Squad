@@ -25,19 +25,18 @@ AugmentType::AugmentType(const std::string& xmlstring)
       if(element=="name")
          name_=xml.GetData();
       else if(element=="type")
-      {
-         std::string temp=xml.GetData();
-         type_=augment_string_to_enum(temp);
-      }
+         type_=augment_string_to_enum(xml.GetData());
       else if(element=="attribute")
          attribute_=attribute_string_to_enum(xml.GetData());
       else if(element=="effect")
          effect_=atoi(xml.GetData());
+      else if(element=="description")
+         description_=xml.GetData();
    }
 
 }
 
-void AugmentType::make_augment(Augmentation& au) const
+void AugmentType::make_augment(Augmentation& au)
 {
    au.name=name_;
    au.type=type_;

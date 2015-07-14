@@ -1699,6 +1699,16 @@ void Creature::strip(vector<Item*>* lootpile)
    }
 }
 
+int Creature::get_weapon_skill() const {
+   int wsk = SKILL_HANDTOHAND;
+   if(get_weapon().has_musical_attack())
+      wsk=SKILL_MUSIC;
+   else if (has_thrown_weapon && len(extra_throwing_weapons))
+      wsk=extra_throwing_weapons[0]->get_attack(false,false,false)->skill;
+   else wsk=get_weapon().get_attack(false,false,false)->skill;
+   return get_skill(wsk);
+}
+
 string Creature::get_weapon_string(int subtype) const
 {
    string r;

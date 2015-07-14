@@ -11,14 +11,16 @@
       <effect> (int) how much the attribute gets boosted by
       <age_minimum> (int) TODO:IMPLEMENT
       <age_maximum> (int) TODO:IMPLEMENT
+      <description> (string) displayed when selecting an augmentation
    </augmenttype>
    -->
 
-   <augmenttype idname="AUGMENTATION_SUPER_SIGHT">
-      <name>Super Sight</name>
-      <type>HEAD</type>
+   <augmenttype idname="AUGMENTATION_SUPER_SPEED">
+      <name>Super Speed</name>
+      <type>LEGS</type>
       <attribute>agility</attribute>
       <effect>5</effect>
+      <description>You have +5 agility</description>
    </augmenttype>
 
    <augmenttype idname="AUGMENTATION_SUPER_STRENGTH">
@@ -26,6 +28,7 @@
       <type>ARMS</type>
       <attribute>strength</attribute>
       <effect>6</effect>
+      <description>You have +6 strength</description>
    </augmenttype>
 
 </augmentations>

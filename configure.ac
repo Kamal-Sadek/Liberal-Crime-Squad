@@ -7,7 +7,7 @@ AC_PREREQ(2.6)
 AC_INIT([crimesquad], [4.07.5],[kamaljalals@gmail.com])
 AC_CONFIG_SRCDIR([src/cursesgraphics.cpp])
 AC_CONFIG_HEADER([config.h])
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([subdir-objects])
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
@@ -21,6 +21,10 @@ AC_DEFINE([NCURSES],[],[Defined if we use NCURSES (always true on linux)])
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([stdlib.h string.h sys/time.h unistd.h ncurses.h ncursesw/ncurses.h])
+
+# We're moving to the future, to C++14!
+CFLAGS+=" -std=c++14"
+CXXFLAGS+=" -std=c++14"
 
 # Check for ncurses libraries, preferring wide character ones:
 for lib in ncurses ncursesw; do

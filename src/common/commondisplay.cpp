@@ -374,13 +374,7 @@ void printparty()
             move(p+2,23);
             addstr(skill);
             addstr("/");
-            int wsk = SKILL_HANDTOHAND;
-            if(party[p]->get_weapon().has_musical_attack())
-               wsk=SKILL_MUSIC;
-            else if (party[p]->has_thrown_weapon && len(party[p]->extra_throwing_weapons))
-               wsk=party[p]->extra_throwing_weapons[0]->get_attack(false,false,false)->skill;
-            else wsk=party[p]->get_weapon().get_attack(false,false,false)->skill;
-            addstr(party[p]->get_skill(wsk));
+            addstr(party[p]->get_weapon_skill());
 
             move(p+2,31);
             if(mode!=GAMEMODE_SITE)set_color(COLOR_WHITE,COLOR_BLACK,0);

@@ -312,6 +312,9 @@ public:
    int get_skill(int skill) const { return MIN(skills[skill].value,MAXATTRIBUTE); }
    int skill_roll(int skill) const;
    bool skill_check(int skill, int difficulty) const;
+   int get_weapon_skill() const;
+
+   Augmentation& get_augmentation(int aug_num) { return augmentations[aug_num]; }
    
    char name[CREATURE_NAMELEN];
    char propername[CREATURE_NAMELEN];

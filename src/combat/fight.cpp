@@ -104,8 +104,9 @@ void youattack()
       else target=pickrandom(super_enemies);
 
       char mistake=0;
-      // 1% chance to accidentally hit bystanders
-      if(len(non_enemies)&&!LCSrandom(100))
+      // Changed from 1% chance to being based on weapon skill
+      if(len(non_enemies)&&activesquad->squad[p]->get_weapon_skill()<8&&
+         !LCSrandom(10+10*activesquad->squad[p]->get_weapon_skill()))
       {
          target=pickrandom(non_enemies);
          mistake=1;

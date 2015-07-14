@@ -322,7 +322,7 @@ int skill_string_to_enum(std::string skillname)
       return -1;
 }
 
-int augment_string_to_enum(std::string& augmentname)
+int augment_string_to_enum(const std::string& augmentname)
 {
    if (augmentname == "HEAD")
       return AUGMENTATION_HEAD;

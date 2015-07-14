@@ -595,7 +595,7 @@ void activate(Creature *cr)
             set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_AUGMENT);
          else
             set_color(COLOR_BLACK,COLOR_BLACK,1);
-         mvaddstr(14,40,"5 - Coming Soon!");//Augment another Liberal");
+         mvaddstr(14,40,"5 - Augment another Liberal");
 
          break;
       case 't':
@@ -1612,7 +1612,7 @@ void recruitSelect(Creature &cr)
    return;
 }
 
-void select_augmentation(Creature *cr) //TODO: Finish
+void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 {
    Creature *victim = 0;
    int culloc=cr->location;
@@ -1625,7 +1625,8 @@ void select_augmentation(Creature *cr) //TODO: Finish
       }
    }
    int cur_step=0,page=0,c=0,aug_c;
-   std::vector<AugmentType *> augtype;
+   std::vector<AugmentType *> aug_type;
+   AugmentType *selected_aug;
 
    while(true)
    {
@@ -1634,7 +1635,7 @@ void select_augmentation(Creature *cr) //TODO: Finish
       int y,p;
 
       switch(cur_step) {
-         case 0:
+         case 0: //PAGE 0
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          mvaddstr(0,0,"Select a Liberal to perform experiments on");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1679,52 +1680,108 @@ void select_augmentation(Creature *cr) //TODO: Finish
 
          break;
          
-         case 1:
+         case 1: //PAGE 1
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          mvaddstr(0,0,"Subject: ");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          addstr(victim->name);addstr(", ");addstr(gettitle(*victim));
-         mvaddstr(1,0,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
+         //mvaddstr(1,0,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
 
-         mvaddstr(3,55,"Status");
-         printwoundstat(*victim,5,55);
+         mvaddstr(2,55,"Status");
+         printwoundstat(*victim,4,55);
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         mvaddstr(12,55,"Heart: ");mvaddstr(12,66,victim->get_attribute(ATTRIBUTE_HEART,true));
-         mvaddstr(13,55,"Age: ");mvaddstr(13,66,victim->age);
+         mvaddstr(11,55,"Heart: ");mvaddstr(11,66,victim->get_attribute(ATTRIBUTE_HEART,true));
+         mvaddstr(12,55,"Age: ");mvaddstr(12,66,victim->age);
 
-         mvaddstr(3,1,"Select an Augmentation");
-         for(p=page*19,y=5;p<AUGMENTATIONNUM&&p<page*19+19;p++,y++)
+         mvaddstr(2,1,"Select an Augmentation");
+         for(p=page*19,y=4;p<AUGMENTATIONNUM&&p<page*19+19;p++,y++)
          {
-            set_color(COLOR_WHITE,COLOR_BLACK,aug_c==y+'a'-5);
+            set_color(COLOR_WHITE,COLOR_BLACK,aug_c==y+'a'-4);
             move(y,1);
-            addchar(y+'A'-5);addstr(" - ");
-            addstr(Augmentation::get_name(y-5));
+            addchar(y+'A'-4);addstr(" - ");
+            addstr(Augmentation::get_name(y-4));
          }
 
          if(aug_c>='a'&&aug_c<='e'&&c>='a'&&c<='e')
          {
-            augtype.clear();
+            aug_type.clear();
             for(int x=0,y=5;x<augmenttype.size();x++)
             {
                if(augmenttype[x]->get_type()==aug_c-'a')
-                  augtype.push_back(augmenttype[x]);
+                  aug_type.push_back(augmenttype[x]);
             }
          }
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-         for(int x=0,y=5;x<augtype.size();x++,y++)
+         for(int x=0,y=5;x<aug_type.size();x++,y++)
          {
             //set_color(COLOR_WHITE,COLOR_BLACK,c==y+'1'-5);
             mvaddchar(y,26,y+'1'-5);addstr(" - ");
-            addstr(augtype[x]->get_name());
+            addstr(aug_type[x]->get_name());
          }
 
-         if(aug_c>='a'&&aug_c<='e'&&c>='1'&&c<='0'+augtype.size());
+         //Checks to see if valid input, and moves to next screen
+         if(aug_c>='a'&&aug_c<='e'&&c>='1'&&c<='0'+aug_type.size())
+         {
+            cur_step=2;
+            selected_aug=aug_type[c-'1'];
+            break;
+         }
+
          c = getkey();
          if(c>='a'&&c<='e') aug_c=c;
-         else if(c=='x'||c==ESC)return; 
-         else if(c==SPACEBAR||c==ENTER) cur_step=0;
+         else if(c==ESC)return; 
+         else if(c=='x'||c==SPACEBAR||c==ENTER) cur_step=0;
+         break;
+
+         case 2: //PAGE 2
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         mvaddstr(0,0,"Subject: ");
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         addstr(victim->name);addstr(", ");addstr(gettitle(*victim));
+
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         mvaddstr(2,0,"Augmentation: ");
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         addstr(selected_aug->get_name());
+
+         mvaddstr(2,55,"Status");
+         printwoundstat(*victim,4,55);
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         mvaddstr(11,55,"Heart: ");mvaddstr(11,66,victim->get_attribute(ATTRIBUTE_HEART,true));
+         mvaddstr(12,55,"Age: ");mvaddstr(12,66,victim->age);
+
+         set_color(COLOR_WHITE,COLOR_BLACK,1); //TODO:Automatic wrap-around
+         mvaddstr(4,0,"Description: ");
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         addstr(selected_aug->get_description());
+
+         mvaddstr(23,0,"Are you sure? (y/n)");
+
+         c = getkey();
+         if(c=='y') 
+         {
+            move(6,1);
+            victim->blood-=100-(10*cr->get_skill(SKILL_SCIENCE) - 15*cr->get_skill(SKILL_FIRSTAID));
+            if(victim->blood<0)
+            {
+               victim->die();
+               addstr(string(cr->name)+" has brutally murdered "+victim->name, gamelog);
+            }
+            else
+            {
+               selected_aug->make_augment(victim->get_augmentation(selected_aug->get_type()));
+               addstr(string(victim->name)+" has been augmented with "+selected_aug->get_name(), gamelog);
+            }
+            gamelog.nextMessage();
+            getkey();
+            return;
+         }
+
+         else if(c==ESC)return; 
+         else if(c=='x'||c==SPACEBAR||c==ENTER||c=='n') {cur_step=1;selected_aug=nullptr;}
+         break;
       }
    }
 }
