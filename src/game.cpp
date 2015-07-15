@@ -270,13 +270,6 @@ int main(int argc, char* argv[])
    char file_name[13];
    FILE *file;
 
-   for(int i=0;i<NUMSAVES;i++)
-   {
-      snprintf(file_name, 13, "save_%03i.dat", i);
-      file = LCSOpenFile(file_name, "a", LCSIO_PRE_HOME);
-      LCSCloseFile(file);
-   }
-
    music.play(MUSIC_TITLEMODE); // initialize music and play title mode song (do this BEFORE displaying anything on the screen, but AFTER initializing artdir and homedir)
 
    // set window title

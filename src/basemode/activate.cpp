@@ -1612,6 +1612,17 @@ void recruitSelect(Creature &cr)
    return;
 }
 
+void show_victim_status(Creature *victim)
+{
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   mvaddstr(2,55,"Status:");
+   printhealthstat(*victim,2,66,true);
+   printwoundstat(*victim,4,55);
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   mvaddstr(11,55,"Heart: ");mvaddstr(11,66,victim->get_attribute(ATTRIBUTE_HEART,true));
+   mvaddstr(12,55,"Age: ");mvaddstr(12,66,victim->age);
+}
+
 void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 {
    Creature *victim = 0;
@@ -1635,7 +1646,8 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
       int y,p;
 
       switch(cur_step) {
-         case 0: //PAGE 0
+
+         case 0: //PAGE 0, selecting a liberal
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          mvaddstr(0,0,"Select a Liberal to perform experiments on");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1680,23 +1692,23 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 
          break;
          
-         case 1: //PAGE 1
+
+
+         case 1: //PAGE 1, selecting an augmentation
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          mvaddstr(0,0,"Subject: ");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          addstr(victim->name);addstr(", ");addstr(gettitle(*victim));
          //mvaddstr(1,0,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
 
-         mvaddstr(2,55,"Status");
-         printwoundstat(*victim,4,55);
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         mvaddstr(11,55,"Heart: ");mvaddstr(11,66,victim->get_attribute(ATTRIBUTE_HEART,true));
-         mvaddstr(12,55,"Age: ");mvaddstr(12,66,victim->age);
+         show_victim_status(victim);
 
          mvaddstr(2,1,"Select an Augmentation");
          for(p=page*19,y=4;p<AUGMENTATIONNUM&&p<page*19+19;p++,y++)
          {
-            set_color(COLOR_WHITE,COLOR_BLACK,aug_c==y+'a'-4);
+            bool already_augmented = victim->get_augmentation(y-4).type!=-1;
+            if(already_augmented) set_color(COLOR_BLACK,COLOR_BLACK,1);
+            else set_color(COLOR_WHITE,COLOR_BLACK,aug_c==y+'a'-4);
             move(y,1);
             addchar(y+'A'-4);addstr(" - ");
             addstr(Augmentation::get_name(y-4));
@@ -1707,6 +1719,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
             aug_type.clear();
             for(int x=0,y=5;x<augmenttype.size();x++)
             {
+               if(victim->get_augmentation(aug_c-'a').type!=-1)break; //Already augmented on that bodypart
                if(augmenttype[x]->get_type()==aug_c-'a')
                   aug_type.push_back(augmenttype[x]);
             }
@@ -1714,10 +1727,10 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
 
-         for(int x=0,y=5;x<aug_type.size();x++,y++)
+         for(int x=0,y=4;x<aug_type.size();x++,y++)
          {
             //set_color(COLOR_WHITE,COLOR_BLACK,c==y+'1'-5);
-            mvaddchar(y,26,y+'1'-5);addstr(" - ");
+            mvaddchar(y,26,y+'1'-4);addstr(" - ");
             addstr(aug_type[x]->get_name());
          }
 
@@ -1735,7 +1748,9 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          else if(c=='x'||c==SPACEBAR||c==ENTER) cur_step=0;
          break;
 
-         case 2: //PAGE 2
+
+
+         case 2: //PAGE 2, confirm your choices
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          mvaddstr(0,0,"Subject: ");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1746,35 +1761,51 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          addstr(selected_aug->get_name());
 
-         mvaddstr(2,55,"Status");
-         printwoundstat(*victim,4,55);
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         mvaddstr(11,55,"Heart: ");mvaddstr(11,66,victim->get_attribute(ATTRIBUTE_HEART,true));
-         mvaddstr(12,55,"Age: ");mvaddstr(12,66,victim->age);
+         show_victim_status(victim);
 
          set_color(COLOR_WHITE,COLOR_BLACK,1); //TODO:Automatic wrap-around
          mvaddstr(4,0,"Description: ");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          addstr(selected_aug->get_description());
 
-         mvaddstr(23,0,"Are you sure? (y/n)");
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         mvaddstr(23,1,"Are you sure? (y/n)");
 
          c = getkey();
          if(c=='y') 
          {
-            move(6,1);
-            victim->blood-=100-(10*cr->get_skill(SKILL_SCIENCE) - 15*cr->get_skill(SKILL_FIRSTAID));
-            if(victim->blood<0)
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+            mvaddstr(23,1,"Press any key to return");
+            move(21,1);
+            int blood_saved = 10*cr->get_skill(SKILL_SCIENCE) + 15*cr->get_skill(SKILL_FIRSTAID);
+            if(blood_saved>100) blood_saved = 100;
+            victim->blood-=100 - blood_saved;
+            if(victim->blood<=0)
             {
+               set_color(COLOR_RED,COLOR_BLACK,1);
                victim->die();
-               addstr(string(cr->name)+" has brutally murdered "+victim->name, gamelog);
+               addstr(string(victim->name)+" has been brutally murdered by "+cr->name, gamelog);
             }
-            else
+            else //TODO: Add chance to fail and just have that limb removed
             {
+               switch(selected_aug->get_type())
+               {
+               case AUGMENTATION_HEAD: victim->wound[BODYPART_HEAD]|=WOUND_BRUISED;       break;
+               case AUGMENTATION_BODY: victim->wound[BODYPART_BODY]|=WOUND_BRUISED;       break;
+               case AUGMENTATION_ARMS: victim->wound[BODYPART_ARM_LEFT]|=WOUND_BRUISED;
+                  victim->wound[BODYPART_ARM_LEFT]|=WOUND_BLEEDING;                       break;
+               case AUGMENTATION_LEGS:victim->wound[BODYPART_LEG_LEFT]|=WOUND_BRUISED;
+                  victim->wound[BODYPART_LEG_LEFT]|=WOUND_BLEEDING;                       break;
+               case AUGMENTATION_SKIN:victim->wound[BODYPART_HEAD]|=WOUND_BRUISED;
+                  victim->wound[BODYPART_BODY]|=WOUND_BURNED;                             break;
+               }
+               set_color(COLOR_GREEN,COLOR_BLACK,1);
                selected_aug->make_augment(victim->get_augmentation(selected_aug->get_type()));
+               victim->adjust_attribute(selected_aug->get_type(), selected_aug->get_effect());
                addstr(string(victim->name)+" has been augmented with "+selected_aug->get_name(), gamelog);
             }
             gamelog.nextMessage();
+            show_victim_status(victim);
             getkey();
             return;
          }

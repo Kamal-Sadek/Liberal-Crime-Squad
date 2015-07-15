@@ -16,7 +16,8 @@ enum Augmentations
 class Augmentation
 {
    public:
-      Augmentation() { }
+      Augmentation():type(-1),name(""),attribute(-1),
+         effect(-1),value(-1) { }
       Augmentation(const std::string& inputXml);
       string showXml() const;
       short type;

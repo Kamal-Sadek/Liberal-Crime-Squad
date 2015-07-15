@@ -564,7 +564,7 @@ void mode_base()
          advanceday(clearformess,canseethings);
          if(day>monthday()) passmonth(clearformess,canseethings);
          advancelocations();
-         if(forcewait)
+         if(forcewait&&day==1)
          {
             erase();
             set_color(COLOR_WHITE,COLOR_BLACK,0);

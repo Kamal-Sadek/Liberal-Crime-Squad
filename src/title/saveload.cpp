@@ -57,7 +57,7 @@ void savegame()
    char new_filename[13];
    snprintf(old_filename, 13, "save_%03i.dat", NUMSAVES-1);
    LCSDeleteFile(old_filename, LCSIO_PRE_HOME);
-   for(int x = NUMSAVES-1; x >= 1; x--) {
+   for(int x=NUMSAVES-1;x>=1;x--) {
       snprintf(old_filename, 13, "save_%03i.dat", x-1);
       snprintf(new_filename, 13, "save_%03i.dat", x);
       LCSRenameFile(old_filename, new_filename, LCSIO_PRE_HOME); 
@@ -369,7 +369,7 @@ Item* create_item(const std::string& inputXml)
 }
 
 /* loads the game from save.dat */
-char load()
+char load() //TODO: If save000.dat is deleted, load save001... etc.
 {
    //LOAD FILE
    int loadversion;
@@ -379,463 +379,470 @@ char load()
    long dummy_l;
    FILE *h;
 
-   h=LCSOpenFile("save_000.dat", "rb", LCSIO_PRE_HOME);
-   if(h!=NULL)
+   char filename[13];
+
+   for(int saves=0;saves<NUMSAVES;saves++)
    {
-      fread(&loadversion,sizeof(int),1,h);
-
-      //NUKE INVALID SAVE GAMES
-      if(loadversion<lowestloadversion)
+      snprintf(filename, 13, "save_%03i.dat", saves);
+      h=LCSOpenFile(filename, "rb", LCSIO_PRE_HOME);
+      if(h!=NULL)
       {
-         LCSCloseFile(h);
+         fread(&loadversion,sizeof(int),1,h);
 
-         reset();
-
-         return 0;
-      }
-
-      fread(seed,sizeof(unsigned long),RNG_SIZE,h);
-
-      fread(&mode,sizeof(short),1,h);
-      fread(&wincondition,sizeof(short),1,h);
-      fread(&fieldskillrate,sizeof(short),1,h);
-
-      fread(&day,sizeof(int),1,h);
-      fread(&month,sizeof(int),1,h);
-      fread(&year,sizeof(int),1,h);
-      fread(&execterm,sizeof(short),1,h);
-      fread(&presparty,sizeof(short),1,h);
-      fread(&amendnum,sizeof(int),1,h);
-
-      fread(&multipleCityMode,sizeof(bool),1,h);
-      fread(&termlimits,sizeof(bool),1,h);
-      fread(&deagle,sizeof(bool),1,h);
-      fread(&m249,sizeof(bool),1,h);
-      fread(&notermlimit,sizeof(bool),1,h);
-      fread(&nocourtpurge,sizeof(bool),1,h);
-      fread(&stalinmode,sizeof(bool),1,h);
-
-      fread(&stat_recruits,sizeof(int),1,h);
-      fread(&stat_dead,sizeof(int),1,h);
-      fread(&stat_kills,sizeof(int),1,h);
-      fread(&stat_kidnappings,sizeof(int),1,h);
-      fread(&stat_buys,sizeof(int),1,h);
-      fread(&stat_burns,sizeof(int),1,h);
-
-      fread(&endgamestate,sizeof(char),1,h);
-      fread(&ccsexposure,sizeof(char),1,h);
-      fread(&ccs_kills,sizeof(char),1,h);
-
-      fread(&Vehicle::curcarid,sizeof(long),1,h);
-      fread(&curcreatureid,sizeof(long),1,h);
-      fread(&cursquadid,sizeof(long),1,h);
-      fread(&police_heat,sizeof(int),1,h);
-      fread(&offended_corps,sizeof(short),1,h);
-      fread(&offended_cia,sizeof(short),1,h);
-      fread(&offended_amradio,sizeof(short),1,h);
-      fread(&offended_cablenews,sizeof(short),1,h);
-      fread(&offended_firemen,sizeof(short),1,h);
-      fread(attorneyseed,sizeof(unsigned long),RNG_SIZE,h);
-      //fread(&selectedsiege,sizeof(long),1,h);
-      fread(lcityname,sizeof(char),CITY_NAMELEN,h);
-      fread(&newscherrybusted,sizeof(char),1,h);
-
-      fread(slogan,sizeof(char),SLOGAN_LEN,h);
-      fread(&ledger,sizeof(class Ledger),1,h);
-      fread(&party_status,sizeof(short),1,h);
-
-      fread(attitude,sizeof(short),VIEWNUM,h);
-      fread(law,sizeof(short),LAWNUM,h);
-      fread(house,sizeof(short),HOUSENUM,h);
-      fread(senate,sizeof(short),SENATENUM,h);
-      fread(court,sizeof(short),COURTNUM,h);
-      fread(courtname,sizeof(char)*POLITICIAN_NAMELEN,COURTNUM,h);
-      fread(exec,sizeof(char),EXECNUM,h);
-      fread(execname,sizeof(char)*POLITICIAN_NAMELEN,EXECNUM,h);
-      fread(oldPresidentName,sizeof(char),POLITICIAN_NAMELEN,h);
-
-      //LOCATIONS
-      fread(&dummy,sizeof(int),1,h);
-      location.resize(dummy);
-      for(l=0;l<len(location);l++)
-      {
-         location[l]=new Location;
-
-         fread(&dummy,sizeof(int),1,h);
-         location[l]->loot.resize(dummy);
-         for(int l2=0;l2<len(location[l]->loot);l2++)
+         //NUKE INVALID SAVE GAMES
+         if(loadversion<lowestloadversion)
          {
-            int itemLen;
-            fread(&itemLen, sizeof(int), 1, h);
-            vector<char> vec = vector<char>(itemLen + 1);
-            fread(&vec[0], itemLen, 1, h);
-            vec[itemLen] = '\0';
+            LCSCloseFile(h);
 
-            Item* it = create_item(&vec[0]);
-            if(it!=NULL)
-               location[l]->loot[l2] = it;
+            reset();
+
+            return 0;
          }
-         //Remove items of unknown type.
-         for(int l2=len(location[l]->loot)-1; l2>=0; l2--)
-         {
-            bool del = false;
-            if(location[l]->loot[l2]->is_loot())
-               del = (getloottype(location[l]->loot[l2]->get_itemtypename()) == -1);
-            else if(location[l]->loot[l2]->is_clip())
-               del = (getcliptype(location[l]->loot[l2]->get_itemtypename()) == -1);
-            else if(location[l]->loot[l2]->is_weapon())
-               del = (getweapontype(location[l]->loot[l2]->get_itemtypename()) == -1);
-            else if(location[l]->loot[l2]->is_armor())
-               del = (getarmortype(location[l]->loot[l2]->get_itemtypename()) == -1);
 
-            if(del)
+         fread(seed,sizeof(unsigned long),RNG_SIZE,h);
+
+         fread(&mode,sizeof(short),1,h);
+         fread(&wincondition,sizeof(short),1,h);
+         fread(&fieldskillrate,sizeof(short),1,h);
+
+         fread(&day,sizeof(int),1,h);
+         fread(&month,sizeof(int),1,h);
+         fread(&year,sizeof(int),1,h);
+         fread(&execterm,sizeof(short),1,h);
+         fread(&presparty,sizeof(short),1,h);
+         fread(&amendnum,sizeof(int),1,h);
+
+         fread(&multipleCityMode,sizeof(bool),1,h);
+         fread(&termlimits,sizeof(bool),1,h);
+         fread(&deagle,sizeof(bool),1,h);
+         fread(&m249,sizeof(bool),1,h);
+         fread(&notermlimit,sizeof(bool),1,h);
+         fread(&nocourtpurge,sizeof(bool),1,h);
+         fread(&stalinmode,sizeof(bool),1,h);
+
+         fread(&stat_recruits,sizeof(int),1,h);
+         fread(&stat_dead,sizeof(int),1,h);
+         fread(&stat_kills,sizeof(int),1,h);
+         fread(&stat_kidnappings,sizeof(int),1,h);
+         fread(&stat_buys,sizeof(int),1,h);
+         fread(&stat_burns,sizeof(int),1,h);
+
+         fread(&endgamestate,sizeof(char),1,h);
+         fread(&ccsexposure,sizeof(char),1,h);
+         fread(&ccs_kills,sizeof(char),1,h);
+
+         fread(&Vehicle::curcarid,sizeof(long),1,h);
+         fread(&curcreatureid,sizeof(long),1,h);
+         fread(&cursquadid,sizeof(long),1,h);
+         fread(&police_heat,sizeof(int),1,h);
+         fread(&offended_corps,sizeof(short),1,h);
+         fread(&offended_cia,sizeof(short),1,h);
+         fread(&offended_amradio,sizeof(short),1,h);
+         fread(&offended_cablenews,sizeof(short),1,h);
+         fread(&offended_firemen,sizeof(short),1,h);
+         fread(attorneyseed,sizeof(unsigned long),RNG_SIZE,h);
+         //fread(&selectedsiege,sizeof(long),1,h);
+         fread(lcityname,sizeof(char),CITY_NAMELEN,h);
+         fread(&newscherrybusted,sizeof(char),1,h);
+
+         fread(slogan,sizeof(char),SLOGAN_LEN,h);
+         fread(&ledger,sizeof(class Ledger),1,h);
+         fread(&party_status,sizeof(short),1,h);
+
+         fread(attitude,sizeof(short),VIEWNUM,h);
+         fread(law,sizeof(short),LAWNUM,h);
+         fread(house,sizeof(short),HOUSENUM,h);
+         fread(senate,sizeof(short),SENATENUM,h);
+         fread(court,sizeof(short),COURTNUM,h);
+         fread(courtname,sizeof(char)*POLITICIAN_NAMELEN,COURTNUM,h);
+         fread(exec,sizeof(char),EXECNUM,h);
+         fread(execname,sizeof(char)*POLITICIAN_NAMELEN,EXECNUM,h);
+         fread(oldPresidentName,sizeof(char),POLITICIAN_NAMELEN,h);
+
+         //LOCATIONS
+         fread(&dummy,sizeof(int),1,h);
+         location.resize(dummy);
+         for(l=0;l<len(location);l++)
+         {
+            location[l]=new Location;
+
+            fread(&dummy,sizeof(int),1,h);
+            location[l]->loot.resize(dummy);
+            for(int l2=0;l2<len(location[l]->loot);l2++)
             {
-               addstr("Item type ");
-               addstr(location[l]->loot[l2]->get_itemtypename());
-               addstr(" does not exist. Deleting item.");
-               delete_and_remove(location[l]->loot,l2);
+               int itemLen;
+               fread(&itemLen, sizeof(int), 1, h);
+               vector<char> vec = vector<char>(itemLen + 1);
+               fread(&vec[0], itemLen, 1, h);
+               vec[itemLen] = '\0';
+
+               Item* it = create_item(&vec[0]);
+               if(it!=NULL)
+                  location[l]->loot[l2] = it;
             }
-         }
-         consolidateloot(location[l]->loot); // consolidate loot after loading
-
-         fread(&dummy,sizeof(int),1,h);
-         location[l]->changes.resize(dummy);
-         for(int l2=0;l2<len(location[l]->changes);l2++)
-            fread(&location[l]->changes[l2],sizeof(sitechangest),1,h);
-
-         fread(location[l]->name,sizeof(char),LOCATION_NAMELEN,h);
-         fread(location[l]->shortname,sizeof(char),LOCATION_SHORTNAMELEN,h);
-         fread(&location[l]->type,sizeof(char),1,h);
-         fread(&location[l]->city,sizeof(int),1,h);
-         fread(&location[l]->area,sizeof(int),1,h);
-         fread(&location[l]->parent,sizeof(int),1,h);
-         fread(&location[l]->id,sizeof(int),1,h);
-
-         fread(&location[l]->renting,sizeof(int),1,h);
-         fread(&location[l]->newrental,sizeof(char),1,h);
-         fread(&location[l]->needcar,sizeof(char),1,h);
-         fread(&location[l]->closed,sizeof(int),1,h);
-         fread(&location[l]->hidden,sizeof(bool),1,h);
-         fread(&location[l]->mapped,sizeof(bool),1,h);
-         fread(&location[l]->upgradable,sizeof(bool),1,h);
-         fread(&location[l]->highsecurity,sizeof(int),1,h);
-         fread(&location[l]->siege,sizeof(siegest),1,h);
-         fread(&location[l]->heat,sizeof(int),1,h);
-         fread(&location[l]->heat_protection,sizeof(int),1,h);
-         fread(&location[l]->compound_walls,sizeof(int),1,h);
-         fread(&location[l]->compound_stores,sizeof(int),1,h);
-         fread(&location[l]->front_business,sizeof(char),1,h);
-         fread(location[l]->front_name,sizeof(char),LOCATION_NAMELEN,h);
-         fread(location[l]->front_shortname,sizeof(char),LOCATION_SHORTNAMELEN,h);
-         fread(&location[l]->haveflag,sizeof(bool),1,h);
-
-         fread(location[l]->mapseed,sizeof(unsigned long),RNG_SIZE,h);
-      }
-
-      //VEHICLES
-      fread(&dummy,sizeof(int),1,h);
-      vehicle.resize(dummy);
-      for(l=0;l<len(vehicle);l++)
-      {
-         int vehicleLen;
-         fread (&vehicleLen, sizeof(int), 1, h);
-         vector<char> vec = vector<char> (vehicleLen + 1);
-         fread (&vec[0], vehicleLen, 1, h);
-         vec[vehicleLen] = '\0';
-         vehicle[l] = new Vehicle (&vec[0]);
-      }
-
-      //POOL
-      fread(&dummy,sizeof(int),1,h);
-      pool.resize(dummy);
-      for(int pl=0;pl<len(pool);pl++)
-      {
-         int creatureLen;
-         fread (&creatureLen, sizeof(int), 1, h);
-         vector<char> vec = vector<char> (creatureLen + 1);
-         fread (&vec[0], creatureLen, 1, h);
-         vec[creatureLen] = '\0';
-         pool[pl] = new Creature(&vec[0]);
-         //pool[pl]=new Creature;
-         //fread(pool[pl],sizeof(Creature),1,h);
-         //read extra interrogation data if applicable
-         if(pool[pl]->align==-1 && pool[pl]->alive)
-         {
-            interrogation* &intr = pool[pl]->activity.intr();
-            intr = new interrogation;
-            fread(intr->techniques,sizeof(bool[6]),1,h);
-            fread(&intr->druguse,sizeof(int),1,h);
-
-            intr->rapport.clear();
-            int size;
-            fread(&size,sizeof(int),1,h);
-            for(int i=0;i<size;i++)
+            //Remove items of unknown type.
+            for(int l2=len(location[l]->loot)-1; l2>=0; l2--)
             {
-               long id;
-               float_zero value;
-               fread(&id,sizeof(long),1,h);
-               fread(&value,sizeof(float_zero),1,h);
-               intr->rapport[id]=value;
+               bool del = false;
+               if(location[l]->loot[l2]->is_loot())
+                  del = (getloottype(location[l]->loot[l2]->get_itemtypename()) == -1);
+               else if(location[l]->loot[l2]->is_clip())
+                  del = (getcliptype(location[l]->loot[l2]->get_itemtypename()) == -1);
+               else if(location[l]->loot[l2]->is_weapon())
+                  del = (getweapontype(location[l]->loot[l2]->get_itemtypename()) == -1);
+               else if(location[l]->loot[l2]->is_armor())
+                  del = (getarmortype(location[l]->loot[l2]->get_itemtypename()) == -1);
+
+               if(del)
+               {
+                  addstr("Item type ");
+                  addstr(location[l]->loot[l2]->get_itemtypename());
+                  addstr(" does not exist. Deleting item.");
+                  delete_and_remove(location[l]->loot,l2);
+               }
             }
-         }
-         /*
-         //read equipment
-         vector<Item*> dump; //Used to catch invalid pointers from creature so they aren't deleted.
-         pool[pl]->drop_weapon(&dump);
-         pool[pl]->strip(&dump);
-         pool[pl]->clips = deque<Clip*>();
-         pool[pl]->extra_throwing_weapons = deque<Weapon*>();
-         int itemLen;
-         fread(&itemLen, sizeof(int), 1, h);
-         if(itemLen != 0)
-         {
-            vector<char> vec = vector<char>(itemLen + 1);
-            fread(&vec[0], itemLen, 1, h);
-            vec[itemLen] = '\0';
+            consolidateloot(location[l]->loot); // consolidate loot after loading
 
-            Weapon w(&vec[0]);
-            if(getweapontype(w.get_itemtypename())!=-1) //Check it is a valid weapon type.
-               pool[pl]->give_weapon(w,&dump);
+            fread(&dummy,sizeof(int),1,h);
+            location[l]->changes.resize(dummy);
+            for(int l2=0;l2<len(location[l]->changes);l2++)
+               fread(&location[l]->changes[l2],sizeof(sitechangest),1,h);
+
+            fread(location[l]->name,sizeof(char),LOCATION_NAMELEN,h);
+            fread(location[l]->shortname,sizeof(char),LOCATION_SHORTNAMELEN,h);
+            fread(&location[l]->type,sizeof(char),1,h);
+            fread(&location[l]->city,sizeof(int),1,h);
+            fread(&location[l]->area,sizeof(int),1,h);
+            fread(&location[l]->parent,sizeof(int),1,h);
+            fread(&location[l]->id,sizeof(int),1,h);
+
+            fread(&location[l]->renting,sizeof(int),1,h);
+            fread(&location[l]->newrental,sizeof(char),1,h);
+            fread(&location[l]->needcar,sizeof(char),1,h);
+            fread(&location[l]->closed,sizeof(int),1,h);
+            fread(&location[l]->hidden,sizeof(bool),1,h);
+            fread(&location[l]->mapped,sizeof(bool),1,h);
+            fread(&location[l]->upgradable,sizeof(bool),1,h);
+            fread(&location[l]->highsecurity,sizeof(int),1,h);
+            fread(&location[l]->siege,sizeof(siegest),1,h);
+            fread(&location[l]->heat,sizeof(int),1,h);
+            fread(&location[l]->heat_protection,sizeof(int),1,h);
+            fread(&location[l]->compound_walls,sizeof(int),1,h);
+            fread(&location[l]->compound_stores,sizeof(int),1,h);
+            fread(&location[l]->front_business,sizeof(char),1,h);
+            fread(location[l]->front_name,sizeof(char),LOCATION_NAMELEN,h);
+            fread(location[l]->front_shortname,sizeof(char),LOCATION_SHORTNAMELEN,h);
+            fread(&location[l]->haveflag,sizeof(bool),1,h);
+
+            fread(location[l]->mapseed,sizeof(unsigned long),RNG_SIZE,h);
          }
-         //pool[pl]->clips.clear();
+
+         //VEHICLES
          fread(&dummy,sizeof(int),1,h);
-         for(int nc=0; nc<dummy; nc++)
+         vehicle.resize(dummy);
+         for(l=0;l<len(vehicle);l++)
          {
-            fread(&itemLen, sizeof(itemLen), 1, h);
-            vector<char> vec = vector<char>(itemLen + 1);
-            fread(&vec[0], itemLen, 1, h);
-            vec[itemLen] = '\0';
-
-            Clip c(&vec[0]);
-            if(getcliptype(c.get_itemtypename())!=-1) //Check it is a valid clip type.
-               pool[pl]->take_clips(c,len(c));
+            int vehicleLen;
+            fread (&vehicleLen, sizeof(int), 1, h);
+            vector<char> vec = vector<char> (vehicleLen + 1);
+            fread (&vec[0], vehicleLen, 1, h);
+            vec[vehicleLen] = '\0';
+            vehicle[l] = new Vehicle (&vec[0]);
          }
-         //pool[pl]->extra_throwing_weapons.clear();
+
+         //POOL
          fread(&dummy,sizeof(int),1,h);
-         for(int ne=0; ne<dummy; ne++)
-         {
-            fread(&itemLen, sizeof(itemLen), 1, h);
-            vector<char> vec = vector<char>(itemLen + 1);
-            fread(&vec[0], itemLen, 1, h);
-            vec[itemLen] = '\0';
-
-            Weapon w(&vec[0]);
-            if(getweapontype(w.get_itemtypename())!=-1) //Check it is a valid weapon type.
-               pool[pl]->give_weapon(w,NULL);
-         }
-         fread(&itemLen, sizeof(itemLen), 1, h);
-         if(itemLen != 0)
-         {
-            vector<char> vec = vector<char>(itemLen + 1);
-            fread(&vec[0], itemLen, 1, h);
-            vec[itemLen] = '\0';
-
-            Armor a(&vec[0]);
-            if(getarmortype(a.get_itemtypename())!=-1) //Check it is a valid armor type.
-               pool[pl]->give_armor(a,&dump);
-         }*/
-      }
-
-      //Unique Creatures
-      {
-         int uniquecreaturesLen;
-         fread (&uniquecreaturesLen, sizeof(int), 1, h);
-         vector<char> vec = vector<char> (uniquecreaturesLen + 1);
-         fread (&vec[0], uniquecreaturesLen, 1, h);
-         vec[uniquecreaturesLen] = '\0';
-         uniqueCreatures = UniqueCreatures(&vec[0]);
-         //fread(&uniqueCreatures,sizeof(UniqueCreatures),1,h);
-      }
-
-      //SQUADS
-      fread(&dummy,sizeof(int),1,h);
-      squad.resize(dummy);
-      for(int sq=0;sq<len(squad);sq++)
-      {
-         squad[sq]=new squadst;
-
-         fread(squad[sq]->name,sizeof(char),SQUAD_NAMELEN,h);
-         fread(&squad[sq]->activity,sizeof(activityst),1,h);
-         fread(&squad[sq]->id,sizeof(int),1,h);
-
-         for(int pos=0;pos<6;pos++)
-         {
-            //REBUILD SQUAD FROM POOL
-            squad[sq]->squad[pos]=NULL;
-            fread(&dummy_b,sizeof(bool),1,h);
-            if(dummy_b)
-            {
-               int dummy_i;
-               fread(&dummy_i,sizeof(int),1,h);
-               for(int pl=0;pl<len(pool);pl++)
-                  if(pool[pl]->id==dummy_i)
-                     squad[sq]->squad[pos]=pool[pl];
-            }
-         }
-
-         fread(&dummy,sizeof(int),1,h);
-         squad[sq]->loot.resize(dummy);
-         for(int l2=0;l2<len(squad[sq]->loot);l2++)
-         {
-            int itemLen;
-            fread(&itemLen, sizeof(int), 1, h);
-            vector<char> vec = vector<char>(itemLen + 1);
-            fread(&vec[0], itemLen, 1, h);
-            vec[itemLen] = '\0';
-
-            Item* it = create_item(&vec[0]);
-            //if(it!=NULL) //Assume save file is correct? -XML
-               squad[sq]->loot[l2] = it;
-            /*else
-               squad[sq]->loot.erase(loot.begin()+l2--);*/
-         }
-         //Remove items of unknown type.
-         for(int l2=len(squad[sq]->loot)-1; l2>=0; l2--)
-         {
-            bool del = false;
-            if(squad[sq]->loot[l2]->is_loot())
-               del = (getloottype(squad[sq]->loot[l2]->get_itemtypename()) == -1);
-            else if(squad[sq]->loot[l2]->is_clip())
-               del = (getcliptype(squad[sq]->loot[l2]->get_itemtypename()) == -1);
-            else if(squad[sq]->loot[l2]->is_weapon())
-               del = (getweapontype(squad[sq]->loot[l2]->get_itemtypename()) == -1);
-            else if(squad[sq]->loot[l2]->is_armor())
-               del = (getarmortype(squad[sq]->loot[l2]->get_itemtypename()) == -1);
-
-            if(del)
-            {
-               addstr("Item type ");
-               addstr(squad[sq]->loot[l2]->get_itemtypename());
-               addstr(" does not exist. Deleting item.");
-               delete_and_remove(squad[sq]->loot,l2);
-            }
-         }
-         consolidateloot(squad[sq]->loot); // consolidate loot after loading
-      }
-
-      activesquad=NULL;
-      fread(&dummy_b,sizeof(bool),1,h);
-      if(dummy_b)
-      {
-         int dummy_i;
-         fread(&dummy_i,sizeof(int),1,h);
-         for(int sq=0;sq<len(squad);sq++)
-            if(squad[sq]->id==dummy_i)
-            {
-               activesquad=squad[sq];
-               break;
-            }
-      }
-
-      //DATES
-      fread(&dummy,sizeof(int),1,h);
-      date.resize(dummy);
-      for(int dt=0;dt<len(date);dt++)
-      {
-         date[dt]=new datest;
-
-         fread(&date[dt]->mac_id,sizeof(long),1,h);
-         fread(&date[dt]->timeleft,sizeof(short),1,h);
-         fread(&date[dt]->city,sizeof(int),1,h);
-
-         fread(&dummy,sizeof(int),1,h);
-         date[dt]->date.resize(dummy);
-         for(int dt2=0;dt2<len(date[dt]->date);dt2++)
+         pool.resize(dummy);
+         for(int pl=0;pl<len(pool);pl++)
          {
             int creatureLen;
             fread (&creatureLen, sizeof(int), 1, h);
             vector<char> vec = vector<char> (creatureLen + 1);
             fread (&vec[0], creatureLen, 1, h);
             vec[creatureLen] = '\0';
-            date[dt]->date[dt2] = new Creature(&vec[0]);
+            pool[pl] = new Creature(&vec[0]);
+            //pool[pl]=new Creature;
+            //fread(pool[pl],sizeof(Creature),1,h);
+            //read extra interrogation data if applicable
+            if(pool[pl]->align==-1 && pool[pl]->alive)
+            {
+               interrogation* &intr = pool[pl]->activity.intr();
+               intr = new interrogation;
+               fread(intr->techniques,sizeof(bool[6]),1,h);
+               fread(&intr->druguse,sizeof(int),1,h);
 
-            //date[dt]->date[dt2]=new Creature;
-            //fread(date[dt]->date[dt2],sizeof(Creature),1,h);
+               intr->rapport.clear();
+               int size;
+               fread(&size,sizeof(int),1,h);
+               for(int i=0;i<size;i++)
+               {
+                  long id;
+                  float_zero value;
+                  fread(&id,sizeof(long),1,h);
+                  fread(&value,sizeof(float_zero),1,h);
+                  intr->rapport[id]=value;
+               }
+            }
+            /*
+            //read equipment
+            vector<Item*> dump; //Used to catch invalid pointers from creature so they aren't deleted.
+            pool[pl]->drop_weapon(&dump);
+            pool[pl]->strip(&dump);
+            pool[pl]->clips = deque<Clip*>();
+            pool[pl]->extra_throwing_weapons = deque<Weapon*>();
+            int itemLen;
+            fread(&itemLen, sizeof(int), 1, h);
+            if(itemLen != 0)
+            {
+               vector<char> vec = vector<char>(itemLen + 1);
+               fread(&vec[0], itemLen, 1, h);
+               vec[itemLen] = '\0';
+
+               Weapon w(&vec[0]);
+               if(getweapontype(w.get_itemtypename())!=-1) //Check it is a valid weapon type.
+                  pool[pl]->give_weapon(w,&dump);
+            }
+            //pool[pl]->clips.clear();
+            fread(&dummy,sizeof(int),1,h);
+            for(int nc=0; nc<dummy; nc++)
+            {
+               fread(&itemLen, sizeof(itemLen), 1, h);
+               vector<char> vec = vector<char>(itemLen + 1);
+               fread(&vec[0], itemLen, 1, h);
+               vec[itemLen] = '\0';
+
+               Clip c(&vec[0]);
+               if(getcliptype(c.get_itemtypename())!=-1) //Check it is a valid clip type.
+                  pool[pl]->take_clips(c,len(c));
+            }
+            //pool[pl]->extra_throwing_weapons.clear();
+            fread(&dummy,sizeof(int),1,h);
+            for(int ne=0; ne<dummy; ne++)
+            {
+               fread(&itemLen, sizeof(itemLen), 1, h);
+               vector<char> vec = vector<char>(itemLen + 1);
+               fread(&vec[0], itemLen, 1, h);
+               vec[itemLen] = '\0';
+
+               Weapon w(&vec[0]);
+               if(getweapontype(w.get_itemtypename())!=-1) //Check it is a valid weapon type.
+                  pool[pl]->give_weapon(w,NULL);
+            }
+            fread(&itemLen, sizeof(itemLen), 1, h);
+            if(itemLen != 0)
+            {
+               vector<char> vec = vector<char>(itemLen + 1);
+               fread(&vec[0], itemLen, 1, h);
+               vec[itemLen] = '\0';
+
+               Armor a(&vec[0]);
+               if(getarmortype(a.get_itemtypename())!=-1) //Check it is a valid armor type.
+                  pool[pl]->give_armor(a,&dump);
+            }*/
          }
-      }
 
-      //RECRUITS
-      fread(&dummy,sizeof(int),1,h);
-      recruit.resize(dummy);
-      for(int rt=0;rt<len(recruit);rt++)
-      {
-         recruit[rt]=new recruitst;
-         fread(&recruit[rt]->recruiter_id,sizeof(long),1,h);
-         fread(&recruit[rt]->timeleft,sizeof(short),1,h);
-         fread(&recruit[rt]->level,sizeof(char),1,h);
-         fread(&recruit[rt]->eagerness1,sizeof(char),1,h);
-         fread(&recruit[rt]->task,sizeof(char),1,h);
+         //Unique Creatures
+         {
+            int uniquecreaturesLen;
+            fread (&uniquecreaturesLen, sizeof(int), 1, h);
+            vector<char> vec = vector<char> (uniquecreaturesLen + 1);
+            fread (&vec[0], uniquecreaturesLen, 1, h);
+            vec[uniquecreaturesLen] = '\0';
+            uniqueCreatures = UniqueCreatures(&vec[0]);
+            //fread(&uniqueCreatures,sizeof(UniqueCreatures),1,h);
+         }
 
-         int creatureLen;
-         fread (&creatureLen, sizeof(int), 1, h);
-         vector<char> vec = vector<char> (creatureLen + 1);
-         fread (&vec[0], creatureLen, 1, h);
-         vec[creatureLen] = '\0';
-         recruit[rt]->recruit = new Creature(&vec[0]);
-         //recruit[rt]->recruit = new Creature;
-         //fread(recruit[rt]->recruit,sizeof(Creature),1,h);
-      }
+         //SQUADS
+         fread(&dummy,sizeof(int),1,h);
+         squad.resize(dummy);
+         for(int sq=0;sq<len(squad);sq++)
+         {
+            squad[sq]=new squadst;
 
-      //NEWS STORIES
-      fread(&dummy,sizeof(int),1,h);
-      newsstory.resize(dummy);
-      for(int ns=0;ns<len(newsstory);ns++)
-      {
-         newsstory[ns]=new newsstoryst;
+            fread(squad[sq]->name,sizeof(char),SQUAD_NAMELEN,h);
+            fread(&squad[sq]->activity,sizeof(activityst),1,h);
+            fread(&squad[sq]->id,sizeof(int),1,h);
 
-         fread(&newsstory[ns]->type,sizeof(short),1,h);
-         fread(&newsstory[ns]->view,sizeof(short),1,h);
+            for(int pos=0;pos<6;pos++)
+            {
+               //REBUILD SQUAD FROM POOL
+               squad[sq]->squad[pos]=NULL;
+               fread(&dummy_b,sizeof(bool),1,h);
+               if(dummy_b)
+               {
+                  int dummy_i;
+                  fread(&dummy_i,sizeof(int),1,h);
+                  for(int pl=0;pl<len(pool);pl++)
+                     if(pool[pl]->id==dummy_i)
+                        squad[sq]->squad[pos]=pool[pl];
+               }
+            }
 
-         fread(&newsstory[ns]->loc,sizeof(long),1,h);
-         fread(&newsstory[ns]->priority,sizeof(long),1,h);
-         fread(&newsstory[ns]->page,sizeof(long),1,h);
-         fread(&newsstory[ns]->positive,sizeof(char),1,h);
-         fread(&newsstory[ns]->siegetype,sizeof(short),1,h);
+            fread(&dummy,sizeof(int),1,h);
+            squad[sq]->loot.resize(dummy);
+            for(int l2=0;l2<len(squad[sq]->loot);l2++)
+            {
+               int itemLen;
+               fread(&itemLen, sizeof(int), 1, h);
+               vector<char> vec = vector<char>(itemLen + 1);
+               fread(&vec[0], itemLen, 1, h);
+               vec[itemLen] = '\0';
 
-         newsstory[ns]->cr=NULL;
+               Item* it = create_item(&vec[0]);
+               //if(it!=NULL) //Assume save file is correct? -XML
+                  squad[sq]->loot[l2] = it;
+               /*else
+                  squad[sq]->loot.erase(loot.begin()+l2--);*/
+            }
+            //Remove items of unknown type.
+            for(int l2=len(squad[sq]->loot)-1; l2>=0; l2--)
+            {
+               bool del = false;
+               if(squad[sq]->loot[l2]->is_loot())
+                  del = (getloottype(squad[sq]->loot[l2]->get_itemtypename()) == -1);
+               else if(squad[sq]->loot[l2]->is_clip())
+                  del = (getcliptype(squad[sq]->loot[l2]->get_itemtypename()) == -1);
+               else if(squad[sq]->loot[l2]->is_weapon())
+                  del = (getweapontype(squad[sq]->loot[l2]->get_itemtypename()) == -1);
+               else if(squad[sq]->loot[l2]->is_armor())
+                  del = (getarmortype(squad[sq]->loot[l2]->get_itemtypename()) == -1);
+
+               if(del)
+               {
+                  addstr("Item type ");
+                  addstr(squad[sq]->loot[l2]->get_itemtypename());
+                  addstr(" does not exist. Deleting item.");
+                  delete_and_remove(squad[sq]->loot,l2);
+               }
+            }
+            consolidateloot(squad[sq]->loot); // consolidate loot after loading
+         }
+
+         activesquad=NULL;
          fread(&dummy_b,sizeof(bool),1,h);
          if(dummy_b)
          {
-            fread(&dummy_l,sizeof(long),1,h);
-            for(int pl=0;pl<len(pool);pl++)
-               if(pool[pl]->id==dummy_l)
+            int dummy_i;
+            fread(&dummy_i,sizeof(int),1,h);
+            for(int sq=0;sq<len(squad);sq++)
+               if(squad[sq]->id==dummy_i)
                {
-                  newsstory[ns]->cr=pool[pl];
+                  activesquad=squad[sq];
                   break;
                }
          }
 
+         //DATES
          fread(&dummy,sizeof(int),1,h);
-         newsstory[ns]->crime.resize(dummy);
-         for(int dt2=0;dt2<len(newsstory[ns]->crime);dt2++)
-            fread(&newsstory[ns]->crime[dt2],sizeof(int),1,h);
-      }
+         date.resize(dummy);
+         for(int dt=0;dt<len(date);dt++)
+         {
+            date[dt]=new datest;
 
-      // Liberal Media
-      fread(public_interest,sizeof(public_interest),1,h);
-      fread(background_liberal_influence,sizeof(background_liberal_influence),1,h);
+            fread(&date[dt]->mac_id,sizeof(long),1,h);
+            fread(&date[dt]->timeleft,sizeof(short),1,h);
+            fread(&date[dt]->city,sizeof(int),1,h);
 
-      // Site mode options
-      fread(&encounterwarnings,sizeof(bool),1,h);
-      bool musicenabled;
-      fread(&musicenabled,sizeof(bool),1,h);
-      music.enableIf(musicenabled);
+            fread(&dummy,sizeof(int),1,h);
+            date[dt]->date.resize(dummy);
+            for(int dt2=0;dt2<len(date[dt]->date);dt2++)
+            {
+               int creatureLen;
+               fread (&creatureLen, sizeof(int), 1, h);
+               vector<char> vec = vector<char> (creatureLen + 1);
+               fread (&vec[0], creatureLen, 1, h);
+               vec[creatureLen] = '\0';
+               date[dt]->date[dt2] = new Creature(&vec[0]);
 
-      LCSCloseFile(h);
-
-      // Check that vehicles are of existing types.
-      for(int v=0;v<len(vehicle);v++)
-      {
-         if(getvehicletype(vehicle[v]->vtypeidname())==-1)
-         { //Remove vehicle of non-existing type.
-            addstr("Vehicle type "+vehicle[v]->vtypeidname()+" does not exist. Deleting vehicle.");
-            delete_and_remove(vehicle,v--);
+               //date[dt]->date[dt2]=new Creature;
+               //fread(date[dt]->date[dt2],sizeof(Creature),1,h);
+            }
          }
-      }
 
-      return 1;
+         //RECRUITS
+         fread(&dummy,sizeof(int),1,h);
+         recruit.resize(dummy);
+         for(int rt=0;rt<len(recruit);rt++)
+         {
+            recruit[rt]=new recruitst;
+            fread(&recruit[rt]->recruiter_id,sizeof(long),1,h);
+            fread(&recruit[rt]->timeleft,sizeof(short),1,h);
+            fread(&recruit[rt]->level,sizeof(char),1,h);
+            fread(&recruit[rt]->eagerness1,sizeof(char),1,h);
+            fread(&recruit[rt]->task,sizeof(char),1,h);
+
+            int creatureLen;
+            fread (&creatureLen, sizeof(int), 1, h);
+            vector<char> vec = vector<char> (creatureLen + 1);
+            fread (&vec[0], creatureLen, 1, h);
+            vec[creatureLen] = '\0';
+            recruit[rt]->recruit = new Creature(&vec[0]);
+            //recruit[rt]->recruit = new Creature;
+            //fread(recruit[rt]->recruit,sizeof(Creature),1,h);
+         }
+
+         //NEWS STORIES
+         fread(&dummy,sizeof(int),1,h);
+         newsstory.resize(dummy);
+         for(int ns=0;ns<len(newsstory);ns++)
+         {
+            newsstory[ns]=new newsstoryst;
+
+            fread(&newsstory[ns]->type,sizeof(short),1,h);
+            fread(&newsstory[ns]->view,sizeof(short),1,h);
+
+            fread(&newsstory[ns]->loc,sizeof(long),1,h);
+            fread(&newsstory[ns]->priority,sizeof(long),1,h);
+            fread(&newsstory[ns]->page,sizeof(long),1,h);
+            fread(&newsstory[ns]->positive,sizeof(char),1,h);
+            fread(&newsstory[ns]->siegetype,sizeof(short),1,h);
+
+            newsstory[ns]->cr=NULL;
+            fread(&dummy_b,sizeof(bool),1,h);
+            if(dummy_b)
+            {
+               fread(&dummy_l,sizeof(long),1,h);
+               for(int pl=0;pl<len(pool);pl++)
+                  if(pool[pl]->id==dummy_l)
+                  {
+                     newsstory[ns]->cr=pool[pl];
+                     break;
+                  }
+            }
+
+            fread(&dummy,sizeof(int),1,h);
+            newsstory[ns]->crime.resize(dummy);
+            for(int dt2=0;dt2<len(newsstory[ns]->crime);dt2++)
+               fread(&newsstory[ns]->crime[dt2],sizeof(int),1,h);
+         }
+
+         // Liberal Media
+         fread(public_interest,sizeof(public_interest),1,h);
+         fread(background_liberal_influence,sizeof(background_liberal_influence),1,h);
+
+         // Site mode options
+         fread(&encounterwarnings,sizeof(bool),1,h);
+         bool musicenabled;
+         fread(&musicenabled,sizeof(bool),1,h);
+         music.enableIf(musicenabled);
+
+         LCSCloseFile(h);
+
+         // Check that vehicles are of existing types.
+         for(int v=0;v<len(vehicle);v++)
+         {
+            if(getvehicletype(vehicle[v]->vtypeidname())==-1)
+            { //Remove vehicle of non-existing type.
+               addstr("Vehicle type "+vehicle[v]->vtypeidname()+" does not exist. Deleting vehicle.");
+               delete_and_remove(vehicle,v--);
+            }
+         }
+
+         return 1;
+      }
    }
 
+   gamelog.log("Could not load");
    return 0;
 }
 
@@ -843,9 +850,9 @@ char load()
 void reset()
 {
    char file_name[13];
-   for(int x = NUMSAVES-1; x >= 0; x--) {
+   for(int x=NUMSAVES-1;x>=0;x--) {
       snprintf(file_name, 13, "save_%03i.dat", x);
-      if(file_exists(file_name)) LCSDeleteFile(file_name ,LCSIO_PRE_HOME);
+      if(file_exists(file_name)) LCSDeleteFile(file_name,LCSIO_PRE_HOME);
    }
 }
 
