@@ -369,7 +369,7 @@ Item* create_item(const std::string& inputXml)
 }
 
 /* loads the game from save.dat */
-char load() //TODO: If save000.dat is deleted, load save001... etc.
+char load()
 {
    //LOAD FILE
    int loadversion;

@@ -386,6 +386,7 @@ void activate(Creature *cr)
       case ACTIVITY_REPAIR_ARMOR:
       case ACTIVITY_STEALCARS:
       case ACTIVITY_WHEELCHAIR:
+      case ACTIVITY_AUGMENT:
          state='d';
          break;
       case ACTIVITY_TEACH_POLITICS:
@@ -423,9 +424,6 @@ void activate(Creature *cr)
          break;
       case ACTIVITY_BURY:
          state='z';
-         break;
-      case ACTIVITY_AUGMENT:
-         state='u';
          break;
       case ACTIVITY_NONE:
          state='x';
@@ -1628,6 +1626,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
    Creature *victim = 0;
    int culloc=cr->location;
    vector<Creature *> temppool;
+
    for(int p=0;p<len(pool);p++) {
       if(pool[p] == cr) continue;
       if(pool[p]->is_active_liberal() && (pool[p]->location==culloc))
@@ -1635,6 +1634,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          temppool.push_back(pool[p]);
       }
    }
+
    int cur_step=0,page=0,c=0,aug_c;
    std::vector<AugmentType *> aug_type;
    AugmentType *selected_aug;
@@ -1719,7 +1719,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
             aug_type.clear();
             for(int x=0,y=5;x<augmenttype.size();x++)
             {
-               if(victim->get_augmentation(aug_c-'a').type!=-1)break; //Already augmented on that bodypart
+               if(victim->get_augmentation(aug_c-'a').type!=-1) break; //Already augmented on that bodypart.
                if(augmenttype[x]->get_type()==aug_c-'a')
                   aug_type.push_back(augmenttype[x]);
             }
@@ -1777,17 +1777,20 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             mvaddstr(23,1,"Press any key to return");
             move(21,1);
+
             int blood_saved = 10*cr->get_skill(SKILL_SCIENCE) + 15*cr->get_skill(SKILL_FIRSTAID);
             if(blood_saved>100) blood_saved = 100;
             victim->blood-=100 - blood_saved;
-            if(victim->blood<=0)
+
+            if(victim->blood<=0) //Lost too much blood, you killed 'em
             {
                set_color(COLOR_RED,COLOR_BLACK,1);
                victim->die();
                addstr(string(victim->name)+" has been brutally murdered by "+cr->name, gamelog);
             }
-            else //TODO: Add chance to fail and just have that limb removed
-            {
+
+            else //It was successful... but not without some injuries
+            { //TODO: Add chance to fail and just have that limb removed
                switch(selected_aug->get_type())
                {
                case AUGMENTATION_HEAD: victim->wound[BODYPART_HEAD]|=WOUND_BRUISED;       break;
@@ -1799,11 +1802,16 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
                case AUGMENTATION_SKIN:victim->wound[BODYPART_HEAD]|=WOUND_BRUISED;
                   victim->wound[BODYPART_BODY]|=WOUND_BURNED;                             break;
                }
-               set_color(COLOR_GREEN,COLOR_BLACK,1);
+
                selected_aug->make_augment(victim->get_augmentation(selected_aug->get_type()));
                victim->adjust_attribute(selected_aug->get_type(), selected_aug->get_effect());
+               cr->train(SKILL_SCIENCE,15);
+               addjuice(*cr,10,1000);
+
+               set_color(COLOR_GREEN,COLOR_BLACK,1);
                addstr(string(victim->name)+" has been augmented with "+selected_aug->get_name(), gamelog);
             }
+
             gamelog.nextMessage();
             show_victim_status(victim);
             getkey();

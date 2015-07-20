@@ -20,8 +20,8 @@ class Augmentation
          effect(-1),value(-1) { }
       Augmentation(const std::string& inputXml);
       string showXml() const;
-      short type;
       std::string name;
+      short type;
       int attribute;
       int effect;
       int value;

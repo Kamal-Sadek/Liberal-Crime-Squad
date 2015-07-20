@@ -1041,6 +1041,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          getkey();
       }
       #endif
+
       // Bullets caught by armor should bruise instead of poke holes.
       if(damamount<4 && damtype & WOUND_SHOT)
       {
