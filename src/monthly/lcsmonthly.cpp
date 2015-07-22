@@ -683,7 +683,7 @@ void printnews(short li,short newspaper)
       gamelog.nextMessage();
 
       change_public_opinion(VIEW_AMRADIO,50);
-      offended_cablenews=1;
+      offended_amradio=1;
    }
 
    getkey();

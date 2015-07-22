@@ -2152,6 +2152,7 @@ void mode_site()
                         } while((levelmap[lx][ly][lz].flag&(SITEBLOCK_BLOCK|SITEBLOCK_DOOR|SITEBLOCK_EXIT))||
                                 (levelmap[lx][ly][lz].siegeflag&(SIEGEFLAG_UNIT|SIEGEFLAG_HEAVYUNIT|SIEGEFLAG_TRAP)));
                         levelmap[lx][ly][lz].siegeflag|=SIEGEFLAG_HEAVYUNIT;
+                        location[cursite]->siege.tanks++;
                      }
                   }
                }
@@ -2176,7 +2177,7 @@ void mode_site()
 
                //BAIL UPON VICTORY
                if(location[cursite]->siege.kills>=10&&
-                  location[cursite]->siege.tanks==0&&
+                  location[cursite]->siege.tanks<1&&
                   location[cursite]->siege.siege)
                {
                   music.play(MUSIC_CONQUER);

@@ -12,6 +12,6 @@ This version of Liberal Crime Squad includes changes such as small bug fixes, ga
 
 The fight against the Conservative Swine is a long and dangerous one, and Liberals need every advantage they can get. As we turn to modern technology, we find yet another way to help the Liberal Cause: We can make our Liberals faster, stronger, and better than ever before through the use of Augmentations!
 
-To tap into this newfound science, Activate a Liberal who has a science skill of 1 or greater, go into the 'D - Recruitment' menu, and '5 - Augment' task. From here, you can select a Brave Liberal Pioneer to test this new technology and advance our Liberal Agenda.
+To tap into this newfound science, Activate a Liberal who has a science skill of 1 or greater, go into the 'D - Recruitment' menu, and '5 - Augment' task. From here, you can select a Brave Liberal Pioneer to test this new technology and advance the Liberal Cause.
 
 Go Forth, and Persue your Liberal Agenda!
