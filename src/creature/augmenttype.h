@@ -13,6 +13,7 @@ class AugmentType {
       std::string get_name() const { return name_; }
       long get_id() const { return id_; }
       short get_type() const { return type_; }
+      int get_attribute() const { return attribute_; }
       int get_effect() const { return effect_; }
       std::string get_description() const { return description_; }
 

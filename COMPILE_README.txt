@@ -139,7 +139,7 @@ that you were given and I will see what I can figure out.
 
 ---------------------------------------------------------------
 
-My games runs smoothly and everything worked out fine untill I wanted to
+My games runs smoothly and everything worked out fine until I wanted to
 load a saved game. All I got was a screen with errors and my terminal
 seems messed up somehow. What gives?
 
@@ -205,7 +205,7 @@ Autosave - The game is automatically saved each turn (after wait is pressed)
 	   original save.dat in case the autosave.dat contains something
 	   which causes a repeatable crash, so you can revert to that one.
 	   (but send Tarn Adams and me the bad save file so we can work on
-	   the bug!)). See below for details on Save Files.
+	   the bug!). See below for details on Save Files.
 	   
 Cursor Keys	Use the cursor keys to move your squad. Once you've been
 		playing for a bit the WADX keys become a bit of a habit,

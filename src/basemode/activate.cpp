@@ -593,7 +593,7 @@ void activate(Creature *cr)
             set_color(COLOR_WHITE,COLOR_BLACK,cr->activity.type==ACTIVITY_AUGMENT);
          else
             set_color(COLOR_BLACK,COLOR_BLACK,1);
-         mvaddstr(14,40,"5 - Augment another Liberal");
+         mvaddstr(14,40,"5 - Augment a Liberal");
 
          break;
       case 't':
@@ -1635,7 +1635,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
       }
    }
 
-   int cur_step=0,page=0,c=0,aug_c;
+   int cur_step=0,page=0,c=0,aug_c=0;
    std::vector<AugmentType *> aug_type;
    AugmentType *selected_aug;
 
@@ -1715,13 +1715,15 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          }
 
          if(aug_c>='a'&&aug_c<='e'&&c>='a'&&c<='e')
-         {
+         {               
             aug_type.clear();
-            for(int x=0,y=5;x<augmenttype.size();x++)
+            if(victim->get_augmentation(aug_c-'a').type==-1) //Already augmented on that bodypart.
             {
-               if(victim->get_augmentation(aug_c-'a').type!=-1) break; //Already augmented on that bodypart.
-               if(augmenttype[x]->get_type()==aug_c-'a')
-                  aug_type.push_back(augmenttype[x]);
+               for(int x=0,y=5;x<augmenttype.size();x++)
+               {
+                  if(augmenttype[x]->get_type()==aug_c-'a')
+                     aug_type.push_back(augmenttype[x]);
+               }
             }
          }
 
@@ -1745,7 +1747,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          c = getkey();
          if(c>='a'&&c<='e') aug_c=c;
          else if(c==ESC)return; 
-         else if(c=='x'||c==SPACEBAR||c==ENTER) cur_step=0;
+         else if(c=='x'||c==SPACEBAR||c==ENTER) {cur_step=0;aug_type.clear();aug_c=0;}
          break;
 
 
@@ -1793,18 +1795,38 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
             { //TODO: Add chance to fail and just have that limb removed
                switch(selected_aug->get_type())
                {
-               case AUGMENTATION_HEAD: victim->wound[BODYPART_HEAD]|=WOUND_BRUISED;       break;
-               case AUGMENTATION_BODY: victim->wound[BODYPART_BODY]|=WOUND_BRUISED;       break;
-               case AUGMENTATION_ARMS: victim->wound[BODYPART_ARM_LEFT]|=WOUND_BRUISED;
-                  victim->wound[BODYPART_ARM_LEFT]|=WOUND_BLEEDING;                       break;
-               case AUGMENTATION_LEGS:victim->wound[BODYPART_LEG_LEFT]|=WOUND_BRUISED;
-                  victim->wound[BODYPART_LEG_LEFT]|=WOUND_BLEEDING;                       break;
-               case AUGMENTATION_SKIN:victim->wound[BODYPART_HEAD]|=WOUND_BRUISED;
-                  victim->wound[BODYPART_BODY]|=WOUND_BURNED;                             break;
+               case AUGMENTATION_HEAD:
+                  victim->wound[BODYPART_HEAD]|=WOUND_BLEEDING;
+                  victim->wound[BODYPART_HEAD]|=WOUND_BRUISED;
+                  break;
+
+               case AUGMENTATION_BODY:
+                  victim->wound[BODYPART_BODY]|=WOUND_BLEEDING;
+                  victim->wound[BODYPART_BODY]|=WOUND_BRUISED;
+                  break;
+
+               case AUGMENTATION_ARMS:
+                  victim->wound[BODYPART_ARM_RIGHT]|=WOUND_BLEEDING;
+                  victim->wound[BODYPART_ARM_RIGHT]|=WOUND_BRUISED;
+                  victim->wound[BODYPART_ARM_LEFT]|=WOUND_BLEEDING;
+                  victim->wound[BODYPART_ARM_LEFT]|=WOUND_BRUISED;
+                  break;
+
+               case AUGMENTATION_LEGS:
+                  victim->wound[BODYPART_LEG_RIGHT]|=WOUND_BLEEDING;
+                  victim->wound[BODYPART_LEG_RIGHT]|=WOUND_BRUISED;
+                  victim->wound[BODYPART_LEG_LEFT]|=WOUND_BLEEDING;
+                  victim->wound[BODYPART_LEG_LEFT]|=WOUND_BRUISED;
+                  break;
+
+               case AUGMENTATION_SKIN:
+                  victim->wound[BODYPART_HEAD]|=WOUND_BRUISED;
+                  victim->wound[BODYPART_BODY]|=WOUND_BRUISED;
+                  break;
                }
 
                selected_aug->make_augment(victim->get_augmentation(selected_aug->get_type()));
-               victim->adjust_attribute(selected_aug->get_type(), selected_aug->get_effect());
+               victim->adjust_attribute(selected_aug->get_attribute(), selected_aug->get_effect());
                cr->train(SKILL_SCIENCE,15);
                addjuice(*cr,10,1000);
 

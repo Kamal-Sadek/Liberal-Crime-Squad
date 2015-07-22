@@ -2,8 +2,6 @@ ChangeLog for Version 4.07.5 beta:
 
 2015-06-09   Kamal Sadek   <kamaljalals@gmail.com>
 * Sourceforge doing their whole injecting malware installers, thought I may as well pull a copy and move it over to GitHub.
-* Added date and time to log when starting up (YYYY-MM-DD HH:MM:SS format)
-* Fixed bug fixes
 
 2007-07-14   Jonathan Stickles   <jonathansfox@users.sourceforge.net>
 * Created branch

@@ -1201,7 +1201,7 @@ void printliberalstats(Creature &cr)
    // Add recruit stats
    if(cr.flag!=CREATUREFLAG_BRAINWASHED)
    {
-      move(18,0);
+      move(18,55);
       addstr(maxsubordinates(cr)-subordinatesleft(cr));
       addstr(" Recruits / ");
       addstr(maxsubordinates(cr));
@@ -1209,19 +1209,19 @@ void printliberalstats(Creature &cr)
    }
    else
    {
-      move(18,0);
+      move(18,55);
       addstr("Enlightened ");
       addstr("Can't Recruit");
    }
    // Any meetings with potential recruits scheduled?
    if(scheduledmeetings(cr))
    {
-      move(18,55);
+      move(20,55);
       addstr("Scheduled Meetings: ");
       addstr(scheduledmeetings(cr));
    }
    // Add seduction stats
-   move(19,0);
+   move(19,55);
    int lovers = loveslaves(cr);
    if(cr.flag & CREATUREFLAG_LOVESLAVE)
       lovers++;
@@ -1234,7 +1234,7 @@ void printliberalstats(Creature &cr)
    // Any dates with potential love interests scheduled?
    if(scheduleddates(cr))
    {
-      move(19,55);
+      move(21,55);
       addstr("Scheduled Dates:    ");
       addstr(scheduleddates(cr));
    }
@@ -1244,8 +1244,8 @@ void printliberalstats(Creature &cr)
    //SPECIAL WOUNDS
    set_color(COLOR_RED,COLOR_BLACK,0);
 
-   int y=12;
-   int x=55;
+   int y=17;
+   int x=0;
    if(cr.special[SPECIALWOUND_HEART]!=1)
    {
       move(y++,x);
@@ -1337,6 +1337,14 @@ void printliberalstats(Creature &cr)
    }
 
    set_color(COLOR_WHITE,COLOR_BLACK,0);
+
+   for(int i=0,y=12;i<AUGMENTATIONNUM;i++,y++)
+   {
+      if(cr.get_augmentation(i).type==-1) continue;
+      mvaddstr(y,55,Augmentation::get_name(i));
+      addstr(": ");
+      addstr(cr.get_augmentation(i).name);
+   }
 }
 
 /* Full screen character sheet, crime sheet */
