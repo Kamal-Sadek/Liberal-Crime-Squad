@@ -1621,6 +1621,15 @@ void show_victim_status(Creature *victim)
    mvaddstr(12,55,"Age: ");mvaddstr(12,66,victim->age);
 }
 
+vector<string>& split(const string &s, char delim, vector<string> &elems) {
+    stringstream ss(s);
+    string item;
+    while (getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+    return elems;
+}
+
 void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 {
    Creature *victim = 0;
@@ -1636,7 +1645,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
    }
 
    int cur_step=0,page=0,c=0,aug_c=0;
-   std::vector<AugmentType *> aug_type;
+   vector<AugmentType *> aug_type;
    AugmentType *selected_aug;
 
    while(true)
@@ -1765,12 +1774,26 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 
          show_victim_status(victim);
 
-         set_color(COLOR_WHITE,COLOR_BLACK,1); //TODO:Automatic wrap-around
-         mvaddstr(4,0,"Description: ");
-         set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr(selected_aug->get_description());
-
          set_color(COLOR_WHITE,COLOR_BLACK,1);
+         mvaddstr(4,0,"Description");
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         mvaddstr(5,0,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
+
+         vector<string> desc;
+         split(selected_aug->get_description(),' ',desc);
+
+         int chars_left=50;
+         for(int i=0,y=6;i<desc.size();i++)
+         {
+            if(desc[i].length()>50) continue;
+            else if(desc[i].length()<=chars_left)
+            {
+               mvaddstr(y,50-chars_left,desc[i]);
+               chars_left-=desc[i].length()+1;
+            }
+            else { y++; i--; chars_left=50; }
+         }
+
          mvaddstr(23,1,"Are you sure? (y/n)");
 
          c = getkey();

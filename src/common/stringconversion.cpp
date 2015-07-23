@@ -324,15 +324,15 @@ int skill_string_to_enum(std::string skillname)
 
 int augment_string_to_enum(const std::string& augmentname)
 {
-   if (augmentname == "HEAD")
+   if (augmentname == "head")
       return AUGMENTATION_HEAD;
-   else if (augmentname == "BODY")
+   else if (augmentname == "body")
       return AUGMENTATION_BODY;
-   else if (augmentname == "ARMS")
+   else if (augmentname == "arms")
       return AUGMENTATION_ARMS;
-   else if (augmentname == "LEGS")
+   else if (augmentname == "legs")
       return AUGMENTATION_LEGS;
-   else if (augmentname == "SKIN")
+   else if (augmentname == "skin")
       return AUGMENTATION_SKIN;
    else
       return -1;
