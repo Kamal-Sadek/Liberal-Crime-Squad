@@ -44,7 +44,7 @@
         <type>skin</type>
         <attribute>health</attribute>
         <effect>3</effect>
-        <description>Human skin has far outlived its usefullness in an evolutionary aspect, not able to stop even the smallest of bullets. Therefore, we can remove their skin, and encase them in a metal shell. (Health+3)</description>
+        <description>Human skin has far outlived its usefulness in an evolutionary aspect, not able to stop even the smallest of bullets. Therefore, we should remove the skin of a Liberal, and encase them in a metal shell! (Health+3)</description>
     </augmenttype>
 
     <augmenttype idname="AUGMENTATION_GORILLA_HEART">
@@ -52,7 +52,7 @@
         <type>body</type>
         <attribute>heart</attribute>
         <effect>3</effect>
-        <description>Numorous Liberal Reports have shown that by transplanting a gorilla heart into the body of a Liberal, their Liberal Devotion increases tenfold! (Heart+3)</description>
+        <description>Numorous Liberal Reports have shown that by transplanting a gorilla heart into the body of an augmentee, their Liberal Devotion increases tenfold! (Heart+3)</description>
     </augmenttype>
 
 </augmentations>

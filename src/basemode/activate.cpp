@@ -1621,13 +1621,25 @@ void show_victim_status(Creature *victim)
    mvaddstr(12,55,"Age: ");mvaddstr(12,66,victim->age);
 }
 
-vector<string>& split(const string &s, char delim, vector<string> &elems) {
-    stringstream ss(s);
-    string item;
-    while (getline(ss, item, delim)) {
-        elems.push_back(item);
-    }
-    return elems;
+vector<string>& split_string(const string &s, char delim, vector<string> &elems) {
+   ostringstream oss;
+   for(char c:s) {
+      if(c==' ')
+      {
+         elems.push_back(oss.str()); 
+         oss.str(string());
+      }
+      else if(c=='\n')
+      {
+         elems.push_back(oss.str()); 
+         elems.push_back(""); 
+         oss.str(string());
+      }
+      else oss<<c;
+   }
+   elems.push_back(oss.str());
+   
+   return elems;
 }
 
 void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
@@ -1780,18 +1792,31 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          mvaddstr(5,0,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
 
          vector<string> desc;
-         split(selected_aug->get_description(),' ',desc);
+         split_string(selected_aug->get_description(),' ',desc);
 
          int chars_left=50;
          for(int i=0,y=6;i<desc.size();i++)
          {
             if(desc[i].length()>50) continue;
+            else if(desc[i] == "")
+            {
+               y++;
+               chars_left=50;
+               continue;
+            }
+            else if(chars_left<0||desc[i].length()>chars_left)
+            {
+               y++;
+               chars_left=50;
+               i--;
+               continue;
+            }
             else if(desc[i].length()<=chars_left)
             {
+               gamelog.log(desc[i] + " chars left: " + to_string(chars_left));
                mvaddstr(y,50-chars_left,desc[i]);
-               chars_left-=desc[i].length()+1;
+               chars_left-=(desc[i].length()+1);
             }
-            else { y++; i--; chars_left=50; }
          }
 
          mvaddstr(23,1,"Are you sure? (y/n)");

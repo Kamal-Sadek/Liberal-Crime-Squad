@@ -913,7 +913,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
       case 33:addstr("\"I'm new in town.  Could you give me directions to your apartment?\"", gamelog);break;
       case 34:addstr("\"Stand still so I can pick you up!\"", gamelog);break;
       case 35:addstr("\"Your daddy must have been a baker, cuz you've got a nice set of buns.\"", gamelog);break;
-      case 36:addstr("\"If you were a laser, you'd be set on 'stunning'.\"", gamelog);break;
+      case 36:addstr("\"If you were a phaser, you'd be set on 'stunning'.\"", gamelog);break;
       case 37:addstr("\"Is that a keg in your pants?  Cuz I'd love to tap that ass.\"", gamelog);break;
       case 38:addstr("\"If I could be anything, I'd love to be your bathwater.\"", gamelog);break;
       case 39:addstr("\"Stop, drop and roll, baby.  You are on fire.\"", gamelog);break;
