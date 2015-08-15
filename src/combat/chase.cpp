@@ -1013,7 +1013,7 @@ int driveskill(Creature &cr,Vehicle &v)
    return driveskill;
 }
 
-Vehicle* getChaseVehicle(Creature c)
+Vehicle* getChaseVehicle(const Creature &c)
 {
    Vehicle* found = NULL;
    int v2 = 0;
@@ -1040,7 +1040,7 @@ Vehicle* getChaseVehicle(Creature c)
    //gamelog.newline();
    return found;
 }
-Creature* getChaseDriver(Creature c)
+Creature* getChaseDriver(const Creature &c)
 {
    Creature* found = NULL;
    

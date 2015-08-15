@@ -1813,7 +1813,6 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
             }
             else if(desc[i].length()<=chars_left)
             {
-               gamelog.log(desc[i] + " chars left: " + to_string(chars_left));
                mvaddstr(y,50-chars_left,desc[i]);
                chars_left-=(desc[i].length()+1);
             }
@@ -1832,46 +1831,94 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
             if(blood_saved>100) blood_saved = 100;
             victim->blood-=100 - blood_saved;
 
-            if(victim->blood<=0) //Lost too much blood, you killed 'em
+            if(cr->get_skill(SKILL_SCIENCE)<8&&
+               !LCSrandom(5*cr->get_skill(SKILL_SCIENCE))&&
+               cr->get_skill(SKILL_FIRSTAID)<8&&
+               !LCSrandom(5*cr->get_skill(SKILL_FIRSTAID)))
             {
-               set_color(COLOR_RED,COLOR_BLACK,1);
-               victim->die();
-               addstr(string(victim->name)+" has been brutally murdered by "+cr->name, gamelog);
-            }
+               unsigned char* wound = nullptr;
 
-            else //It was successful... but not without some injuries
-            { //TODO: Add chance to fail and just have that limb removed
                switch(selected_aug->get_type())
                {
                case AUGMENTATION_HEAD:
-                  victim->wound[BODYPART_HEAD]|=WOUND_BLEEDING;
-                  victim->wound[BODYPART_HEAD]|=WOUND_BRUISED;
+                  wound=&victim->wound[BODYPART_HEAD];
+                  victim->blood-=100;
                   break;
 
                case AUGMENTATION_BODY:
-                  victim->wound[BODYPART_BODY]|=WOUND_BLEEDING;
-                  victim->wound[BODYPART_BODY]|=WOUND_BRUISED;
+                  wound=&victim->wound[BODYPART_BODY];
+                  victim->blood-=100;
                   break;
 
                case AUGMENTATION_ARMS:
-                  victim->wound[BODYPART_ARM_RIGHT]|=WOUND_BLEEDING;
-                  victim->wound[BODYPART_ARM_RIGHT]|=WOUND_BRUISED;
-                  victim->wound[BODYPART_ARM_LEFT]|=WOUND_BLEEDING;
-                  victim->wound[BODYPART_ARM_LEFT]|=WOUND_BRUISED;
+                  if(LCSrandom(2))
+                     wound=&victim->wound[BODYPART_ARM_LEFT];
+                  else
+                     wound=&victim->wound[BODYPART_ARM_RIGHT];
+                  victim->blood-=25;
                   break;
 
                case AUGMENTATION_LEGS:
-                  victim->wound[BODYPART_LEG_RIGHT]|=WOUND_BLEEDING;
-                  victim->wound[BODYPART_LEG_RIGHT]|=WOUND_BRUISED;
-                  victim->wound[BODYPART_LEG_LEFT]|=WOUND_BLEEDING;
-                  victim->wound[BODYPART_LEG_LEFT]|=WOUND_BRUISED;
+                  if(LCSrandom(2))
+                     wound=&victim->wound[BODYPART_LEG_LEFT];
+                  else
+                     wound=&victim->wound[BODYPART_LEG_RIGHT];
+                  victim->blood-=25;
                   break;
 
                case AUGMENTATION_SKIN:
-                  victim->wound[BODYPART_HEAD]|=WOUND_BRUISED;
-                  victim->wound[BODYPART_BODY]|=WOUND_BRUISED;
+                  if(LCSrandom(2))
+                     wound=&victim->wound[BODYPART_HEAD];   
+                  else 
+                     wound=&victim->wound[BODYPART_BODY];
+                  victim->blood-=50;
                   break;
                }
+
+               *wound|=WOUND_NASTYOFF;
+
+               if(victim->blood>0)
+               {
+                  set_color(COLOR_RED,COLOR_BLACK,1);
+                  addstr(string(victim->name)+" has been horribly disfigured", gamelog);
+               }
+            }
+
+            else //It was successful... but not without some injuries
+            {
+               unsigned char* wound = nullptr;
+
+               switch(selected_aug->get_type())
+               {
+               case AUGMENTATION_HEAD:
+                  wound=&victim->wound[BODYPART_HEAD];
+                  break;
+
+               case AUGMENTATION_BODY:
+                  wound=&victim->wound[BODYPART_BODY];
+                  break;
+
+               case AUGMENTATION_ARMS:
+                  if(LCSrandom(2))
+                     wound=&victim->wound[BODYPART_ARM_RIGHT];
+                  else
+                     wound=&victim->wound[BODYPART_ARM_LEFT];
+                  break;
+
+               case AUGMENTATION_LEGS:
+                  if(LCSrandom(2))
+                     wound=&victim->wound[BODYPART_LEG_RIGHT];
+                  else
+                     wound=&victim->wound[BODYPART_LEG_LEFT];
+                  break;
+
+               case AUGMENTATION_SKIN:
+                  wound=&victim->wound[BODYPART_HEAD];
+                  break;
+               }
+
+               *wound|=WOUND_BLEEDING;
+               *wound|=WOUND_BRUISED;
 
                selected_aug->make_augment(victim->get_augmentation(selected_aug->get_type()));
                victim->adjust_attribute(selected_aug->get_attribute(), selected_aug->get_effect());
@@ -1880,6 +1927,13 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 
                set_color(COLOR_GREEN,COLOR_BLACK,1);
                addstr(string(victim->name)+" has been augmented with "+selected_aug->get_name(), gamelog);
+            }
+
+            if(victim->blood<=0) //Lost too much blood, you killed 'em
+            {
+               set_color(COLOR_RED,COLOR_BLACK,1);
+               victim->die();
+               addstr(string(victim->name)+" has been brutally murdered by "+cr->name, gamelog);
             }
 
             gamelog.nextMessage();

@@ -1672,8 +1672,9 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          {
             if (mode==GAMEMODE_CHASECAR)
             {
-               strcpy(str, driver->name);
-               switch(droll)
+               if(driver!=NULL)
+                  strcpy(str,driver->name);
+               switch(droll) // If no driver then droll is 0.
                {
                   case 1: strcpy(str, a.name); strcat(str," missed!"); break;
                   case 2: strcpy(str, a.name); strcat(str," just barely missed!"); break;

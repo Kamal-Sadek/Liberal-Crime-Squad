@@ -6,13 +6,13 @@ int VehicleType::number_of_vehicletypes = 0;
 VehicleType::VehicleType(MCD_STR xmlstring)
  : /*idname_("UNDEFINED"), id_(-1),*/ year_startcurrent_(true), year_start_(0), //Default values
  year_randomuptocurrent_(false), year_addrandom_(0), year_add_(0), displaycolor_(true),
- longname_("UNDEFINED"), shortname_("UNDEF"), 
- steal_difficultytofind_(1), steal_juice_(0), steal_extraheat_(0),
- sensealarmchance_(0), touchalarmchance_(0), availableatshop_(true), price_(1234), sleeperprice_(1111), 
+ longname_("UNDEFINED"), shortname_("UNDEF"),
+ drivebonus_(0), drivebonus_factor_(1), drivebonus_limit1_(8), drivebonus_limit2_(99),
+ dodgebonus_(0), dodgebonus_factor_(1), dodgebonus_limit1_(8), dodgebonus_limit2_(99),
+ attackbonus_driver_(-2), attackbonus_passenger_(0),
  armormidpoint_(50), lowarmormin_(4), lowarmormax_(6), higharmormin_(0), higharmormax_(2),
- drivebonus_(0), drivebonus_factor_(1), drivebonus_limit1_(8), drivebonus_limit2_(99), 
- dodgebonus_(0), dodgebonus_factor_(1), dodgebonus_limit1_(8), dodgebonus_limit2_(99), 
- attackbonus_driver_(-2), attackbonus_passenger_(0)
+ steal_difficultytofind_(1), steal_juice_(0), steal_extraheat_(0),
+ sensealarmchance_(0), touchalarmchance_(0), availableatshop_(true), price_(1234), sleeperprice_(1111)
 {
    id_ = number_of_vehicletypes++;
 
@@ -281,7 +281,7 @@ int VehicleType::gethitlocation(int bodypart)
       return CARPART_BODY;
       break;
    }
-   
+
    return CARPART_WINDOW;
 }
 string VehicleType::getpartname(int location)
