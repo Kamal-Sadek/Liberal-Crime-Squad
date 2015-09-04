@@ -9,8 +9,10 @@
             Which attribute gets boosted by augmentation (I'm planning on having
             augmentations that have other effects besides boosting stats)
         <effect> (int) how much the attribute gets boosted by
-        <age_minimum> (int) TODO:IMPLEMENT
-        <age_maximum> (int) TODO:IMPLEMENT
+        <max_age> (int) (optional) maximum age of victim that can accept augmentation
+            if no value supplied, there is no maximum age
+        <min_age> (int) (optional) minimum age of victim that can accept augmentation
+            if no value supplied, there is no minimum age
         <description> (string) displayed when selecting an augmentation
     </augmenttype>
     -->
@@ -36,7 +38,7 @@
         <type>head</type>
         <attribute>charisma</attribute>
         <effect>3</effect>
-        <description>By augmenting a Liberal's cerebral cortex, we can give them increased language processing and awareness when dealing with other people. (Charisma+3)</description>
+        <description>By augmenting a Liberal's language centers, we can give them increased language processing and awareness when dealing with other people. (Charisma+3)</description>
     </augmenttype>
 
     <augmenttype idname="AUGMENTATION_HARDENED_SKIN">
@@ -53,6 +55,15 @@
         <attribute>heart</attribute>
         <effect>3</effect>
         <description>Numorous Liberal Reports have shown that by transplanting a gorilla heart into the body of an augmentee, their Liberal Devotion increases tenfold! (Heart+3)</description>
+    </augmenttype>
+
+    <augmenttype idname="AUGMENTATION_NEURAL_FEEDBACK">
+        <name>Faster Neural Feedback</name>
+        <type>head</type>
+        <attribute>agility</attribute>
+        <effect>2</effect>
+        <max_age>20</age_max>
+        <description>By supplying the brain cells with a constant source of methamphetamines, electrical signals increase in speed drastically.</description>
     </augmenttype>
 
 </augmentations>

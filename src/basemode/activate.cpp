@@ -1742,7 +1742,9 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
             {
                for(int x=0,y=5;x<augmenttype.size();x++)
                {
-                  if(augmenttype[x]->get_type()==aug_c-'a')
+                  if(augmenttype[x]->get_type()==aug_c-'a'&&
+                        (augmenttype[x]->get_max_age()==-1||victim->age<=augmenttype[x]->get_max_age())&&
+                        (augmenttype[x]->get_min_age()==-1||victim->age>=augmenttype[x]->get_min_age()))
                      aug_type.push_back(augmenttype[x]);
                }
             }

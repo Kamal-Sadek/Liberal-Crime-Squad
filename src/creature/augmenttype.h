@@ -15,6 +15,8 @@ class AugmentType {
       short get_type() const { return type_; }
       int get_attribute() const { return attribute_; }
       int get_effect() const { return effect_; }
+      int get_max_age() const { return max_age_; }
+      int get_min_age() const { return min_age_; }
       std::string get_description() const { return description_; }
 
 		static int number_of_augmenttypes;
@@ -23,6 +25,8 @@ class AugmentType {
       std::string name_;
       int attribute_;
       int effect_;
+      int max_age_;
+      int min_age_;
       long id_;
 	   short type_;
       std::string description_;

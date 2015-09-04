@@ -2,7 +2,7 @@
 
 int AugmentType::number_of_augmenttypes = 0;
 
-AugmentType::AugmentType(const std::string& xmlstring)
+AugmentType::AugmentType(const std::string& xmlstring): max_age_(-1), min_age_(-1)
 {
    id_=number_of_augmenttypes++;
 
@@ -32,14 +32,20 @@ AugmentType::AugmentType(const std::string& xmlstring)
          effect_=atoi(xml.GetData());
       else if(element=="description")
          description_=xml.GetData();
+      else if(element=="max_age")
+         max_age_=atoi(xml.GetData());
+      else if(element=="min_age")
+         min_age_=atoi(xml.GetData());
    }
 
 }
 
 void AugmentType::make_augment(Augmentation& au)
 {
-   au.name=name_;
-   au.type=type_;
-   au.attribute=attribute_;
-   au.effect=effect_;
+   au.name=get_name();
+   au.type=get_type();
+   au.attribute=get_attribute();
+   au.effect=get_effect();
+   au.max_age=get_max_age();
+   au.min_age=get_min_age();
 }
