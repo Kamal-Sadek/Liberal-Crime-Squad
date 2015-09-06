@@ -62,7 +62,7 @@
         <type>head</type>
         <attribute>agility</attribute>
         <effect>2</effect>
-        <max_age>20</age_max>
+        <max_age>20</max_age>
         <description>By supplying the brain cells with a constant source of methamphetamines, electrical signals increase in speed drastically.</description>
     </augmenttype>
 
