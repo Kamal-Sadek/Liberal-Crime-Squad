@@ -74,8 +74,8 @@
 
 //PACKAGE_VERSION must be defined here or the game won't compile on Windows! Don't remove it!!!
 // -- yetisyny
-#define PACKAGE_VERSION "4.07.5 beta"
-#define NUMSAVES 3
+#define PACKAGE_VERSION "4.10.0"
+#define NUMSAVES 1
 
 const int version=40705;
 const int lowestloadversion=40705;
@@ -866,7 +866,7 @@ enum PoliticalParties
 // all states (100%) - for looping thru all states
 #define STATENUM 50
 // 3/4 of states (75%) - needed to pass constitutional amendments
-#define STATESUPERMAJORITY 37
+#define STATESUPERMAJORITY 38
 
 #define POLITICIAN_NAMELEN 80
 

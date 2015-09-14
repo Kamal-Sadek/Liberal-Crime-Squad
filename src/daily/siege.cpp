@@ -173,8 +173,8 @@ void siegecheck(char canseethings)
             // Accumulate heat from liberals who have it, but let them bleed it off in the process
             if(pool[p]->heat > 0)
             {
-               crimes += pool[p]->heat/10 + 1;
-               pool[p]->heat -= MIN(4,pool[p]->heat);
+               crimes += pool[p]->heat/(pool[p]->activity.type==ACTIVITY_NONE?60:10) + 1;
+               pool[p]->heat -= MIN(pool[p]->activity.type==ACTIVITY_NONE?pool[p]->heat/10:5,pool[p]->heat);
             }
          }
 
@@ -265,8 +265,7 @@ void siegecheck(char canseethings)
          if(!location[l]->siege.timeuntillocated)
          {
             location[l]->siege.timeuntillocated=-2;
-            /*location[l]->heat-=250;
-            if(location[l]->heat<0)*/location[l]->heat=0;
+            location[l]->heat=0;
 
             if(numpres>0)
             {

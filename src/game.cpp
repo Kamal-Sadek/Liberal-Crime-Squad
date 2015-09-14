@@ -255,17 +255,15 @@ int main(int argc, char* argv[])
 
    gamelog.initialize(GAMELOG_FILEPATH, OVERWRITE_GAMELOG, NEWLINEMODE_GAMELOG); //Initialize the gamelog (and also initialize artdir and homedir)
 
-   //For formatting.
-   //To let the user know a new instance of the program was started.
-   gamelog.log("\n\n\n---------- PROGRAM STARTED ----------\n");
-
-   //Date and time
    time_t t = time(0);
    struct tm *now = localtime(&t); //Do not need to deallocate this. Statically allocated by system
    char datetime[41];
    sprintf(datetime, "---------%i-%02i-%02i %02i:%02i:%02i---------\n\n\n", 
       now->tm_year+1900, now->tm_mon+1, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec); //YYYY-MM-DD HH:MM:SS format
-   gamelog.log(datetime);
+
+   gamelog.log(string("\n\n\n---------- PROGRAM STARTED ----------\n") + datetime);
+
+
 
    char file_name[13];
    FILE *file;
