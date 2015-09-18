@@ -62,12 +62,11 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <externs.h>
 
-void mode_title()
-{
+char str[100];
+
+void title() {
    //title screen
    erase();
-
-   char str[100];
 
    set_color(COLOR_GREEN,COLOR_BLACK,1);
    strcpy(str,"Liberal Crime Squad");
@@ -593,21 +592,34 @@ void mode_title()
    addstr(str);
    move(24,79);
    addstr("+");
+}
+
+void mode_title()
+{
+   title();
 
    int c=0;
+   bool viewHigh = false;
+
    do
    {
       if(c=='m') music.enableIf(!music.isEnabled());
-      if(music.isEnabled()) strcpy(str,"Press M to turn off the Music.");
-      else strcpy(str,"Press M to turn on some Music.");
+      if(music.isEnabled()) strcpy(str,"Press M to turn off the Music. Press H to view your Liberal High Score.");
+      else strcpy(str,"Press M to turn on some Music. Press H to view your Liberal High Score.");
       move(22,39-((len(str)-1)>>1));
       addstr(str);
-      if(c==ESC) end_game();
+      if(c==ESC||c=='x') end_game();
+      
+      if(c=='h') {
+         viewhighscores();
+      }
+      if(viewHigh) {
+         viewHigh = !viewHigh;
+         title();
+      }
 
       c=getkey();
-   } while(c=='m'||c==ESC);
-
-   viewhighscores();
+   } while(c=='m'||c=='h'||c=='x'||c==ESC||viewHigh);
 
    if(!loaded)
    {
