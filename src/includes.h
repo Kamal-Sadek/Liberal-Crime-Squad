@@ -77,8 +77,8 @@
 #define PACKAGE_VERSION "4.10.0"
 #define NUMSAVES 1
 
-const int version=40705;
-const int lowestloadversion=40705;
+const int version=40100;
+const int lowestloadversion=40100;
 const int lowestloadscoreversion=31203;
 
 #include "common.h" /* include this prior to checking if WIN32 is defined */

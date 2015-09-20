@@ -127,8 +127,6 @@ short activesortingchoice[SORTINGCHOICENUM];
 
 Creature encounter[ENCMAX];
 
-char loaded=0;
-
 short mode=GAMEMODE_TITLE;
 
 short offended_corps=0;
@@ -450,8 +448,6 @@ int main(int argc, char* argv[])
 
    //addstr("Attempting to load saved game... ");
    //getkey();
-
-   loaded=load();
 
    //addstr("Setup complete!");
    //getkey();

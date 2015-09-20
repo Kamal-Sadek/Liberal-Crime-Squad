@@ -209,7 +209,7 @@ void viewhighscores(int musicoverride)
    addstr("Flags Burned: ");
    addstr(ustat_burns);
 
-   getkey();
+   //getkey();
 }
 
 /* loads the high scores file */

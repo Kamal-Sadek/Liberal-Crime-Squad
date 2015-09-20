@@ -68,6 +68,8 @@ void title() {
    //title screen
    erase();
 
+   gamelog.log("title");
+
    set_color(COLOR_GREEN,COLOR_BLACK,1);
    strcpy(str,"Liberal Crime Squad");
    move(2,39-((len(str)-1)>>1));
@@ -78,37 +80,7 @@ void title() {
    move(4,39-((len(str)-1)>>1));
    addstr(str);
 
-   if(loaded)
-   {
-      move(6,39-((len(slogan)-1)>>1));
-      addstr(slogan);
-
-      move(7,10);
-
-      addstr("Liberals Indoctrinated: ");
-      addstr(stat_recruits);
-
-      move(8,10);
-      addstr("Liberals Martyred: ");
-      addstr(stat_dead);
-
-      move(9,10);
-      addstr("Conservatives Killed: ");
-      addstr(stat_kills);
-
-      move(7,47);
-      addstr("Funds Taxed: ");
-      addstr(ledger.total_income);
-
-      move(8,47);
-      addstr("Funds Spent: ");
-      addstr(ledger.total_expense);
-
-      move(9,47);
-      addstr("Conservatives Kidnapped: ");
-      addstr(stat_kidnappings);
-   }
-   else switch(LCSrandom(32))
+   switch(LCSrandom(32))
    {
    case 0:
       strcpy(str,"\"Unjust laws exist; shall we be content to obey them, or shall we");
@@ -599,28 +571,26 @@ void mode_title()
    title();
 
    int c=0;
-   bool viewHigh = false;
 
-   do
-   {
+   do {
+
+      if(c=='h') {
+         viewhighscores();
+         getkey();
+         title();
+      }
+
       if(c=='m') music.enableIf(!music.isEnabled());
       if(music.isEnabled()) strcpy(str,"Press M to turn off the Music. Press H to view your Liberal High Score.");
       else strcpy(str,"Press M to turn on some Music. Press H to view your Liberal High Score.");
       move(22,39-((len(str)-1)>>1));
       addstr(str);
       if(c==ESC||c=='x') end_game();
-      
-      if(c=='h') {
-         viewhighscores();
-      }
-      if(viewHigh) {
-         viewHigh = !viewHigh;
-         title();
-      }
 
       c=getkey();
-   } while(c=='m'||c=='h'||c=='x'||c==ESC||viewHigh);
+   } while(c=='m'||c=='h'||c=='x'||c==ESC);
 
+   char loaded = load();
    if(!loaded)
    {
       setup_newgame();
