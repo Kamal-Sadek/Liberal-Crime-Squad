@@ -210,7 +210,8 @@ char foughtthisround=0;
 short interface_pgup='[';
 short interface_pgdn=']';
 
-bool autosave=true;
+bool autosave=false;
+string savefile_name;
 
 int day=1;
 

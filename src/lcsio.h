@@ -160,4 +160,7 @@ void LCSCloseFileCPP(std::fstream &file);
 void LCSDeleteFile(const char* filename,int flags);
 void LCSRenameFile(const char* old_filename,const char* new_filename,int flags);
 
+//returns a list of all files in homedir with extension .dat
+vector<string> LCSSaveFiles();
+
 #endif // LCSIO_H_INCLUDED

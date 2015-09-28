@@ -68,8 +68,6 @@ void title() {
    //title screen
    erase();
 
-   gamelog.log("title");
-
    set_color(COLOR_GREEN,COLOR_BLACK,1);
    strcpy(str,"Liberal Crime Squad");
    move(2,39-((len(str)-1)>>1));
@@ -572,6 +570,8 @@ void mode_title()
 
    int c=0;
 
+   vector<string> save_files;
+
    do {
 
       if(c=='h') {
@@ -590,14 +590,58 @@ void mode_title()
       c=getkey();
    } while(c=='m'||c=='h'||c=='x'||c==ESC);
 
-   char loaded = load();
+   save_files = std::move(LCSSaveFiles());
+
+   savefile_name = "save.dat";
+   char loaded = save_files.size() > 0;
    if(!loaded)
    {
       setup_newgame();
       makecharacter();
+   } 
+   else
+   {
+      erase();
+      set_color(COLOR_GREEN,COLOR_BLACK,1);
+      strcpy(str,"Liberal Crime Squad");
+      move(2,39-((len(str)-1)>>1));
+      addstr(str);
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      
+      int p=0, y=2, page=0;
+
+      while(false) {
+         for(p=page*19,y=2;p<save_files.size()&&p<page*19+19;p++,y++)
+         {
+            set_color(COLOR_WHITE,COLOR_BLACK,0); //c==y+'a'-2);
+            move(y,0);
+            addchar(y+'A'-2);addstr(" - ");
+         }      
+
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         move(22,0);
+         addstr("Press a Letter to select a Liberal");
+         move(23,0);
+         addpagestr();
+
+         c = getkey();
+
+         //PAGE UP
+         if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
+         //PAGE DOWN
+         if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<save_files.size())page++;
+         if(c>='a'&&c<='s')
+         {
+            int p=page*19+c-'a';
+            //if(p<save_files.size())
+         }
+      }
+
+      load("save.dat");
+
    }
    mode=GAMEMODE_BASE;
    mode_base();
 
-   savegame();
+   savegame(savefile_name);
 }

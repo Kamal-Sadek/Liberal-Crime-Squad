@@ -75,7 +75,6 @@
 //PACKAGE_VERSION must be defined here or the game won't compile on Windows! Don't remove it!!!
 // -- yetisyny
 #define PACKAGE_VERSION "4.10.0"
-#define NUMSAVES 1
 
 const int version=40100;
 const int lowestloadversion=40100;
@@ -441,6 +440,7 @@ private:
 #include "locations/locations.h"
 #include "configfile.h"
 #include "sitemode/sitemap.h"
+#include "tinydir.h"
 
 enum CarChaseObstacles
 {
@@ -1323,9 +1323,9 @@ void makecharacter();
  saveload.cpp
 */
 /* saves the game to save.dat */
-void savegame();
+void savegame(const string& filename);
 /* loads the game from save.dat */
-char load();
+char load(const string& filename);
 /* deletes save.dat (used on endgame and for invalid save version) */
 void reset();
 /* check if file exists */ 

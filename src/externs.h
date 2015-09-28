@@ -3,6 +3,8 @@
 
 #include <includes.h>
 
+extern string savefile_name;
+
 extern char homedir[MAX_PATH_SIZE];
 extern char artdir[MAX_PATH_SIZE];
 

@@ -148,6 +148,25 @@ FILE* LCSOpenFile(const char* filename,const char* mode,int flags)
    return fopen(filepath.c_str(),mode);
 }
 
+vector<string> LCSSaveFiles()
+{
+   vector<string> save_files;
+   tinydir_dir dir;
+   tinydir_open(&dir, homedir);
+   while (dir.has_next)
+   {
+      tinydir_file file;
+      tinydir_readfile(&dir, &file);
+
+      if(strstr(file.name, "save") != NULL && strstr(file.name, "score") == NULL)
+         save_files.push_back(file.name);
+      tinydir_next(&dir);
+   }
+   tinydir_close(&dir);
+
+   return save_files;
+}
+
 //C++ file i/o version of the above.
 bool LCSOpenFileCPP(std::string filename, std::ios_base::openmode mode, int flags, std::fstream &file)
 {

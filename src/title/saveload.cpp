@@ -42,7 +42,7 @@ bool file_exists(const std::string& filename)
    return true;
 }
 
-void savegame()
+void savegame(const string& filename)
 {
 #ifdef NOSAVE
    return;
@@ -53,17 +53,7 @@ void savegame()
    FILE *h;
    int l;
 
-   char old_filename[13];
-   char new_filename[13];
-   snprintf(old_filename, 13, "save_%03i.dat", NUMSAVES-1);
-   LCSDeleteFile(old_filename, LCSIO_PRE_HOME);
-   for(int x=NUMSAVES-1;x>=1;x--) {
-      snprintf(old_filename, 13, "save_%03i.dat", x-1);
-      snprintf(new_filename, 13, "save_%03i.dat", x);
-      LCSRenameFile(old_filename, new_filename, LCSIO_PRE_HOME); 
-   }
-
-   h=LCSOpenFile("save_000.dat", "wb", LCSIO_PRE_HOME);
+   h=LCSOpenFile(filename.c_str(), "wb", LCSIO_PRE_HOME);
 
    if(h!=NULL)
    {
@@ -369,7 +359,7 @@ Item* create_item(const std::string& inputXml)
 }
 
 /* loads the game from save.dat */
-char load()
+char load(const string& filename)
 {
    //LOAD FILE
    int loadversion;
@@ -379,19 +369,14 @@ char load()
    long dummy_l;
    FILE *h;
 
-   char filename[13];
-
-   for(int saves=0;saves<NUMSAVES;saves++)
+   h=LCSOpenFile(filename.c_str(), "rb", LCSIO_PRE_HOME);
+   if(h!=NULL)
    {
-      snprintf(filename, 13, "save_%03i.dat", saves);
-      h=LCSOpenFile(filename, "rb", LCSIO_PRE_HOME);
-      if(h!=NULL)
-      {
-         fread(&loadversion,sizeof(int),1,h);
+      fread(&loadversion,sizeof(int),1,h);
 
-         //NUKE INVALID SAVE GAMES
-         if(loadversion<lowestloadversion)
-         {
+      //NUKE INVALID SAVE GAMES
+      if(loadversion<lowestloadversion)
+      {
             LCSCloseFile(h);
 
             reset();
@@ -840,7 +825,6 @@ char load()
 
          return 1;
       }
-   }
 
    gamelog.log("Could not load");
    return 0;
@@ -849,10 +833,8 @@ char load()
 /* deletes save.dat (used on endgame and for invalid save version) */
 void reset()
 {
-   char file_name[13];
-   for(int x=NUMSAVES-1;x>=0;x--) {
-      snprintf(file_name, 13, "save_%03i.dat", x);
-      if(file_exists(file_name)) LCSDeleteFile(file_name,LCSIO_PRE_HOME);
+   for(string filename : LCSSaveFiles()) {
+      if(file_exists(filename)) LCSDeleteFile(filename.c_str(),LCSIO_PRE_HOME);
    }
 }
 
