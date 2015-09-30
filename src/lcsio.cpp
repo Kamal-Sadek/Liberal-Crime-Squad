@@ -158,7 +158,7 @@ vector<string> LCSSaveFiles()
       tinydir_file file;
       tinydir_readfile(&dir, &file);
 
-      if(strstr(file.name, "save") != NULL && strstr(file.name, "score") == NULL)
+      if(strstr(file.name, ".dat") != NULL &&strstr(file.name, "score") == NULL)
          save_files.push_back(file.name);
       tinydir_next(&dir);
    }

@@ -594,6 +594,7 @@ void mode_title()
 
    savefile_name = "save.dat";
    char loaded = save_files.size() > 0;
+   gamelog.log(to_string(save_files.size()));
    if(!loaded)
    {
       setup_newgame();
@@ -602,25 +603,29 @@ void mode_title()
    else
    {
       erase();
-      set_color(COLOR_GREEN,COLOR_BLACK,1);
-      strcpy(str,"Liberal Crime Squad");
-      move(2,39-((len(str)-1)>>1));
-      addstr(str);
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       
       int p=0, y=2, page=0;
 
-      while(false) {
+      while(true) 
+      {
+         mvaddstr(0,0,"Choose a Save File");
+         mvaddstr(1,0,"컴컴Title컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�");
          for(p=page*19,y=2;p<save_files.size()&&p<page*19+19;p++,y++)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,0); //c==y+'a'-2);
             move(y,0);
             addchar(y+'A'-2);addstr(" - ");
-         }      
+            addstr(save_files[y-2]);
+         }
+
+         move(y,0);
+         addchar(y+'A'-2);addstr(" - ");
+         addstr("NEW GAME");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(22,0);
-         addstr("Press a Letter to select a Liberal");
+         addstr("Press a Letter to select a Save File");
          move(23,0);
          addpagestr();
 
@@ -633,11 +638,18 @@ void mode_title()
          if(c>='a'&&c<='s')
          {
             int p=page*19+c-'a';
-            //if(p<save_files.size())
+            if(p<save_files.size()) { savefile_name = save_files[p]; break; }
+            else if(p == save_files.size())
+            {
+               setup_newgame();
+               makecharacter();
+               savefile_name = "newgame_" + to_string(p) + ".dat";
+               break;
+            }
          }
       }
 
-      load("save.dat");
+      load(savefile_name);
 
    }
    mode=GAMEMODE_BASE;
