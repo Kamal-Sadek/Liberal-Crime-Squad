@@ -210,7 +210,7 @@ void LCSDeleteFile(const char* filename,int flags)
 
    str.append(filename);
 
-   unlink(str.c_str());
+   remove(str.c_str());
 }
 
 void LCSCloseFile(FILE* handle)

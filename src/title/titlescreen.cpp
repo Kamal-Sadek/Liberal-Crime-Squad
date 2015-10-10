@@ -564,6 +564,20 @@ void title() {
    addstr("+");
 }
 
+void choose_savefile_name()
+{
+   erase();
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   mvaddstr(0,0,"In what world will you pursue your Liberal Agenda?");
+   set_color(COLOR_WHITE,COLOR_BLACK,0);
+   mvaddstr(1,0,"Enter a name for the save file.");
+
+   char savefile_temp[21];
+   enter_name(2,0, savefile_temp, sizeof(savefile_temp)/sizeof(savefile_temp[0]), "");
+   if(strcmp(savefile_temp, "") != 0) savefile_name = string(savefile_temp) + ".dat";
+   else savefile_name = "save_" + to_string(LCSrandom(1000)) + ".dat";
+}
+
 void mode_title()
 {
    title();
@@ -592,23 +606,24 @@ void mode_title()
 
    save_files = std::move(LCSSaveFiles());
 
-   savefile_name = "save.dat";
    char loaded = save_files.size() > 0;
-   gamelog.log(to_string(save_files.size()));
+   bool to_delete = false;
+
    if(!loaded)
    {
       setup_newgame();
       makecharacter();
+      choose_savefile_name();
    } 
    else
    {
-      erase();
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       
       int p=0, y=2, page=0;
 
       while(true) 
       {
+         erase();
          mvaddstr(0,0,"Choose a Save File");
          mvaddstr(1,0,"컴컴Title컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�");
          for(p=page*19,y=2;p<save_files.size()&&p<page*19+19;p++,y++)
@@ -625,7 +640,9 @@ void mode_title()
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(22,0);
-         addstr("Press a Letter to select a Save File");
+         if(!to_delete) addstr("Press a Letter to Select a Save File");
+         else addstr("Press a Letter to Delete a Save File");
+         addstr(", or Y to switch");
          move(23,0);
          addpagestr();
 
@@ -638,15 +655,27 @@ void mode_title()
          if(c>='a'&&c<='s')
          {
             int p=page*19+c-'a';
-            if(p<save_files.size()) { savefile_name = save_files[p]; break; }
-            else if(p == save_files.size())
+            if(!to_delete)
             {
-               setup_newgame();
-               makecharacter();
-               savefile_name = "newgame_" + to_string(p) + ".dat";
-               break;
+               if(p<save_files.size()) { savefile_name = save_files[p]; break; }
+               else if(p == save_files.size())
+               {
+                  setup_newgame();
+                  makecharacter();
+                  choose_savefile_name();
+                  break;
+               }
             }
+            else
+            {
+               LCSDeleteFile(save_files[p].c_str(), LCSIO_PRE_HOME);
+               save_files = std::move(LCSSaveFiles());
+               to_delete = false;
+            }
+
          }
+         else if(c=='y') to_delete = !to_delete;
+         if(c==ESC||c=='x') end_game();
       }
 
       load(savefile_name);

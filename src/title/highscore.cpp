@@ -41,12 +41,17 @@ void viewhighscores(int musicoverride)
       if(score[s].valid)validsum++;
    }
 
-   if(!validsum)return;
-
    erase();
 
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    move(0,0);
+
+   if(!validsum)
+   {
+      addstr("No valid scores, press any button to return.");
+      return;
+   }
+
    addstr("The Liberal ELITE");
 
    int y=2;
