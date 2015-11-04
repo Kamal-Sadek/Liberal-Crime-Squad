@@ -611,9 +611,9 @@ void mode_title()
 
    if(!loaded)
    {
+      choose_savefile_name();
       setup_newgame();
       makecharacter();
-      choose_savefile_name();
    } 
    else
    {
@@ -624,7 +624,16 @@ void mode_title()
       while(true) 
       {
          erase();
-         mvaddstr(0,0,"Choose a Save File");
+         if(to_delete) 
+         {
+            set_color(COLOR_RED,COLOR_BLACK,0);
+            mvaddstr(0,0, "Delete a Save File");
+            set_color(COLOR_WHITE,COLOR_BLACK,0);
+         }
+         else
+         {
+            mvaddstr(0,0,"Choose a Save File");
+         }
          mvaddstr(1,0,"컴컴Title컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�");
          for(p=page*19,y=2;p<save_files.size()&&p<page*19+19;p++,y++)
          {
