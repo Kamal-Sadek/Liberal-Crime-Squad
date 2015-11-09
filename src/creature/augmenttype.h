@@ -17,6 +17,7 @@ class AugmentType {
       int get_effect() const { return effect_; }
       int get_max_age() const { return max_age_; }
       int get_min_age() const { return min_age_; }
+      int get_cost() const { return cost_; }
       std::string get_description() const { return description_; }
 
 		static int number_of_augmenttypes;
@@ -29,6 +30,7 @@ class AugmentType {
       int min_age_;
       long id_;
 	   short type_;
+      int cost_;
       std::string description_;
 };
 
