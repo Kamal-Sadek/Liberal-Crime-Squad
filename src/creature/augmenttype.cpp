@@ -48,7 +48,4 @@ void AugmentType::make_augment(Augmentation& au)
    au.type=get_type();
    au.attribute=get_attribute();
    au.effect=get_effect();
-   au.max_age=get_max_age();
-   au.min_age=get_min_age();
-   au.cost=get_cost();
 }

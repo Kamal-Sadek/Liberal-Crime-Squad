@@ -23,7 +23,6 @@ std::string Augmentation::showXml() const
    xml.AddElem("attribute", attribute);
    xml.AddElem("effect", effect);
    xml.AddElem("value", value);
-   xml.AddElem("cost", cost);
 
    return xml.GetDoc();
 }
@@ -49,12 +48,6 @@ Augmentation::Augmentation(const std::string& inputXml)
          effect = atoi(xml.GetData());
       else if(tag == "value")
          value = atoi(xml.GetData());
-      else if(tag=="max_age")
-         max_age=atoi(xml.GetData());
-      else if(tag=="min_age")
-         min_age=atoi(xml.GetData());
-      else if(tag=="cost")
-         cost=atoi(xml.GetData());
    }
 }
 

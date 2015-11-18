@@ -616,9 +616,7 @@ void mode_title()
       makecharacter();
    } 
    else
-   {
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      
+   {      
       int p=0, y=2, page=0;
 
       while(true) 
@@ -626,14 +624,15 @@ void mode_title()
          erase();
          if(to_delete) 
          {
-            set_color(COLOR_RED,COLOR_BLACK,0);
+            set_color(COLOR_YELLOW,COLOR_RED,1);
             mvaddstr(0,0, "Delete a Save File");
-            set_color(COLOR_WHITE,COLOR_BLACK,0);
          }
          else
          {
+            set_color(COLOR_WHITE,COLOR_BLACK,1);
             mvaddstr(0,0,"Choose a Save File");
          }
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
          mvaddstr(1,0,"컴컴Title컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�");
          for(p=page*19,y=2;p<save_files.size()&&p<page*19+19;p++,y++)
          {
@@ -651,7 +650,7 @@ void mode_title()
          move(22,0);
          if(!to_delete) addstr("Press a Letter to Select a Save File");
          else addstr("Press a Letter to Delete a Save File");
-         addstr(", or Y to switch");
+         addstr(", or V to switch");
          move(23,0);
          addpagestr();
 
@@ -669,21 +668,29 @@ void mode_title()
                if(p<save_files.size()) { savefile_name = save_files[p]; break; }
                else if(p == save_files.size())
                {
+                  choose_savefile_name();
                   setup_newgame();
                   makecharacter();
-                  choose_savefile_name();
                   break;
                }
             }
             else
             {
-               LCSDeleteFile(save_files[p].c_str(), LCSIO_PRE_HOME);
-               save_files = std::move(LCSSaveFiles());
-               to_delete = false;
+               set_color(COLOR_WHITE,COLOR_BLACK,1);
+               strcpy(str,"Are you sure you want to delete " + save_files[p] + "? (y/n)");
+               move(10,39-((len(str)-1)>>1));
+               addstr(str);
+               c=getkey();
+               if(c=='y')
+               {
+                  LCSDeleteFile(save_files[p].c_str(), LCSIO_PRE_HOME);
+                  save_files = std::move(LCSSaveFiles());
+               }
+               continue;
             }
 
          }
-         else if(c=='y') to_delete = !to_delete;
+         else if(c=='v') to_delete = !to_delete;
          if(c==ESC||c=='x') end_game();
       }
 

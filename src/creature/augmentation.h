@@ -17,7 +17,7 @@ class Augmentation
 {
    public:
       Augmentation():type(-1),name(""),attribute(-1), effect(-1),
-         value(-1),max_age(-1),min_age(-1), cost(0) { }
+         value(-1) { }
       Augmentation(const std::string& inputXml);
       string showXml() const;
       std::string name;
@@ -25,9 +25,6 @@ class Augmentation
       int attribute;
       int effect;
       int value;
-      int max_age;
-      int min_age;
-      int cost;
       static std::string get_name(int augmentation_type);
       static int get_associated_attribute(int augmentation_type);
 };
