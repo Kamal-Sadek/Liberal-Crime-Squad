@@ -233,6 +233,26 @@ short creaturetype_string_to_enum(const std::string& ctname)
       return -1;
 }
 
+string attribute_enum_to_string(int attribute)
+{
+   if (attribute == ATTRIBUTE_STRENGTH)
+      return "strength";
+   else if (attribute == ATTRIBUTE_INTELLIGENCE)
+      return "intelligence";
+   else if (attribute == ATTRIBUTE_WISDOM)
+      return "wisdom";
+   else if (attribute == ATTRIBUTE_AGILITY)
+      return "agility";
+   else if (attribute == ATTRIBUTE_HEALTH)
+      return "health";
+   else if (attribute == ATTRIBUTE_CHARISMA)
+      return "charisma";
+   else if (attribute == ATTRIBUTE_HEART)
+      return "heart";
+   else
+      return "";
+}
+
 int attribute_string_to_enum(const std::string& attribute)
 {
    if (attribute == "strength")

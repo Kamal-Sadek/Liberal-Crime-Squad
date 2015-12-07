@@ -5,15 +5,14 @@
         <type> (head/body/arms/legs/skin) which bodypart to install augmentation
             Can only have one augmentation per bodypart
         <attribute> (strength/intelligence/wisdom/agility/health/charisma/heart)
-            Which attribute gets boosted by augmentation (I'm planning on having
-            augmentations that have other effects besides boosting stats)
+            Which attribute gets boosted by augmentation
         <effect> (int) how much the attribute gets boosted by
-        <max_age> (int) (optional) maximum age of victim that can accept augmentation
+        <max_age> (int) (+/-) (optional) maximum age of victim that can accept augmentation
             if no value supplied, there is no maximum age
         <min_age> (int) (optional) minimum age of victim that can accept augmentation
             if no value supplied, there is no minimum age
         <description> (string) displayed when selecting an augmentation
-        <cost> (int) (optional) In progress
+        <cost> (int) (optional) Specifies the cost of the augmentation
     </augmenttype>
     -->
 
@@ -22,7 +21,7 @@
         <type>legs</type>
         <attribute>agility</attribute>
         <effect>3</effect>
-        <description>Replacing the legs of a Liberal with mechanical ones would increase their speed and reaction extensively. (Speed+3)</description>
+        <description>Replacing the legs of a Liberal with mechanical ones would increase their speed and reaction extensively.</description>
     </augmenttype>
 
     <augmenttype idname="AUGMENTATION_TONED_CALVES">
@@ -30,7 +29,7 @@
         <type>legs</type>
         <attribute>charisma</attribute>
         <effect>2</effect>
-        <description>Our scientists have found the ultimate chemical formula that gives a Liberal the ultimate tanned calves. Behold, may all who lay eyes upon them be trapped by their beauty (Charisma+3)</description>
+        <description>Our scientists have found the ultimate chemical formula that gives a Liberal the ultimate tanned calves. Behold, may all who lay eyes upon them be trapped by their beauty.</description>
     </augmenttype>
 
     <augmenttype idname="AUGMENTATION_MIGHTY_STRENGTH">
@@ -38,7 +37,7 @@
         <type>arms</type>
         <attribute>strength</attribute>
         <effect>3</effect>
-        <description>We can artificially stimulate the muscles in a Liberals arms, and make them stronger and more powerful than ever before. (Strength+3)</description>
+        <description>We can artificially stimulate the muscles in a Liberals arms, and make them stronger and more powerful than ever before.</description>
     </augmenttype>
 
     <augmenttype idname="AUGMENTATION_SLEEVE_TATTOOS">
@@ -46,7 +45,7 @@
         <type>arms</type>
         <attribute>heart</attribute>
         <effect>2</effect>
-        <description>By covering the arms of a Liberal with these tattoos, which are laced with a special compound, they will be even more ready to devote their lives to the liberal cause. (Heart+2)</description>
+        <description>By covering the arms of a Liberal with these tattoos, which are laced with a special compound, they will be even more ready to devote their lives to the liberal cause.</description>
     </augmenttype>
 
     <augmenttype idname="AUGMENTATION_INCREASED_AWARENESS">
@@ -54,7 +53,7 @@
         <type>head</type>
         <attribute>charisma</attribute>
         <effect>3</effect>
-        <description>By augmenting a Liberal's language centers, we can give them increased language processing and awareness when dealing with other people. (Charisma+3)</description>
+        <description>By augmenting a Liberal's language centers, we can give them increased language processing and awareness when dealing with other people.</description>
     </augmenttype>
 
     <augmenttype idname="AUGMENTATION_NEURAL_FEEDBACK">
@@ -71,15 +70,23 @@
         <type>skin</type>
         <attribute>health</attribute>
         <effect>3</effect>
-        <description>Human skin has far outlived its usefulness in an evolutionary aspect, not able to stop even the smallest of bullets. Therefore, we should remove the skin of a Liberal, and encase them in a metal shell! (Health+3)</description>
+        <description>Human skin has far outlived its usefulness in an evolutionary aspect, not able to stop even the smallest of bullets. Therefore, we should remove the skin of a Liberal, and encase them in a metal shell!</description>
     </augmenttype>
+
+	<augmenttype idname="AUGMENTATION_Thick_SKIN">
+		<name>Thick Skin</name>
+		<type>skin</type>
+		<attribute>wisdom</attribute>
+		<effect>-3</effect>
+		<description>By enhancing this Liberal's skin, they will be better prepared to fight off the words of the Conservative Swine, and less likely to be brainwashed to their side.</description>
+	</augmenttype>
 
     <augmenttype idname="AUGMENTATION_GORILLA_HEART">
         <name>Gorilla Heart</name>
         <type>body</type>
         <attribute>heart</attribute>
         <effect>3</effect>
-        <description>Numorous Liberal Reports have shown that by transplanting a gorilla heart into the body of an augmentee, their Liberal Devotion increases tenfold! (Heart+3)</description>
+        <description>Numorous Liberal Reports have shown that by transplanting a gorilla heart into the body of an augmentee, their Liberal Devotion increases tenfold!</description>
     </augmenttype>
 
 </augmentations>

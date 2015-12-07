@@ -1799,28 +1799,37 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          split_string(selected_aug->get_description(),' ',desc);
 
          int chars_left=50;
-         for(int i=0,y=6;i<desc.size();i++)
+         int line = 6;
+         for(int i=0;i<desc.size();i++)
          {
             if(desc[i].length()>50) continue;
             else if(desc[i] == "")
             {
-               y++;
+               line++;
                chars_left=50;
                continue;
             }
             else if(chars_left<0||desc[i].length()>chars_left)
             {
-               y++;
+               line++;
                chars_left=50;
                i--;
                continue;
             }
             else if(desc[i].length()<=chars_left)
             {
-               mvaddstr(y,50-chars_left,desc[i]);
+               mvaddstr(line,50-chars_left,desc[i]);
                chars_left-=(desc[i].length()+1);
             }
          }
+
+         line += 2;
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         mvaddstr(line, 0, "Effect: ");
+         set_color(COLOR_WHITE,COLOR_BLACK,0);
+         addstr(attribute_enum_to_string(selected_aug->get_attribute()) 
+            + (selected_aug->get_effect() >= 0 ? " +" : " ") + 
+            tostring(selected_aug->get_effect()));
 
          mvaddstr(23,1,"Are you sure? (y/n)");
 

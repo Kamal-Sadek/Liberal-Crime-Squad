@@ -1219,6 +1219,7 @@ inline int atoi(const std::string& str) { return atoi(str.c_str()); }
 inline double atof(const std::string& str) { return atof(str.c_str()); }
 short creaturetype_string_to_enum(const std::string& ctname);
 int augment_string_to_enum(const std::string& augmentname);
+string attribute_enum_to_string(int attribute);
 int attribute_string_to_enum(const std::string& attribute);
 int skill_string_to_enum(std::string skillname);
 int gender_string_to_enum(const std::string& gender);

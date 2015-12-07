@@ -584,7 +584,7 @@ void mode_title()
 
    int c=0;
 
-   vector<string> save_files;
+   vector<string> savefiles;
 
    do {
 
@@ -604,9 +604,9 @@ void mode_title()
       c=getkey();
    } while(c=='m'||c=='h'||c=='x'||c==ESC);
 
-   save_files = std::move(LCSSaveFiles());
+   savefiles = std::move(LCSSaveFiles());
 
-   char loaded = save_files.size() > 0;
+   char loaded = savefiles.size() > 0;
    bool to_delete = false;
 
    if(!loaded)
@@ -634,12 +634,14 @@ void mode_title()
          }
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          mvaddstr(1,0,"컴컴Title컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴�");
-         for(p=page*19,y=2;p<save_files.size()&&p<page*19+19;p++,y++)
+         for(p=page*19,y=2;p<savefiles.size()&&p<page*19+19;p++,y++)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,0); //c==y+'a'-2);
             move(y,0);
             addchar(y+'A'-2);addstr(" - ");
-            addstr(save_files[y-2]);
+
+			string &strtemp = savefiles[y-2];
+            addstr(strtemp.substr(0, strtemp.find(".dat")));
          }
 
          move(y,0);
@@ -650,7 +652,7 @@ void mode_title()
          move(22,0);
          if(!to_delete) addstr("Press a Letter to Select a Save File");
          else addstr("Press a Letter to Delete a Save File");
-         addstr(", or V to switch");
+         addstr(", V to switch, or X to quit");
          move(23,0);
          addpagestr();
 
@@ -659,14 +661,14 @@ void mode_title()
          //PAGE UP
          if((c==interface_pgup||c==KEY_UP||c==KEY_LEFT)&&page>0)page--;
          //PAGE DOWN
-         if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<save_files.size())page++;
+         if((c==interface_pgdn||c==KEY_DOWN||c==KEY_RIGHT)&&(page+1)*19<savefiles.size())page++;
          if(c>='a'&&c<='s')
          {
             int p=page*19+c-'a';
             if(!to_delete)
             {
-               if(p<save_files.size()) { savefile_name = save_files[p]; break; }
-               else if(p == save_files.size())
+               if(p<savefiles.size()) { savefile_name = savefiles[p]; break; }
+               else if(p == savefiles.size())
                {
                   choose_savefile_name();
                   setup_newgame();
@@ -677,14 +679,14 @@ void mode_title()
             else
             {
                set_color(COLOR_WHITE,COLOR_BLACK,1);
-               strcpy(str,"Are you sure you want to delete " + save_files[p] + "? (y/n)");
+               strcpy(str,"Are you sure you want to delete " + savefiles[p] + "? (y/n)");
                move(10,39-((len(str)-1)>>1));
                addstr(str);
                c=getkey();
                if(c=='y')
                {
-                  LCSDeleteFile(save_files[p].c_str(), LCSIO_PRE_HOME);
-                  save_files = std::move(LCSSaveFiles());
+                  LCSDeleteFile(savefiles[p].c_str(), LCSIO_PRE_HOME);
+                  savefiles = std::move(LCSSaveFiles());
                }
                continue;
             }
