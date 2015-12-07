@@ -14,4 +14,8 @@ The fight against the Conservative Swine is a long and dangerous one, and Libera
 
 To tap into this newfound science, Activate a Liberal who has a science skill of 1 or greater, go into the 'D - Recruitment' menu, and '5 - Augment' task. From here, you can select a Brave Liberal Pioneer to test this new technology and advance the Liberal Cause.
 
-Go Forth, and Persue your Liberal Agenda!
+## Save Files
+
+You can now have multiple save files! When you load up LCS, you have the option to choose from previous save files or make a new one. So you can now hold the battle against the Conservative Swine in multiple dimensions!
+
+Go Forth, and Pursue your Liberal Agenda!
