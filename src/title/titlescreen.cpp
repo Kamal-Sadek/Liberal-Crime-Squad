@@ -676,7 +676,7 @@ void mode_title()
                   break;
                }
             }
-            else
+            else if(p<savefiles.size())
             {
                set_color(COLOR_WHITE,COLOR_BLACK,1);
                strcpy(str,"Are you sure you want to delete " + savefiles[p] + "? (y/n)");
