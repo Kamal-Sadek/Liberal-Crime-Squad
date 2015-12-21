@@ -6,8 +6,8 @@
             Can only have one augmentation per bodypart
         <attribute> (strength/intelligence/wisdom/agility/health/charisma/heart)
             Which attribute gets boosted by augmentation
-        <effect> (int) how much the attribute gets boosted by
-        <max_age> (int) (+/-) (optional) maximum age of victim that can accept augmentation
+        <effect> (int) (+/-) how much the attribute gets boosted or weakened
+        <max_age> (int) (optional) maximum age of victim that can accept augmentation
             if no value supplied, there is no maximum age
         <min_age> (int) (optional) minimum age of victim that can accept augmentation
             if no value supplied, there is no minimum age
@@ -73,7 +73,7 @@
         <description>Human skin has far outlived its usefulness in an evolutionary aspect, not able to stop even the smallest of bullets. Therefore, we should remove the skin of a Liberal, and encase them in a metal shell!</description>
     </augmenttype>
 
-	<augmenttype idname="AUGMENTATION_Thick_SKIN">
+	<augmenttype idname="AUGMENTATION_THICK_SKIN">
 		<name>Thick Skin</name>
 		<type>skin</type>
 		<attribute>wisdom</attribute>
@@ -88,5 +88,13 @@
         <effect>3</effect>
         <description>Numorous Liberal Reports have shown that by transplanting a gorilla heart into the body of an augmentee, their Liberal Devotion increases tenfold!</description>
     </augmenttype>
+
+	<augmenttype idname="AUGMENTATION_ROCK_HARD_ABS">
+		<name>Rock Hard Abs</name>
+		<type>body</type>
+		<attribute>strength</attribute>
+		<effect>2</effect>
+		<description>These abs are the result of centuries of Liberal science, perfected to the epitomy of all abs. They increase your core strength one hundred fold.</description>
+	</augmenttype>
 
 </augmentations>

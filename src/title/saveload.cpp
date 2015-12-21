@@ -807,9 +807,11 @@ char load(const string& filename)
 
          // Site mode options
          fread(&encounterwarnings,sizeof(bool),1,h);
-         bool musicenabled;
+
+		 // Music resets to on every time the game is loaded
+         /*bool musicenabled;
          fread(&musicenabled,sizeof(bool),1,h);
-         music.enableIf(musicenabled);
+         music.enableIf(musicenabled);*/
 
          LCSCloseFile(h);
 

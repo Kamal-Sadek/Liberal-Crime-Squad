@@ -74,9 +74,9 @@ make
 If the compilation was successful no errors should be issued but you will
 see a myriad of warnings displayed all of which are safe to ignore.
 
-At the moment due to continuous development of the game it is probaby
+At the moment due to continuous development of the game it is probably
 safer to not install the game systemwide and thus the best option is to
-play it from the games own directory that resides in your home folder.
+play it from the game's own directory that resides in your home folder.
 
 To do this with little trouble issue the following command while in
 the LCS game folder:
