@@ -364,6 +364,14 @@ void initsite(Location &loc)
          levelmap[x][y][z].flag&=~SITEBLOCK_DOOR;
          levelmap[x][y][z].flag&=~SITEBLOCK_LOCKED;
       }
+   //CLEAR BLOCKED STAIRWELLS
+   for(    x=0;x<MAPX;x++)
+   for(int y=0;y<MAPY;y++)
+   for(int z=0;z<MAPZ;z++)
+      if(levelmap[x][y][z].flag & SITEBLOCK_BLOCK && levelmap[x][y][z].special==SPECIAL_STAIRS_DOWN)
+      {
+         levelmap[x][y][z].flag&=~SITEBLOCK_BLOCK;
+      }
    if (oldMapMode)
    {  //ADD RESTRICTIONS
       //bool restricted=0;
