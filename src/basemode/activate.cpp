@@ -1793,7 +1793,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          mvaddstr(4, 0, "Effect: ");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-		 string selected_attribute = attribute_enum_to_string(selected_aug->get_attribute());
+         string selected_attribute = attribute_enum_to_string(selected_aug->get_attribute());
          addstr((char)(toupper(selected_attribute.at(0))) + 
             selected_attribute.substr(1) +
             (selected_aug->get_effect() >= 0 ? " +" : " ") + 

@@ -2,7 +2,7 @@
     <!-- Clarification
     <augmenttype idname="(string)"> idname is used to identify the augmentation type
         <name> (string) The name of the augmentation
-        <type> (head/body/arms/legs/skin) which bodypart to install augmentation
+        <type> (head/body/arms/legs/skin) Which bodypart to install augmentation
             Can only have one augmentation per bodypart
         <attribute> (strength/intelligence/wisdom/agility/health/charisma/heart)
             Which attribute gets boosted by augmentation
@@ -22,6 +22,14 @@
         <attribute>agility</attribute>
         <effect>3</effect>
         <description>Replacing the legs of a Liberal with mechanical ones would increase their speed and reaction extensively.</description>
+    </augmenttype>
+
+    <augmenttype idname="AUGMENTATION_">
+        <name></name>
+        <type>legs</type>
+        <attribute>strength</attribute>
+        <effect>2</effect>
+        <description>Iron is a vital chemical for humans, so by infusing the legs of this Liberal with steel, they will be more ready than ever to take on any Conservative challenge that they will run into.</description>
     </augmenttype>
 
     <augmenttype idname="AUGMENTATION_TONED_CALVES">
@@ -73,13 +81,13 @@
         <description>Human skin has far outlived its usefulness in an evolutionary aspect, not able to stop even the smallest of bullets. Therefore, we should remove the skin of a Liberal, and encase them in a metal shell!</description>
     </augmenttype>
 
-	<augmenttype idname="AUGMENTATION_THICK_SKIN">
-		<name>Thick Skin</name>
-		<type>skin</type>
-		<attribute>wisdom</attribute>
-		<effect>-3</effect>
-		<description>By enhancing this Liberal's skin, they will be better prepared to fight off the words of the Conservative Swine, and less likely to be brainwashed to their side.</description>
-	</augmenttype>
+    <augmenttype idname="AUGMENTATION_THICK_SKIN">
+        <name>Thick Skin</name>
+        <type>skin</type>
+        <attribute>wisdom</attribute>
+        <effect>-3</effect>
+        <description>By enhancing this Liberal's skin, they will be better prepared to fight off the words of the Conservative Swine, and less likely to be brainwashed to their side.</description>
+    </augmenttype>
 
     <augmenttype idname="AUGMENTATION_GORILLA_HEART">
         <name>Gorilla Heart</name>
@@ -89,12 +97,12 @@
         <description>Numorous Liberal Reports have shown that by transplanting a gorilla heart into the body of an augmentee, their Liberal Devotion increases tenfold!</description>
     </augmenttype>
 
-	<augmenttype idname="AUGMENTATION_ROCK_HARD_ABS">
-		<name>Rock Hard Abs</name>
-		<type>body</type>
-		<attribute>strength</attribute>
-		<effect>2</effect>
-		<description>These abs are the result of centuries of Liberal science, perfected to the epitomy of all abs. They increase your core strength one hundred fold.</description>
-	</augmenttype>
+    <augmenttype idname="AUGMENTATION_ROCK_HARD_ABS">
+        <name>Rock Hard Abs</name>
+        <type>body</type>
+        <attribute>strength</attribute>
+        <effect>2</effect>
+        <description>These abs are the result of centuries of Liberal science, perfected to the epitomy of all abs. They increase your core strength one hundred fold.</description>
+    </augmenttype>
 
 </augmentations>

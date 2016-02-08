@@ -116,7 +116,6 @@ void siegecheck(char canseethings)
       if(location[find_police_station(l)]->closed)
       {
          location[l]->heat = static_cast<int>(location[l]->heat * 0.95);
-         continue;
       }
       if(location[l]->siege.siege)continue;
       if(location[l]->renting==RENTING_NOCONTROL)continue;
