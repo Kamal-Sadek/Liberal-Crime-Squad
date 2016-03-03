@@ -29,6 +29,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -191,6 +192,8 @@
     <ClCompile Include="..\src\common\misc.cpp" />
     <ClCompile Include="..\src\common\stringconversion.cpp" />
     <ClCompile Include="..\src\common\translateid.cpp" />
+    <ClCompile Include="..\src\creature\augmentation.cpp" />
+    <ClCompile Include="..\src\creature\augmenttype.cpp" />
     <ClCompile Include="..\src\creature\creaturetype.cpp" />
     <ClCompile Include="..\src\daily\activities.cpp" />
     <ClCompile Include="..\src\daily\daily.cpp" />
@@ -262,6 +265,8 @@
     <ClCompile Include="..\src\lcsio.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\creature\augmentation.h" />
+    <ClInclude Include="..\src\creature\augmenttype.h" />
     <ClInclude Include="..\src\sdl\SDL.h" />
     <ClInclude Include="..\src\sdl\SDL_assert.h" />
     <ClInclude Include="..\src\sdl\SDL_atomic.h" />
