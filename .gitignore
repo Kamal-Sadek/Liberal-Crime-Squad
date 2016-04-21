@@ -19,3 +19,8 @@ config.status
 config.h.in
 *~
 
+/workspaces/Release/*.obj
+/workspaces/Release/*.tlog
+/workspaces/game.sdf
+/workspaces/game.v11.suo
+/workspaces/Release/*.pdb
