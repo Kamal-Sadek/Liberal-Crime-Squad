@@ -13,7 +13,7 @@
             if no value supplied, there is no minimum age
         <description> (string) displayed when selecting an augmentation
         <cost> (int) (optional) Specifies the cost of the augmentation
-        <difficulty> TODO: IMPLEMENT
+        <difficulty> (int) (1 easiest - 10 hardest) chance at failure. default is 5
     </augmenttype>
     -->
 

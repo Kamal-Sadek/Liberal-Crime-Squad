@@ -1005,10 +1005,10 @@ void activate(Creature *cr)
                case CREATURE_DANCER: // for Art & Music
                case CREATURE_ENGINEER: // for Science
                case CREATURE_FASTFOODWORKER:
-			   case CREATURE_BAKER:
-			   case CREATURE_BARISTA:
-			   case CREATURE_BARTENDER:
-			   case CREATURE_FOOTBALLCOACH: // for Persuasion
+            case CREATURE_BAKER:
+            case CREATURE_BARISTA:
+            case CREATURE_BARTENDER:
+            case CREATURE_FOOTBALLCOACH: // for Persuasion
                case CREATURE_HAIRSTYLIST: // for Art
                case CREATURE_HIPPIE: // for Art & Music
                case CREATURE_JOURNALIST: // for Writing & Persuasion
@@ -1798,17 +1798,23 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
             selected_attribute.substr(1) +
             (selected_aug->get_effect() >= 0 ? " +" : " ") + 
             tostring(selected_aug->get_effect()));
-         set_color(COLOR_WHITE,COLOR_BLACK,1);
 
-         mvaddstr(6,0,"Description");
+         set_color(COLOR_WHITE,COLOR_BLACK,1);
+         mvaddstr(5, 0, "Chance at Success: ");
+         int skills = cr->get_skill(SKILL_SCIENCE) + 0.5 * cr->get_skill(SKILL_FIRSTAID);
+         int difficulty = selected_aug->get_difficulty();
+         set_color(COLOR_WHITE, COLOR_BLACK, 0);
+         addstr(to_string(100 * skills / difficulty));
+
+         mvaddstr(7,0,"Description");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         mvaddstr(7,0,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
+         mvaddstr(8,0,"컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴컴");
 
          vector<string> desc;
          split_string(selected_aug->get_description(),' ',desc);
 
          int chars_left=50;
-         int line = 8;
+         int line = 9;
          for(int i=0;i<desc.size();i++)
          {
             if(desc[i].length()>50) continue;
@@ -1845,10 +1851,8 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
             if(blood_saved>100) blood_saved = 100;
             victim->blood-=100 - blood_saved;
 
-            if(cr->get_skill(SKILL_SCIENCE)<8&&
-               !LCSrandom(5*cr->get_skill(SKILL_SCIENCE))&&
-               cr->get_skill(SKILL_FIRSTAID)<8&&
-               !LCSrandom(5*cr->get_skill(SKILL_FIRSTAID)))
+            if(skills < difficulty &&
+               LCSrandom((double)100 * difficulty / skills) < 100)
             {
                unsigned char* wound = nullptr;
 

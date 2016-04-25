@@ -18,19 +18,21 @@ class AugmentType {
       int get_max_age() const { return max_age_; }
       int get_min_age() const { return min_age_; }
       int get_cost() const { return cost_; }
+      int get_difficulty() const { return difficulty_; }
       std::string get_description() const { return description_; }
 
-		static int number_of_augmenttypes;
-	private:
-		std::string idname_;
+      static int number_of_augmenttypes;
+   private:
+      std::string idname_;
       std::string name_;
       int attribute_;
       int effect_;
       int max_age_;
       int min_age_;
       long id_;
-	   short type_;
+      short type_;
       int cost_;
+      int difficulty_;
       std::string description_;
 };
 
