@@ -24,3 +24,4 @@ config.h.in
 /workspaces/game.sdf
 /workspaces/game.v11.suo
 /workspaces/Release/*.pdb
+game.layout
