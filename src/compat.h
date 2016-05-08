@@ -64,7 +64,7 @@
 
 #include "common.h" /* include this prior to checking if WIN32 is defined */
 
-#ifdef Linux
+#ifdef __linux__
  // <http://msdn.microsoft.com/en-us/library/aa383751(VS.85).aspx>
  // <http://msdn.microsoft.com/en-us/library/s3f49ktz.aspx>
 
@@ -117,7 +117,7 @@ typedef PVOID HANDLE;
 int stricmp(const char *str1, const char *str2);
 #endif
 
-#ifdef Linux // BSD and SVr4 too
+#ifdef __linux__ // BSD and SVr4 too
 
 extern int init_alarm;
 extern struct itimerval timer_off;

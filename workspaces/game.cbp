@@ -3,7 +3,6 @@
 	<FileVersion major="1" minor="6" />
 	<Project>
 		<Option title="Liberal Crime Squad" />
-		<Option makefile_is_custom="1" />
 		<Option execution_dir="/home/brian/Desktop/Stuff/Games/Liberal-Crime-Squad/" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
@@ -25,6 +24,7 @@
 				<Compiler>
 					<Add option="-pedantic" />
 					<Add option="-Wall" />
+					<Add option="-std=c++11" />
 					<Add option="-g" />
 					<Add option="-Og" />
 				</Compiler>
@@ -68,8 +68,6 @@
 		</Build>
 		<Compiler>
 			<Add option="-std=c++11" />
-			<Add option="-mfpmath=sse" />
-			<Add option="-mtune=generic" />
 			<Add directory="../src" />
 			<Add directory="../src/pdcurses" />
 			<Add directory="../src/sdl" />
@@ -80,17 +78,10 @@
 			<Add directory="../src/sdl" />
 		</ResourceCompiler>
 		<Linker>
-			<Add option="-Wall" />
-			<Add option="-std=c++98" />
-			<Add option="-pedantic" />
-			<Add option="-mfpmath=sse" />
-			<Add option="-march=pentium3" />
-			<Add option="-mtune=generic" />
-			<Add option="-lmingw32" />
-			<Add option="-lSDL2main" />
 			<Add option="-lSDL2" />
+			<Add option="-lSDL2main" />
 			<Add option="-lSDL2_mixer" />
-			<Add library="../src/pdcurses/pdcurses.lib" />
+			<Add option="-lncurses" />
 			<Add directory="../src" />
 			<Add directory="../src/pdcurses" />
 			<Add directory="../src/sdl" />
@@ -120,6 +111,10 @@
 		<Unit filename="../src/compat.h" />
 		<Unit filename="../src/configfile.cpp" />
 		<Unit filename="../src/configfile.h" />
+		<Unit filename="../src/creature/augmentation.cpp" />
+		<Unit filename="../src/creature/augmentation.h" />
+		<Unit filename="../src/creature/augmenttype.cpp" />
+		<Unit filename="../src/creature/augmenttype.h" />
 		<Unit filename="../src/creature/creature.cpp" />
 		<Unit filename="../src/creature/creature.h" />
 		<Unit filename="../src/creature/creaturenames.cpp" />

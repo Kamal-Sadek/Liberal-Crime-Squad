@@ -907,7 +907,7 @@ void activate(Creature *cr)
                   cr->activity.type=ACTIVITY_STEALCARS;
                else if(!(cr->flag & CREATUREFLAG_WHEELCHAIR))
                   cr->activity.type=ACTIVITY_WHEELCHAIR;
-               break;            
+               break;
             case '5': {
                if(cr->get_skill(SKILL_SCIENCE)!=0) {
                   activityst oact=cr->activity;
@@ -1626,19 +1626,19 @@ vector<string>& split_string(const string &s, char delim, vector<string> &elems)
    for(char c:s) {
       if(c==' ')
       {
-         elems.push_back(oss.str()); 
+         elems.push_back(oss.str());
          oss.str(string());
       }
       else if(c=='\n')
       {
-         elems.push_back(oss.str()); 
-         elems.push_back(""); 
+         elems.push_back(oss.str());
+         elems.push_back("");
          oss.str(string());
       }
       else oss<<c;
    }
    elems.push_back(oss.str());
-   
+
    return elems;
 }
 
@@ -1682,7 +1682,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
             mvaddstr(y,49,temppool[p]->get_attribute(ATTRIBUTE_HEART,true));
             mvaddstr(y,62,temppool[p]->age);
             printhealthstat(*temppool[p],y,31,TRUE);
-         }      
+         }
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(22,0);
@@ -1712,7 +1712,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          if(c=='x'||c==ESC||c==SPACEBAR||c==ENTER) return;
 
          break;
-         
+
 
 
          case 1: //PAGE 1, selecting an augmentation
@@ -1736,7 +1736,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          }
 
          if(aug_c>='a'&&aug_c<='e'&&c>='a'&&c<='e')
-         {               
+         {
             aug_type.clear();
             if(victim->get_augmentation(aug_c-'a').type==-1) //False if already augmented on that bodypart.
             {
@@ -1745,7 +1745,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
                   if(augmenttype[x]->get_type()==aug_c-'a'&&
                         (augmenttype[x]->get_max_age()==-1||victim->age<=augmenttype[x]->get_max_age())&&
                         (augmenttype[x]->get_min_age()==-1||victim->age>=augmenttype[x]->get_min_age())&&
-                        augmenttype[x]->get_cost() <= ledger.get_funds()) 
+                        augmenttype[x]->get_cost() <= ledger.get_funds())
                         //TODO: Make it so that if you don't have money, it just grays it out, not just not show it
                      aug_type.push_back(augmenttype[x]);
                }
@@ -1771,7 +1771,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 
          c = getkey();
          if(c>='a'&&c<='e') aug_c=c;
-         else if(c==ESC)return; 
+         else if(c==ESC)return;
          else if(c=='x'||c==SPACEBAR||c==ENTER) {cur_step=0;aug_type.clear();aug_c=0;}
          break;
 
@@ -1794,9 +1794,9 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          mvaddstr(4, 0, "Effect: ");
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          string selected_attribute = attribute_enum_to_string(selected_aug->get_attribute());
-         addstr((char)(toupper(selected_attribute.at(0))) + 
+         addstr((char)(toupper(selected_attribute.at(0))) +
             selected_attribute.substr(1) +
-            (selected_aug->get_effect() >= 0 ? " +" : " ") + 
+            (selected_aug->get_effect() >= 0 ? " +" : " ") +
             tostring(selected_aug->get_effect()));
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -1841,7 +1841,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          mvaddstr(23,1,"Are you sure? (y/n)");
 
          c = getkey();
-         if(c=='y') 
+         if(c=='y')
          {
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             mvaddstr(23,1,"Press any key to return");
@@ -1886,8 +1886,8 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
 
                case AUGMENTATION_SKIN:
                   if(LCSrandom(2))
-                     wound=&victim->wound[BODYPART_HEAD];   
-                  else 
+                     wound=&victim->wound[BODYPART_HEAD];
+                  else
                      wound=&victim->wound[BODYPART_BODY];
                   victim->blood-=50;
                   break;
@@ -1960,7 +1960,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
             return;
          }
 
-         else if(c==ESC)return; 
+         else if(c==ESC)return;
          else if(c=='x'||c==SPACEBAR||c==ENTER||c=='n') {cur_step=1;selected_aug=nullptr;}
          break;
       }

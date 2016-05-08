@@ -15,6 +15,10 @@
 #ifndef COMMON_H_INCLUDED
 #define COMMON_H_INCLUDED
 
+#ifdef __linux__
+#define NCURSES
+#endif
+
 // uncomment this next line if you want to disable SDL (which is for music/sound)
 //#define DONT_INCLUDE_SDL
 
@@ -146,7 +150,7 @@
 #ifdef GO_PORTABLE
    #include <time.h>
 
-   #ifdef Linux // And BSD and SVr4
+   #ifdef __linux__ // And BSD and SVr4
       /*
       This #undef addstr...It exists only to make the overloaded addstr
          work in linux (because otherwise it clashes with ncurses).
