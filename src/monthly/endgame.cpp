@@ -380,7 +380,7 @@ void reaganify(char canseethings)
                break;
          }
       }
-      reset();
+      reset(savefile_name);
       viewhighscores(MUSIC_REAGANIFIED);
       end_game();
    }
@@ -589,7 +589,7 @@ void stalinize(char canseethings)
                break;
          }
       }
-      reset();
+      reset(savefile_name);
       viewhighscores(MUSIC_STALINIZED);
       end_game();
    }

@@ -1328,9 +1328,9 @@ void savegame(const string& filename);
 /* loads the game from save.dat */
 char load(const string& filename);
 /* deletes save.dat (used on endgame and for invalid save version) */
-void reset();
-/* check if file exists */ 
-bool file_exists(const std::string& filename);
+void reset(const string& filename);
+/* check if file exists */
+bool file_exists(const string& filename);
 
 
 /*******************************************************************************

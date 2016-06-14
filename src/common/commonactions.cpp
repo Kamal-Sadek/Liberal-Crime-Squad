@@ -63,7 +63,7 @@ char endcheck(char cause)
       }
       else savehighscore(cause); // the reason we lost was specified in the function call
       // You just lost the game!
-      reset();
+      reset(savefile_name);
       viewhighscores();
       end_game();
       return true;

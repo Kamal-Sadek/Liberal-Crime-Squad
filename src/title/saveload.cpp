@@ -379,7 +379,7 @@ char load(const string& filename)
       {
             LCSCloseFile(h);
 
-            reset();
+            reset(savefile_name);
 
             return 0;
          }
@@ -833,10 +833,8 @@ char load(const string& filename)
 }
 
 /* deletes save.dat (used on endgame and for invalid save version) */
-void reset()
+void reset(const string& filename)
 {
-   for(string filename : LCSSaveFiles()) {
-      if(file_exists(filename)) LCSDeleteFile(filename.c_str(),LCSIO_PRE_HOME);
-   }
+	if(file_exists(filename)) LCSDeleteFile(filename.c_str(),LCSIO_PRE_HOME);
 }
 

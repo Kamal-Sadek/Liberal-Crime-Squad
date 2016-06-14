@@ -344,7 +344,7 @@ void passmonth(char &clearformess,char canseethings)
    {
       liberalagenda(1);
       savehighscore(END_WON);
-      reset();
+      reset(savefile_name);
       viewhighscores();
       end_game();
    }
@@ -380,7 +380,7 @@ void passmonth(char &clearformess,char canseethings)
       getkey();
 
       savehighscore(END_DISBANDLOSS);
-      reset();
+      reset(savefile_name);
       viewhighscores();
       end_game();
    }

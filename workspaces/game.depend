@@ -814,3 +814,818 @@
 1461562323 source:/home/brian/Desktop/Stuff/Games/Liberal-Crime-Squad/src/creature/augmenttype.cpp
 	<externs.h>
 
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/basemode/activate.cpp
+	<externs.h>
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/externs.h
+	<includes.h>
+
+1465938742 /home/kamal/Games/Liberal-Crime-Squad/src/includes.h
+	"common.h"
+	"lcsio.h"
+	"compat.h"
+	"cursesmovie.h"
+	"cursesgraphics.h"
+	"politics/law.h"
+	"politics/alignment.h"
+	"items/itemtype.h"
+	"items/cliptype.h"
+	"items/weapontype.h"
+	"items/armortype.h"
+	"items/loottype.h"
+	"items/item.h"
+	"items/clip.h"
+	"items/weapon.h"
+	"items/armor.h"
+	"items/loot.h"
+	"items/money.h"
+	"creature/creature.h"
+	"creature/creaturetype.h"
+	"creature/augmentation.h"
+	"creature/augmenttype.h"
+	"vehicle/vehicletype.h"
+	"vehicle/vehicle.h"
+	"locations/locations.h"
+	"configfile.h"
+	"sitemode/sitemap.h"
+	"tinydir.h"
+	"sitemode/shop.h"
+	"news/news.h"
+	"log/log.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/common.h
+	<config.h>
+	<langinfo.h>
+	<windows.h>
+	<io.h>
+	<direct.h>
+	<iostream>
+	<fstream>
+	<vector>
+	<map>
+	<ciso646>
+	<iostream>
+	<fstream>
+	<vector>
+	<map>
+	<iostream.h>
+	<fstream.h>
+	"vector.h"
+	"map.h"
+	<curses.h>
+	<vector>
+	<map>
+	<iostream>
+	<fstream>
+	<ctype.h>
+	<unistd.h>
+	<ctype.h>
+	<xcurses.h>
+	<ncurses.h>
+	<ncursesw/ncurses.h>
+	<ncurses.h>
+	<curses.h>
+	<time.h>
+	<sys/time.h>
+	<signal.h>
+	<string.h>
+	<stdlib.h>
+	<stdio.h>
+	<stdarg.h>
+	<sys/types.h>
+	<sys/stat.h>
+	<sstream>
+	<deque>
+	<algorithm>
+	<queue>
+	<math.h>
+	<cstring>
+	"cmarkup/Markup.h"
+	<locale.h>
+	<mbctype.h>
+	"sdl/SDL.h"
+	"sdl/SDL_mixer.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/vector.h
+	<climits>
+	<memory>
+	<stdexcept>
+	<xutility>
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/pdcurses/curses.h
+	<stdarg.h>
+	<stddef.h>
+	<stdio.h>
+	<wchar.h>
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/cmarkup/Markup.h
+	<stdlib.h>
+	<string.h>
+	<string>
+	<afx.h>
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL.h
+	"SDL_main.h"
+	"SDL_stdinc.h"
+	"SDL_assert.h"
+	"SDL_atomic.h"
+	"SDL_audio.h"
+	"SDL_clipboard.h"
+	"SDL_cpuinfo.h"
+	"SDL_endian.h"
+	"SDL_error.h"
+	"SDL_events.h"
+	"SDL_filesystem.h"
+	"SDL_joystick.h"
+	"SDL_gamecontroller.h"
+	"SDL_haptic.h"
+	"SDL_hints.h"
+	"SDL_loadso.h"
+	"SDL_log.h"
+	"SDL_messagebox.h"
+	"SDL_mutex.h"
+	"SDL_power.h"
+	"SDL_render.h"
+	"SDL_rwops.h"
+	"SDL_system.h"
+	"SDL_thread.h"
+	"SDL_timer.h"
+	"SDL_version.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_main.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_stdinc.h
+	"SDL_config.h"
+	<sys/types.h>
+	<stdio.h>
+	<stdlib.h>
+	<stddef.h>
+	<stdarg.h>
+	<stdlib.h>
+	<malloc.h>
+	<stddef.h>
+	<stdarg.h>
+	<memory.h>
+	<string.h>
+	<strings.h>
+	<inttypes.h>
+	<stdint.h>
+	<ctype.h>
+	<math.h>
+	<float.h>
+	<iconv.h>
+	"begin_code.h"
+	<alloca.h>
+	<malloc.h>
+	<malloc.h>
+	<malloc.h>
+	<stdlib.h>
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_config.h
+	"SDL_platform.h"
+	"SDL_config_premake.h"
+	"SDL_config_windows.h"
+	"SDL_config_winrt.h"
+	"SDL_config_macosx.h"
+	"SDL_config_iphoneos.h"
+	"SDL_config_android.h"
+	"SDL_config_psp.h"
+	"SDL_config_minimal.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_platform.h
+	"AvailabilityMacros.h"
+	"TargetConditionals.h"
+	<winapifamily.h>
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/begin_code.h
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/close_code.h
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_config_windows.h
+	"SDL_platform.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_config_winrt.h
+	"SDL_platform.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_config_macosx.h
+	"SDL_platform.h"
+	<AvailabilityMacros.h>
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_config_iphoneos.h
+	"SDL_platform.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_config_android.h
+	"SDL_platform.h"
+	<stdarg.h>
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_config_psp.h
+	"SDL_platform.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_config_minimal.h
+	"SDL_platform.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_assert.h
+	"SDL_config.h"
+	"begin_code.h"
+	<signal.h>
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_atomic.h
+	"SDL_stdinc.h"
+	"SDL_platform.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_audio.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_endian.h"
+	"SDL_mutex.h"
+	"SDL_thread.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_error.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_endian.h
+	"SDL_stdinc.h"
+	<endian.h>
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_mutex.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_thread.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_atomic.h"
+	"SDL_mutex.h"
+	"begin_code.h"
+	<process.h>
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_rwops.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_clipboard.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_cpuinfo.h
+	"SDL_stdinc.h"
+	<intrin.h>
+	<intrin.h>
+	<altivec.h>
+	<mmintrin.h>
+	<mm3dnow.h>
+	<xmmintrin.h>
+	<emmintrin.h>
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_events.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"SDL_keyboard.h"
+	"SDL_mouse.h"
+	"SDL_joystick.h"
+	"SDL_gamecontroller.h"
+	"SDL_quit.h"
+	"SDL_gesture.h"
+	"SDL_touch.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_video.h
+	"SDL_stdinc.h"
+	"SDL_pixels.h"
+	"SDL_rect.h"
+	"SDL_surface.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_pixels.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_rect.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_pixels.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_surface.h
+	"SDL_stdinc.h"
+	"SDL_pixels.h"
+	"SDL_rect.h"
+	"SDL_blendmode.h"
+	"SDL_rwops.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_blendmode.h
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_keyboard.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_keycode.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_keycode.h
+	"SDL_stdinc.h"
+	"SDL_scancode.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_scancode.h
+	"SDL_stdinc.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_mouse.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_joystick.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_gamecontroller.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_rwops.h"
+	"SDL_joystick.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_quit.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_gesture.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"SDL_touch.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_touch.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_filesystem.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_haptic.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"SDL_joystick.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_hints.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_loadso.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_log.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_messagebox.h
+	"SDL_stdinc.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_power.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_render.h
+	"SDL_stdinc.h"
+	"SDL_rect.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_system.h
+	"SDL_stdinc.h"
+	"SDL_keyboard.h"
+	"SDL_render.h"
+	"SDL_video.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_timer.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_version.h
+	"SDL_stdinc.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sdl/SDL_mixer.h
+	"SDL_stdinc.h"
+	"SDL_rwops.h"
+	"SDL_audio.h"
+	"SDL_endian.h"
+	"SDL_version.h"
+	"begin_code.h"
+	"close_code.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/lcsio.h
+	"common.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/compat.h
+	"common.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/cursesmovie.h
+	"common.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/cursesgraphics.h
+	"common.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/politics/law.h
+	"common.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/politics/alignment.h
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/items/itemtype.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/items/cliptype.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/items/weapontype.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/items/armortype.h
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/items/loottype.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/items/item.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/items/clip.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/items/weapon.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/items/armor.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/items/loot.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/items/money.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/creature/creature.h
+	"common.h"
+	"augmentation.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/creature/augmentation.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/creature/creaturetype.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/creature/augmenttype.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/vehicle/vehicletype.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/vehicle/vehicle.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/locations/locations.h
+	"common.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/configfile.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sitemode/sitemap.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/tinydir.h
+	<errno.h>
+	<stdlib.h>
+	<string.h>
+	<windows.h>
+	<dirent.h>
+	<libgen.h>
+	<sys/stat.h>
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/sitemode/shop.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/news/news.h
+	"includes.h"
+
+1464544118 /home/kamal/Games/Liberal-Crime-Squad/src/log/log.h
+	"includes.h"
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/basemode/activate_sleepers.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/basemode/baseactions.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/basemode/basemode.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/basemode/liberalagenda.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/basemode/reviewmode.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/cmarkup/Markup.cpp
+	<stdio.h>
+	"Markup.h"
+	<errno.h>
+	<iconv.h>
+	<windows.h>
+	<mbstring.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/combat/chase.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/combat/fight.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/combat/haulkidnap.cpp
+	<externs.h>
+
+1465938669 source:/home/kamal/Games/Liberal-Crime-Squad/src/common/commonactions.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/common/commondisplay.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/common/consolesupport.cpp
+	<externs.h>
+	<term.h>
+	<ncursesw/term.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/common/equipment.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/common/getnames.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/common/help.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/common/misc.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/common/stringconversion.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/common/translateid.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/compat.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/configfile.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/creature/augmentation.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/creature/augmenttype.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/creature/creature.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/creature/creaturenames.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/creature/creaturetype.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/creature/creaturetypes.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/cursesgraphics.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/cursesmovie.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/daily/activities.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/daily/daily.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/daily/date.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/daily/interrogation.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/daily/recruit.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/daily/shopsnstuff.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/daily/siege.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/game.cpp
+	<includes.h>
+	<ctime>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/items/armor.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/items/armortype.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/items/clip.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/items/cliptype.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/items/item.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/items/itemtype.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/items/loot.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/items/loottype.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/items/money.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/items/weapon.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/items/weapontype.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/lcsio.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/locations/locations.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/locations/world.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/log/log.cpp
+	<externs.h>
+
+1465941895 source:/home/kamal/Games/Liberal-Crime-Squad/src/monthly/endgame.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/monthly/justice.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/monthly/lcsmonthly.cpp
+	<externs.h>
+
+1465941921 source:/home/kamal/Games/Liberal-Crime-Squad/src/monthly/monthly.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/monthly/sleeper_update.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/news/ads.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/news/headline.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/news/layout.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/news/majorevent.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/news/news.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/news/squadstory_text.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/politics/law.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/politics/politics.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/sitemode/advance.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/sitemode/mapspecials.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/sitemode/miscactions.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/sitemode/newencounter.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/sitemode/shop.cpp
+	<externs.h>
+	<functional>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/sitemode/sitedisplay.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/sitemode/sitemap.cpp
+	<externs.h>
+	"sitemap.h"
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/sitemode/sitemode.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/sitemode/stealth.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/sitemode/talk.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/title/highscore.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/title/initfile.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/title/newgame.cpp
+	<externs.h>
+
+1465942535 source:/home/kamal/Games/Liberal-Crime-Squad/src/title/saveload.cpp
+	<externs.h>
+
+1465942306 source:/home/kamal/Games/Liberal-Crime-Squad/src/title/titlescreen.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/vehicle/vehicle.cpp
+	<externs.h>
+
+1464544118 source:/home/kamal/Games/Liberal-Crime-Squad/src/vehicle/vehicletype.cpp
+	<externs.h>
+

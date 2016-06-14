@@ -614,15 +614,15 @@ void mode_title()
       choose_savefile_name();
       setup_newgame();
       makecharacter();
-   } 
+   }
    else
-   {      
+   {
       int p=0, y=2, page=0;
 
-      while(true) 
+      while(true)
       {
          erase();
-         if(to_delete) 
+         if(to_delete)
          {
             set_color(COLOR_YELLOW,COLOR_RED,1);
             mvaddstr(0,0, "Delete a Save File");
