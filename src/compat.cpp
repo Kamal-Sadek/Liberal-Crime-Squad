@@ -76,7 +76,7 @@ int stricmp(const char *str1,const char *str2)
 }
 #endif
 
-#ifdef __linux__ // BSD and SVr4 too
+#if defined __linux__ || defined __APPLE__ // BSD and SVr4 too
 
 int init_alarm=0; // Flag to indicate if alarmHandler() has been registered.
 struct itimerval timer_off,timer_on;
