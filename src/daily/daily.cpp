@@ -35,7 +35,7 @@ void advanceday(char &clearformess,char canseethings)
    int w=0;
    //int l2;
 
-   //*JDS* Save the game to save.dat each day. :)
+   //*JDS* Save the game to save.dat each day. :) //TODO: Fix
    if(!disbanding) savegame(savefile_name);
 
    ledger.resetDailyAmounts();

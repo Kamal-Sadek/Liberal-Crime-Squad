@@ -20,7 +20,7 @@
     #pagekeys=page
 
 #Uncomment this to disable saving between days
-    #autosave=Off
+    #autosave=On
 
 #Uncomment this to temporarily disable ClearType when the game is running
 #This fixes glitches in the display, thin vertical lines, a bug in ClearType

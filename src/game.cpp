@@ -210,7 +210,7 @@ char foughtthisround=0;
 short interface_pgup='[';
 short interface_pgdn=']';
 
-bool autosave=false;
+bool autosave;
 string savefile_name;
 
 int day=1;
@@ -257,15 +257,10 @@ int main(int argc, char* argv[])
    time_t t = time(0);
    struct tm *now = localtime(&t); //Do not need to deallocate this. Statically allocated by system
    char datetime[41];
-   sprintf(datetime, "---------%i-%02i-%02i %02i:%02i:%02i---------\n\n\n", 
+   sprintf(datetime, "---------%i-%02i-%02i %02i:%02i:%02i---------\n\n\n",
       now->tm_year+1900, now->tm_mon+1, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec); //YYYY-MM-DD HH:MM:SS format
 
    gamelog.log(string("\n\n\n---------- PROGRAM STARTED ----------\n") + datetime);
-
-
-
-   char file_name[13];
-   FILE *file;
 
    music.play(MUSIC_TITLEMODE); // initialize music and play title mode song (do this BEFORE displaying anything on the screen, but AFTER initializing artdir and homedir)
 

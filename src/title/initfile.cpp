@@ -47,6 +47,9 @@ void setconfigoption(std::string name, std::string value)
    {
       if(stringtobool(value)==0)
          autosave=false;
+      else
+         autosave=true;
+
    }
    #ifdef WIN32
    else if(name == "fixcleartype") // this setting is only true if set in the file AND running Windows XP or later, otherwise it's false

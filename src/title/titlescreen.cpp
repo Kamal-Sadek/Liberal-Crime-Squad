@@ -702,5 +702,5 @@ void mode_title()
    mode=GAMEMODE_BASE;
    mode_base();
 
-   savegame(savefile_name);
+   if(!disbanding) savegame(savefile_name);
 }
