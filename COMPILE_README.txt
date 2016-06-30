@@ -118,6 +118,8 @@ To get SVN:
 To get autoconf: (in terminal):
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   brew install automake
+To get SDL2 (for audio) (in terminal):
+  brew install sdl2 sdl2_mixer
 To build LCS:
   svn co http://svn.code.sf.net/p/lcsgame/code/trunk lcsgame
   cd lcsgame/
