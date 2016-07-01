@@ -548,7 +548,7 @@ void title() {
    strcpy(str,"http://sourceforge.net/projects/lcsgame/");
    move(17,39-((len(str)-1)>>1));
    addstr(str);
-   strcpy(str,"http://www.bay12games.com/forum/index.php?board=3.0");
+   strcpy(str,"http://www.bay12forums.com/smf/index.php?board=3.0");
    move(18,39-((len(str)-1)>>1));
    addstr(str);
    strcpy(str,"http://lcs.wikidot.com/");
