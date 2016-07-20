@@ -153,7 +153,7 @@ void pause_ms(int t)
 }
 
 // FNV-1a 32-bit hash function (fast and effective) -- helper function for getSeed()
-void fnvHash(unsigned long &fnv_hash,unsigned long num)
+void fnvHash(unsigned long &fnv_hash,intptr_t num)
 {
    fnv_hash*=16777619UL; // multiply by the FNV-1a hash's 32-bit prime
    fnv_hash&=0xffffffffUL; // keep the number 32-bit (we could be on a 64-bit system)
