@@ -1,6 +1,8 @@
 SUBDIRS = src
 lcsdir = $(datadir)/lcs
 artdir = $(lcsdir)/art
+mididir = $(artdir)/midi
+oggdir = $(artdir)/ogg
 appdir = $(datadir)/applications
 
 dist_art_DATA = art/abort.cmv art/anchor.cmv art/glamshow.cmv art/lacops.cmv\
@@ -22,8 +24,9 @@ dist_art_DATA = art/abort.cmv art/anchor.cmv art/glamshow.cmv art/lacops.cmv\
  art/mapCSV_NuclearPlant_Specials.csv art/mapCSV_NuclearPlant_Tiles.csv\
  art/mapCSV_WhiteHouse_Specials.csv art/mapCSV_WhiteHouse_Tiles.csv\
  art/mapCSV_WhiteHouse2_Specials.csv art/mapCSV_WhiteHouse2_Tiles.csv\
- art/mapCSV_WhiteHouse3_Specials.csv art/mapCSV_WhiteHouse3_Tiles.csv\
- \
+ art/mapCSV_WhiteHouse3_Specials.csv art/mapCSV_WhiteHouse3_Tiles.csv
+
+dist_midi_DATA = \
  art/midi/abort.mid art/midi/activate.mid art/midi/alarmed.mid art/midi/anchor.mid\
  art/midi/basemode.mid art/midi/carchase.mid art/midi/cartheft.mid art/midi/dating.mid\
  art/midi/defeat.mid art/midi/disbanded.mid art/midi/elections.mid art/midi/finances.mid\
@@ -32,8 +35,9 @@ dist_art_DATA = art/abort.cmv art/anchor.cmv art/glamshow.cmv art/lacops.cmv\
  art/midi/newspaper.mid art/midi/reaganified.mid art/midi/recruiting.mid art/midi/reviewmode.mid\
  art/midi/shopping.mid art/midi/siege.mid art/midi/sitemode.mid art/midi/sleepers.mid\
  art/midi/stalinized.mid art/midi/stopevil.mid art/midi/suspicious.mid art/midi/titlemode.mid\
- art/midi/trial.mid art/midi/victory.mid\
- \
+ art/midi/trial.mid art/midi/victory.mid
+
+dist_ogg_DATA = \
  art/ogg/abort.ogg art/ogg/activate.ogg art/ogg/alarmed.ogg art/ogg/anchor.ogg\
  art/ogg/basemode.ogg art/ogg/carchase.ogg art/ogg/cartheft.ogg art/ogg/dating.ogg\
  art/ogg/defeat.ogg art/ogg/disbanded.ogg art/ogg/elections.ogg art/ogg/finances.ogg\
