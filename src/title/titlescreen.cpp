@@ -650,9 +650,9 @@ void mode_title()
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(22,0);
-         if(!to_delete) addstr("Press a Letter to Select a Save File");
-         else addstr("Press a Letter to Delete a Save File");
-         addstr(", V to switch, or X to quit");
+         if(!to_delete) addstr("Press a Letter to Select a Save File, V to switch to delete");
+         else addstr("Press a Letter to Delete a Save File, V to switch to select");
+         addstr(", or X to quit");
          move(23,0);
          addpagestr();
 
