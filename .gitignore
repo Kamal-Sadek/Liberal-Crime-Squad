@@ -12,6 +12,7 @@ depcomp
 install-sh
 missing
 .deps/
+build/
 stamp-h1
 compile
 config.log
@@ -26,3 +27,4 @@ config.h.in
 /workspaces/Release/*.pdb
 game.layout
 game.depend
+
