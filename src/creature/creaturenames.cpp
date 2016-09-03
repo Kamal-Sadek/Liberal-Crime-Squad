@@ -31,8 +31,16 @@
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
 
-#include <externs.h>
+//#include <includeExtern.h>
 
 // Add an age estimate to a person's name
 void add_age(Creature& person)

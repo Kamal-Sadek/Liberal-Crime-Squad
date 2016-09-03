@@ -25,12 +25,52 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+translateid.cpp
+*/
+#include "common\\translateid.h"
+
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+//#include <includeNews.h>
+#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+extern vector<Location *> location;
+#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
+extern MusicClass music;
+extern int stat_dead;
 
 /* monthly - hold trial on a liberal */
+
 void trial(Creature &g)
 {
+	static const int number_of_liberal_juries = 3;
+	static const char* liberal_jury[number_of_liberal_juries] =	{
+		"The jury is Flaming Liberal.", 
+		"A few of the jurors are closet Socialists.",
+		"One of the jurors flashes a SECRET LIBERAL HAND SIGNAL when no one is looking."
+	};
+	static const char* conservative_jury[] =	{
+		"Such a collection of Conservative jurors has never before been assembled.", 
+		"One of the accepted jurors is a Conservative activist.", 
+		"A few of the jurors are members of the KKK.", 
+		"The jury is frighteningly Conservative."
+	};
+
    music.play(MUSIC_TRIAL);
    // If their old base is no longer under LCS control, wander back to the
    // homeless shelter instead.
@@ -587,12 +627,10 @@ void trial(Creature &g)
       else if(jury<=-29)
       {
          set_color(COLOR_GREEN,COLOR_BLACK,1);
-         switch(LCSrandom(4))
+         switch(LCSrandom(number_of_liberal_juries + 1))
          {
             case 0:addstr(g.name);addstr("'s best friend from childhood is a juror.", gamelog);break;
-            case 1:addstr("The jury is Flaming Liberal.", gamelog);break;
-            case 2:addstr("A few of the jurors are closet Socialists.", gamelog);break;
-            case 3:addstr("One of the jurors flashes a SECRET LIBERAL HAND SIGNAL when no one is looking.", gamelog);break;
+			default:addstr(pickrandom(liberal_jury), gamelog); break;
          }
          gamelog.newline();
       }
@@ -602,13 +640,7 @@ void trial(Creature &g)
       else
       {
          set_color(COLOR_YELLOW,COLOR_BLACK,1);
-         switch(LCSrandom(4))
-         {
-            case 0:addstr("Such a collection of Conservative jurors has never before been assembled.", gamelog);break;
-            case 1:addstr("One of the accepted jurors is a Conservative activist.", gamelog);break;
-            case 2:addstr("A few of the jurors are members of the KKK.", gamelog);break;
-            case 3:addstr("The jury is frighteningly Conservative.", gamelog);break;
-         }
+		 addstr(pickrandom(conservative_jury), gamelog);
       }
       gamelog.newline();
 

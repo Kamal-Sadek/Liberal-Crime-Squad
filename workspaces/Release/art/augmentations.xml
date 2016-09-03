@@ -1,0 +1,125 @@
+<augmentations>
+    <!-- Clarification
+    <augmenttype idname="(string)"> idname is used to identify the augmentation type
+        <name> (string) The name of the augmentation
+        <type> (head/body/arms/legs/skin) Which bodypart to install augmentation
+            Can only have one augmentation per bodypart
+        <attribute> (strength/intelligence/wisdom/agility/health/charisma/heart)
+            Which attribute gets boosted by augmentation
+        <effect> (int) (+/-) how much the attribute gets boosted or weakened
+        <max_age> (int) (optional) maximum age of victim that can accept augmentation
+            if no value supplied, there is no maximum age
+        <min_age> (int) (optional) minimum age of victim that can accept augmentation
+            if no value supplied, there is no minimum age
+        <description> (string) displayed when selecting an augmentation
+        <cost> (int) (optional) Specifies the cost of the augmentation
+        <difficulty> (int) (1 easiest - 10 hardest) chance at failure. default is 5
+    </augmenttype>
+    -->
+
+    <augmenttype idname="AUGMENTATION_SUPER_SPEED">
+        <name>Super Speed</name>
+        <type>legs</type>
+        <attribute>agility</attribute>
+        <effect>3</effect>
+        <cost>5000</cost>
+        <description>Replacing the legs of a Liberal with mechanical ones would increase their speed and reaction extensively.</description>
+    </augmenttype>
+
+    <augmenttype idname="AUGMENTATION_SUPER_SQUATS">
+        <name>Super Squats</name>
+        <type>legs</type>
+        <attribute>strength</attribute>
+        <effect>2</effect>
+        <cost>3000</cost>
+        <description>Iron is a vital chemical for humans, so by infusing the legs of this Liberal with steel, they will be more ready than ever to take on any Conservative challenge that they will run into.</description>
+    </augmenttype>
+
+    <augmenttype idname="AUGMENTATION_TONED_CALVES">
+        <name>Toned Calves</name>
+        <type>legs</type>
+        <attribute>charisma</attribute>
+        <effect>2</effect>
+        <cost>2500</cost>
+        <description>Our scientists have found the ultimate chemical formula that gives a Liberal the ultimate tanned calves. Behold, may all who lay eyes upon them be trapped by their beauty.</description>
+    </augmenttype>
+
+    <augmenttype idname="AUGMENTATION_MIGHTY_STRENGTH">
+        <name>Mighty Strength</name>
+        <type>arms</type>
+        <attribute>strength</attribute>
+        <effect>3</effect>
+        <cost>4000</cost>
+        <description>We can artificially stimulate the muscles in a Liberals arms, and make them stronger and more powerful than ever before.</description>
+    </augmenttype>
+
+    <augmenttype idname="AUGMENTATION_SLEEVE_TATTOOS">
+        <name>Sleeve Tattoos</name>
+        <type>arms</type>
+        <attribute>heart</attribute>
+        <effect>2</effect>
+        <cost>20</cost>
+        <description>By covering the arms of a Liberal with these tattoos, which are laced with a special compound, they will be even more ready to devote their lives to the liberal cause.</description>
+    </augmenttype>
+
+    <augmenttype idname="AUGMENTATION_INCREASED_AWARENESS">
+        <name>Increased Awareness</name>
+        <type>head</type>
+        <attribute>charisma</attribute>
+        <effect>3</effect>
+        <description>By augmenting a Liberal's language centers, we can give them increased language processing and awareness when dealing with other people.</description>
+    </augmenttype>
+
+    <augmenttype idname="AUGMENTATION_NEURAL_FEEDBACK">
+        <name>Faster Neural Feedback</name>
+        <type>head</type>
+        <attribute>agility</attribute>
+        <effect>2</effect>
+        <max_age>20</max_age>
+        <cost>4000</cost>
+        <description>By supplying the brain cells with a constant source of methamphetamines, electrical signals increase in speed drastically.</description>
+    </augmenttype>
+
+    <augmenttype idname="AUGMENTATION_BRAIN_JUICE">
+        <name>Brain Juice</name>
+        <type>head</type>
+        <attribute>intelligence</attribute>
+        <effect>2</effect>
+        <description>Our Liberal Scientists have developed a pill that, when taken twice a day (once in the morning and once in the evening with warm glass of Liberal Milk), increases brain power ten-fold.</description>
+    </augmenttype>
+
+    <augmenttype idname="AUGMENTATION_HARDENED_SKIN">
+        <name>Hardened Skin</name>
+        <type>skin</type>
+        <attribute>health</attribute>
+        <effect>3</effect>
+        <description>Human skin has far outlived its usefulness in an evolutionary aspect, not able to stop even the smallest of bullets. Therefore, we should remove the skin of a Liberal, and encase them in a metal shell!</description>
+    </augmenttype>
+
+    <augmenttype idname="AUGMENTATION_THICK_SKIN">
+        <name>Thick Skin</name>
+        <type>skin</type>
+        <attribute>wisdom</attribute>
+        <effect>-3</effect>
+        <description>By enhancing this Liberal's skin, they will be better prepared to fight off the words of the Conservative Swine, and less likely to be brainwashed to their side.</description>
+    </augmenttype>
+
+    <augmenttype idname="AUGMENTATION_GORILLA_HEART">
+        <name>Gorilla Heart</name>
+        <type>body</type>
+        <attribute>heart</attribute>
+        <effect>3</effect>
+        <cost>1000</cost>
+        <description>Numorous Liberal Reports have shown that by transplanting a gorilla heart into the body of an augmentee, their Liberal Devotion increases tenfold!</description>
+    </augmenttype>
+
+    <augmenttype idname="AUGMENTATION_ROCK_HARD_ABS">
+        <name>Rock Hard Abs</name>
+        <type>body</type>
+        <attribute>strength</attribute>
+        <effect>2</effect>
+        <cost>999</cost>
+        <description>These abs are the result of centuries of Liberal science, perfected to the epitomy of all abs. They increase your core strength one hundred fold.</description>
+    </augmenttype>
+
+</augmentations>

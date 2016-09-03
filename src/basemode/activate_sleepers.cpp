@@ -15,8 +15,61 @@ This file is part of Liberal Crime Squad.                                       
     along with Liberal Crime Squad; if not, write to the Free Software              //
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
+#include <includeDefault.h>
+#include "configfile.h"
+#include <includeEnum.h>
+//#include <includeCommon.h>
+/*******************************************************************************
+*
+*                        The Main Game Screen: Base Mode
+*                        Folder: "basemode"
+*
+*******************************************************************************/
 
-#include <externs.h>
+
+/*
+activate_sleepers.cpp
+*/
+#include "basemode\\activate_sleepers.h"
+
+//#include <includeCommonCommon.h>
+
+/*******************************************************************************
+*
+*                                Common Stuff
+*                                Folder: "common"
+*
+*******************************************************************************/
+
+/*
+commondisplay.cpp
+*/
+#include "common\\commondisplay.h"
+
+/*
+commonactions.cpp
+*/
+#include "common\\commonactions.h"
+
+
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+/*
+getnames.cpp
+*/
+#include "common\\getnames.h"
+
+//
+
+//
+
+#include "includeActivate.h"
+#include "includeActivateB.h"
+extern vector<Location *> location;
+extern MusicClass music;
 
 /* base - activate sleepers */
 void activate_sleepers()

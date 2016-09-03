@@ -61,8 +61,19 @@
 * - another alternative is sprintf() variants or addstr_f() or mvaddstr_f() variants with "%d"
 * - many functions like addstr(), mvaddstr(), strcpy(), strcat(), etc. have been overloaded to accept integers directly
 */
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+//#include <includeCommon.h>
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
 
-#include <externs.h>
+//#include <includeTalk.h>
+#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
 
 #ifndef HAS_STRICMP
 // Portable equivalent of Windows stricmp() function.
@@ -76,7 +87,7 @@ int stricmp(const char *str1,const char *str2)
 }
 #endif
 
-#if defined __linux__ || defined __APPLE__ // BSD and SVr4 too
+#ifdef __linux__ // BSD and SVr4 too
 
 int init_alarm=0; // Flag to indicate if alarmHandler() has been registered.
 struct itimerval timer_off,timer_on;
@@ -153,7 +164,7 @@ void pause_ms(int t)
 }
 
 // FNV-1a 32-bit hash function (fast and effective) -- helper function for getSeed()
-void fnvHash(unsigned long &fnv_hash,intptr_t num)
+void fnvHash(unsigned long &fnv_hash,unsigned long num)
 {
    fnv_hash*=16777619UL; // multiply by the FNV-1a hash's 32-bit prime
    fnv_hash&=0xffffffffUL; // keep the number 32-bit (we could be on a 64-bit system)

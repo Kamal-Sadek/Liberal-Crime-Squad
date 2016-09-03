@@ -1,4 +1,24 @@
-#include <externs.h>
+
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+//#include <includeEnum.h>
+//#include <includeCommon.h>
+
+/*
+stringconversion.cpp
+*/
+#include "common\\stringconversion.h"
+
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+//#include <includeTalk.h>
+//#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
 
 Money::Money(const std::string& inputXml) : Item(inputXml)
 {

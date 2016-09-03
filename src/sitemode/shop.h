@@ -1,7 +1,9 @@
 #ifndef SHOP_H
 #define SHOP_H
 
-#include "includes.h"
+//#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
 
 class Shop;
 

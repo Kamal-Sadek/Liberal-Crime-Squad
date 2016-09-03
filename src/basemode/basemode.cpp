@@ -59,8 +59,36 @@ This file is part of Liberal Crime Squad.                                       
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
+#include <includeDefault.h>
+#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+translateid.cpp
+*/
+#include "common\\translateid.h"
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+#include <includeNews.h>
+#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+extern vector<Location *> location;
+#include <includeExternDefault.h>
+extern MusicClass music;
+#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+extern int stat_buys;
+extern int stat_burns;
+extern int year;
+extern Alignment exec[EXECNUM];
+extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 
 bool show_disbanding_screen(int& oldforcemonth)
 {
@@ -79,8 +107,8 @@ bool show_disbanding_screen(int& oldforcemonth)
    set_color(COLOR_WHITE,COLOR_BLACK,1);
    mvaddstr(0,0,getmonth(month)+" ");
    addstr(year);
-
-   signed char align=exec[EXEC_PRESIDENT];
+   // IsaacG ## Precise Fix Unknown #TODO
+   Alignment align= getAlignFromInt(exec[EXEC_PRESIDENT]);
    set_alignment_color(align,true);
    mvaddstr(1,0,"President: ");
    addstr(execname[EXEC_PRESIDENT]);addstr(", ");

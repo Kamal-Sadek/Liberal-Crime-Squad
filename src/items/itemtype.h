@@ -1,7 +1,9 @@
 #ifndef ITEMTYPE_H
 #define ITEMTYPE_H
 
-#include "includes.h"
+//#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
 
 class ItemType
 {

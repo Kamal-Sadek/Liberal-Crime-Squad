@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="debug2|Win32">
       <Configuration>debug2</Configuration>
@@ -24,17 +24,19 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -109,8 +111,8 @@
     </Midl>
     <ClCompile>
       <AdditionalOptions>/wd4996 %(AdditionalOptions)</AdditionalOptions>
-      <Optimization>MaxSpeed</Optimization>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>..\src\pdcurses;..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NOMINMAX;MARKUP_STL;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
@@ -124,6 +126,7 @@
       <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
       <WarningLevel>Level2</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
+      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -135,6 +138,7 @@
       <ProgramDatabaseFile>.\Release/crimesquad.pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug2|Win32'">
@@ -265,8 +269,59 @@
     <ClCompile Include="..\src\lcsio.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\basemode\activate.h" />
+    <ClInclude Include="..\src\basemode\activate_sleepers.h" />
+    <ClInclude Include="..\src\basemode\reviewmode.h" />
+    <ClInclude Include="..\src\combat\chase.h" />
+    <ClInclude Include="..\src\combat\fight.h" />
+    <ClInclude Include="..\src\combat\haulkidnap.h" />
+    <ClInclude Include="..\src\common\commonactions.h" />
+    <ClInclude Include="..\src\common\commondisplay.h" />
+    <ClInclude Include="..\src\common\consolesupport.h" />
+    <ClInclude Include="..\src\common\creature.h" />
+    <ClInclude Include="..\src\common\equipment.h" />
+    <ClInclude Include="..\src\common\getnames.h" />
+    <ClInclude Include="..\src\common\help.h" />
+    <ClInclude Include="..\src\common\stringconversion.h" />
+    <ClInclude Include="..\src\common\translateid.h" />
+    <ClInclude Include="..\src\compat.h" />
     <ClInclude Include="..\src\creature\augmentation.h" />
     <ClInclude Include="..\src\creature\augmenttype.h" />
+    <ClInclude Include="..\src\cursesgraphics.h" />
+    <ClInclude Include="..\src\cursesmovie.h" />
+    <ClInclude Include="..\src\daily\activities.h" />
+    <ClInclude Include="..\src\daily\daily.h" />
+    <ClInclude Include="..\src\daily\siege.h" />
+    <ClInclude Include="..\src\includeActivate.h" />
+    <ClInclude Include="..\src\includeActivateB.h" />
+    <ClInclude Include="..\src\includeAdvance.h" />
+    <ClInclude Include="..\src\includeAdvanceB.h" />
+    <ClInclude Include="..\src\includeCommon.h" />
+    <ClInclude Include="..\src\includeCommonCommon.h" />
+    <ClInclude Include="..\src\includeCreatures.h" />
+    <ClInclude Include="..\src\includeDefault.h" />
+    <ClInclude Include="..\src\includeEnum.h" />
+    <ClInclude Include="..\src\includeEnum2.h" />
+    <ClInclude Include="..\src\includeEnum3.h" />
+    <ClInclude Include="..\src\includeExternDefault.h" />
+    <ClInclude Include="..\src\includeExternPolitics.h" />
+    <ClInclude Include="..\src\includeFunctions.h" />
+    <ClInclude Include="..\src\includeItems.h" />
+    <ClInclude Include="..\src\includeNews.h" />
+    <ClInclude Include="..\src\includePolitics.h" />
+    <ClInclude Include="..\src\includeStringExtern.h" />
+    <ClInclude Include="..\src\includeTalk.h" />
+    <ClInclude Include="..\src\includeTempFunctions.h" />
+    <ClInclude Include="..\src\includeTitle.h" />
+    <ClInclude Include="..\src\lcsio.h" />
+    <ClInclude Include="..\src\monthly\justice.h" />
+    <ClInclude Include="..\src\monthly\lcsmonthly.h" />
+    <ClInclude Include="..\src\monthly\monthly.h" />
+    <ClInclude Include="..\src\monthly\sleeper_update.h" />
+    <ClInclude Include="..\src\sandbox\globals.h" />
+    <ClInclude Include="..\src\sandbox\injury_test.h" />
+    <ClInclude Include="..\src\sandbox\lcscommon.h" />
+    <ClInclude Include="..\src\sandbox\weapon.h" />
     <ClInclude Include="..\src\sdl\SDL.h" />
     <ClInclude Include="..\src\sdl\SDL_assert.h" />
     <ClInclude Include="..\src\sdl\SDL_atomic.h" />
@@ -345,13 +400,13 @@
     <ClInclude Include="..\src\sdl\close_code.h" />
     <ClInclude Include="..\src\creature\creaturetype.h" />
     <ClInclude Include="..\src\locations\locations.h" />
+    <ClInclude Include="..\src\sitemode\newencounter.h" />
     <ClInclude Include="..\src\sitemode\shop.h" />
     <ClInclude Include="..\src\sitemode\sitemap.h" />
     <CustomBuildStep Include="..\src\compat.h" />
     <ClInclude Include="..\src\pdcurses\curses.h" />
     <CustomBuildStep Include="..\src\cursesgraphics.h" />
     <CustomBuildStep Include="..\src\cursesmovie.h" />
-    <ClCompile Include="..\src\externs.h" />
     <CustomBuildStep Include="..\src\includes.h" />
     <CustomBuildStep Include="..\src\lcsio.h" />
     <CustomBuildStep Include="..\src\vector.h" />
@@ -371,12 +426,16 @@
     <ClInclude Include="..\src\items\weapon.h" />
     <ClInclude Include="..\src\items\weapontype.h" />
     <ClInclude Include="..\src\creature\creature.h" />
+    <ClInclude Include="..\src\sitemode\sitemode.h" />
+    <ClInclude Include="..\src\sitemode\stealth.h" />
+    <ClInclude Include="..\src\tinydir.h" />
+    <ClInclude Include="..\src\title\highscore.h" />
+    <ClInclude Include="..\src\vector.h" />
     <ClInclude Include="..\src\vehicle\vehicle.h" />
     <ClInclude Include="..\src\vehicle\vehicletype.h" />
     <ClInclude Include="..\src\cmarkup\Markup.h" />
     <ClInclude Include="..\src\log\log.h" />
     <ClInclude Include="..\src\configfile.h" />
-    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="lcs_news_icon.res" />
@@ -386,6 +445,9 @@
     <Library Include="..\src\sdl\SDL2main.lib" />
     <Library Include="..\src\sdl\SDL2.lib" />
     <Library Include="..\src\sdl\SDL2_mixer.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

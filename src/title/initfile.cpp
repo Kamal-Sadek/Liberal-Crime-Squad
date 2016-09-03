@@ -18,8 +18,30 @@ This file is part of Liberal Crime Squad.
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA
 
 */
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+//#include <includeCommon.h>
 
-#include <externs.h>
+/*
+stringconversion.cpp
+*/
+#include "common\\stringconversion.h"
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+//#include <includeTalk.h>
+#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
 
 void setconfigoption(std::string name, std::string value)
 {
@@ -47,9 +69,6 @@ void setconfigoption(std::string name, std::string value)
    {
       if(stringtobool(value)==0)
          autosave=false;
-      else
-         autosave=true;
-
    }
    #ifdef WIN32
    else if(name == "fixcleartype") // this setting is only true if set in the file AND running Windows XP or later, otherwise it's false

@@ -25,8 +25,21 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+//#include <includeCommon.h>
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
 
-#include <externs.h>
+//#include <includeTalk.h>
+// includeActivateB.h
+extern vector<Creature *> pool;
+#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
+extern vector<LootType *> loottype;
 
 /* transforms a squad id number into the index of that squad in the global vector */
 int getsquad(int id)

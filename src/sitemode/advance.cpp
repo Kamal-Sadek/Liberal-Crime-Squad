@@ -25,8 +25,31 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+//#include <includeNews.h>
+#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include "includeAdvance.h"
+#include "includeAdvanceB.h"
+extern vector<Location *> location;
+extern short mode;
+extern short postalarmtimer;
+extern int stat_dead;
+extern int stat_kills;
+extern int ccs_siege_kills;
+extern int ccs_boss_kills;
+
 
 /* handles end of round stuff for everyone */
 void creatureadvance()

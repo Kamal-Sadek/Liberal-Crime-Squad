@@ -15,7 +15,7 @@
 #ifndef COMMON_H_INCLUDED
 #define COMMON_H_INCLUDED
 
-#if defined __linux__ || defined __APPLE__ // BSD and SVr4 too
+#ifdef __linux__
 #define NCURSES
 #endif
 
@@ -150,7 +150,7 @@
 #ifdef GO_PORTABLE
    #include <time.h>
 
-   #if defined __linux__ || defined __APPLE__ // BSD and SVr4 too
+   #ifdef __linux__ // And BSD and SVr4
       /*
       This #undef addstr...It exists only to make the overloaded addstr
          work in linux (because otherwise it clashes with ncurses).

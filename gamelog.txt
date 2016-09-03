@@ -1,0 +1,286 @@
+
+
+
+---------- PROGRAM STARTED ----------
+---------2016-08-28 14:42:26---------
+
+
+
+
+
+---------- PROGRAM STARTED ----------
+---------2016-08-28 15:03:10---------
+
+
+
+
+
+---------- PROGRAM STARTED ----------
+---------2016-08-28 15:03:32---------
+
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/titlemode.ogg:  Couldn't open './art/ogg/titlemode.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/titlemode.mid:  Couldn't open './art/midi/titlemode.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/newgame.ogg:  Couldn't open './art/ogg/newgame.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/newgame.mid:  Couldn't open './art/midi/newgame.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/basemode.ogg:  Couldn't open './art/ogg/basemode.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/basemode.mid:  Couldn't open './art/midi/basemode.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/siege.ogg:  Couldn't open './art/ogg/siege.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/siege.mid:  Couldn't open './art/midi/siege.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/activate.ogg:  Couldn't open './art/ogg/activate.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/activate.mid:  Couldn't open './art/midi/activate.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/sleepers.ogg:  Couldn't open './art/ogg/sleepers.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/sleepers.mid:  Couldn't open './art/midi/sleepers.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/stopevil.ogg:  Couldn't open './art/ogg/stopevil.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/stopevil.mid:  Couldn't open './art/midi/stopevil.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/reviewmode.ogg:  Couldn't open './art/ogg/reviewmode.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/reviewmode.mid:  Couldn't open './art/midi/reviewmode.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/liberalagenda.ogg:  Couldn't open './art/ogg/liberalagenda.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/liberalagenda.mid:  Couldn't open './art/midi/liberalagenda.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/disbanded.ogg:  Couldn't open './art/ogg/disbanded.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/disbanded.mid:  Couldn't open './art/midi/disbanded.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/finances.ogg:  Couldn't open './art/ogg/finances.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/finances.mid:  Couldn't open './art/midi/finances.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/cartheft.ogg:  Couldn't open './art/ogg/cartheft.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/cartheft.mid:  Couldn't open './art/midi/cartheft.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/elections.ogg:  Couldn't open './art/ogg/elections.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/elections.mid:  Couldn't open './art/midi/elections.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/shopping.ogg:  Couldn't open './art/ogg/shopping.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/shopping.mid:  Couldn't open './art/midi/shopping.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/sitemode.ogg:  Couldn't open './art/ogg/sitemode.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/sitemode.mid:  Couldn't open './art/midi/sitemode.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/suspicious.ogg:  Couldn't open './art/ogg/suspicious.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/suspicious.mid:  Couldn't open './art/midi/suspicious.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/alarmed.ogg:  Couldn't open './art/ogg/alarmed.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/alarmed.mid:  Couldn't open './art/midi/alarmed.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/heavycombat.ogg:  Couldn't open './art/ogg/heavycombat.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/heavycombat.mid:  Couldn't open './art/midi/heavycombat.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/defense.ogg:  Couldn't open './art/ogg/defense.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/defense.mid:  Couldn't open './art/midi/defense.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/conquer.ogg:  Couldn't open './art/ogg/conquer.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/conquer.mid:  Couldn't open './art/midi/conquer.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/carchase.ogg:  Couldn't open './art/ogg/carchase.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/carchase.mid:  Couldn't open './art/midi/carchase.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/footchase.ogg:  Couldn't open './art/ogg/footchase.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/footchase.mid:  Couldn't open './art/midi/footchase.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/interrogation.ogg:  Couldn't open './art/ogg/interrogation.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/interrogation.mid:  Couldn't open './art/midi/interrogation.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/trial.ogg:  Couldn't open './art/ogg/trial.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/trial.mid:  Couldn't open './art/midi/trial.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/recruiting.ogg:  Couldn't open './art/ogg/recruiting.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/recruiting.mid:  Couldn't open './art/midi/recruiting.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/dating.ogg:  Couldn't open './art/ogg/dating.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/dating.mid:  Couldn't open './art/midi/dating.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/newspaper.ogg:  Couldn't open './art/ogg/newspaper.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/newspaper.mid:  Couldn't open './art/midi/newspaper.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/lacops.ogg:  Couldn't open './art/ogg/lacops.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/lacops.mid:  Couldn't open './art/midi/lacops.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/newscast.ogg:  Couldn't open './art/ogg/newscast.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/newscast.mid:  Couldn't open './art/midi/newscast.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/glamshow.ogg:  Couldn't open './art/ogg/glamshow.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/glamshow.mid:  Couldn't open './art/midi/glamshow.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/anchor.ogg:  Couldn't open './art/ogg/anchor.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/anchor.mid:  Couldn't open './art/midi/anchor.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/abort.ogg:  Couldn't open './art/ogg/abort.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/abort.mid:  Couldn't open './art/midi/abort.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/victory.ogg:  Couldn't open './art/ogg/victory.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/victory.mid:  Couldn't open './art/midi/victory.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/defeat.ogg:  Couldn't open './art/ogg/defeat.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/defeat.mid:  Couldn't open './art/midi/defeat.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/reaganified.ogg:  Couldn't open './art/ogg/reaganified.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/reaganified.mid:  Couldn't open './art/midi/reaganified.mid'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/stalinized.ogg:  Couldn't open './art/ogg/stalinized.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/midi/stalinized.mid:  Couldn't open './art/midi/stalinized.mid'
+
+
+
+
+---------- PROGRAM STARTED ----------
+---------2016-08-28 15:04:40---------
+
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/titlemode.ogg:  Couldn't open './art/ogg/titlemode.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/newgame.ogg:  Couldn't open './art/ogg/newgame.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/basemode.ogg:  Couldn't open './art/ogg/basemode.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/siege.ogg:  Couldn't open './art/ogg/siege.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/activate.ogg:  Couldn't open './art/ogg/activate.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/sleepers.ogg:  Couldn't open './art/ogg/sleepers.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/stopevil.ogg:  Couldn't open './art/ogg/stopevil.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/reviewmode.ogg:  Couldn't open './art/ogg/reviewmode.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/liberalagenda.ogg:  Couldn't open './art/ogg/liberalagenda.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/disbanded.ogg:  Couldn't open './art/ogg/disbanded.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/finances.ogg:  Couldn't open './art/ogg/finances.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/cartheft.ogg:  Couldn't open './art/ogg/cartheft.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/elections.ogg:  Couldn't open './art/ogg/elections.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/shopping.ogg:  Couldn't open './art/ogg/shopping.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/sitemode.ogg:  Couldn't open './art/ogg/sitemode.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/suspicious.ogg:  Couldn't open './art/ogg/suspicious.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/alarmed.ogg:  Couldn't open './art/ogg/alarmed.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/heavycombat.ogg:  Couldn't open './art/ogg/heavycombat.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/defense.ogg:  Couldn't open './art/ogg/defense.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/conquer.ogg:  Couldn't open './art/ogg/conquer.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/carchase.ogg:  Couldn't open './art/ogg/carchase.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/footchase.ogg:  Couldn't open './art/ogg/footchase.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/interrogation.ogg:  Couldn't open './art/ogg/interrogation.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/trial.ogg:  Couldn't open './art/ogg/trial.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/recruiting.ogg:  Couldn't open './art/ogg/recruiting.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/dating.ogg:  Couldn't open './art/ogg/dating.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/newspaper.ogg:  Couldn't open './art/ogg/newspaper.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/lacops.ogg:  Couldn't open './art/ogg/lacops.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/newscast.ogg:  Couldn't open './art/ogg/newscast.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/glamshow.ogg:  Couldn't open './art/ogg/glamshow.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/anchor.ogg:  Couldn't open './art/ogg/anchor.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/abort.ogg:  Couldn't open './art/ogg/abort.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/victory.ogg:  Couldn't open './art/ogg/victory.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/defeat.ogg:  Couldn't open './art/ogg/defeat.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/reaganified.ogg:  Couldn't open './art/ogg/reaganified.ogg'
+
+SDL_mixer function Mix_LoadMUS() failed to load ./art/ogg/stalinized.ogg:  Couldn't open './art/ogg/stalinized.ogg'
+
+
+
+
+---------- PROGRAM STARTED ----------
+---------2016-08-28 15:51:36---------
+
+
+
+
+
+---------- PROGRAM STARTED ----------
+---------2016-08-28 16:26:46---------
+
+
+
+
+
+---------- PROGRAM STARTED ----------
+---------2016-08-28 16:54:28---------
+
+
+
+
+
+---------- PROGRAM STARTED ----------
+---------2016-08-28 17:45:02---------
+
+
+
+
+
+---------- PROGRAM STARTED ----------
+---------2016-08-30 23:23:09---------
+
+
+
+
+
+---------- PROGRAM STARTED ----------
+---------2016-09-02 03:27:56---------
+
+

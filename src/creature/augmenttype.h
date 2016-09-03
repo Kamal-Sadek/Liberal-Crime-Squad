@@ -1,7 +1,9 @@
 #ifndef AUGMENT_TYPE_H
 #define AUGMENT_TYPE_H
 
-#include "includes.h"
+//#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
 
 class AugmentType {
    public:
@@ -13,7 +15,7 @@ class AugmentType {
       std::string get_name() const { return name_; }
       long get_id() const { return id_; }
       short get_type() const { return type_; }
-      int get_attribute() const { return attribute_; }
+      CreatureAttribute get_attribute() const { return attribute_; }
       int get_effect() const { return effect_; }
       int get_max_age() const { return max_age_; }
       int get_min_age() const { return min_age_; }
@@ -25,7 +27,7 @@ class AugmentType {
    private:
       std::string idname_;
       std::string name_;
-      int attribute_;
+      CreatureAttribute attribute_;
       int effect_;
       int max_age_;
       int min_age_;

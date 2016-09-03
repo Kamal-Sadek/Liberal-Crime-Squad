@@ -1,0 +1,9 @@
+# By default, this begins with an entity name,
+# and ends with an entity name.
+# Whitespace at the beginning and end are
+# automatically added
+winks at
+smiles at
+smirks at
+chats warmly with
+yells slogans at

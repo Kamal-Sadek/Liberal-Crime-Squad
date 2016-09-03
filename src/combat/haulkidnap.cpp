@@ -30,8 +30,28 @@ This file is part of Liberal Crime Squad.                                       
 //That will depend on the chase and fight code, I think...And the code that
 //handles the squad moving around the site. For now, this'll do. I must remember
 //to come back here and finish the job.
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+//#include <includeNews.h>
+#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+extern vector<Location *> location;
+#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+extern int stat_kidnappings;
+extern short mode;
 
 /* prompt after you've said you want to kidnap someone */
 void kidnapattempt()

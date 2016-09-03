@@ -1,0 +1,166 @@
+# Upon loading, one of the following quotes will be
+# displayed on the title screen.
+# They are all four lines, the fourth being the origin
+# Originally the -- was a special character
+# that functioned as a large dash
+# Not feeling it was worth the effort to preserve this
+# non-unicode character, it has been replaced
+"Unjust laws exist; shall we be content to obey them, or shall we
+endeavor to amend them, and obey them until we have succeeded, or
+shall we transgress them at once? ... I say, break the law."
+-- Henry David Thoreau
+#
+"One has not only a legal, but a moral
+responsibility to obey just laws.  Conversely, one
+has a moral responsibility to disobey unjust laws."
+-- Martin Luther King, Jr.
+#
+"Civil disobedience is not our problem. Our problem is
+civil obedience... Protest beyond the law is not a
+departure from democracy; it is absolutely essential to it."
+-- Howard Zinn
+#
+"We have to grasp, as Marx and Adam Smith did, that corporations are
+not concerned with the common good... If we don't rebel, if we're
+not physically in an active rebellion, then it's spiritual death."
+-- Chris Hedges
+#
+"Civil disobedience becomes a sacred duty when the
+state has become lawless or corrupt... Non-cooperation
+with evil is as much a duty as cooperation with good."
+-- Mahatma Gandhi
+#
+"Civil disobedience's main goal typically is to try
+to arouse and inspire others to join and do something.
+Well, sometimes that is a good tactic, sometimes not."
+-- Noam Chomsky
+#
+"Our enemies are innovative and resourceful, and so
+are we.  They never stop thinking about new ways to
+harm our country and our people, and neither do we."
+-- George W. Bush
+#
+"When you kill one, it is a
+tragedy.  When you kill ten
+million, it is a statistic."
+-- Josef Stalin
+#
+"There's an old saying in Tennessee -- I know it's in Texas,
+probably in Tennessee -- that says, fool me once, shame on
+-- shame on you. Fool me -- you can't get fooled again."
+-- George W. Bush
+#
+"The great story here for anybody willing to find it and write about
+it and explain it is this vast right-wing conspiracy that has been
+conspiring against my husband since the day he announced for President."
+-- Hillary Clinton
+#
+"But I don't want to put the
+cart before the horse.  We
+don't have a strategy yet."
+-- Barack Obama
+#
+"You know how dumb the average person
+is?  Well, by definition, half of
+'em are even dumber than THAT."
+-- J.R. "Bob" Dobbs
+#
+"I believe we are on an irreversible
+trend toward more freedom and
+democracy -- but that could change."
+-- Dan Quayle
+#
+"We should invade their countries, kill their leaders and convert them to
+Christianity.  We weren't punctilious about locating and punishing only Hitler
+and his top officers.  We carpet-bombed German cities; we killed civilians."
+-- Ann Coulter
+#
+"Root out the counterrevolutionaries without mercy,
+lock up suspicious characters in concentration camps...
+Shirkers will be shot, regardless of past service."
+-- Leon Trotsky
+#
+"I want to see Fegelein at once!  If
+he's gone AWOL, it's desertion!  Treason!
+Bring me Fegelein!  Fegelein!  Fegelein!"
+-- Adolf Hitler
+#
+"My fellow Americans, I'm pleased to tell you
+today that I've signed legislation that will outlaw
+Russia forever.  We begin bombing in five minutes."
+-- Ronald Reagan
+#
+"You go into some of these small towns... the jobs have been gone
+now for 25 years and nothing's replaced them... It's not surprising,
+then, they get bitter, they cling to guns or religion..."
+-- Barack Obama
+#
+"You don't have a peaceful revolution.
+You don't have a turn-the-other-cheek revolution.
+There's no such thing as a nonviolent revolution."
+-- Malcolm X
+#
+"Politics is war without
+bloodshed, while war is
+politics with bloodshed."
+-- Chairman Mao
+#
+"Don't think that I have come to bring peace to the Earth.  I did not come to
+bring peace, but a sword.  For I have come to turn a man against his father, a
+daughter against her mother, a daughter-in-law against her mother-in-law..."
+-- Jesus Christ
+#
+"What signify a few lives lost in a century or two?  The
+tree of liberty must be refreshed from time to time with
+the blood of patriots and tyrants.  It is its natural manure."
+-- Thomas Jefferson
+#
+"Is it better to be loved or feared?  One might want to be
+both, but because it is hard to unite them in one person, it
+is far safer to be feared than loved, if you cannot be both."
+-- Niccolo Machiavelli
+#
+"People that are really very weird
+can get into sensitive positions and
+have a tremendous impact on history."
+-- Dan Quayle
+#
+"The supreme art of war is to subdue the enemy without
+fighting... If you know the enemy and know yourself
+you need not fear the results of a hundred battles."
+-- Sun Tzu
+#
+"Only two things are infinite, the
+universe and human stupidity, and
+I'm not sure about the former."
+-- Albert Einstein
+#
+"As Putin rears his head and comes into the airspace of
+the United States of America, where -- where do they
+go?  It's Alaska.  It's just right over the border."
+-- Sarah Palin
+#
+"The production of too many useful things results in too many useless people.
+The only antidote to mental suffering is physical pain.
+If anything is certain, it is that I myself am not a Marxist."
+-- Karl Marx
+#
+"If ignorant of the almighty Time Cube Creation Truth, you
+deserve to be killed.  Killing you is not immoral -- but
+justified to save life on Earth for future generations."
+-- Gene Ray
+#
+"These hangman rope sneak deadly gangsters, judges & police, trick, trap, rob,
+wreck, butcher, and murder the people to keep them terrorized in gangster
+Frankenstein earphone radio slavery for the Communist gangster government."
+-- Francis E. Dec
+#
+"If a political party tried to abolish Social Security, unemployment insurance,
+labor laws, or farm programs, you'd not hear of them again.  A tiny splinter
+group thinks they can do it.  Their number is negligible and they are stupid."
+-- Dwight D. Eisenhower
+#
+"If we see that Germany is winning we ought to help
+Russia and if Russia is winning we ought to help Germany,
+and that way let them kill as many as possible."
+-- Harry S. Truman

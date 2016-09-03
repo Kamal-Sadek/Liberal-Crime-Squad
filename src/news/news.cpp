@@ -27,8 +27,36 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 //TODO: Add logging for this file? --Addictgamer
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+stringconversion.cpp
+*/
+#include "common\\stringconversion.h"
+
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+extern char newscherrybusted;
+extern vector<Location *> location;
+#include <includeExternDefault.h>
+extern bool multipleCityMode;
+#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
+extern MusicClass music;
+extern char endgamestate;
 
 /* news - major newspaper reporting on lcs and other topics */
 void majornewspaper(char &clearformess,char canseethings)
@@ -327,7 +355,7 @@ void handle_public_opinion_impact(const newsstoryst &ns)
    impact++;
 
    // Account for squad responsible, rampages, and Liberal Guardian bias
-   int impact_direction = ALIGN_LIBERAL;
+   Alignment impact_direction = ALIGN_LIBERAL;
    if(ns.type==NEWSSTORY_CCS_SITE || ns.type==NEWSSTORY_CCS_KILLED_SITE)
    {
       impact_direction = ALIGN_CONSERVATIVE;
@@ -2066,7 +2094,7 @@ newsstoryst* ccs_exposure_story()
       }
    }
    // change police regulation issue to be more liberal
-   law[LAW_POLICEBEHAVIOR] += 2;
+   law[LAW_POLICEBEHAVIOR] = getAlignFromInt(law[LAW_POLICEBEHAVIOR] + 2);
    if(law[LAW_POLICEBEHAVIOR] > ALIGN_ELITELIBERAL)
       law[LAW_POLICEBEHAVIOR] = ALIGN_ELITELIBERAL;
    change_public_opinion(VIEW_POLICEBEHAVIOR,50);

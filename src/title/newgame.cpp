@@ -25,8 +25,42 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+translateid.cpp
+*/
+#include "common\\translateid.h"
+
+/*
+stringconversion.cpp
+*/
+#include "common\\stringconversion.h"
+
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+extern vector<Location *> location;
+#include <includeExternDefault.h>
+extern bool multipleCityMode;
+#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
+extern MusicClass music;
+extern int year;
+extern char endgamestate;
+extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 
 /* select new game options */
 void setup_newgame()
@@ -129,7 +163,7 @@ void setup_newgame()
       for(int l=0;l<LAWNUM;l++)
          law[l]=ALIGN_ARCHCONSERVATIVE;
       for(int a=0;a<VIEWNUM-3;a++)
-         attitude[a]=LCSrandom(20);
+         attitude[a]= getAlignFromInt(LCSrandom(20));
       for(int s=0;s<SENATENUM;s++)
       {
          if(s<55) senate[s]=ALIGN_ARCHCONSERVATIVE;
@@ -269,7 +303,7 @@ enum recruits
 void makecharacter()
 {
    Creature *newcr=new Creature;
-   newcr->align=1;
+   newcr->align= ALIGN_LIBERAL;
 
 #ifdef BLIND
    newcr->special[SPECIALWOUND_RIGHTEYE]=1;
@@ -310,7 +344,7 @@ void makecharacter()
    newcr->set_attribute(ATTRIBUTE_STRENGTH,4);
    newcr->set_attribute(ATTRIBUTE_HEALTH,6);
    newcr->set_attribute(ATTRIBUTE_CHARISMA,4);
-   for(int sk=0;sk<SKILLNUM;sk++)newcr->set_skill(sk,0);
+   for(int sk=0;sk<SKILLNUM;sk++)newcr->set_skill(getSkillFromInt(sk),0);
 
    char first[3][80];
    char last[80];

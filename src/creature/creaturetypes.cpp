@@ -1,4 +1,34 @@
-#include <externs.h>
+
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
+
+/*
+translateid.cpp
+*/
+#include "common\\translateid.h"
+
+/*
+stringconversion.cpp
+*/
+#include "common\\stringconversion.h"
+
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+extern vector<Location *> location;
+#include <includeExternDefault.h>
+extern bool multipleCityMode;
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
+extern short mode;
+extern char endgamestate;
+extern short sitetype;
 
 /* Age macros for characters */
 #define AGE_DOGYEARS    2+LCSrandom(5)   /* for the animals */
@@ -27,7 +57,7 @@
    cr.gender_conservative=cr.gender_liberal=GENDER_FEMALE; \
    }
 
-/* rolls up a creature's stats and equipment */
+/* rolls up a creature's stats and equipment */  //IsaacG Unsure why, but attempts at replacing short with CreatureTypes results in inaccessibility of crtype members
 void makecreature(Creature &cr,short type)
 {
    cr.drop_weapons_and_clips(NULL); // Get rid of any old equipment from old encounters.
@@ -36,7 +66,7 @@ void makecreature(Creature &cr,short type)
    cr.creatureinit();
    cr.exists=1;
    cr.squadid=-1;
-   cr.type=type;
+   cr.type = getCreatureTypeFromInt(type);
    cr.infiltration=0;
    cr.location=cursite;
    cr.worklocation=cursite;
@@ -48,7 +78,7 @@ void makecreature(Creature &cr,short type)
    int attcap[ATTNUM];
    for(int i=0;i<ATTNUM;i++)
    {
-      cr.set_attribute(i,crtype->attributes_[i].min);
+      cr.set_attribute(getAttributeFromInt(i),crtype->attributes_[i].min);
       attcap[i]=crtype->attributes_[i].max;
    }
 
@@ -130,7 +160,8 @@ void makecreature(Creature &cr,short type)
          crtype->give_weapon_civilian(cr);
          if(!cr.is_armed())
             cr.give_weapon(*weapontype[getweapontype("WEAPON_CHAIN")],NULL);
-         if(cr.align==ALIGN_LIBERAL) cr.align=LCSrandom(2)-1;
+		 //IsaacG #TODO, create a random alignment function
+         if(cr.align==ALIGN_LIBERAL) cr.align=getAlignFromInt(LCSrandom(2) - 1);
          break;
       case CREATURE_WORKER_SWEATSHOP:
          cr.flag|=CREATUREFLAG_ILLEGALALIEN;
@@ -426,13 +457,13 @@ void makecreature(Creature &cr,short type)
          cr.gender_liberal=cr.gender_conservative=crtype->roll_gender();
          strcpy(cr.name,crtype->get_encounter_name());
          if(cr.align==ALIGN_CONSERVATIVE)
-            cr.align=LCSrandom(2);
+            cr.align= getAlignFromInt(LCSrandom(2));
          break;
       case CREATURE_BUM:
          crtype->give_weapon_civilian(cr);
          if(!cr.is_armed()&&!LCSrandom(5))
             cr.give_weapon(*weapontype[getweapontype("WEAPON_SHANK")],NULL);
-         if(cr.align==ALIGN_CONSERVATIVE)cr.align=LCSrandom(2);
+         if(cr.align==ALIGN_CONSERVATIVE)cr.align= getAlignFromInt(LCSrandom(2));
          break;
       case CREATURE_MUTANT:
          crtype->give_weapon_civilian(cr);
@@ -489,7 +520,7 @@ void makecreature(Creature &cr,short type)
          crtype->give_weapon_civilian(cr);
          if(!LCSrandom(5))
             cr.give_weapon(*weapontype[getweapontype("WEAPON_SHANK")],NULL);
-         if(cr.align==ALIGN_CONSERVATIVE)cr.align=LCSrandom(2);
+         if(cr.align==ALIGN_CONSERVATIVE)cr.align= getAlignFromInt(LCSrandom(2));
          attcap[ATTRIBUTE_HEALTH]=1+LCSrandom(5);
          break;
       case CREATURE_FASTFOODWORKER:
@@ -506,7 +537,7 @@ void makecreature(Creature &cr,short type)
       case CREATURE_PROSTITUTE:
          if(LCSrandom(7))cr.gender_conservative=cr.gender_liberal=GENDER_FEMALE;
          else if(!LCSrandom(3))cr.gender_liberal=GENDER_FEMALE;
-         if(cr.align==ALIGN_CONSERVATIVE)cr.align=LCSrandom(2);
+         if(cr.align==ALIGN_CONSERVATIVE)cr.align= getAlignFromInt(LCSrandom(2));
          if(!LCSrandom(3))cr.crimes_suspected[LAWFLAG_PROSTITUTION]++;
          break;
       case CREATURE_HIPPIE:
@@ -606,7 +637,7 @@ void makecreature(Creature &cr,short type)
    vector<int> possible;
    for(int a=0;a<ATTNUM;a++)
    {
-      attnum-=min(4,cr.get_attribute(a,false));
+      attnum-=min(4,cr.get_attribute(getAttributeFromInt(a),false));
       possible.push_back(a);
    }
    while(attnum>0&&len(possible))
@@ -615,9 +646,9 @@ void makecreature(Creature &cr,short type)
       int a=possible[i];
       if(a==ATTRIBUTE_WISDOM&&cr.align==ALIGN_LIBERAL&&LCSrandom(4)) a=ATTRIBUTE_HEART;
       if(a==ATTRIBUTE_HEART&&cr.align==ALIGN_CONSERVATIVE&&LCSrandom(4)) a=ATTRIBUTE_WISDOM;
-      if(cr.get_attribute(a,false)<attcap[a])
+      if(cr.get_attribute(getAttributeFromInt(a),false)<attcap[a])
       {
-         cr.adjust_attribute(a,+1);
+         cr.adjust_attribute(getAttributeFromInt(a),+1);
          attnum--;
       }
       else possible.erase(possible.begin()+i);
@@ -636,7 +667,7 @@ void makecreature(Creature &cr,short type)
    while(randomskills>0&&len(possible))
    {
       int i=LCSrandom(len(possible));
-      int randomskill=possible[i];
+      CreatureSkill randomskill= getSkillFromInt(possible[i]);
       // 95% chance of not allowing some skills for anybody...
       if(LCSrandom(20))
       {

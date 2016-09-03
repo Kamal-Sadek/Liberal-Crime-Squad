@@ -1,7 +1,9 @@
 #ifndef CLIPTYPE_H
 #define CLIPTYPE_H
 
-#include "includes.h"
+//#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
 
 class ClipType : public ItemType
 {

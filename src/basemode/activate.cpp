@@ -59,8 +59,48 @@ the bottom of includes.h in the top src folder.
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
+#include <includeDefault.h>
+#include "configfile.h"
+#include <includeEnum.h>
+//#include <includeCommon.h>
+#include <includeCommonCommon.h>
 
-#include <externs.h>
+/*
+translateid.cpp
+*/
+#include "common\\translateid.h"
+/*
+stringconversion.cpp
+*/
+#include "common\\stringconversion.h"
+
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+/*******************************************************************************
+*
+*                        The Main Game Screen: Base Mode
+*                        Folder: "basemode"
+*
+*******************************************************************************/
+
+/*
+activate.cpp
+*/
+#include "basemode\\activate.h"
+#include <includeTempFunctions.h>
+#include "common\\help.h"
+
+// externs
+
+#include "includeActivate.h"
+#include "includeActivateB.h"
+extern vector<Location *> location;
+extern MusicClass music;
+extern short mode;
+
+
 
 vector<Creature *> activatable_liberals()
 {
@@ -115,9 +155,9 @@ void activate()
          int skill=0;
          for(int sk=0;sk<SKILLNUM;sk++)
          {
-            skill+=temppool[p]->get_skill(sk);
-            if(temppool[p]->get_skill_ip(sk)>=100+(10*temppool[p]->get_skill(sk))&&
-               temppool[p]->get_skill(sk)<temppool[p]->skill_cap(sk,true))bright=1;
+            skill+=temppool[p]->get_skill(getSkillFromInt(sk));
+            if(temppool[p]->get_skill_ip(sk)>=100+(10*temppool[p]->get_skill(getSkillFromInt(sk)))&&
+               temppool[p]->get_skill(getSkillFromInt(sk))<temppool[p]->skill_cap(getSkillFromInt(sk),true))bright=1;
          }
 
          set_color(COLOR_WHITE,COLOR_BLACK,bright);
@@ -1324,9 +1364,9 @@ void select_tendhostage(Creature *cr)
          int skill=0;
          for(int sk=0;sk<SKILLNUM;sk++)
          {
-            skill+=temppool[p]->get_skill(sk);
-            if(temppool[p]->get_skill_ip(sk)>=100+(10*temppool[p]->get_skill(sk))&&
-               temppool[p]->get_skill(sk)<temppool[p]->skill_cap(sk,true))bright=1;
+            skill+=temppool[p]->get_skill(getSkillFromInt(sk));
+            if(temppool[p]->get_skill_ip(sk)>=100+(10*temppool[p]->get_skill(getSkillFromInt(sk)))&&
+               temppool[p]->get_skill(getSkillFromInt(sk))<temppool[p]->skill_cap(getSkillFromInt(sk),true))bright=1;
          }
 
          set_color(COLOR_WHITE,COLOR_BLACK,bright);

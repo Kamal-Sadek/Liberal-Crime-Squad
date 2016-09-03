@@ -25,8 +25,43 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+#include <includeExternDefault.h>
+extern MusicClass music;
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+extern int ustat_recruits;
+extern int ustat_kidnappings;
+extern int ustat_dead;
+extern int ustat_kills;
+extern int ustat_funds;
+extern int ustat_spent;
+extern int ustat_buys;
+extern int ustat_burns;
+
+extern int stat_buys;
+extern int stat_burns;
+
+extern int stat_kidnappings;
+extern int year;
+extern int stat_dead;
+extern int stat_kills;
+extern int stat_recruits;
 
 /* displays the high score board */
 void viewhighscores(int musicoverride)

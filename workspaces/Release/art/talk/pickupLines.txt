@@ -1,0 +1,306 @@
+# Lines beginning with the symbol '#' are ignored as comments
+# blank lines are ignored, except if it is the second line of a pickup line
+# or later.  That is, each line starts, then the next four lines are taken
+# even if they are comments
+# 
+# The first two lines are the pickup,
+# the third line is accepting, and the fourth and fifth lines are rejection
+# 
+#"Hey baby, you're kinda ugly. I like that.\"
+#
+#"You're not so cute yourself. Wanna get a room?\"
+#"You're such an asshole!\"
+# <pouts>
+#
+# The fifth line is placed between <> in all default pickup lines,
+# and the fifth line is always colored white
+# As a convention, a comment is placed between
+# each pickup line to make it human readable
+# but this is optional, i.e. placing fifteen lines
+# in a row will be read as three separate pickup lines
+# alternatively, blank lines can be placed between pickup lines
+# as LCS will ignore blank lines between pickup lines
+# but I recommend commenting, because crimesquad.exe
+# will notify the user if any pickup line includes such a line
+#
+"Hey baby, you're kinda ugly. I like that."
+
+"You're not so cute yourself. Wanna get a room?"
+"You're such an asshole!"
+ <pouts>
+#
+"I lost my phone number. Could I have yours?"
+
+"How sweet! You can call me tonight..."
+"Sure, here ya go..."
+ <writes wrong number>
+#
+"Hey, you wanna go rub one off?"
+
+"You bet, baby."
+"I'm.. uh.. waiting for someone."
+ <turns away>
+#
+"Hot damn. You're built like a brick shithouse, honey."
+
+"He he, I'll let that one slide. Besides, I like country folk..."
+"Go use a real bathroom, ya hick."
+ <points towards bathroom>
+#
+"I'm big where it counts."
+
+"Oooo, let me see!"
+"You're big everywhere, fatass."
+ <laughs>
+#
+"Let's play squirrel. I'll bust a nut in your hole."
+
+"Winter's coming. You'd better bust more than one."
+"You fuck squirrels?"
+ <looks dumbfounded>
+#
+"You know, if I were you, I'd have sex with me."
+
+"But you're not, so the pleasure's all mine."
+"So what you're saying is you masturbate a lot."
+ <wags finger>
+#
+"You don't sweat much for a fat chick."
+
+"Just wait until tonight, baby."
+"You're a pig."
+ <turns away>
+#
+"Fuck me if I'm wrong but you want to kiss me, right?"
+
+"You're wrong."
+"Nice try, but no."
+ <sticks out tongue>
+#
+"Your parents must be retarded, because you are special."
+
+"I can drool on you if you like it that way."
+"Are you serious?"
+ <turns away>
+#
+"Let's play trains... you can sit on my face and I will chew chew chew."
+
+"Oooo, all aboard baby!"
+"You look like a biter."
+ <flinches>
+#
+"Is it hot in here or is it just you?"
+
+"Not as hot as we'll be tonight you slut."
+"I'm way outta your league, scumbag."
+ <grabs pepper spray>
+#
+"I may not be Fred Flintstone, but I can make your bed rock!"
+
+"Goober. You wanna hook up tonight?"
+"You still watch cartoons?"
+ <laughs>
+#
+"What do you say we go behind a rock and get a little boulder?"
+
+"Oooo, we should get stoned too! He he."
+"I hate puns! You suck at comedy."
+ <frowns>
+#
+"Do you have stars on your panties? Your ass is outta this world!"
+
+"You'll have to whip out your rocket to get some. Let's do it."
+"Yes, I'm an alien, you inferior Earth scum."
+ <reaches for ray gun>
+#
+"Those pants would look great on the floor of my bedroom."
+
+"So would my underwear."
+"Not after I do this."
+ <shits pants>
+#
+"If I said you had a nice body, would you hold it against me?"
+
+"Yeah, and you're going to repay me tonight."
+"Yes, I can't stand liars."
+ <crosses flabby arms>
+#
+"Are you tired? You've been running around in my thoughts all day."
+
+"Then stop *thinking* about it and come over tonight."
+"I don't remember doing that."
+ <looks confused>
+#
+"If I could change the alphabet baby, I would put the U and I together!"
+
+"As long as you put a condom between them, I'm all for it."
+"We got a kindergarten dropout over here!"
+ <points and laughs>
+#
+"Your lips look sweet. Can I taste them?"
+
+"Sure, but you can't use your mouth."
+"No, I don't want to infect anyone else with herpes."
+ <sighs>
+# 
+"Nice shoes. Wanna fuck?"
+
+"I hope you don't have a foot fetish, but I'm game."
+"Stop staring at my feet, you freak!"
+ <kicks you>
+# 
+"Your sexuality makes me nervous and this frustrates me."
+
+"My sex could do even more."
+"You're such a loser."
+ <makes L sign on forehead>
+# 
+"Are you Jamaican? Cuz Jamaican me horny."
+
+"Let me invite you to visit my island paradise. Tonight."
+"I'm about to put a voodoo curse on yo ass..."
+ <starts chanting>
+# 
+"Hey pop tart, fancy coming in my toaster of love?"
+
+"Oh, man... just don't tell anybody I'm seeing you."
+"I don't approve of your hi-carb diet."
+ <starts ranting about nutrition>
+# 
+"Wanna play army? You lie down and I'll blow you away."
+
+"I hope we're shooting blanks, soldier. I'm out of condoms."
+"Go back home to play with your G.I. Joe dolls."
+ <scoffs>
+# 
+"Can I lick your forehead?"
+
+"You can lick all my decals off, baby."
+"No, and stop acting like a lost puppy."
+ <hisses like a cat>
+# 
+"I have a genital rash. Will you rub this ointment on me?"
+
+"Only if I'm not allowed to use my hands."
+"Jesus..."
+ <turns away>
+# 
+"What's your sign?"
+
+"The one that says 'Open All Night'."
+"I don't believe in astrology, you ignoramus."
+ <blinds you with science>
+# 
+"Hi. I suffer from amnesia. Do I come here often?"
+
+"Yeah. I hope you remember the lube this time."
+"You're not my type. I like sane people."
+ <turns away>
+# 
+"I'm new in town. Could you give me directions to your apartment?"
+
+"But if we use a hotel, you won't get shot by an angry spouse tonight."
+"Yes, here you go..."
+ <writes fake directions>
+# 
+"Stand still so I can pick you up!"
+
+"I think you'll appreciate the way I move after tonight."
+"Gotta go! Bye!"
+ <squirms away>
+# 
+"Your daddy must have been a baker, cuz you've got a nice set of buns."
+
+"They make a yummy bedtime snack."
+"I don't do anal."
+ <puts hands over butt>
+# 
+"If you were a phaser, you'd be set on 'stunning'."
+
+"Oh.. oh, God. I can't believe I'm going to date a Trekkie."
+"Hey, look, a UFO!"
+ <ducks away>
+# 
+"Is that a keg in your pants? Cuz I'd love to tap that ass."
+
+"Oh, it isn't safe for you to drive like that. You'd better stay the night."
+"Go home, you're drunk."
+ <gestures away>
+# 
+"If I could be anything, I'd love to be your bathwater."
+
+"Come over tonight and I can show you what it's like."
+"At least then you'd be liquidated."
+ <stares intently>
+# 
+"Stop, drop and roll, baby. You are on fire."
+
+"I'll stop, drop and roll if you do it with me."
+"Laaaame."
+ <looks bored>
+# 
+"Do you want to see something swell?"
+
+"I'd rather feel something swell."
+"Eew, no, gross."
+ <vomits on you>
+# 
+"Excuse me. Do you want to fuck or should I apologize?"
+
+"You can apologize later if it isn't any good."
+"Too late for apologies!"
+ <slaps you>
+# 
+"Say, did we go to different schools together?"
+
+"Yeah, and we tonight can try different positions together."
+"What an idiot!"
+ <laughs>
+# 
+"You smell... Let's go take a shower."
+
+"Don't you like it dirty?"
+"Nothing works, I can't help it."
+ <starts crying>
+# 
+"Did it hurt when you fell from heaven?"
+
+"Actually I'm a succubus from hell, and you're my next victim."
+"Yes, now go away."
+ <points to exit>
+# 
+"Holy shit you're hot! I want to have sex with you RIGHT NOW."
+
+"Can you wait a couple hours? I got 6 other people to fuck first."
+"Touch me and you'll regret it."
+ <crosses arms>
+# 
+"I know I've seen you on the back of a milk carton, "
+"cuz you've been missing from my life."
+"That's sick.  I can do sick tonight."
+"That was a very traumatic incident."
+ <cries>
+# 
+"Daaaaaamn girl, I want to wrap your legs around my face and "
+"wear you like a feed bag!"
+"Wow, looks like I'm going to have to reward creativity tonight!"
+"You're disgusting."
+ <turns away>
+# 
+"Do you work for the post office? "
+"Because I could have sworn you were checking out my package."
+"It looks like a letter bomb to me.  Let me blow it up."
+"Yes, and it's practically microscopic."
+ <puts 2 fingers really close together>
+# 
+"I'm not the most attractive person in here, "
+"but I'm the only one talking to you."
+"Hey, I could do better.  But I'm feeling cheap tonight."
+"My spouse will be here soon to straighten things out."
+ <looks for spouse>
+# 
+"Roses are red, violets are blue,"
+"All my base, are belong to you."
+"It's you!!  Somebody set up us the bomb.  Move 'Zig'.  For great justice."
+"Hahahahaha!"
+ <shakes head>

@@ -25,8 +25,31 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+//#include <includeNews.h>
+#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+#include <includeExternDefault.h>
+#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
+extern PoliticalParties presparty;
+extern MusicClass music;
+extern int year;
+extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+extern Alignment exec[EXECNUM];
 
 //TODO: Not sure if anything in here should be logged...Perhaps only a summary of the results? --Addictgamer
 
@@ -123,7 +146,7 @@ void fillCabinetPost(int position)
    if(exec[EXEC_PRESIDENT]==ALIGN_ARCHCONSERVATIVE) exec[position]=ALIGN_ARCHCONSERVATIVE;
    else if(exec[EXEC_PRESIDENT]==ALIGN_ELITELIBERAL) exec[position]=ALIGN_ELITELIBERAL;
    else if(exec[EXEC_PRESIDENT]==ALIGN_STALINIST) exec[position]=ALIGN_STALINIST;
-   else exec[position]=exec[EXEC_PRESIDENT]+LCSrandom(3)-1;
+   else exec[position]= getAlignFromInt(exec[EXEC_PRESIDENT]+LCSrandom(3)-1);
    // Set name
    if(exec[position]==ALIGN_ARCHCONSERVATIVE) generate_name(execname[position],GENDER_WHITEMALEPATRIARCH);
    else if(exec[position]==ALIGN_CONSERVATIVE) generate_name(execname[position],GENDER_MALE);
@@ -241,7 +264,7 @@ void elections(char clearformess,char canseethings)
          for(c=0;c<2+stalinmode;c++)
          {
             // Pick color by political orientation
-            set_alignment_color(candidate[c][0],true);
+            set_alignment_color(getAlignFromInt(candidate[c][0]),true);
 
             move(8-((c+1)%3)*2,0);
             // Choose title -- president or vice president special titles, otherwise
@@ -256,7 +279,7 @@ void elections(char clearformess,char canseethings)
             else addstr("Mrs. ");
 
             addstr(candidate[c]+1);
-            addstr(", "+getalign(candidate[c][0],false));
+            addstr(", "+getalign(getAlignFromInt(candidate[c][0]),false));
          }
 
          if(!disbanding)
@@ -352,7 +375,7 @@ void elections(char clearformess,char canseethings)
       if(winner==presparty&&execterm==1) execterm=2;
       else
       {
-         presparty=winner, execterm=1, exec[EXEC_PRESIDENT]=candidate[winner][0];
+         presparty= getPartyFromInt(winner), execterm=1, exec[EXEC_PRESIDENT]= getAlignFromInt(candidate[winner][0]);
          strcpy(execname[EXEC_PRESIDENT],candidate[winner]+1);
          for(int e=EXEC_PRESIDENT+1;e<EXECNUM;e++) fillCabinetPost(e);
       }
@@ -450,7 +473,7 @@ void elections(char clearformess,char canseethings)
          addstr("Proposition "+tostring(propnums[p])+':');
          move(p*3+2,18);
          addstr("To ");
-         set_alignment_color(propdir[p]);
+         set_alignment_color(getAlignFromInt(propdir[p]));
          switch(prop[p])
          {
             case LAW_ABORTION:
@@ -607,7 +630,7 @@ void elections(char clearformess,char canseethings)
          addstr("A Recount was Necessary");
       }
 
-      if(yeswin) law[prop[p]]+=propdir[p];
+      if(yeswin) law[prop[p]] = getAlignFromInt(prop[p] + propdir[p]);
    }
 
    if(canseethings)
@@ -674,7 +697,7 @@ void elections_senate(int senmod,char canseethings)
       if(stalinmode&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)) vote=3;
 
       change[senate[s]+2]--;
-      if(termlimits) senate[s]=vote;
+      if(termlimits) senate[s]= getAlignFromInt(vote);
       else
       {
          int vote2;
@@ -694,7 +717,7 @@ void elections_senate(int senmod,char canseethings)
             }
             first=false;
          } while(vote2!=senate[s]&&vote2!=vote);
-         senate[s]=vote2;
+         senate[s]= getAlignFromInt(vote2);
       }
       change[senate[s]+2]++;
 
@@ -744,7 +767,7 @@ void elections_senate(int senmod,char canseethings)
    if(canseethings)
    {
       move(21,0);
-      signed char winner;
+      Alignment winner;
       if(change[5]>0&&change[5]>change[0]+change[1]&&change[5]>change[3]+change[4]) // Stalinist increased and Stalinist gain is more than C or L side gain/loss
          winner=ALIGN_STALINIST;
       else if(change[0]+change[1]>change[3]+change[4]) // C side gain/loss is more than L side gain/loss
@@ -867,7 +890,7 @@ void elections_house(char canseethings)
       if(stalinmode&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)) vote=3;
 
       change[house[h]+2]--;
-      if(termlimits) house[h]=vote;
+      if(termlimits) house[h]= getAlignFromInt(vote);
       else
       {
          int vote2;
@@ -887,7 +910,7 @@ void elections_house(char canseethings)
             }
             first=false;
          } while(vote2!=house[h]&&vote2!=vote);
-         house[h]=vote2;
+         house[h]= getAlignFromInt(vote2);
       }
       change[house[h]+2]++;
 
@@ -966,7 +989,7 @@ void elections_house(char canseethings)
    if(canseethings)
    {
       move(21,0);
-      signed char winner;
+      Alignment winner;
       if(change[5]>0&&change[5]>change[0]+change[1]&&change[5]>change[3]+change[4]) // Stalinist increased and Stalinist gain is more than C or L side gain/loss
          winner=ALIGN_STALINIST;
       else if(change[0]+change[1]>change[3]+change[4]) // C side gain/loss is more than L side gain/loss
@@ -1261,7 +1284,7 @@ void supremecourt(char clearformess,char canseethings)
          }
       }
 
-      if(yeswin) law[scase[c]]+=scasedir[c];
+      if(yeswin) law[scase[c]] = getAlignFromInt(scase[c] + scasedir[c]);
    }
 
    if(canseethings)
@@ -1303,7 +1326,10 @@ void supremecourt(char clearformess,char canseethings)
 
          getkey();
       }
-
+	  //TODO
+	  // IsaacG
+	  // Converting enumerators into floats is inadvisable
+	  // But the alternative is complex at best
       float president=(exec[EXEC_PRESIDENT]==ALIGN_STALINIST?-3:exec[EXEC_PRESIDENT]);
       float sen=0;
       for(int s=0;s<100;s++) sen+=(senate[s]==ALIGN_STALINIST?-3:senate[s]);
@@ -1809,7 +1835,7 @@ void congress(char clearformess,char canseethings)
             pause_ms(500);
          }
 
-         if(killbill[c]==BILL_SIGNED||killbill[c]==BILL_OVERRIDE_VETO) law[bill[c]]+=billdir[c];
+         if(killbill[c]==BILL_SIGNED||killbill[c]==BILL_OVERRIDE_VETO) law[bill[c]] = getAlignFromInt((int)bill[c] + billdir[c]);
       }
 
       if(canseethings)
@@ -1867,25 +1893,41 @@ char wincheck()
    else
    {
       int liberalLaws=0,eliteLaws=0;
-      for(int l=0;l<LAWNUM;l++)
-      {
-         if(law[l]<ALIGN_LIBERAL) return 0;
-         if(law[l]==ALIGN_LIBERAL) liberalLaws++;
-         else eliteLaws++;
+	  for (int l = 0; l < LAWNUM; l++)
+	  {
+		  if (law[l] == ALIGN_LIBERAL) { liberalLaws++; }
+		  else if (law[l] == ALIGN_ELITELIBERAL) { eliteLaws++; }
+			  else return 0;
       }
       if(eliteLaws<liberalLaws) return 0;
    }
+   int houseLib = 0;
+   int houseELib = 0;
+   for (int h = 0; h < HOUSENUM; h++) {
+	   if (house[h] == ALIGN_ELITELIBERAL) {
+		   houseELib++;
+	   }
+	   if (house[h] == ALIGN_LIBERAL) {
+		   houseLib++;
+	   }
+   }
+   if(houseELib+houseLib/2<((wincondition==WINCONDITION_ELITE)?HOUSESUPERMAJORITY:HOUSECOMFYMAJORITY)) return 0; // Elite Libs plus half of Libs >= 3/5 for easy, 2/3 for elite
+   if(houseELib<((wincondition==WINCONDITION_ELITE)?HOUSECOMFYMAJORITY:HOUSEMAJORITY)) return 0; // Elite Libs themselves >= 1/2 for easy, 3/5 for elite
 
-   int housemake[6]={0,0,0,0,0,0};
-   for(int h=0;h<HOUSENUM;h++) housemake[house[h]+2]++;
-   if(housemake[4]+housemake[3]/2<((wincondition==WINCONDITION_ELITE)?HOUSESUPERMAJORITY:HOUSECOMFYMAJORITY)) return 0; // Elite Libs plus half of Libs >= 3/5 for easy, 2/3 for elite
-   if(housemake[4]<((wincondition==WINCONDITION_ELITE)?HOUSECOMFYMAJORITY:HOUSEMAJORITY)) return 0; // Elite Libs themselves >= 1/2 for easy, 3/5 for elite
-
-   int senatemake[6]={0,0,0,0,0,0};
-   for(int s=0;s<SENATENUM;s++) senatemake[senate[s]+2]++;
-   if(senatemake[4]+senatemake[3]/2<((wincondition==WINCONDITION_ELITE)?SENATESUPERMAJORITY:SENATECOMFYMAJORITY)) return 0; // Elite Libs plus half of Libs >= 3/5 for easy, 2/3 for elite
-   if(wincondition!=WINCONDITION_ELITE) senatemake[exec[EXEC_VP]+2]++; // VP counts as Senator only for breaking ties (so counts for 1/2 fraction but not higher fractions)
-   if(senatemake[4]<((wincondition==WINCONDITION_ELITE)?SENATECOMFYMAJORITY:SENATEMAJORITY)) return 0; // Elite Libs themselves >= 1/2 for easy, 3/5 for elite
+   int senateLib = 0;
+   int senateELib = 0;
+   for (int s = 0; s < SENATENUM; s++) {
+	   //senatemake[senate[s] + 2]++;
+	   if (senate[s] == ALIGN_ELITELIBERAL) {
+		   senateELib++;
+	   }
+	   if (senate[s] == ALIGN_LIBERAL) {
+		   senateLib++;
+	   }
+   }
+   if(senateELib + senateLib /2<((wincondition==WINCONDITION_ELITE)?SENATESUPERMAJORITY:SENATECOMFYMAJORITY)) return 0; // Elite Libs plus half of Libs >= 3/5 for easy, 2/3 for elite
+   if (wincondition != WINCONDITION_ELITE) { if (exec[EXEC_VP] == ALIGN_ELITELIBERAL) { senateELib++; } else if (exec[EXEC_VP] == ALIGN_LIBERAL) { senateLib++; } } // VP counts as Senator only for breaking ties (so counts for 1/2 fraction but not higher fractions)
+   if(senateELib<((wincondition==WINCONDITION_ELITE)?SENATECOMFYMAJORITY:SENATEMAJORITY)) return 0; // Elite Libs themselves >= 1/2 for easy, 3/5 for elite
 
    int elibjudge=0,libjudge=0;
    for(int c=0;c<COURTNUM;c++)

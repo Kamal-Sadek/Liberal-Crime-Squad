@@ -31,8 +31,30 @@
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
+#include <includeDefault.h>
+#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+#include <includeExternDefault.h>
+#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
+extern MusicClass music;
+extern int year;
+extern Alignment exec[EXECNUM];
+extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 
 enum Pages
 {
@@ -90,7 +112,7 @@ bool liberalagenda(signed char won)
          move(3,0);
          addstr("ผ                 ศออออออออออฯออออออออออฯอออออออออออออออออออออออออออออออออออออออ");
 
-         signed char align=exec[EXEC_PRESIDENT];
+         Alignment align=exec[EXEC_PRESIDENT];
          set_alignment_color(align,true);
          move(5,0);
          if(won==-1) addstr("King: ");

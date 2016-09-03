@@ -59,8 +59,37 @@ This file is part of Liberal Crime Squad.                                       
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+translateid.cpp
+*/
+#include "common\\translateid.h"
+
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+//#include <includeNews.h>
+#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+extern char newscherrybusted;
+extern vector<Location *> location;
+#include <includeExternDefault.h>
+extern vector<LootType *> loottype;
+extern MusicClass music;
+//#include <includeExternPolitics.h>
+extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+extern short mode;
+extern Alignment exec[EXECNUM];
+extern char endgamestate;
 
 void doActivitySolicitDonations(vector<Creature *> &solicit, char &clearformess);
 void doActivitySellTshirts(vector<Creature *> &tshirts, char &clearformess);
@@ -1706,7 +1735,7 @@ void doActivityLearn(vector<Creature *> &students, char &clearformess)
    {
 	   if(ledger.get_funds()<60) break;
 	   ledger.subtract_funds(60,EXPENSE_TRAINING);
-	   int skill[2] = {-1, -1};
+	   CreatureSkill skill[2] = { getSkillFromInt(-1), getSkillFromInt(-1)};
 	   int effectiveness[2] = {20, 20};
 	   switch(students[s]->activity.type)
 	   {
@@ -2232,7 +2261,7 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
 {
    for(int t=0;t<len(teachers);t++)
    {
-      int skillarray[14];
+      CreatureSkill skillarray[14];
       int cost=0, students=0;
       //Build a list of skills to train and determine the cost for running
       //a class depending on what the teacher is teaching
@@ -2249,7 +2278,7 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
          skillarray[6]=SKILL_STREETSENSE;
          skillarray[7]=SKILL_MUSIC;
          skillarray[8]=SKILL_ART;
-         skillarray[9]=-1;
+         skillarray[9]= getSkillFromInt(-1);
          break;
       case ACTIVITY_TEACH_COVERT:
          cost=6;
@@ -2261,7 +2290,7 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
          skillarray[5]=SKILL_SEDUCTION;
          skillarray[6]=SKILL_PSYCHOLOGY;
          skillarray[7]=SKILL_DRIVING;
-         skillarray[8]=-1;
+         skillarray[8]= getSkillFromInt(-1);
          break;
       case ACTIVITY_TEACH_FIGHTING:
          cost=10;
@@ -2278,7 +2307,7 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
          skillarray[10]=SKILL_HANDTOHAND;
          skillarray[11]=SKILL_DODGE;
          skillarray[12]=SKILL_FIRSTAID;
-         skillarray[13]=-1;
+         skillarray[13]= getSkillFromInt(-1);
          break;
       }
 

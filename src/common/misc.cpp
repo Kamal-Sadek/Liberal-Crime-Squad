@@ -1,4 +1,34 @@
-#include <externs.h>
+
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
+
+/*
+stringconversion.cpp
+*/
+#include "common\\stringconversion.h"
+
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+//#include <includeTalk.h>
+// still contains
+extern Log gamelog;
+//#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
+extern char homedir[MAX_PATH_SIZE];
+extern char artdir[MAX_PATH_SIZE];
+extern MusicClass music;
 
 /* pick a descriptor acronym */
 void sexdesc(char *str)

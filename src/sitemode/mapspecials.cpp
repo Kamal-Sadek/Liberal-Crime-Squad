@@ -25,8 +25,37 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+translateid.cpp
+*/
+#include "common\\translateid.h"
+
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+//#include <includeNews.h>
+#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+extern vector<Location *> location;
+#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
+extern vector<LootType *> loottype;
+extern short postalarmtimer;
+extern short mode;
+extern char endgamestate;
+extern short sitetype;
 
 enum bouncer_reject_reason
 {
@@ -81,7 +110,7 @@ void special_bouncer_assess_squad()
          autoadmit=1;
          strcpy(sleepername,pool[p]->name);
          strcpy(encounter[0].name,sleepername);
-         encounter[0].align=1;
+         encounter[0].align= ALIGN_LIBERAL;
          break;
       }
    }
@@ -1897,7 +1926,7 @@ void special_security(bool metaldetect)
             autoadmit=2;
             strcpy(sleepername,pool[p]->name);
             strcpy(encounter[0].name,sleepername);
-            encounter[0].align=1;
+            encounter[0].align= ALIGN_LIBERAL;
             encounter[0].cantbluff=1;
             break;
          }

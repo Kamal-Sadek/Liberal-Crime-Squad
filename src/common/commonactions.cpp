@@ -25,8 +25,36 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+translateid.cpp
+*/
+#include "common\\translateid.h"
+
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+#include <includeNews.h>
+#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+extern char newscherrybusted;
+extern vector<Location *> location;
+#include <includeExternDefault.h>
+extern MusicClass music;
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
+extern char endgamestate;
+extern short mode;
 
 /* common - test for possible game over */
 char endcheck(char cause)
@@ -63,7 +91,7 @@ char endcheck(char cause)
       }
       else savehighscore(cause); // the reason we lost was specified in the function call
       // You just lost the game!
-      reset(savefile_name);
+      reset();
       viewhighscores();
       end_game();
       return true;

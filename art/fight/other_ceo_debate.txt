@@ -1,0 +1,9 @@
+# By default, this begins with an entity name,
+# and ends with an entity name.
+# Whitespace at the beginning and end are
+# automatically added
+debates fiscal policy with
+derides voodoo economics to
+dismisses the Reagan presidency to
+argues about tax cuts with
+explains Liberal philosophy to

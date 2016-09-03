@@ -25,8 +25,40 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+translateid.cpp
+*/
+#include "common\\translateid.h"
+
+/*
+stringconversion.cpp
+*/
+#include "common\\stringconversion.h"
+
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+//#include <includeNews.h>
+#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+extern vector<Location *> location;
+#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
+extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+extern char oldPresidentName[POLITICIAN_NAMELEN];
+//#include <includeExternStat.h>
+
+extern Alignment exec[EXECNUM];
 
 
 Skill::Skill(const std::string& inputXml)
@@ -41,9 +73,9 @@ Skill::Skill(const std::string& inputXml)
       std::string tag = xml.GetTagName();
 
       if (tag == "associated_attribute")
-         associated_attribute = atoi(xml.GetData());
+         associated_attribute = getAttributeFromInt(atoi(xml.GetData()));
       else if (tag == "skill")
-         skill = atoi(xml.GetData());
+         skill = getSkillFromInt(atoi(xml.GetData()));
       else if (tag == "value")
          value = min(atoi(xml.GetData()),MAXATTRIBUTE);
    }
@@ -61,7 +93,7 @@ string Skill::showXml() const
    return xml.GetDoc();
 }
 
-CreatureAttribute Skill::get_associated_attribute(int skill_type)
+CreatureAttribute Skill::get_associated_attribute(CreatureSkill skill_type)
 {
    // Initialize associated attribute
    switch(skill_type)
@@ -106,7 +138,7 @@ CreatureAttribute Skill::get_associated_attribute(int skill_type)
    }
 }
 
-std::string Skill::get_name(int skill_type)
+std::string Skill::get_name(CreatureSkill skill_type)
 {
    switch(skill_type)
    {
@@ -157,7 +189,7 @@ Attribute::Attribute(const std::string& inputXml)
       std::string tag = xml.GetTagName();
 
       if (tag == "attribute")
-         attribute = atoi(xml.GetData());
+         attribute = getAttributeFromInt(atoi(xml.GetData()));
       else if (tag == "value")
          value = min(atoi(xml.GetData()),MAXATTRIBUTE);
    }
@@ -174,7 +206,7 @@ string Attribute::showXml() const
    return xml.GetDoc();
 }
 
-std::string Attribute::get_name(int attribute_type)
+std::string Attribute::get_name(CreatureAttribute attribute_type)
 {
    switch(attribute_type)
    {
@@ -426,7 +458,7 @@ void Creature::creatureinit()
    armor=NULL;//new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]); //Causes crash for global uniqueCreature -XML
    for(int a=0;a<ATTNUM;a++)
    {
-      attributes[a].set_type(a);
+      attributes[a].set_type(getAttributeFromInt(a));
       attributes[a].value=1;
    }
    int attnum=32;
@@ -441,7 +473,7 @@ void Creature::creatureinit()
    }
    for(int s=0;s<SKILLNUM;s++)
    {
-      skills[s].set_type(s);
+      skills[s].set_type(getSkillFromInt(s));
       skills[s].value=0;
       skill_experience[s]=0;
    }
@@ -469,7 +501,7 @@ void Creature::creatureinit()
    money=0;
    income=0;
    exists=true;
-   align=LCSrandom(3)-1;
+   align= getAlignFromInt(LCSrandom(3)-1);
    infiltration=0.0f;
    type=CREATURE_WORKER_JANITOR;
    type_idname="CREATURE_WORKER_JANITOR";
@@ -530,11 +562,11 @@ Creature::Creature(const std::string& inputXml)
       else if (tag == "exists")
          exists = atoi(xml.GetData());
       else if (tag == "align")
-         align = atoi(xml.GetData());
+         align = getAlignFromInt(atoi(xml.GetData()));
       else if (tag == "alive")
          alive = atoi(xml.GetData());
       else if (tag == "type")
-         type = atoi(xml.GetData());
+         type = getCreatureTypeFromInt(atoi(xml.GetData()));
       else if (tag == "type_idname")
          type_idname = xml.GetData();
       else if (tag == "infiltration")
@@ -740,7 +772,7 @@ string Creature::showXml() const
    return xml.GetDoc();
 }
 
-int Creature::get_attribute(int attribute, bool usejuice) const
+int Creature::get_attribute(CreatureAttribute attribute, bool usejuice) const
 {
    int ret=attributes[attribute].value;
 
@@ -929,7 +961,7 @@ int Creature::roll_check(int skill)
    return total;
 }
 
-int Creature::attribute_roll(int attribute) const
+int Creature::attribute_roll(CreatureAttribute attribute) const
 {
    int return_value = roll_check(get_attribute(attribute,true));
    #ifdef SHOWMECHANICS
@@ -947,7 +979,7 @@ int Creature::attribute_roll(int attribute) const
    return return_value;
 }
 
-bool Creature::attribute_check(int attribute, int difficulty) const
+bool Creature::attribute_check(CreatureAttribute attribute, int difficulty) const
 {
    #ifdef SHOWMECHANICS
    mvaddstr(8,1," AttributeCheck(");
@@ -989,7 +1021,7 @@ int Creature::skill_roll(int skill) const
    // Take skill strength
    int skill_value = skills[skill].value;
    // plus the skill's associate attribute
-   int attribute_value = get_attribute(skills[skill].get_attribute(),true);
+   int attribute_value = get_attribute(getAttributeFromInt(skills[skill].get_attribute()),true);
 
    int adjusted_attribute_value;
    switch(skill)
@@ -1113,7 +1145,7 @@ int Creature::skill_roll(int skill) const
    return return_value;
 }
 
-bool Creature::skill_check(int skill, int difficulty) const
+bool Creature::skill_check(CreatureSkill skill, int difficulty) const
 {
    #ifdef SHOWMECHANICS
    mvaddstr(8,1," SkillCheck(");
@@ -1136,7 +1168,7 @@ void Creature::stop_hauling_me()
    for(int p=0;p<len(pool);p++) if(pool[p]->prisoner==this) pool[p]->prisoner=NULL;
 }
 
-void Creature::train(int trainedskill, int experience, int upto)
+void Creature::train(CreatureSkill trainedskill, int experience, int upto)
 {
    // Do we allow animals to gain skills? Right now, yes
    //if(animalgloss==ANIMALGLOSS_ANIMAL)return;
@@ -1164,12 +1196,12 @@ void Creature::skill_up()
    for(int s=0;s<SKILLNUM;s++)
    {
       while(skill_experience[s]>=100+10*skills[s].value&&
-            skills[s].value<skill_cap(s,true))
+            skills[s].value<skill_cap(getSkillFromInt(s),true))
       {
          skill_experience[s]-=100+10*skills[s].value;
          skills[s].value++;
       }
-      if(skills[s].value==skill_cap(s,true))
+      if(skills[s].value==skill_cap(getSkillFromInt(s),true))
          skill_experience[s]=0;
    }
 }
@@ -1704,12 +1736,12 @@ void Creature::strip(vector<Item*>* lootpile)
 }
 
 int Creature::get_weapon_skill() const {
-   int wsk = SKILL_HANDTOHAND;
+	CreatureSkill wsk = SKILL_HANDTOHAND;
    if(get_weapon().has_musical_attack())
       wsk=SKILL_MUSIC;
    else if (has_thrown_weapon && len(extra_throwing_weapons))
-      wsk=extra_throwing_weapons[0]->get_attack(false,false,false)->skill;
-   else wsk=get_weapon().get_attack(false,false,false)->skill;
+      wsk= getSkillFromInt(extra_throwing_weapons[0]->get_attack(false,false,false)->skill);
+   else wsk= getSkillFromInt(get_weapon().get_attack(false,false,false)->skill);
    return get_skill(wsk);
 }
 

@@ -1,0 +1,9 @@
+# By default, these start with the entity's name
+# So generally one should put a space at the beginning
+ makes a break for it!
+ escapes crying!
+ runs away!
+ gets out of there!
+ runs hollering!
+ bolts out of there!
+ runs away screaming!

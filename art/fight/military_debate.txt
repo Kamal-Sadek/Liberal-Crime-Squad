@@ -1,0 +1,9 @@
+# By default, this begins with an entity name,
+# and ends with an entity name.
+# Whitespace at the beginning and end are
+# automatically added
+recites the Pledge of Allegiance to
+debates national security with
+debates terrorism with
+preaches about veterans to
+explains military spending to
