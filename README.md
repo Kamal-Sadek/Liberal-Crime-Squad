@@ -4,7 +4,7 @@ Welcome to Liberal Crime Squad! The Conservatives have taken the Executive, Legi
 
 This version of Liberal Crime Squad is an unofficial transfer from SourceForge. A full list of authors is available in AUTHORS.
 
-Read COMPILE_README.txt for instructions on how to compile on all platforms.
+Read [COMPILE_README.txt](COMPILE_README.txt) for instructions on how to compile on all platforms.
 
 ## Augmentations
 
