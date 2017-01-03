@@ -1,0 +1,108 @@
+﻿Build started 9/2/2016 3:26:11 AM.
+     1>Project "C:\Users\isaacG\Documents\Visual Studio 2015\Projects\v4.10.0\workspaces\game.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I..\src\pdcurses /I..\src /Zi /nologo /W2 /WX- /O1 /Ob0 /Os /Oy- /D WIN32 /D NOMINMAX /D MARKUP_STL /D NDEBUG /D _CONSOLE /D _VC80_UPGRADE=0x0710 /D _MBCS /GF /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo".\Release/" /Fd".\Release/vc140.pdb" /Gd /TP /analyze- /errorReport:prompt /wd4996 ..\src\basemode\activate.cpp ..\src\creature\augmentation.cpp ..\src\locations\locations.cpp ..\src\items\loot.cpp ..\src\lcsio.cpp
+         activate.cpp
+     1>..\src\basemode\activate.cpp(1844): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+     1>..\src\basemode\activate.cpp(1895): warning C4244: 'argument': conversion from 'double' to 'long', possible loss of data
+         augmentation.cpp
+         locations.cpp
+         loot.cpp
+         lcsio.cpp
+         Generating Code...
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I..\src\pdcurses /I..\src /Zi /nologo /W2 /WX- /O1 /Ob0 /Os /Oy- /D WIN32 /D NOMINMAX /D MARKUP_STL /D NDEBUG /D _CONSOLE /D _VC80_UPGRADE=0x0710 /D _MBCS /GF /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo".\Release\creaturetypes1.obj" /Fd".\Release/vc140.pdb" /Gd /TP /analyze- /errorReport:prompt /wd4996 ..\src\creature\creaturetypes.cpp
+         creaturetypes.cpp
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Release/crimesquad.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:".\Release/crimesquad.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\Release\crimesquad.lib" /MACHINE:X86 /SAFESEH:NO .\Release/activate.obj
+         .\Release/activate_sleepers.obj
+         .\Release/baseactions.obj
+         .\Release/basemode.obj
+         .\Release/reviewmode.obj
+         .\Release/chase.obj
+         .\Release/fight.obj
+         .\Release/haulkidnap.obj
+         .\Release/commonactions.obj
+         .\Release/commondisplay.obj
+         .\Release/consolesupport.obj
+         .\Release/equipment.obj
+         .\Release/getnames.obj
+         .\Release/help.obj
+         .\Release/liberalagenda.obj
+         .\Release/misc.obj
+         .\Release/stringconversion.obj
+         .\Release/translateid.obj
+         .\Release/augmentation.obj
+         .\Release/augmenttype.obj
+         .\Release/creaturetype.obj
+         .\Release/activities.obj
+         .\Release/daily.obj
+         .\Release/date.obj
+         .\Release/interrogation.obj
+         .\Release/recruit.obj
+         .\Release/shopsnstuff.obj
+         .\Release/siege.obj
+         .\Release/locations.obj
+         .\Release/world.obj
+         .\Release/endgame.obj
+         .\Release/justice.obj
+         .\Release/lcsmonthly.obj
+         .\Release/monthly.obj
+         .\Release/sleeper_update.obj
+         .\Release/news.obj
+         .\Release/advance.obj
+         .\Release/mapspecials.obj
+         .\Release/miscactions.obj
+         .\Release/newencounter.obj
+         .\Release/shop.obj
+         .\Release/sitedisplay.obj
+         .\Release/sitemap.obj
+         .\Release/sitemode.obj
+         .\Release/stealth.obj
+         .\Release/talk.obj
+         .\Release/highscore.obj
+         .\Release/initfile.obj
+         .\Release/newgame.obj
+         .\Release/saveload.obj
+         .\Release/titlescreen.obj
+         .\Release/law.obj
+         .\Release/politics.obj
+         .\Release/ads.obj
+         .\Release/headline.obj
+         .\Release/layout.obj
+         .\Release/majorevent.obj
+         .\Release/squadstory_text.obj
+         .\Release/armor.obj
+         .\Release/armortype.obj
+         .\Release/clip.obj
+         .\Release/cliptype.obj
+         .\Release/item.obj
+         .\Release/itemtype.obj
+         .\Release/loot.obj
+         .\Release/loottype.obj
+         .\Release/money.obj
+         .\Release/weapon.obj
+         .\Release/weapontype.obj
+         .\Release/creature.obj
+         .\Release/creaturenames.obj
+         .\Release/vehicle.obj
+         .\Release/vehicletype.obj
+         .\Release/Markup.obj
+         .\Release/log.obj
+         .\Release/compat.obj
+         .\Release/configfile.obj
+         .\Release/cursesgraphics.obj
+         .\Release/cursesmovie.obj
+         .\Release/game.obj
+         .\Release/lcsio.obj
+         .\Release\creaturetypes1.obj
+         ..\src\pdcurses\pdcurses.lib
+         ..\src\sdl\SDL2main.lib
+         ..\src\sdl\SDL2.lib
+         ..\src\sdl\SDL2_mixer.lib
+         lcs_news_icon.res
+         game.vcxproj -> C:\Users\isaacG\Documents\Visual Studio 2015\Projects\v4.10.0\workspaces\.\Release\crimesquad.exe
+     1>Done Building Project "C:\Users\isaacG\Documents\Visual Studio 2015\Projects\v4.10.0\workspaces\game.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:19.91

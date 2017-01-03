@@ -25,8 +25,44 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+translateid.cpp
+*/
+#include "common\\translateid.h"
+
+#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+extern char newscherrybusted;
+extern vector<Location *> location;
+#include <includeExternDefault.h>
+extern bool multipleCityMode;
+#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+extern int stat_buys;
+extern int stat_burns;
+
+extern PoliticalParties presparty;
+extern MusicClass music;
+extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+extern int stat_kidnappings;
+extern int year;
+extern short mode;
+extern Alignment exec[EXECNUM];
+extern char endgamestate;
+extern bool encounterwarnings;
+extern int stat_dead;
+extern int stat_kills;
+extern int stat_recruits;
+extern char oldPresidentName[POLITICIAN_NAMELEN];
 
 // TODO: It would be really cool to be able to "export" characters.
 
@@ -379,7 +415,7 @@ char load(const string& filename)
       {
             LCSCloseFile(h);
 
-            reset(savefile_name);
+            reset();
 
             return 0;
          }
@@ -833,8 +869,10 @@ char load(const string& filename)
 }
 
 /* deletes save.dat (used on endgame and for invalid save version) */
-void reset(const string& filename)
+void reset()
 {
-	if(file_exists(filename)) LCSDeleteFile(filename.c_str(),LCSIO_PRE_HOME);
+   for(string filename : LCSSaveFiles()) {
+      if(file_exists(filename)) LCSDeleteFile(filename.c_str(),LCSIO_PRE_HOME);
+   }
 }
 

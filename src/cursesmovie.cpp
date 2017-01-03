@@ -20,7 +20,22 @@
 //    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA			//
 //////////////////////////////////////////////////////////////////////////////////////////
 
-#include <externs.h>
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
+
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+//#include <includeExtern.h>
 
 extern CursesMoviest movie;
 

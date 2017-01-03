@@ -18,8 +18,22 @@ This file is part of Liberal Crime Squad.                                       
     along with Liberal Crime Squad; if not, write to the Free Software              //
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
 
-#include <externs.h>
+#include <includeTalk.h>
+extern vector<Location *> location;
+//#include <includeExternDefault.h>
+extern bool multipleCityMode;
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
 
 // Finds a location with the corresponding type and returns
 // its index in the location array

@@ -1,0 +1,16 @@
+# By default, this begins with an entity name,
+# and ends with an entity name.
+# Whitespace at the beginning and end are
+# automatically added
+debates the death penalty with
+debates gay rights with
+debates free speech with
+debates the Second Amendment with
+justifies voodoo economics to
+extols the Reagan presidency to
+argues about tax cuts with
+explains Conservative philosophy to
+extends a dinner invitation to
+debates fiscal policy with
+chats warmly with
+smiles at

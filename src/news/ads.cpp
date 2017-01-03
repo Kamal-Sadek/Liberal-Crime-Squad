@@ -1,4 +1,21 @@
-#include <externs.h>
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+//#include <includeCommon.h>
+//still contains
+void displaynewsstory(char *story, short *storyx_s, short *storyx_e, int y);
+
+/*
+stringconversion.cpp
+*/
+#include "common\\stringconversion.h"
+
+#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+extern int year;
 
 void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,short* storyx_e,int& it2)
 {

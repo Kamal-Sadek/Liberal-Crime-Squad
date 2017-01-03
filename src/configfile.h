@@ -72,7 +72,9 @@
 //
 // ~ Jonathan S. Fox
 
-#include "includes.h"
+//#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
 
 // - configurable is a base class object for anything
 //   that is implemented in the config file

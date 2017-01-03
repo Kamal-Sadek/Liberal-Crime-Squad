@@ -18,9 +18,29 @@ This file is part of Liberal Crime Squad.                                       
     along with Liberal Crime Squad; if not, write to the Free Software              //
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-//#include <includes.h>
-#include <externs.h>
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+extern vector<Location *> location;
+//#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
+extern MusicClass music;
+extern int stat_recruits;
 
 /* recruit struct constructor */
 recruitst::recruitst() : timeleft(0), level(0), eagerness1(0), task(0)

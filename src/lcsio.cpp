@@ -21,8 +21,28 @@ This file is part of Liberal Crime Squad.
     along with Liberal Crime Squad; if not, write to the Free Software
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA
 */
+#include <includeDefault.h>
+//#include "configfile.h"
+#include "tinydir.h"
+//#include <includeEnum.h>
+//#include <includeCommon.h>
 
-#include <externs.h>
+/*
+stringconversion.cpp
+*/
+#include "common\\stringconversion.h"
+
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+//#include <includeTalk.h>
+//#include <includeExternDefault.h>
+extern char homedir[MAX_PATH_SIZE];
+extern char artdir[MAX_PATH_SIZE];
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
 
 const char* arttest="newspic.cpc";
 bool initialized=false;

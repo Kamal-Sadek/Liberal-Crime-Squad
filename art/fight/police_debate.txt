@@ -1,0 +1,11 @@
+# By default, this begins with an entity name,
+# and ends with an entity name.
+# Whitespace at the beginning and end are
+# automatically added
+reasons with
+promises a fair trial to
+offers a kind ear to
+urges cooperation from
+offers a hug to
+suggests counseling to
+gives a teddy bear to

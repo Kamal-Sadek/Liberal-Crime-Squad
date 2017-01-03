@@ -59,8 +59,26 @@ This file is part of Liberal Crime Squad.                                       
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+//#include <includeNews.h>
+#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
+extern short mode;
+extern bool mapshowing;
 
 // Imperfect but quick and dirty line of sight check
 // Only works if the target point is at most two spaces

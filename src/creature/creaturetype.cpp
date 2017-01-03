@@ -1,4 +1,28 @@
-#include <externs.h>
+
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
+
+/*
+translateid.cpp
+*/
+#include "common\\translateid.h"
+
+/*
+stringconversion.cpp
+*/
+#include "common\\stringconversion.h"
+
+//#include <includeNews.h>
+#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
 
 // Assign a value to an Interval from a string or log error.
 void assign_interval(Interval& i, const std::string& value,
@@ -242,12 +266,13 @@ void CreatureType::make_creature(Creature& cr) const
    cr.infiltration=roll_infiltration();
    cr.money=money_.roll();
    strcpy(cr.name,get_encounter_name());
-   for(int i=0;i<SKILLNUM;i++) cr.set_skill(i,skills_[i].roll());
+   for(int i=0;i<SKILLNUM;i++) cr.set_skill(getSkillFromInt(i),skills_[i].roll());
    give_armor(cr);
    give_weapon(cr);
 }
 
-int CreatureType::get_alignment() const
+//IsaacG ## This is suboptimal #TODO
+Alignment CreatureType::get_alignment() const
 {
    if(alignment_public_mood_)
    {
@@ -255,7 +280,7 @@ int CreatureType::get_alignment() const
       int a=ALIGN_CONSERVATIVE;
       if(LCSrandom(100)<mood) a++;
       if(LCSrandom(100)<mood) a++;
-      return a;
+      return getAlignFromInt(a);
    }
    else return alignment_;
 }

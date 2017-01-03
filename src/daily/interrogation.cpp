@@ -18,7 +18,48 @@ This file is part of Liberal Crime Squad.                                       
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
 */
 
-#include <externs.h>
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
+
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+//#include <includeNews.h>
+#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+extern vector<Location *> location;
+//#include <includeExternDefault.h>
+extern MusicClass music;
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
+extern int stat_recruits;
+extern int stat_kills;
+
+
+
+
+extern vector<string> execution;
+extern vector<string> feels_sick;
+extern vector<string> low_heart_torture_props;
+extern vector<string> screaming;
+extern vector<string> beat_with_props;
+extern vector<string> words_meaning_screaming;
+extern vector<string> words_to_scream;
+extern vector<string> prays;
+extern vector<string> prays_on_drugs;
+extern vector<string> use_props;
+extern vector<string> resist_drugs;
+extern vector<string> partial_conversion;
+extern vector<string> broods_over_death;
+extern vector<string> self_wounding;
 
 // Macro dumps interrogation data to screen for debug
 #ifdef INTERROGATION_DEBUG
@@ -138,6 +179,158 @@ void show_interrogation_sidebar( Creature * cr, Creature * a )
 /* hostage tending */
 void tendhostage(Creature *cr,char &clearformess)
 {
+	static const int number_of_fall_in_love = 3;
+	static const char *fall_in_love[number_of_fall_in_love][2] =
+	{
+		{" hallucinates and sees ", " as an angel."},
+		{" realizes with joy that ", " is Ronald Reagan!"},
+		{" begs ", " to let the colors stay forever."}
+	};
+
+	static const int number_of_bad_trip = 2;
+	static const char *bad_trip[number_of_bad_trip][2] = 
+	{
+		{" screams in horror as "," turns into an alien."},
+		{" watches ", " shift from one demonic form to another."}
+	};
+
+	static const int good_trip_number = 2;
+	static const char *good_trip[good_trip_number] =
+	{
+		" can't stop looking at the moving colors.",
+		" barks and woofs like a dog."
+	};
+
+	static const int good_trip_companion_number = 2;
+	static const char *good_trip_companion[good_trip_companion_number][2] =
+	{
+		{" comments on the swirling light "," is radiating."},
+		{" laughs hysterically at ","'s altered appearance."}
+	};
+
+	static const int smarter_than_you_one_line_number = 3;
+	static const char *smarter_than_you_one_line[smarter_than_you_one_line_number] =
+	{
+		" knows how this works, and won't budge.",
+		" asks if Liberal mothers would approve of this.",
+		" seems resistant to this form of interrogation."
+	};
+
+	static const int smarter_than_you_number = 1;
+	static const char *smarter_than_you[smarter_than_you_number][2] =
+	{
+		{" plays mind games with ", "."}
+	};
+	
+
+	static const int develops_hatred_one_line_number = 6;
+	static const char *develops_hatred_one_line[develops_hatred_one_line_number] =
+	{
+		" babbles mindlessly.",
+		" just whimpers.",
+		" cries helplessly.",
+		" is losing faith in the world.",
+		" only grows more distant.",
+		" just hates the LCS even more."
+	};
+
+	static const int develops_hatred_number = 1;
+	static const char *develops_hatred[develops_hatred_number][2] =
+	{
+		{" is too terrified to even speak to ", "."}
+	};
+
+	static const int number_of_compassion_one_line = 6;
+	static const char *interrogater_shows_compassion_one_line[number_of_compassion_one_line] = 
+	{
+		" consoles the Conservative automaton.",
+		" shares some chocolates.",
+		" provides a shoulder to cry on.",
+		"'s heart opens to the poor Conservative.",
+		" helps the poor thing to come to terms with captivity.",
+		"'s patience and kindness leaves the Conservative confused."
+	};
+
+	static const int number_of_compassion = 1;
+	static const char *interrogater_shows_compassion[number_of_compassion][2] =
+	{
+		{" understands ", "'s pain."}
+	};
+
+	static const int number_of_clinging = 5;
+	static const char *cling_to_interrogater[number_of_clinging][2] =
+	{
+		{" emotionally clings to ", "'s sympathy."},
+		{" begs ", " for help."},
+		{" thanks ", " for being merciful."},
+		{" cries in ", "'s arms."},
+		{" really likes ", "."}
+	};
+
+	static const int number_of_clinging_one_line = 2;
+	static const char *clinging_one_line[number_of_clinging_one_line] =
+	{
+		" promises to be good.",
+		" reveals childhood pains."
+	};
+
+	static const int number_of_clinging_religion = 2;
+	static const char *cling_to_religion[number_of_clinging_religion][2] =
+	{
+		{" is unable to shake ","'s religious conviction."},
+		{"'s efforts to question ","'s faith seem futile."}
+	};
+
+	static const int number_of_clinging_religion_one_line = 2;
+	static const char *cling_to_religion_one_line[number_of_clinging_religion_one_line] =
+	{
+		" will never be broken so long as God grants it strength.",
+		" calmly explains the Conservative tenets of its faith."
+	};
+
+	static const int discuss_number = 2;
+	static const char *discuss[discuss_number][2] = 
+	{
+		{" talks about ", " with "},
+		{" argues about ", " with "}
+	};
+
+	static const int vanilla_recruit_number = 2;
+	static const char *vanilla_recruit[vanilla_recruit_number] = 
+	{
+		" tries to expose the true Liberal side of ",
+		" attempts to recruit "
+	};
+
+	static const int number_of_clinging_business = 2;
+	static const char *cling_to_business[number_of_clinging_business][2] =
+	{
+		{" will never be moved by ", "'s pathetic economic ideals."},
+		{" explains to ", " why communism failed."}
+	};
+
+	static const int number_of_clinging_business_one_line = 2;
+	static const char *cling_to_business_one_line[number_of_clinging_business_one_line] =
+	{
+		" wishes a big company would just buy the LCS and shut it down.",
+		" mumbles incoherently about Reaganomics."
+	};	
+
+	static const int number_of_clinging_science = 3;
+	static const char *cling_to_science[number_of_clinging_science][2] =
+	{
+		{" wonders what mental disease has possessed ", "."},
+		{" makes Albert Einstein faces at ", "."},
+		{" pities ", "'s blind ignorance of science."}
+	};
+
+	static const int number_of_clinging_science_one_line = 1;
+	static const char *cling_to_science_one_line[number_of_clinging_science_one_line] =
+	{
+		" explains why nuclear energy is safe."
+	};
+
+
    music.play(MUSIC_INTERROGATION);
    vector<Creature *> temppool;
    int p;
@@ -373,14 +566,7 @@ void tendhostage(Creature *cr,char &clearformess)
             addstr(" executes ", gamelog);
             addstr(cr->name, gamelog);
             addstr(" by ", gamelog);
-            switch(LCSrandom(5))
-            {
-            case 0: addstr("strangling it to death.", gamelog); break;
-            case 1: addstr("beating it to death.", gamelog); break;
-            case 2: addstr("burning photos of Reagan in front of it.", gamelog); break;
-            case 3: addstr("telling it that taxes have been increased.", gamelog); break;
-            case 4: addstr("telling it its parents wanted to abort it.", gamelog); break;
-            }
+            addstr(pickrandom(execution), gamelog);
             //show_interrogation_sidebar(cr,a);
 
             getkey();
@@ -394,13 +580,7 @@ void tendhostage(Creature *cr,char &clearformess)
                addstr(" feels sick to the stomach afterward and ", gamelog);
                a->adjust_attribute(ATTRIBUTE_HEART,-1);
                move(y++,0);
-               switch(LCSrandom(4))
-               {
-               case 0: addstr("throws up in a trash can.", gamelog); break;
-               case 1: addstr("gets drunk, eventually falling asleep.", gamelog); break;
-               case 2: addstr("curls up in a ball, crying softly.", gamelog); break;
-               case 3: addstr("shoots up and collapses in a heap on the floor.", gamelog); break;
-               }
+               addstr(pickrandom(feels_sick), gamelog);
             }
             else if(!LCSrandom(3))
             {
@@ -632,35 +812,14 @@ void tendhostage(Creature *cr,char &clearformess)
             rapport[a->id]-=3;
 
             addstr(a->name, gamelog);
-            switch(LCSrandom(6))
-            {
-            case 0:addstr(" reenacts scenes from Abu Ghraib", gamelog);break;
-            case 1:addstr(" whips the Automaton with a steel cable", gamelog);break;
-            case 2:addstr(" holds the hostage's head under water", gamelog);break;
-            case 3:addstr(" pushes needles under the Automaton's fingernails", gamelog);break;
-            case 4:addstr(" beats the hostage with a metal bat", gamelog);break;
-            case 5:addstr(" beats the hostage with a belt", gamelog);break;
-            }
+			addstr(" ", gamelog);
+            addstr(pickrandom(low_heart_torture_props), gamelog);
             addstr(", ", gamelog);
             move(++y,0);
             addstr("screaming \"", gamelog);
-            for(int i=0;i<2;i++)
-            {
-               switch(LCSrandom(10))
-               {
-               case 0:addstr("I hate you", gamelog);break;
-               case 1:addstr("Does it hurt?", gamelog);break;
-               case 2:addstr("Nobody loves you", gamelog);break;
-               case 3:addstr("God hates you", gamelog);break;
-               case 4:addstr("Don't fuck with me", gamelog);break;
-               case 5:addstr("This is Liberalism", gamelog);break;
-               case 6:addstr("Convert, bitch", gamelog);break;
-               case 7:addstr("I'm going to kill you", gamelog);break;
-               case 8:addstr("Do you love me?", gamelog);break;
-               case 9:addstr("I am your God", gamelog);break;
-               }
-               if(i<1) addstr("! ", gamelog);
-            }
+			addstr(pickrandom(screaming), gamelog);
+			addstr("! ", gamelog);
+			addstr(pickrandom(screaming), gamelog);
             addstr("!\" in its face.", gamelog);
             gamelog.newline();
             if(cr->get_attribute(ATTRIBUTE_HEART,true)>1) cr->adjust_attribute(ATTRIBUTE_HEART,-1);
@@ -688,52 +847,15 @@ void tendhostage(Creature *cr,char &clearformess)
             addstr(" the Automaton", gamelog);
             if(techniques[TECHNIQUE_PROPS])
             {
-               switch(LCSrandom(6))
-               {
-               case 0:addstr(" with a giant stuffed elephant", gamelog);break;
-               case 1:addstr(" while draped in a Confederate flag", gamelog);break;
-               case 2:addstr(" with a cardboard cutout of Reagan", gamelog);break;
-               case 3:addstr(" with a King James Bible", gamelog);break;
-               case 4:addstr(" with fists full of money", gamelog);break;
-               case 5:addstr(" with Conservative propaganda on the walls", gamelog);break;
-               }
+				addstr(" ", gamelog);
+				addstr(pickrandom(beat_with_props), gamelog);
             }
             addstr(", ", gamelog);
             move(++y,0);
-            switch(LCSrandom(4))
-            {
-            case 0:addstr("scream", gamelog);break;
-            case 1:addstr("yell", gamelog);break;
-            case 2:addstr("shout", gamelog);break;
-            case 3:addstr("holler", gamelog);break;
-            }
-            addstr("ing \"", gamelog);
+            addstr(pickrandom(words_meaning_screaming), gamelog);
             for(int i=0;i<3;i++)
             {
-               switch(LCSrandom(20))
-               {
-               case 0:addstr("McDonalds", gamelog);break;
-               case 1:addstr("Microsoft", gamelog);break;
-               case 2:addstr("Bill Gates", gamelog);break;
-               case 3:addstr("Wal-Mart", gamelog);break;
-               case 4:addstr("George W. Bush", gamelog);break;
-               case 5:addstr("ExxonMobil", gamelog);break;
-               case 6:addstr("Trickle-down economics", gamelog);break;
-               case 7:addstr("Family values", gamelog);break;
-               case 8:addstr("Conservatism", gamelog);break;
-               case 9:addstr("War on Drugs", gamelog);break;
-               case 10:addstr("War on Terror", gamelog);break;
-               case 11:addstr("Ronald Reagan", gamelog);break;
-               case 12:addstr("Rush Limbaugh", gamelog);break;
-               case 13:addstr("Tax cuts", gamelog);break;
-               case 14:addstr("Military spending", gamelog);break;
-               case 15:addstr("Ann Coulter", gamelog);break;
-               case 16:addstr("Deregulation", gamelog);break;
-               case 17:addstr("Police", gamelog);break;
-               case 18:addstr("Corporations", gamelog);break;
-               case 19:addstr("Wiretapping", gamelog);break;
-
-               }
+               addstr(pickrandom(words_to_scream), gamelog);
                if(i<2) addstr("! ", gamelog);
             }
             addstr("!\" in its face.", gamelog);
@@ -755,20 +877,14 @@ void tendhostage(Creature *cr,char &clearformess)
                addstr(cr->name, gamelog);
                if(!techniques[TECHNIQUE_DRUGS])
                {
-                  switch(LCSrandom(2))
-                  {
-                  case 0:addstr(" prays...", gamelog);break;
-                  case 1:addstr(" cries out for God.", gamelog);break;
-                  }
+				   addstr(" ", gamelog);
+                  addstr(pickrandom(prays), gamelog);
                   gamelog.newline();
                }
                else
                {
-                  switch(LCSrandom(2))
-                  {
-                  case 0:addstr(" takes solace in the personal appearance of God.", gamelog);break;
-                  case 1:addstr(" appears to be having a religious experience.", gamelog);break;
-                  }
+				   addstr(" ", gamelog);
+                  addstr(pickrandom(prays_on_drugs), gamelog);
                   gamelog.newline();
                }
             }
@@ -895,13 +1011,7 @@ void tendhostage(Creature *cr,char &clearformess)
                addstr(" feels sick to the stomach afterward and ", gamelog);
                a->adjust_attribute(ATTRIBUTE_HEART,-1);
                move(y++,0);
-               switch(LCSrandom(4))
-               {
-                  case 0:addstr("throws up in a trash can.", gamelog);break;
-                  case 1:addstr("gets drunk, eventually falling asleep.", gamelog);break;
-                  case 2:addstr("curls up in a ball, crying softly.", gamelog);break;
-                  case 3:addstr("shoots up and collapses in a heap on the floor.", gamelog);break;
-               }
+               addstr(pickrandom(feels_sick), gamelog);
                gamelog.newline();
             }
             else if(!LCSrandom(3))
@@ -931,33 +1041,20 @@ void tendhostage(Creature *cr,char &clearformess)
          if(techniques[TECHNIQUE_PROPS])//props
          {
             attack += 10;
-            switch(LCSrandom(9))
-            {
-            case 0:addstr(" plays violent video games with ", gamelog);break;
-            case 1:addstr(" reads Origin of the Species to ", gamelog);break;
-            case 2:addstr(" burns flags in front of ", gamelog);break;
-            case 3:addstr(" explores an elaborate political fantasy with ", gamelog);break;
-            case 4:addstr(" watches controversial avant-garde films with ", gamelog);break;
-            case 5:addstr(" plays the anime film Bible Black for ", gamelog);break;// Yes, this is a porno.
-            case 6:addstr(" watches a documentary about Emmett Till with ", gamelog);break;
-            case 7:addstr(" watches Michael Moore films with ", gamelog);break;
-            case 8:addstr(" listens to Liberal radio shows with ", gamelog);break;
-            }
+			addstr(" ", gamelog);
+            addstr(pickrandom(use_props), gamelog);
             gamelog.newline();
          }
          else
          {
-            switch(LCSrandom(4))
-            {
-            case 0:addstr(" talks about ", gamelog);
-                   addstr(getview(LCSrandom(VIEWNUM-3),true), gamelog);
-                   addstr(" with ", gamelog);break;
-            case 1:addstr(" argues about ", gamelog);
-                   addstr(getview(LCSrandom(VIEWNUM-3),true), gamelog);
-                   addstr(" with ", gamelog);break;
-            case 2:addstr(" tries to expose the true Liberal side of ", gamelog);break;
-            case 3:addstr(" attempts to recruit ", gamelog);break;
-            }
+			int which_discuss = LCSrandom(discuss_number + vanilla_recruit_number);
+			if(which_discuss < discuss_number){
+				addstr(discuss[which_discuss][0], gamelog);
+				addstr(getview(LCSrandom(VIEWNUM-3),true), gamelog);
+				addstr(discuss[which_discuss][1], gamelog);
+			}else{
+				addstr(pickrandom(vanilla_recruit), gamelog);
+			}
          }
          addstr(cr->name, gamelog);
          addstr(".", gamelog);
@@ -974,79 +1071,39 @@ void tendhostage(Creature *cr,char &clearformess)
             move(y++,0);
             if(cr->skill_check(SKILL_PSYCHOLOGY,DIFFICULTY_CHALLENGING))
             {
-               switch(LCSrandom(4))
-               {
-               case 0:addstr(cr->name);
-                     addstr(" takes the drug-induced hallucinations with stoicism.", gamelog);
-                     break;
-               case 1:addstr(cr->name);
-                     addstr(" mutters its initials over and over again.", gamelog);
-                     break;
-               case 2:addstr(cr->name);
-                     addstr(" babbles continuous numerical sequences.", gamelog);
-                     break;
-               case 3:addstr(cr->name);
-                     addstr(" manages to remain grounded through the hallucinations.", gamelog);
-                     break;
-               }
+				addstr(cr->name);
+				addstr(" ", gamelog);
+				addstr(pickrandom(resist_drugs), gamelog);
                gamelog.newline();
             }
             else if((rapport[a->id]>1 && !LCSrandom(3)) || !LCSrandom(10))
             {
                rapport_temp=10;
-               switch(LCSrandom(4))
+               switch(LCSrandom(number_of_fall_in_love + 1))
                {
                case 0:
-                  addstr(cr->name, gamelog);
-                  addstr(" hallucinates and sees ", gamelog);
-                  addstr(a->name, gamelog);
-                  addstr(" as an angel.", gamelog);
-                  break;
-               case 1:
-                  addstr(cr->name);
-                  addstr(" realizes with joy that ", gamelog);
-                  addstr(a->name, gamelog);
-                  addstr(" is Ronald Reagan!", gamelog);
-                  break;
-               case 2:
                   addstr(cr->name, gamelog);
                   addstr(" stammers and ", gamelog);
                   techniques[TECHNIQUE_RESTRAIN] ? addstr("talks about hugging ", gamelog) : addstr("hugs ", gamelog);
                   addstr(a->name, gamelog);
                   addstr(".", gamelog);
                   break;
-               case 3:
-                  addstr(cr->name, gamelog);
-                  addstr(" begs ", gamelog);
-                  addstr(a->name, gamelog);
-                  addstr(" to let the colors stay forever.", gamelog);
-                  break;
+			   default:
+				   int which_love = LCSrandom (number_of_fall_in_love);
+				   addstr(cr->name, gamelog);
+				   addstr(fall_in_love[which_love][0], gamelog);
+				   addstr(a->name, gamelog);
+				   addstr(fall_in_love[which_love][1], gamelog);
+				   break;
                }
                gamelog.newline();
             }
             else if((rapport[a->id]<-1 && LCSrandom(3)) || !LCSrandom(5))
             {
                attack=0;
-               switch(LCSrandom(4))
+               switch(LCSrandom(number_of_bad_trip + 2))
                {
                case 0:
-                  addstr(cr->name, gamelog);
-                  addstr(" screams in horror as ", gamelog);
-                  addstr(a->name, gamelog);
-                  addstr(" turns into an alien.", gamelog);
-                  break;
-               case 1:
-                  addstr(cr->name, gamelog);
-                  if(!techniques[TECHNIQUE_RESTRAIN]) addstr(" curls up and", gamelog);
-                  addstr(" begs for the nightmare to end.", gamelog);
-                  break;
-               case 2:
-                  addstr(cr->name, gamelog);
-                  addstr(" watches ", gamelog);
-                  addstr(a->name, gamelog);
-                  addstr(" shift from one demonic form to another.", gamelog);
-                  break;
-               case 3:
                   if(rapport[a->id]<-3)
                   {
                      addstr(cr->name, gamelog);
@@ -1062,34 +1119,32 @@ void tendhostage(Creature *cr,char &clearformess)
                      addstr(" to stop looking like Hitler.", gamelog);
                   }
                   break;
+			   case 1:
+                  addstr(cr->name, gamelog);
+                  if(!techniques[TECHNIQUE_RESTRAIN]) addstr(" curls up and", gamelog);
+                  addstr(" begs for the nightmare to end.", gamelog);
+                  break;
+			   default:
+				   int which_trip = LCSrandom (number_of_bad_trip);
+				   addstr(cr->name, gamelog);
+				   addstr(pickrandom(bad_trip[which_trip][0]), gamelog);
+				   addstr(a->name, gamelog);
+				   addstr(pickrandom(bad_trip[which_trip][1]), gamelog);
+				   break;
                }
                gamelog.newline();
             }
             else
             {
-               switch(LCSrandom(4))
-               {
-               case 0:
-                  addstr(cr->name, gamelog);
-                  addstr(" comments on the swirling light ", gamelog);
-                  addstr(a->name, gamelog);
-                  addstr(" is radiating.", gamelog);
-                  break;
-               case 1:
-                  addstr(cr->name, gamelog);
-                  addstr(" can't stop looking at the moving colors.", gamelog);
-                  break;
-               case 2:
-                  addstr(cr->name, gamelog);
-                  addstr(" laughs hysterically at ", gamelog);
-                  addstr(a->name, gamelog);
-                  addstr("'s altered appearance.", gamelog);
-                  break;
-               case 3:
-                  addstr(cr->name, gamelog);
-                  addstr(" barks and woofs like a dog.", gamelog);
-                  break;
-               }
+				int which_good_trip = LCSrandom(good_trip_number + good_trip_companion_number);
+				addstr(cr->name, gamelog);
+				if(which_good_trip < good_trip_companion_number){
+					addstr(good_trip_companion[which_good_trip][0], gamelog);
+					addstr(a->name, gamelog);
+					addstr(good_trip_companion[which_good_trip][1], gamelog);
+				} else {
+					addstr(pickrandom(good_trip), gamelog);
+				}
                gamelog.newline();
             }
          }
@@ -1101,23 +1156,15 @@ void tendhostage(Creature *cr,char &clearformess)
          if(cr->get_skill(SKILL_PSYCHOLOGY)>a->get_skill(SKILL_PSYCHOLOGY))
          {
             move(y++,0);
-            switch(LCSrandom(4))
-            {
-            case 0:addstr(cr->name, gamelog);
-                  addstr(" plays mind games with ", gamelog);
-                  addstr(a->name, gamelog);
-                  addstr(".", gamelog);
-                  break;
-            case 1:addstr(cr->name, gamelog);
-                  addstr(" knows how this works, and won't budge.", gamelog);
-                  break;
-            case 2:addstr(cr->name, gamelog);
-                  addstr(" asks if Liberal mothers would approve of this.", gamelog);
-                  break;
-            case 3:addstr(cr->name, gamelog);
-                  addstr(" seems resistant to this form of interrogation.", gamelog);
-                  break;
-            }
+			addstr(cr->name, gamelog);
+			int which_smarter = LCSrandom(smarter_than_you_number + smarter_than_you_one_line_number);
+			if(which_smarter < smarter_than_you_number){
+				addstr(smarter_than_you[which_smarter][0], gamelog);
+				addstr(a->name, gamelog);
+				addstr(smarter_than_you[which_smarter][1], gamelog);
+			} else {
+				addstr(pickrandom(smarter_than_you_one_line), gamelog);
+			}
          }
          //Attempt to convert when the target is brutally treated will
          //just alienate them and make them cynical
@@ -1125,15 +1172,14 @@ void tendhostage(Creature *cr,char &clearformess)
          {
             move(y++,0);
             addstr(cr->name, gamelog);
-            switch(LCSrandom(7))
-            {
-            case 0:addstr(" babbles mindlessly.", gamelog);break;
-            case 1:addstr(" just whimpers.", gamelog);break;
-            case 2:addstr(" cries helplessly.", gamelog);break;
-            case 3:addstr(" is losing faith in the world.", gamelog);break;
-            case 4:addstr(" only grows more distant.", gamelog);break;
-            case 5:addstr(" is too terrified to even speak to ", gamelog);addstr(a->name);addstr(".");break;
-            case 6:addstr(" just hates the LCS even more.", gamelog);break;
+            int which_hatred = LCSrandom(develops_hatred_number + develops_hatred_one_line_number);
+            if(which_hatred < develops_hatred_number)
+			{
+				addstr(develops_hatred[which_hatred][0], gamelog);
+				addstr(a->name);
+				addstr(develops_hatred[which_hatred][1], gamelog);
+			}else{
+				addstr(pickrandom(develops_hatred_one_line), gamelog);
             }
             gamelog.newline();
             if(a->skill_check(SKILL_SEDUCTION,DIFFICULTY_CHALLENGING))
@@ -1144,16 +1190,15 @@ void tendhostage(Creature *cr,char &clearformess)
 
                move(y++,0);
                addstr(a->name, gamelog);
-               switch(LCSrandom(7))
-               {
-               case 0:addstr(" consoles the Conservative automaton.", gamelog);break;
-               case 1:addstr(" shares some chocolates.", gamelog);break;
-               case 2:addstr(" provides a shoulder to cry on.", gamelog);break;
-               case 3:addstr(" understands ", gamelog);addstr(cr->name, gamelog);addstr("'s pain.", gamelog);break;
-               case 4:addstr("'s heart opens to the poor Conservative.", gamelog);break;
-               case 5:addstr(" helps the poor thing to come to terms with captivity.", gamelog);break;
-               case 6:addstr("'s patience and kindness leaves the Conservative confused.", gamelog);break;
-               }
+			   int which_compassion = LCSrandom(number_of_compassion + number_of_compassion_one_line);
+			   if(which_compassion < number_of_compassion){
+				   addstr(interrogater_shows_compassion[which_compassion][0], gamelog);
+				   addstr(cr->name, gamelog);
+				   addstr(interrogater_shows_compassion[which_compassion][1], gamelog);
+			   }else{
+				   addstr(pickrandom(interrogater_shows_compassion_one_line), gamelog);
+			   }
+
                gamelog.newline();
                rapport[a->id]+=0.7f;
                if(rapport[a->id]>3)
@@ -1164,26 +1209,14 @@ void tendhostage(Creature *cr,char &clearformess)
 
                   move(y++,0);
                   addstr(cr->name, gamelog);
-                  switch(LCSrandom(7))
-                  {
-                  case 0:addstr(" emotionally clings to ", gamelog);
-                         addstr(a->name, gamelog);
-                         addstr("'s sympathy.", gamelog); break;
-                  case 1:addstr(" begs ", gamelog);
-                         addstr(a->name, gamelog);
-                         addstr(" for help.", gamelog); break;
-                  case 2:addstr(" promises to be good.", gamelog); break;
-                  case 3:addstr(" reveals childhood pains.", gamelog); break;
-                  case 4:addstr(" thanks ", gamelog);
-                         addstr(a->name, gamelog);
-                         addstr(" for being merciful.", gamelog); break;
-                  case 5:addstr(" cries in ", gamelog);
-                         addstr(a->name, gamelog);
-                         addstr("'s arms.", gamelog); break;
-                  case 6:addstr(" really likes ", gamelog);
-                         addstr(a->name, gamelog);
-                         addstr(".", gamelog); break;
-                  }
+				  int which_cling = LCSrandom(number_of_clinging + number_of_clinging_one_line);
+				  if(which_cling < number_of_clinging){
+					  addstr(cling_to_interrogater[which_cling][0], gamelog);
+					  addstr(a->name, gamelog);
+					  addstr(cling_to_interrogater[which_cling][1], gamelog);
+				  }else{
+					  addstr(pickrandom(clinging_one_line), gamelog);
+				  }
                   gamelog.newline();
 
                   if(rapport[a->id]>5) turned=1;
@@ -1196,25 +1229,17 @@ void tendhostage(Creature *cr,char &clearformess)
          else if(cr->get_skill(SKILL_RELIGION)>a->get_skill(SKILL_RELIGION)+a->get_skill(SKILL_PSYCHOLOGY) && !techniques[TECHNIQUE_DRUGS])
          {
             move(y++,0);
-            switch(LCSrandom(4))
-            {
-            case 0:addstr(a->name);
-                  addstr(" is unable to shake ", gamelog);
-                  addstr(cr->name, gamelog);
-                  addstr("'s religious conviction.", gamelog);
-                  break;
-            case 1:addstr(cr->name, gamelog);
-                  addstr(" will never be broken so long as God grants it strength.", gamelog);
-                  break;
-            case 2:addstr(a->name, gamelog);
-                  addstr("'s efforts to question ", gamelog);
-                  addstr(cr->name, gamelog);
-                  addstr("'s faith seem futile.", gamelog);
-                  break;
-            case 3:addstr(cr->name, gamelog);
-                  addstr(" calmly explains the Conservative tenets of its faith.", gamelog);
-                  break;
-            }
+
+			int which_cling = LCSrandom(number_of_clinging_religion + number_of_clinging_religion_one_line);
+			if(which_cling < number_of_clinging_religion){
+				addstr(a->name, gamelog);
+				addstr(cling_to_religion[which_cling][0], gamelog);
+				addstr(cr->name, gamelog);
+				addstr(cling_to_religion[which_cling][1], gamelog);
+			}else{
+				addstr(cr->name, gamelog);
+				addstr(pickrandom(cling_to_religion_one_line), gamelog);
+			}
             gamelog.newline();
 
             a->train(SKILL_RELIGION,cr->get_skill(SKILL_RELIGION)*4);
@@ -1223,26 +1248,18 @@ void tendhostage(Creature *cr,char &clearformess)
          else if(cr->get_skill(SKILL_BUSINESS)>a->get_skill(SKILL_BUSINESS)+a->get_skill(SKILL_PSYCHOLOGY) && !techniques[TECHNIQUE_DRUGS])
          {
             move(y++,0);
-            switch(LCSrandom(4))
-            {
-            case 0:addstr(cr->name, gamelog);
-                  addstr(" will never be moved by ", gamelog);
-                  addstr(a->name, gamelog);
-                  addstr("'s pathetic economic ideals.", gamelog);
-                  break;
-            case 1:addstr(cr->name, gamelog);
-                  addstr(" wishes a big company would just buy the LCS and shut it down.", gamelog);
-                  break;
-            case 2:addstr(cr->name, gamelog);
-                  addstr(" explains to ", gamelog);
-                  addstr(a->name, gamelog);
-                  addstr(" why communism failed.", gamelog);
-                  break;
-            case 3:addstr(cr->name, gamelog);
-                  addstr(" mumbles incoherently about Reaganomics.", gamelog);
-                  break;
-            }
-            gamelog.newline();
+
+			int which_cling = LCSrandom(number_of_clinging_business + number_of_clinging_business_one_line);
+			if(which_cling < number_of_clinging_business){
+				addstr(cr->name, gamelog);
+				addstr(cling_to_business[which_cling][0], gamelog);
+				addstr(a->name, gamelog);
+				addstr(cling_to_business[which_cling][1], gamelog);
+			}else{
+				addstr(cr->name, gamelog);
+				addstr(pickrandom(cling_to_business_one_line), gamelog);
+			}
+			gamelog.newline();
 
             a->train(SKILL_BUSINESS,cr->get_skill(SKILL_BUSINESS)*4);
          }
@@ -1250,27 +1267,18 @@ void tendhostage(Creature *cr,char &clearformess)
          else if(cr->get_skill(SKILL_SCIENCE)>a->get_skill(SKILL_SCIENCE)+a->get_skill(SKILL_PSYCHOLOGY) && !techniques[TECHNIQUE_DRUGS])
          {
             move(y++,0);
-            switch(LCSrandom(4))
-            {
-            case 0:addstr(cr->name, gamelog);
-                  addstr(" wonders what mental disease has possessed ", gamelog);
-                  addstr(a->name, gamelog);
-                  addstr(".", gamelog);
-                  break;
-            case 1:addstr(cr->name, gamelog);
-                  addstr(" explains why nuclear energy is safe.", gamelog);
-                  break;
-            case 2:addstr(cr->name, gamelog);
-                  addstr(" makes Albert Einstein faces at ", gamelog);
-                  addstr(a->name, gamelog);
-                  addstr(".", gamelog);
-                  break;
-            case 3:addstr(cr->name, gamelog);
-                  addstr(" pities ", gamelog);
-                  addstr(a->name, gamelog);
-                  addstr("'s blind ignorance of science.", gamelog);
-                  break;
-            }
+
+			int which_cling = LCSrandom(number_of_clinging_science + number_of_clinging_science_one_line);
+			if(which_cling < number_of_clinging_science){
+				addstr(cr->name, gamelog);
+				addstr(cling_to_science[which_cling][0], gamelog);
+				addstr(a->name, gamelog);
+				addstr(cling_to_science[which_cling][1], gamelog);
+			}else{
+				addstr(cr->name, gamelog);
+				addstr(pickrandom(cling_to_science_one_line), gamelog);
+			}
+
             gamelog.newline();
 
             a->train(SKILL_SCIENCE,cr->get_skill(SKILL_SCIENCE)*4);
@@ -1298,14 +1306,7 @@ void tendhostage(Creature *cr,char &clearformess)
 
             move(y++,0);
             addstr(cr->name, gamelog);
-            switch(LCSrandom(5))
-            {
-            case 0:addstr("'s Conservative beliefs are shaken.", gamelog);break;
-            case 1:addstr(" quietly considers these ideas.", gamelog);break;
-            case 2:addstr(" is beginning to see Liberal reason.", gamelog);break;
-            case 3:addstr(" has a revelation of understanding.", gamelog);break;
-            case 4:addstr(" grudgingly admits sympathy for LCS ideals.", gamelog);break;
-            }
+			addstr(pickrandom(partial_conversion), gamelog);
             gamelog.newline();
             if(location[cr->worklocation]->mapped==0 && !LCSrandom(5))
             {
@@ -1392,13 +1393,10 @@ void tendhostage(Creature *cr,char &clearformess)
             set_color(COLOR_MAGENTA,COLOR_BLACK,0);
             addstr(cr->name, gamelog);
             //can't cut self if restrained
-            switch(LCSrandom(5-techniques[TECHNIQUE_RESTRAIN]))
-            {
-            case 0: addstr(" mutters about death.", gamelog); break;
-            case 1: addstr(" broods darkly.", gamelog); break;
-            case 2: addstr(" has lost hope of rescue.", gamelog); break;
-            case 3: addstr(" is making peace with God.", gamelog); break;
-            case 4: addstr(" is bleeding from self-inflicted wounds.", gamelog); cr->blood-=LCSrandom(15)+10; break;
+			if(! techniques[TECHNIQUE_RESTRAIN] && ! LCSrandom(5)){
+				addstr(" " + pickrandom(self_wounding), gamelog); cr->blood-=LCSrandom(15)+10;
+			}else{
+				addstr(" " + pickrandom(broods_over_death), gamelog);
             }
             gamelog.newline();
          }
@@ -1452,13 +1450,7 @@ void tendhostage(Creature *cr,char &clearformess)
                addstr(" feels sick to the stomach afterward and ", gamelog);
                a->adjust_attribute(ATTRIBUTE_HEART,-1);
                move(++y,0);
-               switch(LCSrandom(4))
-               {
-                  case 0:addstr("throws up in a trash can.", gamelog);break;
-                  case 1:addstr("gets drunk, eventually falling asleep.", gamelog);break;
-                  case 2:addstr("curls up in a ball, crying softly.", gamelog);break;
-                  case 3:addstr("shoots up and collapses in a heap on the floor.", gamelog);break;
-               }
+               addstr(pickrandom(feels_sick), gamelog);
             }
             else if(!LCSrandom(3))
             {

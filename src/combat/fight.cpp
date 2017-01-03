@@ -25,8 +25,66 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+translateid.cpp
+*/
+#include "common\\translateid.h"
+
+/*
+stringconversion.cpp
+*/
+#include "common\\stringconversion.h"
+
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+//#include <includeNews.h>
+#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+extern vector<Location *> location;
+#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
+extern short mode;
+extern short sitetype;
+extern char foughtthisround;
+extern int stat_dead;
+extern int stat_kills;
+extern int ccs_siege_kills;
+extern int ccs_boss_kills;
+
+extern vector<string> escape_running;
+extern vector<string> escape_crawling;
+extern vector<string> judge_debate;
+extern vector<string> conservative_politician_debate;
+extern vector<string> other_politician_debate;
+extern vector<string> conservative_ceo_debate;
+extern vector<string> other_ceo_debate;
+extern vector<string> media_debate;
+extern vector<string> military_debate;
+extern vector<string> police_debate;
+extern vector<string> cry_alarm;
+
+extern vector<string> bleeding_to_death;
+extern vector<string> stunned_text;
+extern vector<string> paralyzed_text;
+extern vector<string> paralyzed_tank;
+extern vector<string> bleeding_animal;
+extern vector<vector<string>> double_line_death;
+extern vector<string> body_falls_apart;
+
+
 
 bool goodguyattack = false;
 
@@ -105,8 +163,8 @@ void youattack()
 
       char mistake=0;
       // Changed from 1% chance to being based on weapon skill
-      if(len(non_enemies)&&activesquad->squad[p]->get_weapon_skill()<8&&
-         !LCSrandom(10+10*activesquad->squad[p]->get_weapon_skill()))
+if(len(non_enemies)&&activesquad->squad[p]->get_weapon_skill()<8&&
+!LCSrandom(10+10*activesquad->squad[p]->get_weapon_skill()))
       {
          target=pickrandom(non_enemies);
          mistake=1;
@@ -241,29 +299,7 @@ void youattack()
 
 void enemyattack()
 {
-   static const char *escape_crawling[] =
-   {
-      " crawls off moaning...",
-      " crawls off whimpering...",
-      " crawls off trailing blood...",
-      " crawls off screaming...",
-      " crawls off crying...",
-      " crawls off sobbing...",
-      " crawls off whispering...",
-      " crawls off praying...",
-      " crawls off cursing..."
-   };
 
-   static const char *escape_running[] =
-   {
-      " makes a break for it!",
-      " escapes crying!",
-      " runs away!",
-      " gets out of there!",
-      " runs hollering!",
-      " bolts out of there!",
-      " runs away screaming!",
-   };
 
 
    foughtthisround=1;
@@ -469,6 +505,7 @@ void enemyattack()
 /* attack handling for an individual creature and its target */
 void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
 {
+
    actual=0;
 
    char str[200];
@@ -645,7 +682,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    int bonus=0; // Accuracy bonus or penalty that does NOT affect damage or counterattack chance
 
    //SKILL EFFECTS
-   int wsk=attack_used->skill;
+   CreatureSkill wsk = getSkillFromInt(attack_used->skill);
 
    Creature* driver = getChaseDriver(t);
    Vehicle* vehicle = getChaseVehicle(t);
@@ -1041,7 +1078,6 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          getkey();
       }
       #endif
-
       // Bullets caught by armor should bruise instead of poke holes.
       if(damamount<4 && damtype & WOUND_SHOT)
       {
@@ -1659,22 +1695,15 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          if(sneak_attack)
          {
              strcpy(str, t.name);
-             switch(LCSrandom(4))
-             {
-                 case 0: strcat(str," notices at the last moment!"); break;
-                 case 1: strcat(str," wasn't born yesterday!"); break;
-                 case 2: strcat(str," spins and blocks the attack!"); break;
-                 default: strcat(str," jumps back and cries out in alarm!"); break;
-             }
+			 strcat(str, " " + pickrandom(cry_alarm));
              sitealarm=1;
          }
          else
          {
             if (mode==GAMEMODE_CHASECAR)
             {
-               if(driver!=NULL)
-                  strcpy(str,driver->name);
-               switch(droll) // If no driver then droll is 0.
+               strcpy(str, driver->name);
+               switch(droll)
                {
                   case 1: strcpy(str, a.name); strcat(str," missed!"); break;
                   case 2: strcpy(str, a.name); strcat(str," just barely missed!"); break;
@@ -1825,96 +1854,12 @@ void damagemod(Creature &t,char &damtype,int &damamount,
 void specialattack(Creature &a, Creature &t, char &actual)
 {
    std::string s = "";
-   static const char *judge_debate[]   =
-   {
-      "debates the death penalty with",
-      "debates gay rights with",
-      "debates free speech with",
-      "debates the Second Amendment with"
-   };
 
-   static const char *conservative_ceo_debate[] =
+   static const int number_of_scientist_debate = 2;
+   static const char *scientist_debate[number_of_scientist_debate] = 
    {
-      "explains the derivatives market to",
-      "justifies voodoo economics to",
-      "extols the Reagan presidency to",
-      "argues about tax cuts with",
-      "explains Conservative philosophy to",
-      "extends a dinner invitation to",
-      "offers a VP position to",
-      "shows a $1000 bill to",
-      "debates fiscal policy with",
-      "offers stock options to"
-   };
-
-   static const char *other_ceo_debate[] =
-   {
-      "debates fiscal policy with",
-      "derides voodoo economics to",
-      "dismisses the Reagan presidency to",
-      "argues about tax cuts with",
-      "explains Liberal philosophy to"
-   };
-
-   static const char *conservative_politician_debate[] =
-   {
-      "debates the death penalty with",
-      "debates gay rights with",
-      "debates free speech with",
-      "debates the Second Amendment with",
-      "justifies voodoo economics to",
-      "extols the Reagan presidency to",
-      "argues about tax cuts with",
-      "explains Conservative philosophy to",
-      "extends a dinner invitation to",
-      "debates fiscal policy with",
-      "chats warmly with",
-      "smiles at"
-   };
-
-   static const char *other_politician_debate[] =
-   {
-      "debates the death penalty with",
-      "debates gay rights with",
-      "debates free speech with",
-      "debates the Second Amendment with",
-      "derides voodoo economics to",
-      "dismisses the Reagan presidency to",
-      "argues about tax cuts with",
-      "explains Liberal philosophy to",
-      "extends a dinner invitation to",
-      "debates fiscal policy with",
-      "chats warmly with",
-      "smiles at"
-   };
-
-   static const char *media_debate[] =
-   {
-      "winks at",
-      "smiles at",
-      "smirks at",
-      "chats warmly with",
-      "yells slogans at"
-   };
-
-   static const char *military_debate[] =
-   {
-      "recites the Pledge of Allegiance to",
-      "debates national security with",
-      "debates terrorism with",
-      "preaches about veterans to",
-      "explains military spending to"
-   };
-
-   static const char *police_debate[] =
-   {
-      "reasons with ",
-      "promises a fair trial to ",
-      "offers a kind ear to ",
-      "urges cooperation from ",
-      "offers a hug to ",
-      "suggests counseling to ",
-      "gives a teddy bear to "
+	  "debates scientific ethics with",
+	  "discusses the scientific method with"
    };
 
    int resist=0;
@@ -1949,12 +1894,12 @@ void specialattack(Creature &a, Creature &t, char &actual)
          attack+=a.skill_roll(SKILL_LAW);
          break;
       case CREATURE_SCIENTIST_EMINENT:
-         switch(LCSrandom(3))
+         switch(LCSrandom(number_of_scientist_debate+1))
          {
-            case 0:strcat(str,"debates scientific ethics with");break;
-            case 1:if(a.align==-1)strcat(str,"explains the benefits of research to");
+            case 0:if(a.align==ALIGN_CONSERVATIVE)strcat(str,"explains the benefits of research to");
                    else strcat(str,"explains ethical research to");break;
-            case 2:strcat(str,"discusses the scientific method with");break;
+			default:
+				strcat(str, pickrandom(scientist_debate));break;
          }
          strcat(str," ");
          strcat(str,t.name);
@@ -2026,6 +1971,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
          if(a.enemy())
          {
             strcat(str,pickrandom(police_debate));
+			strcat(str, " ");
             strcat(str,t.name);
             strcat(str,"!");
 
@@ -2387,8 +2333,8 @@ void capturecreature(Creature &t)
 char incapacitated(Creature &a,char noncombat,char &printed)
 {
    printed=0;
-
-   if(a.animalgloss==ANIMALGLOSS_TANK)
+   switch(a.animalgloss){
+   case ANIMALGLOSS_TANK:
    {
       if(a.blood<=20||(a.blood<=50&&(LCSrandom(2)||a.forceinc)))
       {
@@ -2402,12 +2348,7 @@ char incapacitated(Creature &a,char noncombat,char &printed)
             move(16,1);
             addstr("The ", gamelog);
             addstr(a.name, gamelog);
-            switch(LCSrandom(3))
-            {
-            case 0: addstr(" smokes...", gamelog); break;
-            case 1: addstr(" smolders.", gamelog); break;
-            case 2: addstr(" burns...", gamelog); break;
-            }
+            addstr(" " + pickrandom(paralyzed_tank));
 
             gamelog.newline();
 
@@ -2415,11 +2356,9 @@ char incapacitated(Creature &a,char noncombat,char &printed)
          }
          return 1;
       }
-
-      return 0;
+		  return 0;
    }
-
-   if(a.animalgloss==ANIMALGLOSS_ANIMAL)
+   case ANIMALGLOSS_ANIMAL:
    {
       if(a.blood<=20||(a.blood<=50&&(LCSrandom(2)||a.forceinc)))
       {
@@ -2434,10 +2373,10 @@ char incapacitated(Creature &a,char noncombat,char &printed)
             addstr(a.name);
             switch(LCSrandom(3))
             {
-            case 0: addstr(" yelps in pain...", gamelog); break;
-            case 1: if(law[LAW_FREESPEECH]==-2) addstr(" [makes a stinky].", gamelog);
+            case 0: if(law[LAW_FREESPEECH]==-2) addstr(" [makes a stinky].", gamelog);
                     else addstr(" soils the floor.", gamelog); break;
-            case 2: addstr(" yowls pitifully...", gamelog); break;
+			default:
+				addstr(" " + pickrandom(bleeding_animal), gamelog); break;
             }
 
             gamelog.newline();
@@ -2446,10 +2385,10 @@ char incapacitated(Creature &a,char noncombat,char &printed)
          }
          return 1;
       }
-
-      return 0;
+	  return 0;
+	  
    }
-
+   default:
    if(a.blood<=20||(a.blood<=50&&(LCSrandom(2)||a.forceinc)))
    {
       a.forceinc=0;
@@ -2459,54 +2398,24 @@ char incapacitated(Creature &a,char noncombat,char &printed)
          set_color(COLOR_WHITE,COLOR_BLACK,1);
 
          move(16,1);
-         addstr(a.name);
+		 addstr(a.name);
          switch(LCSrandom(54))
          {
-         case 0: addstr(" desperately cries out to Jesus."); break;
-         case 1: if(law[LAW_FREESPEECH]==-2) addstr(" [makes a stinky].");
+         case 0: if(law[LAW_FREESPEECH]==-2) addstr(" [makes a stinky].");
                  else addstr(" soils the floor."); break;
-         case 2: addstr(" whimpers in a corner."); break;
-         case 3: addstr(" begins to weep."); break;
-         case 4: addstr(" vomits."); break;
-         case 5: addstr(" chortles..."); break;
-         case 6: addstr(" screams in pain."); break;
-         case 7: addstr(" asks for mother."); break;
-         case 8: addstr(" prays softly..."); break;
-         case 9: addstr(" clutches at the wounds."); break;
-         case 10: addstr(" reaches out and moans."); break;
-         case 11: addstr(" hollers in pain."); break;
-         case 12: addstr(" groans in agony."); break;
-         case 13: addstr(" begins hyperventilating."); break;
-         case 14: addstr(" shouts a prayer."); break;
-         case 15: addstr(" coughs up blood."); break;
-         case 16: if(mode!=GAMEMODE_CHASECAR) addstr(" stumbles against a wall.");
+         case 1: if(mode!=GAMEMODE_CHASECAR) addstr(" stumbles against a wall.");
                   else addstr(" leans against the door."); break;
-         case 17: addstr(" begs for forgiveness."); break;
-         case 18: addstr(" shouts \"Why have you forsaken me?\""); break;
-         case 19: addstr(" murmurs \"Why Lord?   Why?\""); break;
-         case 20: addstr(" whispers \"Am I dead?\""); break;
-         case 21: if(law[LAW_FREESPEECH]==-2) addstr(" [makes a mess], moaning.");
-                  else addstr(" pisses on the floor, moaning."); break;
-         case 22: addstr(" whispers incoherently."); break;
-         case 23: if(a.special[SPECIALWOUND_RIGHTEYE]&&a.special[SPECIALWOUND_LEFTEYE])
+         case 2: if(a.special[SPECIALWOUND_RIGHTEYE]&&a.special[SPECIALWOUND_LEFTEYE])
                      addstr(" stares off into space.");
                   else if(a.special[SPECIALWOUND_RIGHTEYE]||a.special[SPECIALWOUND_LEFTEYE])
                      addstr(" stares into space with one empty eye.");
                   else addstr(" stares out with hollow sockets."); break;
-         case 24: addstr(" cries softly."); break;
-         case 25: addstr(" yells until the scream cracks dry."); break;
-         case 26: if(a.special[SPECIALWOUND_TEETH]>1) addstr("'s teeth start chattering.");
+         case 3: if(law[LAW_FREESPEECH]==-2) addstr(" [makes a mess], moaning.");
+                  else addstr(" pisses on the floor, moaning."); break;
+         case 4: if(a.special[SPECIALWOUND_TEETH]>1) addstr("'s teeth start chattering.");
                   else if(a.special[SPECIALWOUND_TEETH]==1) addstr("'s tooth starts chattering.");
                   else addstr("'s gums start chattering."); break;
-         case 27: addstr(" starts shaking uncontrollably."); break;
-         case 28: addstr(" looks strangely calm."); break;
-         case 29: addstr(" nods off for a moment."); break;
-         case 30: addstr(" starts drooling."); break;
-         case 31: addstr(" seems lost in memories."); break;
-         case 32: addstr(" shakes with fear."); break;
-         case 33: addstr(" murmurs \"I'm so afraid...\""); break;
-         case 34: addstr(" cries \"It can't be like this...\""); break;
-         case 35: if(a.age<20 && !a.animalgloss) addstr(" cries \"Mommy!\"");
+         case 5: if(a.age<20 && !a.animalgloss) addstr(" cries \"Mommy!\"");
                   else switch(a.type) {
                   case CREATURE_GENETIC:
                      addstr(" murmurs \"What about my offspring?\""); break;
@@ -2515,34 +2424,18 @@ char incapacitated(Creature &a,char noncombat,char &printed)
                   default:
                      addstr(" murmurs \"What about my children?\""); break;
                   } break;
-         case 36: addstr(" shudders quietly."); break;
-         case 37: addstr(" yowls pitifully."); break;
-         case 38: addstr(" begins losing faith in God."); break;
-         case 39: addstr(" muses quietly about death."); break;
-         case 40: addstr(" asks for a blanket."); break;
-         case 41: addstr(" shivers softly."); break;
-         case 42: if(law[LAW_FREESPEECH]==-2)addstr(" [makes a mess].");
+         case 6: if(law[LAW_FREESPEECH]==-2)addstr(" [makes a mess].");
                   else addstr(" vomits up a clot of blood."); break;
-         case 43: if(law[LAW_FREESPEECH]==-2)addstr(" [makes a mess].");
+         case 7: if(law[LAW_FREESPEECH]==-2)addstr(" [makes a mess].");
                   else addstr(" spits up a cluster of bloody bubbles."); break;
-         case 44: addstr(" pleads for mercy."); break;
-         case 45: addstr(" quietly asks for coffee."); break;
-         case 46: addstr(" looks resigned."); break;
-         case 47: addstr(" scratches at the air."); break;
-         case 48: addstr(" starts to giggle uncontrollably."); break;
-         case 49: addstr(" wears a look of pain."); break;
-         case 50: addstr(" questions God."); break;
-         case 51: addstr(" whispers \"Mama baby.  Baby loves mama.\""); break;
-         case 52: addstr(" asks for childhood toys frantically."); break;
-         case 53: addstr(" murmurs \"But I go to church...\""); break;
+		 default: addstr(pickrandom(bleeding_to_death));
          }
-
+         
          printed=1;
       }
-
-      return 1;
+	  return 1;
    }
-   else if(a.stunned)
+    if(a.stunned)
    {
       if(noncombat)
       {
@@ -2552,20 +2445,7 @@ char incapacitated(Creature &a,char noncombat,char &printed)
 
          move(16,1);
          addstr(a.name, gamelog);
-         switch(LCSrandom(11))
-         {
-         case 0: addstr(" seems hesitant.", gamelog); break;
-         case 1: addstr(" is caught in self-doubt.", gamelog); break;
-         case 2: addstr(" looks around uneasily.", gamelog); break;
-         case 3: addstr(" begins to weep.", gamelog); break;
-         case 4: addstr(" asks \"Is this right?\"", gamelog); break;
-         case 5: addstr(" asks for guidance.", gamelog); break;
-         case 6: addstr(" is caught in indecision.", gamelog); break;
-         case 7: addstr(" feels numb.", gamelog); break;
-         case 8: addstr(" prays softly.", gamelog); break;
-         case 9: addstr(" searches for the truth.", gamelog); break;
-         case 10: addstr(" tears up.", gamelog); break;
-         }
+		 addstr(" " + pickrandom(stunned_text));
 
          gamelog.newline();
 
@@ -2573,9 +2453,7 @@ char incapacitated(Creature &a,char noncombat,char &printed)
       }
       return 1;
    }
-
-   if(a.special[SPECIALWOUND_NECK]==2||
-      a.special[SPECIALWOUND_UPPERSPINE]==2)
+   if(a.special[SPECIALWOUND_NECK]==2||a.special[SPECIALWOUND_UPPERSPINE]==2)
    {
       if(!noncombat)
       {
@@ -2584,27 +2462,17 @@ char incapacitated(Creature &a,char noncombat,char &printed)
 
          move(16,1);
          addstr(a.name, gamelog);
-         switch(LCSrandom(5))
-         {
-         case 0: addstr(" looks on with authority.", gamelog); break;
-         case 1: addstr(" waits patiently.", gamelog); break;
-         case 2: addstr(" sits in thought.", gamelog); break;
-         case 3: addstr(" breathes slowly.", gamelog); break;
-         case 4: addstr(" considers the situation.", gamelog); break;
-         }
+         addstr(" " + pickrandom(paralyzed_text));
 
          gamelog.newline();
 
          printed=1;
       }
-
-      return 1;
+	  return 1;
    }
-
    return 0;
+   }
 }
-
-
 
 /* describes a character's death */
 void adddeathmessage(Creature &cr)
@@ -2613,142 +2481,88 @@ void adddeathmessage(Creature &cr)
 
    move(16,1);
    char str[200];
+   char secondLine[200];
+   bool hasSecondLine = false;
+
+   strcpy(str,cr.name);
 
    if((cr.wound[BODYPART_HEAD] & WOUND_CLEANOFF)||
       (cr.wound[BODYPART_HEAD] & WOUND_NASTYOFF))
    {
-      strcpy(str,cr.name);
+	   hasSecondLine = true;
       switch(LCSrandom(4))
       {
       case 0:
          strcat(str," reaches once where there ");
-         addstr(str, gamelog);
-         move(17,1);
          if(mode!=GAMEMODE_CHASECAR)
-            addstr("is no head, and falls.", gamelog);
-         else addstr("is no head, and slumps over.", gamelog);
+            strcpy(secondLine, "is no head, and falls.");
+         else strcpy(secondLine, "is no head, and slumps over.");
          break;
       case 1:
          if(mode!=GAMEMODE_CHASECAR)
             strcat(str," stands headless for a ");
          else strcat(str," sits headless for a ");
-         addstr(str, gamelog);
-         move(17,1);
-         addstr("moment then crumples over.", gamelog);
+         strcpy(secondLine, "moment then crumples over.");
          break;
       case 2:
          strcat(str," squirts ");
          if(law[LAW_FREESPEECH]==-2)strcat(str,"[red water]");
          else strcat(str,"blood");
          strcat(str," out of the ");
-         addstr(str, gamelog);
-         move(17,1);
          if(mode!=GAMEMODE_CHASECAR)
-            addstr("neck and runs down the hall.", gamelog);
-         else addstr("neck and falls to the side.", gamelog);
+            strcpy(secondLine, "neck and runs down the hall.");
+         else strcpy(secondLine, "neck and falls to the side.");
          break;
       case 3:
          strcat(str," sucks a last breath through ");
-         addstr(str, gamelog);
-         move(17,1);
-         addstr("the neck hole, then is quiet.", gamelog);
+         strcpy(secondLine, "the neck hole, then is quiet.");
          break;
       }
    }
    else if((cr.wound[BODYPART_BODY] & WOUND_CLEANOFF)||
       (cr.wound[BODYPART_BODY] & WOUND_NASTYOFF))
    {
-      strcpy(str,cr.name);
-      switch(LCSrandom(2))
-      {
-      case 0:strcat(str," breaks into pieces."); break;
-      case 1:strcat(str," falls apart and is dead."); break;
-      }
-      addstr(str, gamelog);
+      strcat(str, " " + pickrandom(body_falls_apart));
    }
    else
    {
-      strcpy(str,cr.name);
+	   hasSecondLine = true;
       switch(LCSrandom(11))
       {
-      case 0:
-         strcat(str," cries out one last time ");
-         addstr(str, gamelog);
-         move(17,1);
-         addstr("then is quiet.", gamelog);
+	  case 0:
+         strcat(str," sweats profusely, murmurs ");
+         if(law[LAW_FREESPEECH]==-2)strcpy(secondLine, "something [good] about Jesus, and dies.");
+         else strcpy(secondLine, "something about Jesus, and dies.");
          break;
       case 1:
          strcat(str," gasps a last breath and ");
-         addstr(str, gamelog);
-         move(17,1);
-         if(law[LAW_FREESPEECH]==-2)addstr("[makes a mess].", gamelog);
-         else addstr("soils the floor.", gamelog);
+         if(law[LAW_FREESPEECH]==-2) strcpy(secondLine, "[makes a mess].");
+         else strcpy(secondLine, "soils the floor.");
          break;
-      case 2:
-         strcat(str," murmurs quietly, breathing softly. ");
-         addstr(str, gamelog);
-         move(17,1);
-         addstr("Then all is silent.", gamelog);
-         break;
-      case 3:
-         strcat(str," shouts \"FATHER!  Why have you ");
-         addstr(str, gamelog);
-         move(17,1);
-         addstr("forsaken me?\" and dies in a heap.", gamelog);
-         break;
-      case 4:
-         strcat(str," cries silently for mother, ");
-         addstr(str, gamelog);
-         move(17,1);
-         addstr("breathing slowly, then not at all.", gamelog);
-         break;
-      case 5:
-         strcat(str," breathes heavily, coughing up ");
-         addstr(str, gamelog);
-         move(17,1);
-         addstr("blood...  then is quiet.", gamelog);
-         break;
-      case 6:
-         strcat(str," silently drifts away, and ");
-         addstr(str, gamelog);
-         move(17,1);
-         addstr("is gone.", gamelog);
-         break;
-      case 7:
-         strcat(str," sweats profusely, murmurs ");
-         addstr(str, gamelog);
-         move(17,1);
-         if(law[LAW_FREESPEECH]==-2)addstr("something [good] about Jesus, and dies.", gamelog);
-         else addstr("something about Jesus, and dies.", gamelog);
-         break;
-      case 8:
-         strcat(str," whines loudly, voice crackling, ");
-         addstr(str, gamelog);
-         move(17,1);
-         addstr("then curls into a ball, unmoving.", gamelog);
-         break;
-      case 9:
-         strcat(str," shivers silently, whispering ");
-         addstr(str, gamelog);
-         move(17,1);
-         addstr("a prayer, then all is still.", gamelog);
-         break;
-      case 10:
+	  case 2:
          strcat(str," speaks these final words: ");
-         addstr(str, gamelog);
-         move(17,1);
          switch(cr.align)
          {
          case ALIGN_LIBERAL:
          case ALIGN_ELITELIBERAL:
-            addstr(slogan, gamelog); break;
+            strcpy(secondLine, slogan); break;
          case ALIGN_MODERATE:
-            addstr("\"A plague on both your houses...\"", gamelog); break;
+            strcpy(secondLine, "\"A plague on both your houses...\""); break;
          default:
-            addstr("\"Better dead than liberal...\"", gamelog); break;
+            strcpy(secondLine, "\"Better dead than liberal...\""); break;
          }
          break;
+	  default:
+		  vector<string> death = pickrandom(double_line_death);
+		  strcat(str, " " + death[0]);
+		  strcpy(secondLine, death[1]);
+		  break;
       }
+   }
+   addstr(str, gamelog);
+   if(hasSecondLine){
+	  move(17,1);
+	  addstr(secondLine, gamelog);
    }
    gamelog.newline();
 }

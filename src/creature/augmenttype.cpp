@@ -1,4 +1,23 @@
-#include <externs.h>
+
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
+
+/*
+stringconversion.cpp
+*/
+#include "common\\stringconversion.h"
+
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+//#include <includeExtern.h>
+//The game log. All events and stuff are output here.
+//NO debugging out. Make a debugging log for that.
+extern Log xmllog;
 
 int AugmentType::number_of_augmenttypes = 0;
 
@@ -27,7 +46,7 @@ AugmentType::AugmentType(const std::string& xmlstring): max_age_(-1), min_age_(-
       else if(element=="type")
          type_=augment_string_to_enum(xml.GetData());
       else if(element=="attribute")
-         attribute_=attribute_string_to_enum(xml.GetData());
+         attribute_= getAttributeFromInt(attribute_string_to_enum(xml.GetData()));
       else if(element=="effect")
          effect_=atoi(xml.GetData());
       else if(element=="description")

@@ -59,13 +59,45 @@ the bottom of includes.h in the top src folder.
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+translateid.cpp
+*/
+#include "common\\translateid.h"
+
+/*
+stringconversion.cpp
+*/
+#include "common\\stringconversion.h"
+
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+extern vector<Location *> location;
+#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
+extern int year;
+extern short mode;
+extern bool mapshowing;
 
 // Sets the text color to the thematic color for the given alignment
 // extended_range forces colors to be set on a 5 point scale instead
 // of just basic liberal-moderate-conservative
-void set_alignment_color(signed char alignment, bool extended_range)
+void set_alignment_color(Alignment alignment, bool extended_range)
 {
    switch(alignment)
    {
@@ -365,9 +397,9 @@ void printparty()
             char bright=0;
             for(int sk=0;sk<SKILLNUM;sk++)
             {
-               skill+=(int)party[p]->get_skill(sk);
-               if(party[p]->get_skill_ip(sk)>=100+(10*party[p]->get_skill(sk))&&
-                  party[p]->get_skill(sk)<party[p]->skill_cap(sk,true))bright=1;
+               skill+=(int)party[p]->get_skill(getSkillFromInt(sk));
+               if(party[p]->get_skill_ip(sk)>=100+(10*party[p]->get_skill(getSkillFromInt(sk)))&&
+                  party[p]->get_skill(getSkillFromInt(sk))<party[p]->skill_cap(getSkillFromInt(sk),true))bright=1;
             }
 
             set_color(COLOR_WHITE,COLOR_BLACK,bright);
@@ -777,13 +809,13 @@ void printcreatureinfo(Creature *cr, unsigned char knowledge)
       printed=0;
 
       int max=0;
-      long maxs=-1;
+      CreatureSkill maxs= getSkillFromInt(-1);
       for(int s=0;s<SKILLNUM;s++)
       {
-         if((cr->get_skill(s)*10000+cr->get_skill_ip(s))>max && !used[s])
+         if((cr->get_skill(getSkillFromInt(s))*10000+cr->get_skill_ip(s))>max && !used[s])
          {
-            max=(cr->get_skill(s)*10000+cr->get_skill_ip(s));
-            maxs=s;
+            max=(cr->get_skill(getSkillFromInt(s))*10000+cr->get_skill_ip(s));
+            maxs= getSkillFromInt(s);
          }
       }
 
@@ -975,36 +1007,36 @@ void printliberalskills(Creature &cr)
       }
 
       // Maxed skills are cyan
-      if(cr.skill_cap(s,true)!=0 && cr.get_skill(s)>=cr.skill_cap(s,true))set_color(COLOR_CYAN,COLOR_BLACK,1);
+      if(cr.skill_cap(getSkillFromInt(s),true)!=0 && cr.get_skill(getSkillFromInt(s))>=cr.skill_cap(getSkillFromInt(s),true))set_color(COLOR_CYAN,COLOR_BLACK,1);
       // About to level up skills are white
-      else if(cr.get_skill_ip(s)>=100+(10*cr.get_skill(s))&&
-         cr.get_skill(s)<cr.skill_cap(s,true))set_color(COLOR_WHITE,COLOR_BLACK,1);
+      else if(cr.get_skill_ip(s)>=100+(10*cr.get_skill(getSkillFromInt(s)))&&
+         cr.get_skill(getSkillFromInt(s))<cr.skill_cap(getSkillFromInt(s),true))set_color(COLOR_WHITE,COLOR_BLACK,1);
       // <1 skills are dark gray
-      else if(cr.get_skill(s)<1)set_color(COLOR_BLACK,COLOR_BLACK,1);
+      else if(cr.get_skill(getSkillFromInt(s))<1)set_color(COLOR_BLACK,COLOR_BLACK,1);
       // >=1 skills are light gray
       else set_color(COLOR_WHITE,COLOR_BLACK,0);
 
       move(5+s/3,27*(s%3));
-      addstr(Skill::get_name(s));
+      addstr(Skill::get_name(getSkillFromInt(s)));
       addstr(": ");
       move(5+s/3,14+27*(s%3));
-      addstr_f("%2d.",cr.get_skill(s));
-      if(cr.get_skill_ip(s)<100+(10*cr.get_skill(s)))
+      addstr_f("%2d.",cr.get_skill(getSkillFromInt(s)));
+      if(cr.get_skill_ip(s)<100+(10*cr.get_skill(getSkillFromInt(s))))
       {
-         if((cr.get_skill_ip(s)*100)/(100+(10*cr.get_skill(s)))!=0)
+         if((cr.get_skill_ip(s)*100)/(100+(10*cr.get_skill(getSkillFromInt(s))))!=0)
          {
-            if((cr.get_skill_ip(s)*100)/(100+(10*cr.get_skill(s)))<10)
+            if((cr.get_skill_ip(s)*100)/(100+(10*cr.get_skill(getSkillFromInt(s))))<10)
                addstr("0");
-            addstr((cr.get_skill_ip(s)*100)/(100+(10*cr.get_skill(s))));
+            addstr((cr.get_skill_ip(s)*100)/(100+(10*cr.get_skill(getSkillFromInt(s)))));
          }
          else addstr("00");
       }
       else addstr("99+");
 
-      if(cr.skill_cap(s,true)==0 || cr.get_skill(s)<cr.skill_cap(s,true))
+      if(cr.skill_cap(getSkillFromInt(s),true)==0 || cr.get_skill(getSkillFromInt(s))<cr.skill_cap(getSkillFromInt(s),true))
          set_color(COLOR_BLACK,COLOR_BLACK,1);
       move(5+s/3,20+27*(s%3));
-      addstr_f("%2d.00",cr.skill_cap(s,true));
+      addstr_f("%2d.00",cr.skill_cap(getSkillFromInt(s),true));
    }
    set_color(COLOR_WHITE,COLOR_BLACK,0);
 }
@@ -1110,13 +1142,13 @@ void printliberalstats(Creature &cr)
       printed=0;
 
       int max=0;
-      long maxs=-1;
+      CreatureSkill maxs= getSkillFromInt(-1);
       for(int s=0;s<SKILLNUM;s++)
       {
-         if((cr.get_skill(s)*10000+cr.get_skill_ip(s))>max && !used[s])
+         if((cr.get_skill(getSkillFromInt(s))*10000+cr.get_skill_ip(s))>max && !used[s])
          {
-            max=(cr.get_skill(s)*10000+cr.get_skill_ip(s));
-            maxs=s;
+            max=(cr.get_skill(getSkillFromInt(s))*10000+cr.get_skill_ip(s));
+            maxs= getSkillFromInt(s);
          }
       }
 

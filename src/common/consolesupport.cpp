@@ -27,7 +27,20 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #define CONSOLE_SUPPORT // define this BEFORE including anything
-#include <externs.h>
+
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+//#include <includeCommon.h>
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+//#include <includeTalk.h>
+#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
 
 #if defined(USE_NCURSES)
 #include <term.h>

@@ -31,8 +31,34 @@
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+stringconversion.cpp
+*/
+#include "common\\stringconversion.h"
+
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
+extern PoliticalParties presparty;
+//#include <includeExternStat.h>
+
+extern MusicClass music;
+extern int year;
 
 /* news - constructs non-LCS related event stories */
 void constructeventstory(char *story,short view,char positive)

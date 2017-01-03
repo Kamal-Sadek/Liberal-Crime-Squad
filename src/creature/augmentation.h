@@ -1,7 +1,9 @@
 #ifndef AUGMENTATION_H
 #define AUGMENTATION_H
 
-#include "includes.h"
+//#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
 
 enum Augmentations
 {
@@ -16,7 +18,7 @@ enum Augmentations
 class Augmentation
 {
    public:
-      Augmentation():name(""),type(-1),attribute(-1), effect(-1),
+      Augmentation():type(-1),name(""),attribute(-1), effect(-1),
          value(-1) { }
       Augmentation(const std::string& inputXml);
       string showXml() const;

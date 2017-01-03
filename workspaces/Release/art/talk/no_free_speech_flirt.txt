@@ -1,0 +1,27 @@
+# Lines beginning with the symbol '#' are ignored as comments
+# blank lines are ignored, except if it is the second line of a pickup line
+# or later.  That is, each line starts, then the next four lines are taken
+# even if they are comments
+# 
+# The first two lines are the pickup,
+# the third line is accepting, and the fourth and fifth lines are rejection
+# 
+# all 3 of the rejection lines are from Darth Vader
+# (the 3rd one from back when he's a little kid)
+# These are the "no free speech" pickup lines
+"[What church do you go to?]\"
+
+"[I go to your church.]"
+"I find your lack of faith disturbing.\"
+
+#
+"[Will you marry me?]\"
+
+"[Yes.]"
+"No.  I am your father."
+
+#
+"[Do you believe in abstinence education?]"
+
+"[Yes.  Yes, I do.]"
+"Don't count on it, slimeball!"

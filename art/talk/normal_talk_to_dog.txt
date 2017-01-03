@@ -1,0 +1,33 @@
+#
+"Hi Mister Dog!"
+"Woof?"
+#
+"Good dog!"
+"Bark!"
+#
+"Hey there, boy."
+"Woof!"
+#
+"Woof...?"
+"Woof!"
+#
+"Bark at the man for me!"
+"Bark! Grr..."
+#
+"Down, boy!"
+"Rr...?"
+#
+"Don't bite me!"
+"Grrr...!"
+#
+"Hi doggy!"
+"Bark!"
+#
+"Hi, puppy."
+"Bark!"
+#
+"OH MAN I LOVE DOGS!"
+"Bark!"
+#
+"Bark! Bark!"
+"Your accent is atrocious."

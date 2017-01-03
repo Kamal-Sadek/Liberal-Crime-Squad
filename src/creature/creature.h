@@ -262,30 +262,30 @@ enum SpecialWounds
 class Skill
 {
 private:
-   int associated_attribute;
-   int skill;
+	CreatureAttribute associated_attribute;
+	CreatureSkill skill;
 public:
    Skill() { }
    Skill(const std::string& inputXml);
    string showXml() const;
    int value;
    int get_attribute() const { return associated_attribute; }
-   static std::string get_name(int skill_type);
-   static CreatureAttribute get_associated_attribute(int skill_type);
-   void set_type(int skill_type) { skill=skill_type,associated_attribute=get_associated_attribute(skill); }
+   static std::string get_name(CreatureSkill skill_type);
+   static CreatureAttribute get_associated_attribute(CreatureSkill skill_type);
+   void set_type(CreatureSkill skill_type) { skill=skill_type,associated_attribute=get_associated_attribute(skill); }
 };
 
 class Attribute
 {
 private:
-   int attribute;
+	CreatureAttribute attribute;
 public:
    Attribute() { }
    Attribute(const std::string& inputXml);
    string showXml() const;
    int value;
-   void set_type(int attribute_type) { attribute=attribute_type; }
-   static std::string get_name(int attribute_type);
+   void set_type(CreatureAttribute attribute_type) { attribute=attribute_type; }
+   static std::string get_name(CreatureAttribute attribute_type);
 };
 
 class Creature
@@ -302,16 +302,16 @@ private:
    Weapon* weapon;
    Armor* armor;
 public:
-   void set_attribute(int attribute, int amount) { attributes[attribute].value=MIN(amount,MAXATTRIBUTE); }
-   int get_attribute(int attribute, bool use_juice) const;
-   void adjust_attribute(int attribute, int amount) { set_attribute(attribute,attributes[attribute].value+amount); }
-   int attribute_roll(int attribute) const;
-   bool attribute_check(int attribute, int difficulty) const;
+   void set_attribute(CreatureAttribute attribute, int amount) { attributes[attribute].value=MIN(amount,MAXATTRIBUTE); }
+   int get_attribute(CreatureAttribute attribute, bool use_juice) const;
+   void adjust_attribute(CreatureAttribute attribute, int amount) { set_attribute(attribute,attributes[attribute].value+amount); }
+   int attribute_roll(CreatureAttribute attribute) const;
+   bool attribute_check(CreatureAttribute attribute, int difficulty) const;
 
-   void set_skill(int skill, int amount) { skills[skill].value=MIN(amount,MAXATTRIBUTE); }
-   int get_skill(int skill) const { return MIN(skills[skill].value,MAXATTRIBUTE); }
+   void set_skill(CreatureSkill skill, int amount) { skills[skill].value=MIN(amount,MAXATTRIBUTE); }
+   int get_skill(CreatureSkill skill) const { return MIN(skills[skill].value,MAXATTRIBUTE); }
    int skill_roll(int skill) const;
-   bool skill_check(int skill, int difficulty) const;
+   bool skill_check(CreatureSkill skill, int difficulty) const;
    int get_weapon_skill() const;
 
    Augmentation& get_augmentation(int aug_num) { return augmentations[aug_num]; }
@@ -325,10 +325,10 @@ public:
    int birthday_month;
    int birthday_day;
    bool exists;
-   char align;
+   Alignment align;
    bool alive;
    void die();
-   short type;
+   CreatureTypes type;
    std::string type_idname;
    float infiltration;
    char animalgloss;
@@ -350,7 +350,7 @@ public:
 
    char forceinc;
 
-   void train(int trainedskill, int experience, int upto=MAXATTRIBUTE);
+   void train(CreatureSkill trainedskill, int experience, int upto=MAXATTRIBUTE);
    void skill_up();
    int get_skill_ip(int skill) const { return skill_experience[skill]; }
    std::string get_type_name() const; // this function is implemented inline in creaturetype.h (can't do it here since CreatureType has to be defined after Creature)
@@ -441,7 +441,7 @@ public:
    bool kidnap_resistant() const;
    bool reports_to_police() const;
    /* returns the creature's maximum level in the given skill */
-   int skill_cap(int skill, bool use_juice) const { return get_attribute(Skill::get_associated_attribute(skill),use_juice); }
+   int skill_cap(CreatureSkill skill, bool use_juice) const { return get_attribute(Skill::get_associated_attribute(skill),use_juice); }
    const char* heshe(bool capitalize=false) const;
    const char* hisher(bool capitalize=false) const;
    const char* himher(bool capitalize=false) const;

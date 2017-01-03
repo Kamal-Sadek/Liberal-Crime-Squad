@@ -1,7 +1,9 @@
 #ifndef LOOTTYPE_H
 #define LOOTTYPE_H
 
-#include "includes.h"
+//#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
 
 class LootType : public ItemType
 {

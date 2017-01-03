@@ -1,4 +1,20 @@
-#include <externs.h>
+
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+//#include <includeEnum.h>
+//#include <includeCommon.h>
+
+/*
+stringconversion.cpp
+*/
+#include "common\\stringconversion.h"
+
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+//#include <includeExtern.h>
 
 Item::Item(const ItemType& seed, int number) : number_(number)
 {

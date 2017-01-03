@@ -24,8 +24,29 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+#include <includeNews.h>
+#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+#include <includeExternDefault.h>
+extern MusicClass music;
+#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
+extern char execname[EXECNUM][POLITICIAN_NAMELEN];
+extern Alignment exec[EXECNUM];
 
 /*
     TODO: I'm not sure if anything in here should be logged. Perhaps only the notification
@@ -380,7 +401,7 @@ void reaganify(char canseethings)
                break;
          }
       }
-      reset(savefile_name);
+      reset();
       viewhighscores(MUSIC_REAGANIFIED);
       end_game();
    }
@@ -589,7 +610,7 @@ void stalinize(char canseethings)
                break;
          }
       }
-      reset(savefile_name);
+      reset();
       viewhighscores(MUSIC_STALINIZED);
       end_game();
    }

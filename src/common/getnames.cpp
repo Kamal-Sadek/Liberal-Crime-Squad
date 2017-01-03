@@ -59,8 +59,27 @@ the bottom of includes.h in the top src folder.
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+translateid.cpp
+*/
+#include "common\\translateid.h"
+
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+extern vector<Location *> location;
+#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
+//#include <includeExternStat.h>
+
 
 std::string getactivity(activityst &act)
 {
@@ -819,7 +838,7 @@ std::string getmonth(int month, bool shortname)
    }
 }
 
-std::string getalign(signed char alignment,bool capitalize)
+std::string getalign(Alignment alignment,bool capitalize)
 {
    switch(alignment)
    {

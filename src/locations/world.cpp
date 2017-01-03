@@ -1,4 +1,20 @@
-#include <externs.h>
+
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+//#include <includeEnum.h>
+//#include <includeCommon.h>
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+//#include <includeTalk.h>
+//includeAdvanceB.h
+// still contains
+extern vector<Location *> location;
+extern bool multipleCityMode;
+//#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
 
 #define City(X)                  location.push_back(city = new Location(X)); \
                                  city->id = id++;

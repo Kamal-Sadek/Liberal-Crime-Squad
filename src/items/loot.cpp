@@ -1,4 +1,21 @@
-#include <externs.h>
+
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+//#include <includeEnum.h>
+//#include <includeCommon.h>
+
+/*
+translateid.cpp
+*/
+#include "common\\translateid.h"
+
+//#include <includeNews.h>
+//#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+//#include <includeExtern.h>
+extern vector<LootType *> loottype;
 
 Loot::Loot(const LootType& seed, int number) : Item(seed,number)
 { }

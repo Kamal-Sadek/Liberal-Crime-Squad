@@ -25,8 +25,42 @@ This file is part of Liberal Crime Squad.                                       
         To see descriptions of files and functions, see the list at
         the bottom of includes.h in the top src folder.
 */
+#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
+#include <includeEnum.h>
+#include <includeCommon.h>
 
-#include <externs.h>
+/*
+translateid.cpp
+*/
+#include "common\\translateid.h"
+
+/*
+consolesupport.cpp
+*/
+#include "common\\consolesupport.h"
+
+#include <includeNews.h>
+#include <includeFunctions.h>
+//#include <includeTitle.h>
+
+#include <includeTalk.h>
+extern vector<Location *> location;
+#include <includeExternDefault.h>
+//#include <includeExternPolitics.h>
+extern vector<LootType *> loottype;
+extern MusicClass music;
+extern short mode;
+extern short postalarmtimer;
+extern char endgamestate;
+extern short sitetype;
+extern char foughtthisround;
+extern bool mapshowing;
+extern bool encounterwarnings;
+extern int ccs_siege_kills;
+extern int ccs_boss_kills;
+extern int stat_recruits;
 
 void fight_subdued()
 {

@@ -1,7 +1,9 @@
 #ifndef CREATURE_TYPE_H
 #define CREATURE_TYPE_H
 
-#include "includes.h"
+//#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
 
 class CreatureType
 {
@@ -18,7 +20,7 @@ class CreatureType
       long get_id() const { return id_; }
       short get_type() const { return type_; }
 
-      int get_alignment() const;
+      Alignment get_alignment() const;
       int roll_gender() const;
       float roll_infiltration() const;
       std::string get_encounter_name() const;

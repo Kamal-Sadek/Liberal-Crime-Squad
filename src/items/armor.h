@@ -1,7 +1,9 @@
 #ifndef ARMOR_H
 #define ARMOR_H
 
-#include "includes.h"
+//#include <includeDefault.h>
+//#include "configfile.h"
+//#include "tinydir.h"
 
 class Armor : public Item
 {
