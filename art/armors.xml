@@ -346,6 +346,7 @@
         <interrogation>
             <basepower>8</basepower>
             <assaultbonus>6</assaultbonus>
+			<drugbonus>4</drugbonus> <!-- Liberal Additions -->
         </interrogation>
         <professionalism>1</professionalism>
         <stealth_value>1</stealth_value>
@@ -445,12 +446,15 @@
         </armor>
         <body_covering>
             <head>true</head>
+			<conceals_face>true</conceals_face> <!-- Liberal Additions -->
         </body_covering>
         <name>Heavy Ceramic Armor</name>
         <shortname>HeavyBodyArmor</shortname>
         <fencevalue>400</fencevalue>
         <interrogation>
-            <basepower>2</basepower>
+            <basepower>10</basepower> <!-- Liberal Additions: It's intimidating as heck -->
+			<assaultbonus>8</assaultbonus> <!-- Liberal Additions: You do NOT want some heavily armoured monster beating the tar out of you -->
+			<drugbonus>6</drugbonus> <!-- Liberal Additions -->
         </interrogation>
         <professionalism>1</professionalism>
         <qualitylevels>7</qualitylevels>

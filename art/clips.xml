@@ -40,6 +40,13 @@
         <ammo>7</ammo>
         <fencevalue>3</fencevalue>
     </cliptype>
+	
+	<cliptype idname="CLIP_5.7"> <!-- Liberal Additions -->
+        <name>5.7x28mm Mag</name>
+        <name_future>5.7x28mm Slug Pack</name_future>
+        <ammo>20</ammo> <!-- P90 and 5.7 both share the same ammo for now. AK47's and M16's already share the same magazines, so it's not too jarring? -->
+        <fencevalue>5</fencevalue>
+    </cliptype>
 
     <cliptype idname="CLIP_9">
         <name>9mm Pistol Mag</name>
@@ -51,7 +58,7 @@
     <cliptype idname="CLIP_SMG">
         <name>9mm SMG Mag</name>
         <name_future>SMG Powerpack</name_future>
-        <ammo>15</ammo>
+        <ammo>30</ammo> <!-- Liberal Additions: Mag size of 15 makes the SMG even more worthless -->
         <fencevalue>5</fencevalue>
     </cliptype>
 
@@ -65,7 +72,7 @@
     <cliptype idname="CLIP_GASOLINE">
         <name>Gas Tank</name>
         <name_future>Hydrogen Fuel</name_future>
-        <ammo>2</ammo>
+        <ammo>3</ammo> <!-- Liberal Additions -->
         <fencevalue>2</fencevalue>
     </cliptype>
 
@@ -89,6 +96,13 @@
         <name>Shotgun Shells</name>
         <name_future>Shotgun Plasma Pack</name_future>
         <ammo>8</ammo>
+        <fencevalue>3</fencevalue>
+    </cliptype>
+	
+	<cliptype idname="CLIP_DRUM_AA12">  <!-- Liberal Additions: Impossible to have BOTH Shotgun and AA-12 sharing ammo AND separate clips for them as far as I know. -->
+        <name>AA-12 Drum</name>
+        <name_future>Z-12 Plasma Belt</name_future>
+        <ammo>20</ammo>
         <fencevalue>3</fencevalue>
     </cliptype>
 

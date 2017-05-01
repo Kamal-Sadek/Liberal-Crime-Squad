@@ -33,7 +33,7 @@
     
     -->
     <only_sell_legal_items>false</only_sell_legal_items>
-    <fullscreen>false</fullscreen>
+    <fullscreen>true</fullscreen> <!-- Liberal Additions: Not enough space for EVERYTHING. Gangsters and mercenaries sell everything now. Selling not allowed because it would make pawnshop worthless. -->
     <allow_selling>false</allow_selling>
     <increase_prices_with_illegality>true</increase_prices_with_illegality>
     <exit>Leave</exit>
@@ -73,12 +73,77 @@
             <type>WEAPON_SHOTGUN_PUMP</type>
             <price>400</price>
         </item>
+		<item>
+            <class>WEAPON</class>
+            <type>WEAPON_SHOTGUN_PUMP</type>
+            <price>400</price>
+        </item>
+		<item>
+            <class>WEAPON</class>
+            <type>WEAPON_DESERT_EAGLE</type> <!-- Liberal Additions -->
+            <price>1500</price>
+        </item>
+		<item>
+            <class>WEAPON</class>
+            <type>WEAPON_FLAMETHROWER</type> <!-- Liberal Additions -->
+            <price>15000</price>
+        </item>
+		<item>
+            <class>WEAPON</class>
+            <type>WEAPON_M249_MACHINEGUN</type> <!-- Liberal Additions -->
+            <price>15000</price>
+        </item>
+		<item>
+            <class>WEAPON</class>
+            <type>WEAPON_MOLOTOV</type> <!-- Liberal Additions -->
+            <price>40</price>
+        </item>
+		<item>
+            <class>WEAPON</class>
+            <type>WEAPON_AUTORIFLE_M16</type> <!-- Liberal Additions -->
+            <price>1500</price>
+        </item>
+		<item>
+            <class>WEAPON</class>
+            <type>WEAPON_GRENADE</type> <!-- Liberal Additions -->
+            <price>500</price>
+        </item>
+		<item>
+            <class>WEAPON</class>
+            <type>WEAPON_CARBINE_M4</type> <!-- Liberal Additions -->
+            <price>1400</price>
+        </item>
+		<item>
+            <class>WEAPON</class>
+            <type>WEAPON_SMG_P90</type> <!-- Liberal Additions -->
+            <price>1500</price>
+        </item>
+		<item>
+            <class>WEAPON</class>
+            <type>WEAPON_SEMIRIFLE_AR15</type> <!-- Liberal Additions -->
+            <price>450</price>
+        </item>
+		<item>
+            <class>WEAPON</class>
+            <type>WEAPON_SHOTGUN_AA12</type> <!-- Liberal Additions -->
+            <price>1500</price>
+        </item>
+		<item>
+            <class>WEAPON</class>
+            <type>WEAPON_FIVESEVEN</type> <!-- Liberal Additions -->
+            <price>1500</price>
+        </item>
+		<item>
+            <class>WEAPON</class>
+            <type>WEAPON_REVOLVER_38</type> <!-- Liberal Additions -->
+            <price>150</price>
+        </item>
     </department>
     
     <department>
         <entry>Buy Liberal Clips</entry>
         <letter>c</letter>
-        <fullscreen>false</fullscreen>
+        <fullscreen>true</fullscreen> <!-- Liberal Additions: Not enough space for M249 Drum -->
         <exit>Done buying Liberal clips</exit>
         <item>
             <class>CLIP</class>
@@ -129,6 +194,33 @@
             <letter>r</letter>
             <price>50</price>
         </item>
+		<item>
+            <class>CLIP</class>
+            <description>Buy a 5.7 Mag</description>
+            <type>CLIP_5.7</type> <!-- Liberal Additions -->
+            <letter></letter>
+            <price>50</price>
+        </item>
+		<item>
+            <class>CLIP</class>
+            <description>Buy a M249 Drum</description>
+            <type>CLIP_DRUM</type> <!-- Liberal Additions -->
+            <letter></letter>
+            <price>500</price>
+        </item>
+		<item>
+            <class>CLIP</class>
+            <description>Buy a Gas Tank</description>
+            <type>CLIP_GASOLINE</type> <!-- Liberal Additions -->
+            <letter></letter>
+            <price>100</price>
+        </item>
+		<item>
+            <class>CLIP</class>
+            <description>Buy an AA-12 Drum</description>
+            <type>CLIP_DRUM_AA12</type> <!-- Liberal Additions: Impossible to have BOTH Shotgun and AA-12 sharing ammo AND separate clips for them as far as I know. -->
+            <price>50</price>
+        </item> 
     </department>
 
 </shop>
