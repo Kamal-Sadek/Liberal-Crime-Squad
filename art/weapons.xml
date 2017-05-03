@@ -189,12 +189,12 @@
             <attack_description>shoots at</attack_description>
             <skill>PISTOL</skill>
             <ammotype>CLIP_44</ammotype>
-            <random_damage>276</random_damage>
-            <fixed_damage>10</fixed_damage>
+            <random_damage>286</random_damage> <!-- Liberal Additions -->
+            <fixed_damage>20</fixed_damage> <!-- Liberal Additions -->
             <shoots>true</shoots>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
-            <armorpiercing>4</armorpiercing>
+            <armorpiercing>6</armorpiercing> <!-- Liberal Additions -->
         </attack>
         <attack>
             <priority>2</priority>
@@ -224,12 +224,12 @@
             <attack_description>shoots at</attack_description>
             <skill>PISTOL</skill>
             <ammotype>CLIP_45</ammotype>
-            <random_damage>181</random_damage>
-            <fixed_damage>10</fixed_damage>
+            <random_damage>191</random_damage> <!-- Liberal Additions -->
+            <fixed_damage>15</fixed_damage> <!-- Liberal Additions -->
             <shoots>true</shoots>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
-            <armorpiercing>4</armorpiercing>
+             <armorpiercing>5</armorpiercing> <!-- Liberal Additions -->
         </attack>
         <attack>
             <priority>2</priority>
@@ -294,14 +294,14 @@
             <ranged>true</ranged>
             <attack_description>shoots at</attack_description>
             <skill>SHOTGUN</skill>
-            <ammotype>CLIP_BUCKSHOT</ammotype>
+            <ammotype>CLIP_DRUM_AA12</ammotype> <!-- Liberal Additions: Impossible to have BOTH Shotgun and AA-12 sharing ammo AND separate clips for them as far as I know. -->
             <random_damage>201</random_damage>
             <fixed_damage>30</fixed_damage>
             <shoots>true</shoots>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
-            <armorpiercing>0</armorpiercing>
-            <accuracy_bonus>4</accuracy_bonus>
+            <armorpiercing>6</armorpiercing> <!-- Liberal Additions: Shotgun Slugs. -->
+            <accuracy_bonus>2</accuracy_bonus> <!-- Liberal Additions: Reduced accuracy bonus due to shotgun slugs being used instead of buckshot -->
             <number_attacks>2</number_attacks>
             <successive_attacks_difficulty>3</successive_attacks_difficulty>
             <severtype>NASTY</severtype>
@@ -335,14 +335,14 @@
             <attack_description>shoots at</attack_description>
             <skill>RIFLE</skill>
             <ammotype>CLIP_ASSAULT</ammotype>
-            <random_damage>251</random_damage>
-            <fixed_damage>10</fixed_damage>
+            <random_damage>261</random_damage> <!-- Liberal Additions -->
+            <fixed_damage>15</fixed_damage> <!-- Liberal Additions -->
             <shoots>true</shoots>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
             <armorpiercing>7</armorpiercing>
             <number_attacks>3</number_attacks>
-            <successive_attacks_difficulty>3</successive_attacks_difficulty>
+             <successive_attacks_difficulty>5</successive_attacks_difficulty> <!-- Liberal Additions: Recoil makes it harder to stay on target -->
             <critical>
                 <chance>100</chance>
                 <hits_required>3</hits_required>
@@ -384,6 +384,7 @@
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
             <armorpiercing>7</armorpiercing>
+			<accuracy_bonus>1</accuracy_bonus> <!-- Liberal Additions -->
             <severtype>NONE</severtype>
         </attack>
         <attack>
@@ -414,12 +415,12 @@
             <attack_description>shoots at</attack_description>
             <skill>PISTOL</skill>
             <ammotype>CLIP_50AE</ammotype>
-            <random_damage>301</random_damage>
-            <fixed_damage>10</fixed_damage>
+            <random_damage>311</random_damage> <!-- Liberal Additions -->
+            <fixed_damage>20</fixed_damage> <!-- Liberal Additions -->
             <shoots>true</shoots>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
-            <armorpiercing>4</armorpiercing>
+            <armorpiercing>6</armorpiercing> <!-- Liberal Additions -->
             <severtype>NASTY</severtype>
         </attack>
         <attack>
@@ -441,7 +442,7 @@
         <shortname_future>Plasmagun</shortname_future>
         <can_take_hostages>true</can_take_hostages>
         <threatening>true</threatening>
-        <legality>-3</legality>
+        <legality>0</legality> <!-- Actually legal according to Cracked. "Only in America would a device capable of launching rivers of fire at people be less regulated than marijuana," indeed.-->
         <fencevalue>0</fencevalue>
         <bashstrengthmod>125</bashstrengthmod>
         <size>15</size>
@@ -455,11 +456,12 @@
             <fixed_damage>50</fixed_damage>
             <burns>true</burns>
             <damages_armor>true</damages_armor>
-            <armorpiercing>9</armorpiercing>
+            <armorpiercing>10</armorpiercing> <!-- Liberal Additions: People roast all the same whether they're naked or in full body armor -->
+			<no_damage_reduction_for_limbs_chance>33</no_damage_reduction_for_limbs_chance> <!-- Liberal Additions: Flamethrower to the leg won't kill you, but a molotov will? -->
             <fire>
-                <starts_fire>true</starts_fire>
+                <starts_fire>false</starts_fire><!-- Liberal Additions: Make the flamethrower actually useful and not maim your entire squad. Bunker gear helps mitigate the damage, but it's still not worth it. -->
                 <causes_debris>false</causes_debris>
-                <chance>33</chance>
+                <chance>0</chance> <!-- Liberal Additions -->
             </fire>
         </attack>
         <attack>
@@ -484,7 +486,7 @@
         <legality>-2</legality>
         <fencevalue>400</fencevalue>
         <bashstrengthmod>125</bashstrengthmod>
-        <size>15</size>
+        <size>10</size> <!-- Liberal Additions: It's like a slightly tinier M16. -->
         <attack>
             <priority>1</priority>
             <ranged>true</ranged>
@@ -575,7 +577,7 @@
         <attack>
             <priority>1</priority>
             <ranged>true</ranged>
-            <attack_description>shoots at</attack_description>
+            <attack_description>sprays bullets at</attack_description> <!-- Liberal Additions -->
             <skill>HEAVYWEAPONS</skill>
             <ammotype>CLIP_DRUM</ammotype>
             <random_damage>301</random_damage>
@@ -613,7 +615,7 @@
         <shortname_future>Molotov</shortname_future>
         <threatening>true</threatening>
         <fencevalue>0</fencevalue>
-        <size>15</size>
+        <size>5</size> <!-- Liberal Additions: It's a small bottle with a rag and alcohol in it-->
         <attack>
             <priority>1</priority>
             <ranged>true</ranged>
@@ -627,11 +629,11 @@
             <fixed_damage>25</fixed_damage>
             <burns>true</burns>
             <damages_armor>true</damages_armor>
-            <armorpiercing>7</armorpiercing>
+            <armorpiercing>10</armorpiercing> <!-- Liberal Additions: People roast all the same whether they're naked or in full body armor -->
             <no_damage_reduction_for_limbs_chance>33</no_damage_reduction_for_limbs_chance>
             <fire>
                 <chance_causes_debris>100</chance_causes_debris>
-                <chance>100</chance>
+                <chance>0</chance> <!-- Liberal Additions: Make the molotov actually useful and not maim your entire squad. Bunker gear helps mitigate the damage, but it's still not worth it. -->
             </fire>
         </attack>
     </weapontype>
@@ -721,7 +723,7 @@
         <threatening>true</threatening>
         <fencevalue>0</fencevalue>
         <bashstrengthmod>200</bashstrengthmod>
-        <size>15</size>
+        <size>10</size> <!-- Liberal Additions -->
         <attack>
             <priority>1</priority>
             <attack_description>chops at</attack_description>
@@ -733,7 +735,9 @@
             <cuts>true</cuts>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
-            <armorpiercing>2</armorpiercing>
+            <number_attacks>2</number_attacks> <!-- Liberal Additions -->
+            <successive_attacks_difficulty>5</successive_attacks_difficulty> <!-- Liberal Additions -->
+            <armorpiercing>7</armorpiercing> <!-- Liberal Additions -->
             <severtype>CLEAN</severtype>
         </attack>
     </weapontype>
@@ -744,7 +748,7 @@
         <threatening>true</threatening>
         <fencevalue>20</fencevalue>
         <bashstrengthmod>150</bashstrengthmod>
-        <size>15</size>
+        <size>10</size> <!-- Liberal Additions -->
         <attack>
             <priority>1</priority>
             <attack_description>swings at</attack_description>
@@ -755,6 +759,9 @@
             <random_damage>41</random_damage>
             <fixed_damage>5</fixed_damage>
             <bruises>true</bruises>
+			<number_attacks>3</number_attacks> <!-- Liberal Additions -->
+            <successive_attacks_difficulty>5</successive_attacks_difficulty> <!-- Liberal Additions -->
+			<armorpiercing>6</armorpiercing> <!-- Liberal Additions -->
         </attack>
     </weapontype>
 
@@ -776,6 +783,8 @@
             <random_damage>11</random_damage>
             <fixed_damage>5</fixed_damage>
             <bruises>true</bruises>
+			<number_attacks>3</number_attacks> <!-- Liberal Additions -->
+            <successive_attacks_difficulty>3</successive_attacks_difficulty> <!-- Liberal Additions -->
         </attack>
     </weapontype>
 
@@ -798,7 +807,7 @@
             <can_backstab>true</can_backstab>
             <cuts>true</cuts>
             <bleeding>true</bleeding>
-            <armorpiercing>2</armorpiercing>
+            <armorpiercing>7</armorpiercing> <!-- Liberal Additions: Stab vests don't exist in LCS, and knives go through armor in reality -->
             <number_attacks>3</number_attacks>
             <successive_attacks_difficulty>4</successive_attacks_difficulty>
         </attack>
@@ -811,6 +820,7 @@
         <shortname_future>Cross</shortname_future>
         <fencevalue>100</fencevalue>
         <suspicious>false</suspicious>
+		<protects_against_kidnapping>false</protects_against_kidnapping> <!-- Liberal Additions -->
         <size>5</size>
         <attack>
             <priority>1</priority>
@@ -820,6 +830,8 @@
             <skill>CLUB</skill>
             <random_damage>11</random_damage>
             <fixed_damage>5</fixed_damage>
+			<number_attacks>3</number_attacks> <!-- Liberal Additions -->
+            <successive_attacks_difficulty>3</successive_attacks_difficulty> <!-- Liberal Additions -->
             <bruises>true</bruises>
         </attack>
     </weapontype>
@@ -832,7 +844,7 @@
         <fencevalue>10</fencevalue>
         <bashstrengthmod>200</bashstrengthmod>
         <auto_break_locks>true</auto_break_locks>
-        <size>15</size>
+        <size>10</size> <!-- Liberal Additions -->
         <attack>
             <priority>1</priority>
             <attack_description>swings at</attack_description>
@@ -843,6 +855,9 @@
             <fixed_damage>10</fixed_damage>
             <bruises>true</bruises>
             <bleeding>true</bleeding>
+			<number_attacks>3</number_attacks> <!-- Liberal Additions -->
+            <successive_attacks_difficulty>4</successive_attacks_difficulty> <!-- Liberal Additions -->
+			<armorpiercing>6</armorpiercing> <!-- Liberal Additions -->
         </attack>
     </weapontype>
 
@@ -865,7 +880,7 @@
             <cuts>true</cuts>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
-            <armorpiercing>2</armorpiercing>
+            <armorpiercing>7</armorpiercing> <!-- Liberal Additions: Stab vests don't exist in LCS, and knives go through armor in reality -->
             <number_attacks>3</number_attacks>
             <successive_attacks_difficulty>4</successive_attacks_difficulty>
         </attack>
@@ -884,20 +899,23 @@
         <threatening>true</threatening>
         <fencevalue>100</fencevalue>
         <bashstrengthmod>150</bashstrengthmod>
-        <size>15</size>
+        <size>10</size> <!-- Liberal Additions -->
         <attack>
             <priority>1</priority>
-            <attack_description>swings at</attack_description>
+            <attack_description>Slashes at</attack_description> <!-- Liberal Additions -->
             <strength_min>6</strength_min>
             <strength_max>12</strength_max>
             <skill>SWORD</skill>
             <random_damage>101</random_damage>
             <fixed_damage>10</fixed_damage>
+			<can_backstab>true</can_backstab> <!-- Liberal Additions -->
             <cuts>true</cuts>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
-            <armorpiercing>2</armorpiercing>
+            <armorpiercing>7</armorpiercing> <!-- Liberal Additions -->
             <severtype>CLEAN</severtype>
+			<number_attacks>3</number_attacks> <!-- Liberal Additions -->
+            <successive_attacks_difficulty>5</successive_attacks_difficulty> <!-- Liberal Additions -->
         </attack>
     </weapontype>
 
@@ -919,6 +937,8 @@
             <random_damage>6</random_damage>
             <fixed_damage>5</fixed_damage>
             <bruises>true</bruises>
+			<number_attacks>3</number_attacks> <!-- Liberal Additions -->
+            <successive_attacks_difficulty>3</successive_attacks_difficulty> <!-- Liberal Additions -->
         </attack>
     </weapontype>
 
@@ -931,6 +951,7 @@
         <instrument>true</instrument>
         <fencevalue>100</fencevalue>
         <suspicious>false</suspicious>
+		<protects_against_kidnapping>false</protects_against_kidnapping> <!-- Liberal Additions -->
         <can_threaten_hostages>false</can_threaten_hostages>
         <size>15</size>
         <attack>
@@ -964,6 +985,9 @@
             <fixed_damage>10</fixed_damage>
             <bruises>true</bruises>
             <bleeding>true</bleeding>
+			<number_attacks>2</number_attacks> <!-- Liberal Additions -->
+            <successive_attacks_difficulty>5</successive_attacks_difficulty> <!-- Liberal Additions -->
+			<armorpiercing>6</armorpiercing> <!-- Liberal Additions -->
         </attack>
     </weapontype>
 
@@ -985,6 +1009,9 @@
             <random_damage>41</random_damage>
             <fixed_damage>5</fixed_damage>
             <bruises>true</bruises>
+			<number_attacks>2</number_attacks> <!-- Liberal Additions -->
+            <successive_attacks_difficulty>5</successive_attacks_difficulty> <!-- Liberal Additions -->
+			<armorpiercing>6</armorpiercing> <!-- Liberal Additions -->
         </attack>
     </weapontype>
 
@@ -997,7 +1024,7 @@
         <fencevalue>20</fencevalue>
         <bashstrengthmod>125</bashstrengthmod>
         <suspicious>false</suspicious>
-        <size>15</size>
+        <size>10</size> <!-- Liberal Additions -->
         <attack>
             <priority>1</priority>
             <attack_description>swings at</attack_description>
@@ -1007,6 +1034,9 @@
             <random_damage>21</random_damage>
             <fixed_damage>5</fixed_damage>
             <bruises>true</bruises>
+			<number_attacks>3</number_attacks> <!-- Liberal Additions -->
+            <successive_attacks_difficulty>4</successive_attacks_difficulty> <!-- Liberal Additions -->
+			<armorpiercing>6</armorpiercing> <!-- Liberal Additions -->
         </attack>
     </weapontype>
 
@@ -1030,7 +1060,7 @@
             <cuts>true</cuts>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
-            <armorpiercing>1</armorpiercing>
+            <armorpiercing>3</armorpiercing> <!-- Liberal Additions -->
         </attack>
     </weapontype>
 
@@ -1053,7 +1083,7 @@
             <cuts>true</cuts>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
-            <armorpiercing>1</armorpiercing>
+            <armorpiercing>7</armorpiercing> <!-- Liberal Additions: Stab vests don't exist in LCS, and knives go through armor in reality -->
             <number_attacks>3</number_attacks>
             <successive_attacks_difficulty>4</successive_attacks_difficulty>
         </attack>
@@ -1067,6 +1097,7 @@
         <graffiti>true</graffiti>
         <fencevalue>2</fencevalue>
         <suspicious>false</suspicious>
+		<protects_against_kidnapping>false</protects_against_kidnapping> <!-- Liberal Additions -->
         <size>5</size>
         <attack>
             <priority>1</priority>
@@ -1077,6 +1108,9 @@
             <random_damage>11</random_damage>
             <fixed_damage>5</fixed_damage>
             <bruises>true</bruises>
+			<number_attacks>3</number_attacks> <!-- Liberal Additions -->
+            <successive_attacks_difficulty>3</successive_attacks_difficulty> <!-- Liberal Additions -->
+			<armorpiercing>4</armorpiercing> <!-- Liberal Additions -->
         </attack>
     </weapontype>
 
@@ -1098,6 +1132,9 @@
             <random_damage>21</random_damage>
             <fixed_damage>5</fixed_damage>
             <bruises>true</bruises>
+			<number_attacks>3</number_attacks> <!-- Liberal Additions -->
+            <successive_attacks_difficulty>4</successive_attacks_difficulty> <!-- Liberal Additions -->
+			<armorpiercing>6</armorpiercing> <!-- Liberal Additions -->
         </attack>
     </weapontype>
 
@@ -1110,7 +1147,7 @@
         <threatening>true</threatening>
         <fencevalue>100</fencevalue>
         <bashstrengthmod>150</bashstrengthmod>
-        <size>15</size>
+        <size>10</size> <!-- Liberal Additions -->
         <attack>
             <priority>1</priority>
             <attack_description>slashes at</attack_description>
@@ -1119,11 +1156,14 @@
             <skill>SWORD</skill>
             <random_damage>101</random_damage>
             <fixed_damage>10</fixed_damage>
+			<can_backstab>true</can_backstab> <!-- Liberal Additions -->
             <cuts>true</cuts>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
-            <armorpiercing>2</armorpiercing>
+            <armorpiercing>7</armorpiercing> <!-- Liberal Additions -->
             <severtype>CLEAN</severtype>
+			<number_attacks>3</number_attacks> <!-- Liberal Additions -->
+            <successive_attacks_difficulty>5</successive_attacks_difficulty> <!-- Liberal Additions -->
         </attack>
     </weapontype>
 
@@ -1134,6 +1174,7 @@
         <can_take_hostages>true</can_take_hostages>
         <fencevalue>10</fencevalue>
         <suspicious>false</suspicious>
+		<protects_against_kidnapping>false</protects_against_kidnapping> <!-- Liberal Additions: I've got a M249, you've got a syringe. Come with me. -->
         <size>5</size>
         <attack>
             <priority>1</priority>
@@ -1144,6 +1185,7 @@
             <random_damage>4</random_damage>
             <fixed_damage>1</fixed_damage>
             <cuts>true</cuts>
+			<bleeding>true</bleeding> <!-- Liberal Additions -->
             <armorpiercing>4</armorpiercing>
         </attack>
     </weapontype>
@@ -1153,6 +1195,8 @@
         <name_future>Burning Flare</name_future>
         <shortname>Torch</shortname>
         <shortname_future>Flare</shortname_future>
+		<can_take_hostages>true</can_take_hostages> <!-- Liberal Additions: Come with me or I'll burn your face off -->
+		<protects_against_kidnapping>false</protects_against_kidnapping> <!-- Liberal Additions -->
         <threatening>true</threatening>
         <fencevalue>2</fencevalue>
         <size>15</size> <!-- You can't conceal a burning torch under your clothes. -->        
@@ -1166,6 +1210,121 @@
             <fixed_damage>5</fixed_damage>
             <burns>true</burns>
             <damages_armor>true</damages_armor>
+			<number_attacks>3</number_attacks> <!-- Liberal Additions -->
+            <successive_attacks_difficulty>3</successive_attacks_difficulty> <!-- Liberal Additions -->
+			<armorpiercing>10</armorpiercing> <!-- Liberal Additions: It burns! -->
+        </attack>
+    </weapontype>
+	
+	
+	<weapontype idname="WEAPON_FIVESEVEN"> <!-- Liberal Additions -->     
+        <name>FN Five SeveN</name>
+        <name_future>5.7 Blaster</name_future>
+        <shortname>FN 5.7</shortname>
+        <shortname_future>5.7 Blasta</shortname_future>
+        <can_take_hostages>true</can_take_hostages>
+        <threatening>true</threatening>
+        <legality>1</legality>
+        <fencevalue>50</fencevalue>
+        <size>5</size>
+        <attack>
+            <priority>1</priority>
+            <ranged>true</ranged>
+            <attack_description>shoots at</attack_description>
+            <skill>PISTOL</skill>
+            <ammotype>CLIP_5.7</ammotype>
+            <random_damage>141</random_damage>
+            <fixed_damage>10</fixed_damage>
+            <shoots>true</shoots>
+            <bleeding>true</bleeding>
+            <damages_armor>true</damages_armor>
+            <armorpiercing>7</armorpiercing>
+        </attack>
+        <attack>
+            <priority>2</priority>
+            <strength_min>2</strength_min>
+            <strength_max>6</strength_max>
+            <attack_description>swings at</attack_description>
+            <skill>CLUB</skill>
+            <random_damage>6</random_damage>
+            <fixed_damage>5</fixed_damage>
+            <bruises>true</bruises>
+        </attack>
+    </weapontype>
+	
+	<weapontype idname="WEAPON_SMG_P90"> <!-- Liberal Additions -->     
+        <name>P90 SMG</name>
+        <name_future>Tokyo King SMG</name_future>
+        <shortname>P90</shortname>
+        <shortname_future>King SMG</shortname_future>
+        <can_take_hostages>true</can_take_hostages>
+        <threatening>true</threatening>
+        <legality>-2</legality>
+        <fencevalue>450</fencevalue>
+        <size>10</size>
+        <attack>
+            <priority>1</priority>
+            <ranged>true</ranged>
+            <attack_description>shoots at</attack_description>
+            <skill>SMG</skill>
+            <ammotype>CLIP_5.7</ammotype>
+            <random_damage>141</random_damage>
+            <fixed_damage>10</fixed_damage>
+            <shoots>true</shoots>
+            <bleeding>true</bleeding>
+            <damages_armor>true</damages_armor>
+            <armorpiercing>7</armorpiercing>
+            <accuracy_bonus>2</accuracy_bonus>
+            <number_attacks>2</number_attacks>
+            <successive_attacks_difficulty>3</successive_attacks_difficulty>
+        </attack>
+        <attack>
+            <priority>2</priority>
+            <attack_description>swings at</attack_description>
+            <skill>CLUB</skill>
+            <strength_min>5</strength_min>
+            <strength_max>10</strength_max>
+            <random_damage>21</random_damage>
+            <fixed_damage>5</fixed_damage>
+            <bruises>true</bruises>
+        </attack>
+    </weapontype>
+	
+	<weapontype idname="WEAPON_GRENADE"> <!-- Liberal Additions -->
+        <name>Grenade</name>
+        <name_future>Lemo-Nade</name_future>
+        <shortname>Grenade</shortname>
+        <shortname_future>Lemo-Nade</shortname_future>
+        <threatening>true</threatening>
+		<can_take_hostages>true</can_take_hostages>
+		<legality>-2</legality>
+        <fencevalue>100</fencevalue>
+        <size>5</size>
+        <attack>
+            <priority>1</priority>
+            <ranged>true</ranged>
+            <thrown>true</thrown>
+            <attack_description>lobs a grenade at</attack_description>
+            <hit_description>exploding</hit_description>
+            <always_describe_hit>true</always_describe_hit>
+            <hit_punctuation>!</hit_punctuation>
+            <skill>THROWING</skill>
+            <random_damage>301</random_damage>
+            <fixed_damage>50</fixed_damage>
+            <burns>true</burns>
+            <damages_armor>true</damages_armor>
+            <armorpiercing>10</armorpiercing>
+            <no_damage_reduction_for_limbs_chance>66</no_damage_reduction_for_limbs_chance>
+			<bleeding>true</bleeding>
+            <fire>
+                <chance_causes_debris>100</chance_causes_debris>
+                <chance>0</chance>
+            </fire>
+                <critical>
+                <chance>50</chance>
+                <hits_required>1</hits_required>
+                <severtype>NASTY</severtype>
+            </critical>
         </attack>
     </weapontype>
 

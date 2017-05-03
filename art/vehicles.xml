@@ -131,7 +131,7 @@
         <shortname>Bug</shortname>
         <stealing>
             <difficulty_to_find>2</difficulty_to_find>
-            <juice>0</juice>
+            <juice>10</juice> <!-- Liberal Additions -->
             <extra_heat>0</extra_heat>
             <sense_alarm_chance>1</sense_alarm_chance>
             <touch_alarm_chance>10</touch_alarm_chance>
@@ -178,13 +178,13 @@
         <longname>HMMWV</longname>
         <shortname>Humvee</shortname>
         <stealing>
-            <difficulty_to_find>10</difficulty_to_find>
-            <juice>0</juice>
-            <extra_heat>0</extra_heat>
-            <sense_alarm_chance>0</sense_alarm_chance>
-            <touch_alarm_chance>0</touch_alarm_chance>
+            <difficulty_to_find>9</difficulty_to_find> <!-- Liberal Additions -->
+            <juice>50</juice> <!-- Liberal Additions: Takes massive balls to steal from the Army -->
+            <extra_heat>24</extra_heat> <!-- Liberal Additions: The Army won't let a missing car go unnoticed. -->
+            <sense_alarm_chance>15</sense_alarm_chance> <!-- Liberal Additions -->
+            <touch_alarm_chance>95</touch_alarm_chance> <!-- Liberal Additions -->
         </stealing>
-        <available_at_dealership>false</available_at_dealership>
+        <available_at_dealership>true</available_at_dealership> <!-- Liberal Additions -->
         <price>80000</price>
     </vehicletype>
 
@@ -229,12 +229,12 @@
         <shortname>Jeep</shortname>
         <stealing>
             <difficulty_to_find>6</difficulty_to_find>
-            <juice>0</juice>
-            <extra_heat>0</extra_heat>
+            <juice>15</juice> <!-- Liberal Additions -->
+            <extra_heat>4</extra_heat> <!-- Liberal Additions: A little extra heat because it's harder to find a Jeep -->
             <sense_alarm_chance>1</sense_alarm_chance>
             <touch_alarm_chance>10</touch_alarm_chance>
         </stealing>
-        <available_at_dealership>false</available_at_dealership>
+        <available_at_dealership>true</available_at_dealership> <!-- Liberal Additions -->
         <price>7500</price>
     </vehicletype>
 
@@ -279,7 +279,7 @@
         <shortname>Pickup</shortname>
         <stealing>
             <difficulty_to_find>1</difficulty_to_find>
-            <juice>0</juice>
+             <juice>10</juice> <!-- Liberal Additions -->
             <extra_heat>0</extra_heat>
             <sense_alarm_chance>1</sense_alarm_chance>
             <touch_alarm_chance>10</touch_alarm_chance>
@@ -327,7 +327,7 @@
         <shortname>Cruiser</shortname>
         <stealing>
             <difficulty_to_find>7</difficulty_to_find>
-            <juice>2</juice>
+            <juice>30</juice> <!-- Liberal Additions: You have the audacity to steal a cop car in broad daylight and successfully get away -->
             <extra_heat>16</extra_heat>
             <sense_alarm_chance>0</sense_alarm_chance>
             <touch_alarm_chance>0</touch_alarm_chance>
@@ -344,6 +344,10 @@
         </year>
         <colors>
             <color>Black</color>
+			<color>Red</color> <!-- Liberal Additions -->
+            <color>White</color> <!-- Liberal Additions -->
+            <color>Blue</color> <!-- Liberal Additions -->
+            <color>Beige</color> <!-- Liberal Additions -->
         </colors>
         <drivebonus>
             <base>0</base>
@@ -369,16 +373,16 @@
             <armor_midpoint>30</armor_midpoint>
         </armor>
         <size>2</size>
-        <longname>Sportscar</longname>
-        <shortname>Sport</shortname>
-        <stealing> <!-- Stealing isn't possible for agentcars -->
-            <difficulty_to_find>10</difficulty_to_find>
-            <juice>0</juice>
-            <extra_heat>0</extra_heat>
-            <sense_alarm_chance>0</sense_alarm_chance>
-            <touch_alarm_chance>0</touch_alarm_chance>
+        <longname>Supercar</longname> <!-- Liberal Additions -->
+        <shortname>Super</shortname> <!-- Liberal Additions -->
+        <stealing> <!-- Liberal Additions: Stealing isn't possible for agentcars? Not anymore. -->
+            <difficulty_to_find>9</difficulty_to_find> <!-- Liberal Additions -->
+            <juice>50</juice> <!-- Liberal Additions: Takes massive balls to steal from the CIA -->
+            <extra_heat>32</extra_heat> <!-- Liberal Additions: The CIA won't let a missing car go unnoticed. -->
+            <sense_alarm_chance>15</sense_alarm_chance> <!-- Liberal Additions -->
+            <touch_alarm_chance>95</touch_alarm_chance> <!-- Liberal Additions -->
         </stealing>
-        <available_at_dealership>false</available_at_dealership>
+        <available_at_dealership>true</available_at_dealership> <!-- Liberal Additions -->
         <price>10000</price>
     </vehicletype>
 
@@ -423,7 +427,7 @@
         <shortname>Sport</shortname>
         <stealing>
             <difficulty_to_find>3</difficulty_to_find>
-            <juice>0</juice>
+            <juice>10</juice> <!-- Liberal Additions -->
             <extra_heat>5</extra_heat>
             <sense_alarm_chance>15</sense_alarm_chance>
             <touch_alarm_chance>95</touch_alarm_chance>
@@ -474,12 +478,12 @@
         <shortname>Wagon</shortname>
         <stealing>
             <difficulty_to_find>1</difficulty_to_find>   
-            <juice>0</juice>
+            <juice>10</juice> <!-- Liberal Additions -->
             <extra_heat>0</extra_heat>
             <sense_alarm_chance>1</sense_alarm_chance>
             <touch_alarm_chance>10</touch_alarm_chance>
         </stealing>
-        <available_at_dealership>false</available_at_dealership>
+        <available_at_dealership>true</available_at_dealership> <!-- Liberal Additions -->
         <price>7500</price>
     </vehicletype>
 
@@ -526,7 +530,7 @@
         <shortname>SUV</shortname>
         <stealing>
             <difficulty_to_find>1</difficulty_to_find>
-            <juice>2</juice>
+            <juice>10</juice> <!-- Liberal Additions -->
             <extra_heat>0</extra_heat>
             <sense_alarm_chance>4</sense_alarm_chance>
             <touch_alarm_chance>85</touch_alarm_chance>
@@ -574,12 +578,12 @@
         <shortname>Taxicab</shortname>
         <stealing>
             <difficulty_to_find>8</difficulty_to_find>
-            <juice>0</juice>
-            <extra_heat>0</extra_heat>
+            <juice>20</juice> <!-- Liberal Additions: Taxicabs are pretty hard to find unoccupied -->
+            <extra_heat>8</extra_heat> <!-- Liberal Additions: Cab company reports a missing cab -->
             <sense_alarm_chance>0</sense_alarm_chance>
             <touch_alarm_chance>0</touch_alarm_chance>
         </stealing>
-        <available_at_dealership>false</available_at_dealership>
+        <available_at_dealership>True</available_at_dealership> <!-- Liberal Additions -->
         <price>5000</price>
     </vehicletype>
 
@@ -625,12 +629,12 @@
         <shortname>Van</shortname>
         <stealing>
             <difficulty_to_find>2</difficulty_to_find>
-            <juice>0</juice>
+             <juice>10</juice> <!-- Liberal Additions -->
             <extra_heat>0</extra_heat>
             <sense_alarm_chance>1</sense_alarm_chance>
             <touch_alarm_chance>10</touch_alarm_chance>
         </stealing>
-        <available_at_dealership>false</available_at_dealership>
+        <available_at_dealership>true</available_at_dealership> <!-- Liberal Additions -->
         <price>10000</price>
     </vehicletype>
 

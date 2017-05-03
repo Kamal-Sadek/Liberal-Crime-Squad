@@ -1,0 +1,126 @@
+----------
+WEAPON CHANGES:
+----------
+
+.45 Pistol and AK47 are less identical to the 9mm Pistol and M16.
+More powerful guns have had Fixed Damage, Random Damage, and Armor Pierce buffed.
+Bladed weapons generally get 7 AP, Blunt weapons generally get 6 AP
+Most melee weapons can hit multiple times
+Some custom attack descriptions added
+Certain weapons no longer protect from kidnapping
+Some weapons have their size reduced, and some weapons have minor additions like accuracy bonuses or bleeding
+AA-12 uses a 20-round drum magazine and fires shotgun slugs that have 6 AP
+
+(Fixed Damage = FD, Random Damage = RD, Armor Pierce = AP, SAD = Successive Attack Difficulty)
+44 Magnum: 20 fixed damage, 286 random damage, 6 Armor Pierce
+45 Pistol: 15 fixed damage, 191 random damage, 5 AP. It's no longer identical to the 9mm pistol.
+AA-12: uses a different ammo type (20-round Drum magazine filled with slugs) than the Shotgun, 6 AP (Due to shotgun slugs), accuracy bonus reduced to 2
+AK-47: 15 FD, 261 RD, successive attacks difficulty increased to 5 (Strong recoil). Less identical to the M16.
+AR-15: Accuracy Bonus of 1
+Desert Eagle: 20 FD, 311 RD, 6 AP
+Flamethrower: Legality changed to 0 (Actually legal according to Cracked, won't be banned until gun laws turn slightly Liberal), Flamethrower has 10 AP, 33% "No Limb Damage Reduction" chance, 0% chance of fire starting (To prevent it killing your entire squad)
+M4 Carbine: size changed to 10
+M249: custom attack description
+Molotov: 10 AP and no chance to start a fire, Size changed to 5
+Axe: can hit twice, has 5 successive attack difficulty, and has 7 AP
+Baseball Bat: can hit 3x, has 5 SAD, 6 AP
+Chain: Hits 3x, 3 SAD
+Combat Knife, Dagger, Shank: 7 AP
+Cross: No kidnap protection, hits 3x, 3 SAD
+Crowbar: Hits 3x, 4 SAD, 6 AP
+Daisho: Custom attack description, 7 AP, hits 3x, 5 SAD	
+Gavel: Hits 3x, 3 SAD
+Guitar: No kidnap protection
+Hammer: Hits 2x, 6 AP, 5 SAD
+Maul: Hits 2x, 5 SAD, 6 AP
+Nightstick: Hits 3x, 4 SAD, 6 AP
+Pitchfork: 3 AP
+Spraycan: No kidnap protection, hits 3x, 3 SAD, 4 AP
+Staff: Hits 3x, 4 SAD, 6 AP
+Sword: 7 AP, Hits 3x, 5 SAD
+Syringe: No kidnap protection, causes bleeding
+Torch: Can take hostages, no kidnap protection, hits 3x, 3 SAD, 10 AP
+
+----------
+NEW WEAPONS:
+----------
+
+Five SeveN and P90 added. Both of them have 7 Armor Piercing and use 20-round 5.7x28mm magazines, but they do about as much damage as the .38 Revolver.
+Grenades added. 66% "No damage reduction for limbs" chance.
+
+----------
+EXPANDED CONSERVATIVE ARMORY:
+----------
+
+New toys for Conservatives to play with. You get stuff ranging from Deathsquad Officers with M249's to Agents hacking your Liberals to death with the Daisho.
+
+CEOs: .44 Magnum and Five SeveN
+SWAT: Five SeveN and P90
+Deathsquads: AA-12, Desert Eagle, M249, Five SeveN, P90, Grenade, .44 Magnum. 
+Police Gang Unit: 45 Pistol, 44 Magnum, AR-15
+Agent: Grenade, Desert Eagle, 45 Pistol, AA-12, M249, P90, Five SeveN, Daisho, Sword
+Secret Service: 45 Pistol, P90, Five SeveN
+Soldier: Shotgun, M249, Grenade
+CCS Boss: M249, Daisho, Flamethrower
+Military Police: 45 Pistol, P90, Five SeveN, Grenade, AA-12
+Navy SEAL: AA-12, M249, P90, Five SeveN, Grenade
+
+----------
+EXPANDED CONSERVATIVE SKILLS:
+----------
+
+Conservatives get new skills to accompany their new weapons.
+
+Deathsquads: Heavy Weapons, SMG, Throwing.
+Agents: Heavy, Throwing, Sword
+Soldier: Heavy, Shotgun, Throwing
+CCS Boss: Heavy, Sword
+Military Police: Throwing
+Navy SEAL: Heavy, Shotgun, Throwing, Pistol, SMG
+
+----------
+VEHICLE CHANGES
+----------
+
+Expanded the list of vehicles that give juice upon stealing, makes Agent Cars and HMMWV's stealable, and turns Agent Cars into Super Cars.
+
+Bug, Pickup Truck, Sportscar, Station Wagon, SUV, Van gives 10 Juice on theft
+Army HMMWV's can be stolen, give 50 Juice and 24 extra heat, have alarm chances, and can be bought at the dealership
+Jeep gives 15 Juice, 4 Heat, and is buyable
+Police Cars give 30 Juice and can be bought
+Agent Cars are now Supercars, are buyable, come in a wide variety of colors, can be stolen, give 50 Juice, 32 Heat, and have alarm chances
+Station Wagon buyable
+Taxicab gives 20 juice, 8 heat, can be bought
+Van can be bought
+
+----------
+CLIP CHANGES
+----------
+
+Minor changes made here.
+
+.45 Pistol mag size changed to 12
+MP5 mag size changed to 30
+Flamethrowers can be fired 3 times now without reloading
+AA-12 uses a drum magazine that holds 20 rounds
+
+----------
+ARMOR CHANGES
+----------
+
+Not many changes.
+
+Deathsquad Armor has a drug bonus
+Heavy Armor conceals face, has 10 base Interrogation power, assault and drug bonus
+
+----------
+PAWNSHOP CHANGES
+----------
+
+Pawnshop is now fullscreen and sells ammo for every weapon
+
+----------
+ARMSDEALER CHANGES(Gangster/Mercenary selling you weapons = Armsdealer)
+----------
+
+Fullscreen buying interface, all weapons/ammo can be bought. It gets expensive if the guns are illegal, though!
