@@ -723,7 +723,7 @@
         <threatening>true</threatening>
         <fencevalue>0</fencevalue>
         <bashstrengthmod>200</bashstrengthmod>
-        <size>15</size>
+        <size>10</size> <!-- Liberal Additions -->
         <attack>
             <priority>1</priority>
             <attack_description>chops at</attack_description>
@@ -748,7 +748,7 @@
         <threatening>true</threatening>
         <fencevalue>20</fencevalue>
         <bashstrengthmod>150</bashstrengthmod>
-        <size>15</size>
+        <size>10</size> <!-- Liberal Additions -->
         <attack>
             <priority>1</priority>
             <attack_description>swings at</attack_description>
@@ -844,7 +844,7 @@
         <fencevalue>10</fencevalue>
         <bashstrengthmod>200</bashstrengthmod>
         <auto_break_locks>true</auto_break_locks>
-        <size>15</size>
+        <size>10</size> <!-- Liberal Additions -->
         <attack>
             <priority>1</priority>
             <attack_description>swings at</attack_description>
@@ -899,7 +899,7 @@
         <threatening>true</threatening>
         <fencevalue>100</fencevalue>
         <bashstrengthmod>150</bashstrengthmod>
-        <size>15</size>
+        <size>10</size> <!-- Liberal Additions -->
         <attack>
             <priority>1</priority>
             <attack_description>Slashes at</attack_description> <!-- Liberal Additions -->
@@ -908,7 +908,7 @@
             <skill>SWORD</skill>
             <random_damage>101</random_damage>
             <fixed_damage>10</fixed_damage>
-			<can_backstab>true</can_backstab>
+			<can_backstab>true</can_backstab> <!-- Liberal Additions -->
             <cuts>true</cuts>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
@@ -1024,7 +1024,7 @@
         <fencevalue>20</fencevalue>
         <bashstrengthmod>125</bashstrengthmod>
         <suspicious>false</suspicious>
-        <size>15</size>
+        <size>10</size> <!-- Liberal Additions -->
         <attack>
             <priority>1</priority>
             <attack_description>swings at</attack_description>
@@ -1147,7 +1147,7 @@
         <threatening>true</threatening>
         <fencevalue>100</fencevalue>
         <bashstrengthmod>150</bashstrengthmod>
-        <size>15</size>
+        <size>10</size> <!-- Liberal Additions -->
         <attack>
             <priority>1</priority>
             <attack_description>slashes at</attack_description>
@@ -1156,7 +1156,7 @@
             <skill>SWORD</skill>
             <random_damage>101</random_damage>
             <fixed_damage>10</fixed_damage>
-			<can_backstab>true</can_backstab>
+			<can_backstab>true</can_backstab> <!-- Liberal Additions -->
             <cuts>true</cuts>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
