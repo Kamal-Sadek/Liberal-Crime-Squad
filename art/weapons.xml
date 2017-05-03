@@ -908,6 +908,7 @@
             <skill>SWORD</skill>
             <random_damage>101</random_damage>
             <fixed_damage>10</fixed_damage>
+			<can_backstab>true</can_backstab>
             <cuts>true</cuts>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
@@ -1155,6 +1156,7 @@
             <skill>SWORD</skill>
             <random_damage>101</random_damage>
             <fixed_damage>10</fixed_damage>
+			<can_backstab>true</can_backstab>
             <cuts>true</cuts>
             <bleeding>true</bleeding>
             <damages_armor>true</damages_armor>
