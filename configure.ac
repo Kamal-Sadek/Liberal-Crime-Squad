@@ -32,7 +32,9 @@ AC_TYPE_SIZE_T
 AC_HEADER_TIME
 
 # Checks for library functions.
-AC_FUNC_MALLOC
+#
+# commented out until it's proved a glibc-compatible malloc is needed
+# AC_FUNC_MALLOC
 AC_TYPE_SIGNAL
 AC_FUNC_STAT
 
