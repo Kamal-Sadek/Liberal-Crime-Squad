@@ -52,5 +52,4 @@ crimesquad_SOURCES = game.cpp lcsio.cpp cursesmovie.cpp compat.cpp\
  sdl/SDL_timer.h sdl/SDL_touch.h sdl/SDL_types.h sdl/SDL_version.h\
  sdl/SDL_video.h sdl/begin_code.h sdl/close_code.h
 
-crimesquad_CPPFLAGS = -DINSTALL_DATA_DIR=\"$(datadir)\"
-crimesquad_CXXFLAGS = -I$(top_srcdir)/src
+crimesquad_CPPFLAGS = -DINSTALL_DATA_DIR=\"$(datadir)\" -I$(top_srcdir)/src 

@@ -16,7 +16,12 @@ AC_PROG_CXX
 
 # We're moving to the future, to C++11!
 AC_CONFIG_MACRO_DIR([.])
+
+old_cxxflags=$CXXFLAGS
 AX_CXX_COMPILE_STDCXX_11([noext],[mandatory])
+AM_CXXFLAGS=$CXXFLAGS
+AC_SUBST([AM_CXXFLAGS])
+CXXFLAGS=$old_cxxflags
 
 # Defines
 # TODO: Conditionally set these depending on build system.
