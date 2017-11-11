@@ -13,6 +13,7 @@ AM_SILENT_RULES([yes])
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
+AC_LANG(C++)
 
 # We're moving to the future, to C++11!
 AC_CONFIG_MACRO_DIR([.])
@@ -22,6 +23,25 @@ AX_CXX_COMPILE_STDCXX_11([noext],[mandatory])
 AM_CXXFLAGS=$CXXFLAGS
 AC_SUBST([AM_CXXFLAGS])
 CXXFLAGS=$old_cxxflags
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_STDBOOL
+AC_C_CONST
+AC_C_INLINE
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+
+# Checks for library functions.
+AC_FUNC_MALLOC
+AC_TYPE_SIGNAL
+AC_FUNC_STAT
+
+
+AC_CHECK_FUNCS([memset mkdir strchr])
+
+AC_CHECK_HEADER([langinfo.h],
+                [AC_DEFINE([HAVE_LANGINFO_H], [1],
+                    [Define is you have <lamginfo.h>.])])
 
 # Defines
 # TODO: Conditionally set these depending on build system.
@@ -85,20 +105,5 @@ if test "$LACK_SDL2" = 1; then
    AC_MSG_WARN([ *** Compiling without SDL2 or SDL2_mixer, and with DONT_INCLUDE_SDL defined.])
 fi
 
-# Checks for typedefs, structures, and compiler characteristics.
-AC_HEADER_STDBOOL
-AC_C_CONST
-AC_C_INLINE
-AC_TYPE_SIZE_T
-AC_HEADER_TIME
-
-# Checks for library functions.
-AC_FUNC_MALLOC
-AC_TYPE_SIGNAL
-AC_FUNC_STAT
-
-
-
-AC_CHECK_FUNCS([memset mkdir strchr])
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT
