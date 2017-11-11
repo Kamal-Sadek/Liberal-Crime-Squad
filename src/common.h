@@ -39,6 +39,10 @@
 
 #ifdef WIN32 // safe to do now that we did that earlier thing defining WIN32 if _WIN32 was defined
    #include <windows.h>
+
+#  ifdef KEY_EVENT
+#   undef KEY_EVENT
+#  endif
    #define GO_PORTABLE
    #include <io.h> //needed for unlink()
    #include <direct.h>
