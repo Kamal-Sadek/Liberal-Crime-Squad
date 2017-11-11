@@ -8,6 +8,8 @@ AC_INIT([crimesquad], [4.10.0],[kamaljalals@gmail.com])
 AC_CONFIG_SRCDIR([src/cursesgraphics.cpp])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([subdir-objects foreign])
+AM_SILENT_RULES([yes])
+
 # Checks for programs.
 AC_PROG_CC
 AC_PROG_CXX
