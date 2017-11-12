@@ -185,8 +185,8 @@ unsigned long getSeed()
    fnvHash(_seed,GetCurrentProcessId()); /* process ID for current process */
    SYSTEM_INFO info; /* a whole bunch of system info */
    GetSystemInfo(&info); /* get the system info */
-   fnvHash(_seed,(unsigned long)info.lpMinimumApplicationAddress); /* pointer to minimum accessible memory location */
-   fnvHash(_seed,(unsigned long)info.lpMaximumApplicationAddress); /* pointer to maximum accessible memory location */
+   fnvHash(_seed,(intptr_t)info.lpMinimumApplicationAddress); /* pointer to minimum accessible memory location */
+   fnvHash(_seed,(intptr_t)info.lpMaximumApplicationAddress); /* pointer to maximum accessible memory location */
 #else // we're on a POSIX system and can use POSIX API entropy sources
 #if defined(_SC_AVPHYS_PAGES) && defined(_SC_PAGESIZE) // might or might not be defined... optional in POSIX
    fnvHash(_seed,sysconf(_SC_AVPHYS_PAGES)*sysconf(_SC_PAGESIZE)); /* current available memory */
