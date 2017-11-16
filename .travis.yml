@@ -30,7 +30,7 @@ matrix:
 before_script:
   - mkdir build
   - cd build
-  - ../autogen.sh CXX=$COMPILER --disable-silent-rules
+  - ../bootstrap CXX=$COMPILER --disable-silent-rules
 script:
   - make
 
