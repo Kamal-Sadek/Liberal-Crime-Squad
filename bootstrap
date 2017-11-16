@@ -1,2 +1,20 @@
-#!/bin/sh
-autoreconf -fvi
+#!/bin/sh -e
+#
+# @file bootstrap
+# @brief Script to prepare the project build environment from a SCM checkout.
+#
+# Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+#
+blddir=$(pwd)
+srcdir=$(dirname $0)
+if [ -z "$srcdir" ]; then
+  srcdir="$blddir"
+fi
+
+cd "$srcdir"
+autoreconf -i -f -v
+
+cd "$blddir"
+if [ -z "$NOCONFIGURE" ]; then
+  "$srcdir/configure" "$@"
+fi
