@@ -88,7 +88,6 @@ const int lowestloadscoreversion=31203;
 #include "compat.h"
 #include "cursesmovie.h"
 #include "cursesgraphics.h"
-//#include "politics/law.h"
 #include "politics/alignment.h"
 
 #define TAB 9
@@ -1791,23 +1790,5 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int (&libpowe
 void sleeper_scandal(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM]);
 void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM]);
 void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM]);
-
-/*
- justice.cpp
-*/
-/* monthly - hold trial on a liberal */
-void trial(Creature &g);
-/* monthly - sentence a liberal */
-void penalize(Creature &g,char lenient);
-/* monthly - move a liberal to jail */
-void imprison(Creature &g);
-/* monthly - advances a liberal's prison time or executes them */
-char prison(Creature &g);
-/* monthly - subjects a liberal to liberal therapy */
-void reeducation(Creature &g);
-/* monthly - subjects a liberal to hard labor */
-void laborcamp(Creature &g);
-/* monthly - subjects a liberal to normal prison */
-void prisonscene(Creature &g);
 
 #endif // INCLUDES_H_INCLUDED
