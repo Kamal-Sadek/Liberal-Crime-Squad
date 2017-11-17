@@ -29,6 +29,7 @@ This file is part of Liberal Crime Squad.
 #ifndef LOG_H_INCLUDED
 #define LOG_H_INCLUDED
 
+#include <fstream>
 #include "includes.h"
 
 /* Not in log.cpp, we just need this declared inside this header */

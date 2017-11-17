@@ -28,6 +28,7 @@
 */
 #include "politics/politics.h"
 
+#include <algorithm>
 #include <externs.h>
 #include "politics/amendments.h"
 

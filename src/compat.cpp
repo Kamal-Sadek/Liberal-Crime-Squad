@@ -62,6 +62,7 @@
 * - many functions like addstr(), mvaddstr(), strcpy(), strcat(), etc. have been overloaded to accept integers directly
 */
 
+#include <algorithm>
 #include <externs.h>
 
 #ifndef HAS_STRICMP

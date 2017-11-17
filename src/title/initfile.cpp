@@ -19,6 +19,7 @@ This file is part of Liberal Crime Squad.
 
 */
 
+#include <algorithm>
 #include <externs.h>
 
 void setconfigoption(std::string name, std::string value)

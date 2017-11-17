@@ -60,6 +60,7 @@ This file is part of Liberal Crime Squad.                                       
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
+#include <algorithm>
 #include <externs.h>
 
 /* prompt user to enter an amount of items to equip, move, or sell */

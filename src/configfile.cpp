@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <externs.h>
 
 std::ifstream* openFile(const std::string& filename, std::ios_base::openmode format)

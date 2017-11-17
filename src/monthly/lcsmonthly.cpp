@@ -28,6 +28,7 @@
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
 #include "monthly/monthly.h"
+#include <algorithm>
 #include <externs.h>
 
 //TODO: Log the monthly report? --Addictgamer

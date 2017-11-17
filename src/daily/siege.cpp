@@ -867,12 +867,7 @@ void siegeturn(char clearformess)
    // Count people at each location
    int l;
    //int hs=-1;
-   int* liberalcount = new int[len(location)];
-   char* food_prep   = new char[len(location)];
-
-   // Clear food_prep and liberalcount lists
-   std::memset(food_prep,0,len(location));
-   std::memset(liberalcount,0,sizeof(int)*len(location));
+   std::vector<int> liberalcount(len(location), 0);
 
    for(int p=0;p<len(pool);p++)
    {
@@ -1443,8 +1438,6 @@ void siegeturn(char clearformess)
             gamelog.newline(); // single blank line after every siege day
          } // end if(!location[l]->siege.underattack)
       } // end for(l=0;l<len(location);l++) if(location[l]->siege.siege)
-   delete[] liberalcount;
-   delete[] food_prep;
 }
 
 

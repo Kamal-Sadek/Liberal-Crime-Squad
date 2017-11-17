@@ -1,4 +1,7 @@
+#include <algorithm>
 #include <externs.h>
+#include <sstream>
+
 
 std::string tostring(long i)
 {

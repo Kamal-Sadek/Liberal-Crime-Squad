@@ -37,6 +37,7 @@ This file is part of Liberal Crime Squad.
 #define LCSIO_H_INCLUDED
 
 #include "common.h" /* include this prior to checking if WIN32 is defined */
+#include <iostream>
 
 /**
     I/O Flags for the LCS I/O System.

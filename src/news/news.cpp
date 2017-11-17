@@ -479,8 +479,7 @@ void setpriority(newsstoryst &ns)
       {
          ns.priority=0;
 
-         int crime[CRIMENUM];
-         memset(crime,0,CRIMENUM*sizeof(int));
+         int crime[CRIMENUM] = { 0 };
          // Record all the crimes in this story
          for(int c=0;c<len(ns.crime);c++)
             crime[ns.crime[c]]++;
@@ -843,8 +842,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
             case NEWSSTORY_WANTEDARREST:
             case NEWSSTORY_GRAFFITIARREST:
             {
-               int crime[CRIMENUM];
-               std::memset(crime,0,sizeof(int)*CRIMENUM);
+               int crime[CRIMENUM] = { 0 };
                for(int c=0;c<len(ns.crime);c++)
                   crime[ns.crime[c]]++;
                if(crime[CRIME_KILLEDSOMEBODY]>1)
@@ -877,8 +875,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
             case NEWSSTORY_DRUGARREST:
             case NEWSSTORY_BURIALARREST:
             {
-               int crime[CRIMENUM];
-               std::memset(crime,0,sizeof(int)*CRIMENUM);
+               int crime[CRIMENUM] = { 0 };
                for(int c=0;c<len(ns.crime);c++)
                   crime[ns.crime[c]]++;
                strcat(story,"A routine arrest went horribly wrong yesterday, ");
@@ -974,8 +971,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
 
                squadstory_text_opening(ns,liberalguardian,ccs,story);
 
-               int crime[CRIMENUM];
-               memset(crime,0,sizeof(int)*CRIMENUM);
+               int crime[CRIMENUM] = { 0 };
                int typesum=0;
                for(int c=0;c<len(ns.crime);c++)
                {

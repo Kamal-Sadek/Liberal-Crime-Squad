@@ -26,6 +26,7 @@ This file is part of Liberal Crime Squad.                                       
         the bottom of includes.h in the top src folder.
 */
 
+#include <algorithm>
 #include <externs.h>
 #include "politics/politics.h"
 

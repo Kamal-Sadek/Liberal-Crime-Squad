@@ -44,8 +44,6 @@
    //Visual C++ .NET (7) includes the STL with vector, so we
    //will use that, otherwise the HP STL Vector.h will be used.
    #ifdef __MINGW32__
-      #include <iostream>
-      #include <fstream>
       #include <vector>
       #include <map>
    #else
@@ -53,14 +51,10 @@
          #define WIN32_DOTNET
          #include <ciso646> // alternate keywords included in the ISO C++ standard
                             // but not directly supported by Microsoft Visual Studio C++
-         #include <iostream>
-         #include <fstream>
          #include <vector>
          #include <map>
       #else
          #define WIN32_PRE_DOTNET
-         #include <iostream.h>
-         #include <fstream.h>
          #include "vector.h"
          #include "map.h"
       #endif
@@ -78,11 +72,8 @@
 #else
    #include <vector>
    #include <map>
-   #include <iostream>
-   #include <fstream>
    #include <ctype.h>
    #include <unistd.h>
-   #include <ctype.h>
    #define GO_PORTABLE
 
    #if defined(HAVE_WIDE_NCURSES) && defined(__STDC_ISO_10646__)
@@ -168,21 +159,8 @@
    #endif
 #endif
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sstream>
-#include <deque>
-#include <algorithm>
-#include <queue>
-#include <math.h>
-#include <cstring>
 #include "cmarkup/Markup.h" //For XML.
 
-#include <locale.h>
 #ifdef _WIN32
 #ifdef __STRICT_ANSI__ /* mbctype.h doesn't work in strict ansi mode so this hack makes it work */
 #define STRICT_ANSI_TEMP_OFF
