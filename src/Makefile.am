@@ -21,7 +21,8 @@ crimesquad_SOURCES = game.cpp lcsio.cpp cursesmovie.cpp compat.cpp\
  configfile.cpp configfile.h news/ads.cpp news/headline.cpp news/layout.cpp\
  news/majorevent.cpp news/squadstory_text.cpp sitemode/sitemap.h\
  sitemode/sitemap.cpp news/news.h\
- locationdef.h basemode/activate_sleepers.cpp monthly/sleeper_update.cpp\
+ locationdef.h basemode/activate_sleepers.cpp \
+ monthly/sleepers.h     monthly/sleepers.cpp \
  items/armor.cpp creature/augmenttype.cpp creature/creaturetypes.cpp basemode/liberalagenda.cpp\
  common/misc.cpp common/help.cpp creature/augmentation.h creature/creature.h\
  creature/creaturenames.cpp cmarkup/Markup.cpp cmarkup/Markup.h vehicle/vehicle.cpp vehicle/vehicle.h\

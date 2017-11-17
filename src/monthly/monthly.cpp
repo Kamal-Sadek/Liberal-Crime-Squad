@@ -62,6 +62,7 @@ This file is part of Liberal Crime Squad.                                       
 
 #include <externs.h>
 #include "monthly/justice.h"
+#include "monthly/sleeper.h"
 #include "politics/politics.h"
 
 /* does end of month actions */
