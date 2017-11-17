@@ -22,14 +22,6 @@
 // uncomment this next line if you want to disable SDL (which is for music/sound)
 //#define DONT_INCLUDE_SDL
 
-/* some compilers sometimes define _WIN32 but not WIN32 on Windows, but LCS usually
-   just checks if WIN32's defined, so the next couple lines fix that so it works */
-#ifdef _WIN32
-   #ifndef WIN32
-      #define WIN32 _WIN32
-   #endif /* !WIN32 */
-#endif /* _WIN32 */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -37,7 +29,7 @@
 #include <langinfo.h>
 #endif
 
-#ifdef WIN32 // safe to do now that we did that earlier thing defining WIN32 if _WIN32 was defined
+#ifdef _WIN32
    #include <windows.h>
 
 #  ifdef KEY_EVENT
@@ -191,7 +183,7 @@
 #include "cmarkup/Markup.h" //For XML.
 
 #include <locale.h>
-#ifdef WIN32
+#ifdef _WIN32
 #ifdef __STRICT_ANSI__ /* mbctype.h doesn't work in strict ansi mode so this hack makes it work */
 #define STRICT_ANSI_TEMP_OFF
 #undef __STRICT_ANSI__

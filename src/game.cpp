@@ -242,7 +242,7 @@ newsstoryst *sitestory=NULL;
 highscorest score[SCORENUM];
 int yourscore=-1;
 
-#ifdef WIN32
+#ifdef _WIN32
 bool fixcleartype=false;
 #endif
 
@@ -461,7 +461,7 @@ int main(int argc, char* argv[])
 /* Free memory and exit the game */
 void end_game(int err)
 {
-   #ifdef WIN32
+   #ifdef _WIN32
    end_cleartype_fix(); // won't do anything unless fixcleartype is true
    #endif
 

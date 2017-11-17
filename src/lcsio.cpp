@@ -31,7 +31,7 @@ const char *art_search_paths[]=
    #ifdef INSTALL_DATA_DIR
    INSTALL_DATA_DIR "/lcs/art/",
    #endif
-   #ifndef WIN32
+   #ifndef _WIN32
    "/usr/local/share/lcs/art/",
    "/usr/share/lcs/art/",
    "/usr/games/share/lcs/art/",
@@ -55,7 +55,7 @@ bool LCSFileExists(const char* filename)
 //Create the home directory if it does not exist.
 bool LCSInitHomeDir()
 {
-   #ifndef WIN32
+   #ifndef _WIN32
    char* homeenv=getenv("HOME");
    #else
    char* homeenv=(char*)"./";
@@ -66,14 +66,14 @@ bool LCSInitHomeDir()
    if(str[len(str)-1]!='/')
       str+="/";
 
-   #ifndef WIN32
+   #ifndef _WIN32
    str+=".lcs/";
    #endif
 
    strncpy(homedir,str,MAX_PATH_SIZE);
    if((!LCSFileExists(homedir)) && (strncmp(homedir,".",1)!=0))
    {
-      #ifdef WIN32
+      #ifdef _WIN32
       if(_mkdir(homedir)!=0)
          return false;
       #else

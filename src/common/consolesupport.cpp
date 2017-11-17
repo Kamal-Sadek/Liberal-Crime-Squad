@@ -211,7 +211,7 @@ int checkkey_cap()
 bool unicode_enabled = false;
 
 bool setup_unicode() {
-   #ifdef WIN32
+   #ifdef _WIN32
    #ifdef PDC_WIDE
    unicode_enabled = true; // We're using a version of PDCurses with UTF-8 support (e.g. from pdc34dllu.zip)
    #else
@@ -293,13 +293,13 @@ void set_title(char *s)
 // Initialize the console, depending on the OS and language/code page settings
 void init_console()
 {
-   #ifdef WIN32
+   #ifdef _WIN32
    // This has to be set to Code Page 437 in Windows regardless of Unicode, that's just how PDCurses works on Windows, even the UTF-8 version of PDCurses
    SetConsoleOutputCP(437); // use Code Page 437 (US English code page for DOS) for output, regardless of anything else
    SetConsoleCP(437); // use Code Page 437 (US English code page for DOS) for input, regardless of anything else
    setlocale(LC_ALL,"English_United States.437");
    _setmbcp(_MB_CP_LOCALE); // use same code page as multibyte code page
-   #else // WIN32
+   #else // _WIN32
    #ifdef CH_USE_UNICODE
    setlocale(LC_ALL,"en_US.UTF-8"); // POSIX-compliant OSes DO support UTF-8/Unicode for setlocale, unlike Windows
    #endif
@@ -309,13 +309,13 @@ void init_console()
    #ifdef CH_USE_ASCII_HACK
    setlocale(LC_ALL,"en_US.CP437");
    #endif
-   #endif // WIN32
+   #endif // _WIN32
    #ifdef CH_USE_UNICODE
    setup_unicode();
    #endif
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 #define  FE_FONTSMOOTHINGSTANDARD           1
 #define  FE_FONTSMOOTHINGCLEARTYPE          2
 #define  SPI_GETFONTSMOOTHINGTYPE      0x200A

@@ -111,13 +111,13 @@ void initalarm()
 }
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 int ptime=GetTickCount();
 #endif
 
 void alarmset(int t)
 {
-   #ifdef WIN32
+   #ifdef _WIN32
    ptime=GetTickCount()+t;
    #else
    /* If the signal handler is not set up set it up now */
@@ -132,7 +132,7 @@ void alarmset(int t)
 
 void alarmwait()
 {
-   #ifdef WIN32
+   #ifdef _WIN32
    while(ptime>(int)GetTickCount());
    #else
    struct itimerval timer_now;
@@ -180,7 +180,7 @@ unsigned long getSeed()
    fnvHash(_seed,time(NULL)); /* Seconds since 1970-01-01 00:00:00 */
    fnvHash(_seed,clock()); /* clock ticks since LCS was launched (clock ticks are some fraction of a second that varies on different implementations) */
 #endif // GO_PORTABLE
-#ifdef WIN32 // We're on Windows and can use the Win32 API as entropy sources
+#ifdef _WIN32 // We're on Windows and can use the Win32 API as entropy sources
    fnvHash(_seed,GetTickCount()); /* ms since system boot */
    fnvHash(_seed,GetCurrentProcessId()); /* process ID for current process */
    SYSTEM_INFO info; /* a whole bunch of system info */
@@ -194,7 +194,7 @@ unsigned long getSeed()
 #ifdef _SC_NPROCESSORS_ONLN // might or might not be defined... optional in POSIX
    fnvHash(_seed,sysconf(_SC_NPROCESSORS_ONLN));
 #endif // _SC_NPROCESSORS_ONLN
-#endif // WIN32
+#endif // _WIN32
    return _seed;
 }
 

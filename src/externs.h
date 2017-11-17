@@ -74,7 +74,7 @@ extern short interface_pgdn;
 
 extern bool autosave;
 
-#ifdef WIN32
+#ifdef _WIN32
 extern bool fixcleartype;
 #endif
 
