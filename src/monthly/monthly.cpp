@@ -66,7 +66,7 @@
 
 #include <externs.h>
 #include "monthly/justice.h"
-#include "monthly/sleeper.h"
+#include "monthly/sleepers.h"
 #include "politics/politics.h"
 
 
