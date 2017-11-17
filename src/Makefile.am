@@ -11,9 +11,13 @@ crimesquad_SOURCES = game.cpp lcsio.cpp cursesmovie.cpp compat.cpp\
  sitemode/sitedisplay.cpp sitemode/stealth.cpp combat/chase.cpp\
  combat/fight.cpp combat/haulkidnap.cpp daily/activities.cpp daily/daily.cpp\
  daily/date.cpp news/news.cpp daily/shopsnstuff.cpp daily/siege.cpp\
- politics/amendments.cpp monthly/justice.cpp monthly/lcsmonthly.cpp\
- monthly/monthly.cpp politics/politics.cpp daily/interrogation.cpp\
- daily/recruit.cpp politics/law.cpp politics/alignment.h politics/law.h\
+ monthly/justice.cpp monthly/lcsmonthly.cpp\
+ monthly/monthly.cpp \
+ politics/amendments.h  politics/amendments.cpp \
+ politics/law.h         politics/law.cpp \
+ politics/politics.h    politics/politics.cpp \
+ daily/interrogation.cpp\
+ daily/recruit.cpp politics/alignment.h \
  configfile.cpp configfile.h news/ads.cpp news/headline.cpp news/layout.cpp\
  news/majorevent.cpp news/squadstory_text.cpp sitemode/sitemap.h\
  sitemode/sitemap.cpp news/news.h\

@@ -61,6 +61,7 @@ This file is part of Liberal Crime Squad.                                       
 // it out for yourself.
 
 #include <externs.h>
+#include "politics/politics.h"
 
 /* TODO
 make it less likely to be raided based on:

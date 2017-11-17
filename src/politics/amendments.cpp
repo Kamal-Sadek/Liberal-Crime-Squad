@@ -3,7 +3,7 @@
  */
 /*
  * Copyright (c) 2002,2003,2004 by Tarn Adams
- * Copyright 2017 Stephen M. Webb
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -29,6 +29,7 @@
  */
 #include "politics/amendments.h"
 #include <externs.h>
+#include "politics/politics.h"
 
 /*
     TODO: I'm not sure if anything in here should be logged. Perhaps only the notification

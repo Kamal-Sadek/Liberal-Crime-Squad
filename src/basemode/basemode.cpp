@@ -61,6 +61,7 @@ This file is part of Liberal Crime Squad.                                       
 // it out for yourself.
 
 #include <externs.h>
+#include "politics/politics.h"
 
 bool show_disbanding_screen(int& oldforcemonth)
 {

@@ -1,38 +1,101 @@
+/**
+ * Congressional manipulations.
+ */
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
-
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net) by
+ * copying code from game.cpp.
 */
+#include "politics/politics.h"
 
 #include <externs.h>
 #include "politics/amendments.h"
 
 //TODO: Not sure if anything in here should be logged...Perhaps only a summary of the results? --Addictgamer
 
-/* politics - calculate presidential approval */
-int presidentapproval()
+/**
+ * Get the leaning of an issue voter for an election.
+ *
+ * Takes a random voter, calculates how liberal or conservative they are (if
+ * @p stalin is true, calculates how libertarian or Stalinist they are instead)
+ * and for each issue they roll for their opinion on a 50-point subset of the
+ * spectrum, determined by bias -- high liberal/libertarian bias only rolls on
+ * the liberal/libertarian end of the spectrum, high conservative/Stalinist bias
+ * only rolls on the conservative/Stalinist end of the spectrum.
+ */
+static int
+getswingvoter(bool stalin)
+{
+   int bias = publicmood(-1-stalin)-LCSrandom(100), vote=-2;
+   if(bias> 25)bias= 25;
+   if(bias<-25)bias=-25;
+   for(int i=0;i<4;i++)
+   {
+      int issue=randomissue(true);
+      if(25+LCSrandom(50)-bias<((stalin&&stalinview(issue,false))?100-attitude[issue]:attitude[issue])) vote++;
+   }
+   return vote;
+}
+
+
+/**
+ * Get the leaning of a partyline voter for an election.
+ *
+ * No need for this to deal with Stalinism, this function deliberately only deals with the
+ * liberal vs. conservative spectrum.
+ */
+static int
+getsimplevoter(int leaning)
+{
+   int vote=leaning-1;
+   for(int i=0;i<2;i++) if(LCSrandom(100)<attitude[randomissue(true)]) vote++;
+   return vote;
+}
+
+
+/**
+ * Appoint a figure to an executive office, based on the President's alignment.
+ */
+static void
+fillCabinetPost(int position)
+{
+   // Set alignment
+   if(exec[EXEC_PRESIDENT]==ALIGN_ARCHCONSERVATIVE) exec[position]=ALIGN_ARCHCONSERVATIVE;
+   else if(exec[EXEC_PRESIDENT]==ALIGN_ELITELIBERAL) exec[position]=ALIGN_ELITELIBERAL;
+   else if(exec[EXEC_PRESIDENT]==ALIGN_STALINIST) exec[position]=ALIGN_STALINIST;
+   else exec[position]=exec[EXEC_PRESIDENT]+LCSrandom(3)-1;
+   // Set name
+   if(exec[position]==ALIGN_ARCHCONSERVATIVE) generate_name(execname[position],GENDER_WHITEMALEPATRIARCH);
+   else if(exec[position]==ALIGN_CONSERVATIVE) generate_name(execname[position],GENDER_MALE);
+   else generate_name(execname[position]);
+}
+
+
+/**
+ * Calculate presidential approval.
+ */
+int
+presidentapproval()
 {
    //Calculate Presidential approval rating
    int approval=0, i;
@@ -58,36 +121,12 @@ int presidentapproval()
    return approval;
 }
 
-/* politics -- gets the leaning of an issue voter for an election */
-int getswingvoter(bool stalin)
-{
-   // Take a random voter, calculate how liberal or conservative they are
-   // If stalin parameter is true, it calculates how libertarian or Stalinist they are instead
-   int bias = publicmood(-1-stalin)-LCSrandom(100), vote=-2;
-   if(bias> 25)bias= 25;
-   if(bias<-25)bias=-25;
-   // Each issue they roll for their opinion on a 50-point subset of the
-   // spectrum, determined by bias -- high liberal/libertarian bias only rolls on the
-   // liberal/libertarian end of the spectrum, high conservative/Stalinist bias only rolls on
-   // the conservative/Stalinist end of the spectrum
-   for(int i=0;i<4;i++)
-   {
-      int issue=randomissue(true);
-      if(25+LCSrandom(50)-bias<((stalin&&stalinview(issue,false))?100-attitude[issue]:attitude[issue])) vote++;
-   }
-   return vote;
-}
 
-/* politics -- gets the leaning of a partyline voter for an election */
-int getsimplevoter(int leaning)
-{  // no need for this to deal with Stalinism, this function deliberately only deals with the liberal vs. conservative spectrum
-   int vote=leaning-1;
-   for(int i=0;i<2;i++) if(LCSrandom(100)<attitude[randomissue(true)]) vote++;
-   return vote;
-}
-
-/* politics -- promotes the Vice President to President, and replaces VP */
-void promoteVP()
+/**
+ * Promote the Vice President to President, and replace VP.
+ */
+void
+promoteVP()
 {
    exec[EXEC_PRESIDENT]=exec[EXEC_VP]; // VP takes over as President
    strcpy(execname[EXEC_PRESIDENT], execname[EXEC_VP]);
@@ -117,22 +156,12 @@ void promoteVP()
    }
 }
 
-/* politics -- appoints a figure to an executive office, based on the President's alignment */
-void fillCabinetPost(int position)
-{
-   // Set alignment
-   if(exec[EXEC_PRESIDENT]==ALIGN_ARCHCONSERVATIVE) exec[position]=ALIGN_ARCHCONSERVATIVE;
-   else if(exec[EXEC_PRESIDENT]==ALIGN_ELITELIBERAL) exec[position]=ALIGN_ELITELIBERAL;
-   else if(exec[EXEC_PRESIDENT]==ALIGN_STALINIST) exec[position]=ALIGN_STALINIST;
-   else exec[position]=exec[EXEC_PRESIDENT]+LCSrandom(3)-1;
-   // Set name
-   if(exec[position]==ALIGN_ARCHCONSERVATIVE) generate_name(execname[position],GENDER_WHITEMALEPATRIARCH);
-   else if(exec[position]==ALIGN_CONSERVATIVE) generate_name(execname[position],GENDER_MALE);
-   else generate_name(execname[position]);
-}
 
-/* politics - causes the people to vote (presidential, congressional, propositions) */
-void elections(char clearformess,char canseethings)
+/**
+ * Cause the people to vote (presidential, congressional, propositions).
+ */
+void
+elections(bool clearformess,bool canseethings)
 {
    int l,p,c;
 
@@ -621,7 +650,9 @@ void elections(char clearformess,char canseethings)
    }
 }
 
-void elections_senate(int senmod,char canseethings)
+
+void
+elections_senate(int senmod,bool canseethings)
 {
    int mood=publicmood(LAW_MOOD);
    int stalinmood=publicmood(LAW_STALIN);
@@ -788,7 +819,9 @@ void elections_senate(int senmod,char canseethings)
    }
 }
 
-void elections_house(char canseethings)
+
+void
+elections_house(bool canseethings)
 {
    int mood=publicmood(LAW_MOOD);
    int stalinmood=publicmood(LAW_STALIN);
@@ -1013,8 +1046,12 @@ void elections_house(char canseethings)
    }
 }
 
-/* politics - causes the supreme court to hand down decisions */
-void supremecourt(char clearformess,char canseethings)
+
+/**
+ * Cause the supreme court to hand down decisions.
+ */
+void
+supremecourt(bool clearformess, bool canseethings)
 {
    int c;
    if(canseethings)
@@ -1347,6 +1384,7 @@ void supremecourt(char clearformess,char canseethings)
    }
 }
 
+
 enum BillStatus
 {
    BILL_SIGNED=-2,
@@ -1355,9 +1393,16 @@ enum BillStatus
    BILL_FAILED=1
 };
 
-//Some politicians listen to public opinion, but no politician will radically deviate from their alignment.
-//More extreme politicians are less likely to deviate from their views. Moderates always consult public opinion.
-char determine_politician_vote(char alignment,int law)
+
+/**
+ * Determine a politician's vote in congress.
+ *
+ * Some politicians listen to public opinion, but no politician will radically
+ * deviate from their alignment.  More extreme politicians are less likely to
+ * deviate from their views. Moderates always consult public opinion.
+ */
+static char
+determine_politician_vote(char alignment, int law)
 {
    char vote=alignment;
    int mood=publicmood(law);
@@ -1389,9 +1434,11 @@ char determine_politician_vote(char alignment,int law)
 }
 
 
-
-/* politics - causes congress to act on legislation */
-void congress(char clearformess,char canseethings)
+/**
+ * Causes congress to act on legislation.
+ */
+void
+congress(bool clearformess, bool canseethings)
 {
    int l, c;
    if(canseethings)
@@ -1859,8 +1906,12 @@ void congress(char clearformess,char canseethings)
       stalinize(canseethings);
 }
 
-/* politics - checks if the game is won */
-char wincheck()
+
+/**
+ * Checks if the game is won.
+ */
+char
+wincheck()
 {
    for(int e=0;e<EXECNUM;e++) if(exec[e]<ALIGN_ELITELIBERAL) return 0;
 
@@ -1940,8 +1991,11 @@ FIXME, PART1:
         -- LiteralKa
 */
 
-/* politics - checks the prevailing attitude on a specific law, or overall */
-int publicmood(int l)
+/**
+ * Check the prevailing attitude on a specific law, or overall.
+ */
+int
+publicmood(int l)
 {
    switch(l)
    {  // All laws should be affected by exactly one issue if there is a direct
@@ -1995,9 +2049,15 @@ int publicmood(int l)
    }
 }
 
-/* returns true if Stalinists agree with Elite Liberals on a view/law, false if they strongly disagree with libs  *
- * the input bool islaw, if true, returns Stalinist opinion on laws, if false, returns Stalinist opinion on views */
-bool stalinview(short view,bool islaw)
+/**
+ * Get the Stalinist view of a law or view.
+ *
+ * Returns true if Stalinists agree with Elite Liberals on a view/law, false if
+ * they strongly disagree with libs the input bool islaw, if true, returns
+ * Stalinist opinion on laws, if false, returns Stalinist opinion on views
+ */
+bool
+stalinview(short view,bool islaw)
 {
    if(islaw) switch(view)
    {

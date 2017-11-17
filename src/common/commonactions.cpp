@@ -27,6 +27,7 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <externs.h>
+#include "politics/politics.h"
 
 /* common - test for possible game over */
 char endcheck(char cause)

@@ -27,6 +27,7 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <externs.h>
+#include "politics/politics.h"
 
 
 Skill::Skill(const std::string& inputXml)

@@ -27,6 +27,7 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <externs.h>
+#include "politics/politics.h"
 
 /* monthly - hold trial on a liberal */
 void trial(Creature &g)

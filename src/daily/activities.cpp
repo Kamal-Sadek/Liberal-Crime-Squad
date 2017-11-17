@@ -61,6 +61,7 @@ This file is part of Liberal Crime Squad.                                       
 // it out for yourself.
 
 #include <externs.h>
+#include "politics/politics.h"
 
 void doActivitySolicitDonations(vector<Creature *> &solicit, char &clearformess);
 void doActivitySellTshirts(vector<Creature *> &tshirts, char &clearformess);

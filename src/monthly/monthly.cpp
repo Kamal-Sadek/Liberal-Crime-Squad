@@ -61,6 +61,7 @@ This file is part of Liberal Crime Squad.                                       
 // it out for yourself.
 
 #include <externs.h>
+#include "politics/politics.h"
 
 /* does end of month actions */
 void passmonth(char &clearformess,char canseethings)

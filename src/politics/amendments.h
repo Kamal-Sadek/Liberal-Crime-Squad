@@ -22,6 +22,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+#ifndef LCS_POLITICS_AMENDMENTS_H
+#define LCS_POLITICS_AMENDMENTS_H
 
 /* Attempt to pass a constitutional amendment to help win the game. */
 void
@@ -39,3 +41,4 @@ reaganify(bool canseethings);
 void
 stalinize(bool canseethings);
 
+#endif /* LCS_POLITICS_AMENDMENTS_H */

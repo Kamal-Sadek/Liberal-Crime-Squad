@@ -1,4 +1,5 @@
 #include <externs.h>
+#include "politics/politics.h"
 
 // Assign a value to an Interval from a string or log error.
 void assign_interval(Interval& i, const std::string& value,
