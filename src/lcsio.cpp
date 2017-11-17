@@ -23,6 +23,7 @@ This file is part of Liberal Crime Squad.
 */
 
 #include <externs.h>
+#include "tinydir.h"
 
 const char* arttest="newspic.cpc";
 bool initialized=false;

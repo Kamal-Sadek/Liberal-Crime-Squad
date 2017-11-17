@@ -437,7 +437,6 @@ private:
 #include "locations/locations.h"
 #include "configfile.h"
 #include "sitemode/sitemap.h"
-#include "tinydir.h"
 
 enum CarChaseObstacles
 {

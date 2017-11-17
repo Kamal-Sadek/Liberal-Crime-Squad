@@ -27,6 +27,7 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <externs.h>
+#include <sys/stat.h>
 
 // TODO: It would be really cool to be able to "export" characters.
 
