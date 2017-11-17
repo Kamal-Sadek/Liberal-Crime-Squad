@@ -1,37 +1,40 @@
+/**
+ * Monthly updates.
+ */
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
-*/
-
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
+#include "monthly/monthly.h"
 #include <externs.h>
 
 //TODO: Log the monthly report? --Addictgamer
 
 /* monthly - reports the guardian's power to the player */
-void guardianupdate(char size, int power)
+static void
+guardianupdate(char size, int power)
 {
    music.play(MUSIC_NEWSPAPER);
    erase();
@@ -91,11 +94,12 @@ void guardianupdate(char size, int power)
 
 
 /* monthly - lets the player choose a special edition for the guardian */
-int choosespecialedition(char &clearformess)
+int
+choosespecialedition(char& clearformess)
 {
-   //Temporary, maybe put special edition definition into an xml file. -XML
-	static const string document_types[] =
-	{  // This list MUST be in alphabetical order for binary_search() to work right
+    //Temporary, maybe put special edition definition into an xml file. -XML
+    // This list MUST be in alphabetical order for binary_search() to work right
+    static const vector<string> dox {
       "LOOT_AMRADIOFILES",
       "LOOT_CABLENEWSFILES",
       "LOOT_CCS_BACKERLIST",
@@ -109,8 +113,7 @@ int choosespecialedition(char &clearformess)
       "LOOT_PRISONFILES",
       "LOOT_RESEARCHFILES",
       "LOOT_SECRETDOCUMENTS"
-	};
-	static const vector<string> dox(document_types,document_types+len(document_types));
+    };
 
    int page=0;
 
@@ -262,7 +265,8 @@ int choosespecialedition(char &clearformess)
 
 
 /* monthly - guardian - prints liberal guardian special editions */
-void printnews(short li,short newspaper)
+void
+printnews(short li, short newspaper)
 {
    music.play(MUSIC_NEWSPAPER);
    if(law[LAW_FREESPEECH]==-2)offended_firemen=1;
@@ -691,7 +695,8 @@ void printnews(short li,short newspaper)
 
 
 /* monthly - LCS finances report */
-void fundreport(char &clearformess)
+void
+fundreport(char& clearformess)
 {
    if(disbanding) return;
    music.play(MUSIC_FINANCES);

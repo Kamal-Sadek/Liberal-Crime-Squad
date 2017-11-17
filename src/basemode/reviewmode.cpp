@@ -61,6 +61,7 @@ the bottom of includes.h in the top src folder.
 // it out for yourself.
 
 #include <externs.h>
+#include "monthly/monthly.h"
 
 /* base - review and reorganize liberals */
 void review()

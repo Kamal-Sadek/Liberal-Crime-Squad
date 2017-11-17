@@ -1751,31 +1751,4 @@ void generatefiller(char *story,int amount);
 /* news - major newspaper reporting on lcs and other topics */
 void majornewspaper(char &clearformess,char canseethings);
 
-/*******************************************************************************
-*
-*                             End of Month Events
-*                             Folder: "monthly"
-*
-*******************************************************************************/
-
-/*
- monthly.cpp
-*/
-/* does end of month actions */
-void passmonth(char &clearformess,char canseethings);
-/* rename prison according to the new laws (add more buildings to this) */
-void updateworld_laws(short *law,short *oldlaw);
-
-/*
- lcsmonthly.cpp
-*/
-/* monthly - reports the guardian's power to the player */
-void guardianupdate(char size,int power);
-/* monthly - lets the player choose a special edition for the guardian */
-int choosespecialedition(char &clearformess);
-/* monthly - guardian - prints liberal guardian special editions */
-void printnews(short l,short newspaper);
-/* monthly - LCS finances report */
-void fundreport(char &clearformess);
-
 #endif // INCLUDES_H_INCLUDED

@@ -12,17 +12,17 @@ crimesquad_SOURCES = game.cpp lcsio.cpp cursesmovie.cpp compat.cpp\
  combat/fight.cpp combat/haulkidnap.cpp daily/activities.cpp daily/daily.cpp\
  daily/date.cpp news/news.cpp daily/shopsnstuff.cpp daily/siege.cpp\
  monthly/justice.h      monthly/justice.cpp \
- monthly/lcsmonthly.cpp monthly/monthly.cpp \
+ mointhly/monthly.h     monthly/monthly.cpp monthly/lcsmonthly.cpp \
  politics/amendments.h  politics/amendments.cpp \
  politics/law.h         politics/law.cpp \
  politics/politics.h    politics/politics.cpp \
+ monthly/sleepers.h     monthly/sleepers.cpp \
  daily/interrogation.cpp\
  daily/recruit.cpp politics/alignment.h \
  configfile.cpp configfile.h news/ads.cpp news/headline.cpp news/layout.cpp\
  news/majorevent.cpp news/squadstory_text.cpp sitemode/sitemap.h\
  sitemode/sitemap.cpp news/news.h\
  locationdef.h basemode/activate_sleepers.cpp \
- monthly/sleepers.h     monthly/sleepers.cpp \
  items/armor.cpp creature/augmenttype.cpp creature/creaturetypes.cpp basemode/liberalagenda.cpp\
  common/misc.cpp common/help.cpp creature/augmentation.h creature/creature.h\
  creature/creaturenames.cpp cmarkup/Markup.cpp cmarkup/Markup.h vehicle/vehicle.cpp vehicle/vehicle.h\
