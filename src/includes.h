@@ -91,10 +91,6 @@ const int lowestloadscoreversion=31203;
 #include "politics/law.h"
 #include "politics/alignment.h"
 
-#ifndef NDEBUG
-#define NDEBUG
-#endif
-
 #define TAB 9
 #define ENTER 10
 #define ESC 27
