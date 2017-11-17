@@ -27,6 +27,7 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <externs.h>
+#include "politics/amendments.h"
 
 //TODO: Not sure if anything in here should be logged...Perhaps only a summary of the results? --Addictgamer
 
