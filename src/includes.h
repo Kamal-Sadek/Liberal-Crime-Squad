@@ -88,7 +88,7 @@ const int lowestloadscoreversion=31203;
 #include "compat.h"
 #include "cursesmovie.h"
 #include "cursesgraphics.h"
-#include "politics/law.h"
+//#include "politics/law.h"
 #include "politics/alignment.h"
 
 #define TAB 9
