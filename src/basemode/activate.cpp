@@ -1798,7 +1798,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          addstr((char)(toupper(selected_attribute.at(0))) +
             selected_attribute.substr(1) +
             (selected_aug->get_effect() >= 0 ? " +" : " ") +
-            tostring(selected_aug->get_effect()));
+            std::to_string(selected_aug->get_effect()));
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          mvaddstr(5, 0, "Chance at Success: ");
@@ -2060,7 +2060,7 @@ void select_makeclothing(Creature *cr)
          }
 
          set_color(COLOR_GREEN,COLOR_BLACK,1);
-         string price = '$'+tostring(armortype[armortypei[p]]->get_make_price());
+         string price = '$'+std::to_string(armortype[armortypei[p]]->get_make_price());
          move(y,64-len(price));
          addstr(price);
       }

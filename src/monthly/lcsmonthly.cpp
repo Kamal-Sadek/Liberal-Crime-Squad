@@ -733,10 +733,10 @@ fundreport(char& clearformess)
                set_color(COLOR_WHITE,COLOR_BLACK,0);
                mvaddstr(y,0,dotdotdot);
                set_color(COLOR_GREEN,COLOR_BLACK,0);
-               num="+$"+tostring(ledger.income[i]);
+               num="+$"+std::to_string(ledger.income[i]);
                mvaddstr(y,60-len(num),num);
                if(ledger.dailyIncome[i])
-                  num=" (+$"+tostring(ledger.dailyIncome[i])+")";
+                  num=" (+$"+std::to_string(ledger.dailyIncome[i])+")";
                else
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -782,10 +782,10 @@ fundreport(char& clearformess)
                set_color(COLOR_WHITE,COLOR_BLACK,0);
                mvaddstr(y,0,dotdotdot);
                set_color(COLOR_RED,COLOR_BLACK,0);
-               num="-$"+tostring(ledger.expense[i]);
+               num="-$"+std::to_string(ledger.expense[i]);
                mvaddstr(y,60-len(num),num);
                if(ledger.dailyExpense[i])
-                  num=" (-$"+tostring(ledger.dailyExpense[i])+")";
+                  num=" (-$"+std::to_string(ledger.dailyExpense[i])+")";
                else
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -834,17 +834,17 @@ fundreport(char& clearformess)
             if(totalmoney>0) { set_color(COLOR_GREEN,COLOR_BLACK,1); num="+"; }
             else if(totalmoney<0) { set_color(COLOR_RED,COLOR_BLACK,1); num="-"; }
             else { set_color(COLOR_WHITE,COLOR_BLACK,1); num=""; }
-            num+="$"+tostring(abs(totalmoney));
+            num+="$"+std::to_string(abs(totalmoney));
             mvaddstr(y,60-len(num),num);
             if(dailymoney>0)
             {
                set_color(COLOR_GREEN,COLOR_BLACK,1);
-               num=" (+$"+tostring(abs(dailymoney))+")";
+               num=" (+$"+std::to_string(abs(dailymoney))+")";
             }
             else if(dailymoney<0)
             {
                set_color(COLOR_RED,COLOR_BLACK,1);
-               num=" (-$"+tostring(abs(dailymoney))+")";
+               num=" (-$"+std::to_string(abs(dailymoney))+")";
             }
             else
             {
@@ -877,7 +877,7 @@ fundreport(char& clearformess)
          mvaddstr(y,0,dotdotdot);
          mvaddstr(y,0,"Cash");
          set_color(ledger.get_funds()?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
-         num="$"+tostring(ledger.get_funds());
+         num="$"+std::to_string(ledger.get_funds());
          mvaddstr(y,60-len(num),num);
       }
 
@@ -889,7 +889,7 @@ fundreport(char& clearformess)
          mvaddstr(y,0,dotdotdot);
          mvaddstr(y,0,"Tools and Weapons");
          set_color(weaponValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
-         num="$"+tostring(weaponValue);
+         num="$"+std::to_string(weaponValue);
          mvaddstr(y,60-len(num),num);
       }
 
@@ -901,7 +901,7 @@ fundreport(char& clearformess)
          mvaddstr(y,0,dotdotdot);
          mvaddstr(y,0,"Clothing and Armor");
          set_color(armorValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
-         num="$"+tostring(armorValue);
+         num="$"+std::to_string(armorValue);
          mvaddstr(y,60-len(num),num);
       }
 
@@ -913,7 +913,7 @@ fundreport(char& clearformess)
          mvaddstr(y,0,dotdotdot);
          mvaddstr(y,0,"Ammunition");
          set_color(clipValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
-         num="$"+tostring(clipValue);
+         num="$"+std::to_string(clipValue);
          mvaddstr(y,60-len(num),num);
       }
 
@@ -925,7 +925,7 @@ fundreport(char& clearformess)
          mvaddstr(y,0,dotdotdot);
          mvaddstr(y,0,"Miscellaneous Loot");
          set_color(lootValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
-         num="$"+tostring(lootValue);
+         num="$"+std::to_string(lootValue);
          mvaddstr(y,60-len(num),num);
       }
 
@@ -941,7 +941,7 @@ fundreport(char& clearformess)
          mvaddstr(y,0,"Total Liquid Assets:");
          long netWorth=ledger.get_funds()+weaponValue+armorValue+clipValue+lootValue;
          set_color(netWorth?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,1);
-         num="$"+tostring(netWorth);
+         num="$"+std::to_string(netWorth);
          mvaddstr(y,60-len(num),num);
       }
 

@@ -30,7 +30,7 @@ void ItemType::init(const MCD_STR& xmlstring)
 
    idname_ = xml.GetAttrib("idname");
    if (!len(idname_))
-      idname_ = "LACKS IDNAME " + tostring(id_);
+      idname_ = "LACKS IDNAME " + std::to_string(id_);
 
    xml.IntoElem();
 

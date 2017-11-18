@@ -341,7 +341,7 @@ void stopevil()
                set_color(COLOR_RED,COLOR_BLACK,1);
             else
                set_color(COLOR_GREEN,COLOR_BLACK,1);
-            addstr(" ($"+tostring(ticketprice)+")");
+            addstr(" ($"+std::to_string(ticketprice)+")");
          }
          if(this_location->siege.siege > 0) {
             set_color(COLOR_RED,COLOR_BLACK,0);
@@ -389,7 +389,7 @@ void stopevil()
             if(ledger.get_funds() < ticketprice)
                set_color(COLOR_RED,COLOR_BLACK,1);
             else set_color(COLOR_GREEN,COLOR_BLACK,1);
-            addstr(" ($"+tostring(ticketprice)+")");
+            addstr(" ($"+std::to_string(ticketprice)+")");
          }
          temploc.push_back(-1);
       }

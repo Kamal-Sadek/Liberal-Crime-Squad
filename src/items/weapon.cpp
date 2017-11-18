@@ -26,14 +26,14 @@ string Weapon::showXml() const
    xml.IntoElem();
    addBaseValues(xml);
    xml.AddElem("loaded_cliptype",loaded_cliptype_);
-   xml.AddElem("ammo",tostring(ammo_));
+   xml.AddElem("ammo",std::to_string(ammo_));
    return xml.GetDoc();
 }
 
 string Weapon::equip_title() const
 {
    string et=get_name();
-   if(ammo_>0) et+=" ("+tostring(ammo_)+")";
+   if(ammo_>0) et+=" ("+std::to_string(ammo_)+")";
    return et;
 }
 

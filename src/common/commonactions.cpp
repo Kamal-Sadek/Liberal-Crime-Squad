@@ -830,7 +830,7 @@ int buyprompt(const string &firstline, const string &secondline,
          mvaddchar(y,0,'A'+y-2);addstr(" - ");
          addstr(nameprice[p].first);
          move(y++, namepaddedlength+4); //Add 4 for start of line, eg "A - ".
-         addstr("$"+tostring(nameprice[p].second));
+         addstr("$"+std::to_string(nameprice[p].second));
       }
 
       set_color(COLOR_WHITE,COLOR_BLACK,0);

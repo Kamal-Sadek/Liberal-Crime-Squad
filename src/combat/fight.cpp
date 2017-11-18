@@ -889,7 +889,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          case 3: strcat(str," three times"); break;
          case 4: strcat(str," four times"); break;
          case 5: strcat(str," five times"); break;
-         default: strcat(str," "+tostring(bursthits)+" times"); break;
+         default: strcat(str," "+std::to_string(bursthits)+" times"); break;
          }
       }
       else if(attack_used->always_describe_hit)

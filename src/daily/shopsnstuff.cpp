@@ -153,7 +153,7 @@ void dealership(int loc)
          if(car_to_sell->get_heat())
             price/=10;
          set_color(COLOR_WHITE,COLOR_BLACK,0);
-         addstr("S - Sell the "+car_to_sell->fullname()+" ($"+tostring(price)+")");
+         addstr("S - Sell the "+car_to_sell->fullname()+" ($"+std::to_string(price)+")");
       }
       else
       {
@@ -215,7 +215,7 @@ void dealership(int loc)
             {
                availablevehicle.push_back(i);
                vehicleoption.push_back(vehicletype[i]->longname()+" ($"+
-                  tostring(sleepercarsalesman?vehicletype[i]->sleeperprice():vehicletype[i]->price())+")");
+                  std::to_string(sleepercarsalesman?vehicletype[i]->sleeperprice():vehicletype[i]->price())+")");
             }
          while(true)
          {

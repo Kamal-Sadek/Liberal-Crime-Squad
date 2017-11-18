@@ -100,12 +100,12 @@ bool show_disbanding_screen(int& oldforcemonth)
    else align=ALIGN_MODERATE; // nobody has a majority
    set_alignment_color(align,true);
    mvaddstr(2,0,"House: ");
-   if(stalinmode) addstr(tostring(housemake[5])+"Sta, ");
-   addstr(tostring(housemake[4])+"Lib+, ");
-   addstr(tostring(housemake[3])+"Lib, ");
-   addstr(tostring(housemake[2])+"Mod, ");
-   addstr(tostring(housemake[1])+"Cons, ");
-   addstr(tostring(housemake[0])+"Cons+");
+   if(stalinmode) addstr(std::to_string(housemake[5])+"Sta, ");
+   addstr(std::to_string(housemake[4])+"Lib+, ");
+   addstr(std::to_string(housemake[3])+"Lib, ");
+   addstr(std::to_string(housemake[2])+"Mod, ");
+   addstr(std::to_string(housemake[1])+"Cons, ");
+   addstr(std::to_string(housemake[0])+"Cons+");
 
    int senatemake[6]={0,0,0,0,0,0};
    for(int s=0;s<SENATENUM;s++) senatemake[senate[s]+2]++;
@@ -119,12 +119,12 @@ bool show_disbanding_screen(int& oldforcemonth)
    set_alignment_color(align,true);
    senatemake[exec[EXEC_VP]+2]--; // Vice President isn't actually a Senator though
    mvaddstr(3,0,"Senate: ");
-   if(stalinmode) addstr(tostring(senatemake[5])+"Sta, ");
-   addstr(tostring(senatemake[4])+"Lib+, ");
-   addstr(tostring(senatemake[3])+"Lib, ");
-   addstr(tostring(senatemake[2])+"Mod, ");
-   addstr(tostring(senatemake[1])+"Cons, ");
-   addstr(tostring(senatemake[0])+"Cons+");
+   if(stalinmode) addstr(std::to_string(senatemake[5])+"Sta, ");
+   addstr(std::to_string(senatemake[4])+"Lib+, ");
+   addstr(std::to_string(senatemake[3])+"Lib, ");
+   addstr(std::to_string(senatemake[2])+"Mod, ");
+   addstr(std::to_string(senatemake[1])+"Cons, ");
+   addstr(std::to_string(senatemake[0])+"Cons+");
 
    int courtmake[6]={0,0,0,0,0,0};
    for(int s=0;s<COURTNUM;s++) courtmake[court[s]+2]++;
@@ -136,12 +136,12 @@ bool show_disbanding_screen(int& oldforcemonth)
    else align=ALIGN_MODERATE; // nobody has a majority
    set_alignment_color(align,true);
    mvaddstr(4,0,"Supreme Court: ");
-   if(stalinmode) addstr(tostring(courtmake[5])+"Sta, ");
-   addstr(tostring(courtmake[4])+"Lib+, ");
-   addstr(tostring(courtmake[3])+"Lib, ");
-   addstr(tostring(courtmake[2])+"Mod, ");
-   addstr(tostring(courtmake[1])+"Cons, ");
-   addstr(tostring(courtmake[0])+"Cons+");
+   if(stalinmode) addstr(std::to_string(courtmake[5])+"Sta, ");
+   addstr(std::to_string(courtmake[4])+"Lib+, ");
+   addstr(std::to_string(courtmake[3])+"Lib, ");
+   addstr(std::to_string(courtmake[2])+"Mod, ");
+   addstr(std::to_string(courtmake[1])+"Cons, ");
+   addstr(std::to_string(courtmake[0])+"Cons+");
 
    for(int l=0;l<LAWNUM;l++)
    {
@@ -572,7 +572,7 @@ void mode_base()
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             mvaddstr(7,5,"Time passes...",gamelog);
             mvaddstr(9,12,getmonth(month,true)+" ",gamelog);
-            mvaddstr(9,17,tostring(day)+", ",gamelog);
+            mvaddstr(9,17,std::to_string(day)+", ",gamelog);
             mvaddstr(9,21,year,gamelog);
             gamelog.nextMessage(); //Write out buffer to prepare for the next message.
             refresh();

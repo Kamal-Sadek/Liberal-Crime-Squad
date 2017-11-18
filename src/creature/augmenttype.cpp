@@ -13,8 +13,8 @@ AugmentType::AugmentType(const std::string& xmlstring): max_age_(-1), min_age_(-
    idname_=xml.GetAttrib("idname");
    if(!len(idname_))
    {
-      idname_ = "LACKS IDNAME "+tostring(id_);
-      xmllog.log("Augment type "+tostring(id_)+" lacks idname.");
+      idname_ = "LACKS IDNAME "+std::to_string(id_);
+      xmllog.log("Augment type "+std::to_string(id_)+" lacks idname.");
    }
    xml.IntoElem();
 

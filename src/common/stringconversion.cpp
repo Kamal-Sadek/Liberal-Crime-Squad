@@ -1,14 +1,6 @@
 #include <algorithm>
 #include <externs.h>
-#include <sstream>
 
-
-std::string tostring(long i)
-{
-   std::ostringstream os;
-   os << i;
-   return os.str();
-}
 
 int stringtobool(std::string boolstr)
 {

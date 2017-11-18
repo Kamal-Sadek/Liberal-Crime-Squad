@@ -1721,14 +1721,14 @@ string Creature::get_weapon_string(int subtype) const
    {
       r = weapon->get_name(subtype);
       if(weapon->uses_ammo())
-         r += " (" + tostring(weapon->get_ammoamount()) + "/" + tostring(count_clips()) + ")";
+         r += " (" + std::to_string(weapon->get_ammoamount()) + "/" + std::to_string(count_clips()) + ")";
       else if(weapon->is_throwable())
-         r += " (1/" + tostring(count_weapons()-1) + ")"; // -1 so not to count weapon in hands.
+         r += " (1/" + std::to_string(count_weapons()-1) + ")"; // -1 so not to count weapon in hands.
    }
    else if(len(extra_throwing_weapons))
    {
       r = extra_throwing_weapons[0]->get_name(subtype);
-      r += " (0/" + tostring(count_weapons()) + ")";
+      r += " (0/" + std::to_string(count_weapons()) + ")";
    }
    else r = "None";
    return r;

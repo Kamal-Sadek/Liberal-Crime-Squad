@@ -916,9 +916,6 @@ enum ActiveSortingChoices
    Created by jonathansfox.
 */
 
-/* This is declared again lower down, just needed here for this header. */
-std::string tostring(long i);
-
 /* end the game and clean up */
 void end_game(int err=EXIT_SUCCESS);
 
@@ -1013,10 +1010,10 @@ inline int addstr(const std::string& text, Log &log) { log.record(text); return 
 inline int mvaddstr(int y,int x,const std::string& text) { int ret=move(y,x); if(ret!=ERR) ret=addstr(text); return ret; }
 inline int mvaddstr(int y,int x,const std::string& text,Log &log) { log.record(text); return mvaddstr(y,x,text); }
 /* These wrappers convert numbers to text */
-inline int addstr(long num) { return addstr(tostring(num)); }
-inline int addstr(long num,Log &log) { return addstr(tostring(num),log); }
-inline int mvaddstr(int y,int x,long num) { return mvaddstr(y,x,tostring(num)); }
-inline int mvaddstr(int y,int x,long num,Log &log) { return mvaddstr(y,x,tostring(num),log); }
+inline int addstr(long num) { return addstr(std::to_string(num)); }
+inline int addstr(long num,Log &log) { return addstr(std::to_string(num),log); }
+inline int mvaddstr(int y,int x,long num) { return mvaddstr(y,x,std::to_string(num)); }
+inline int mvaddstr(int y,int x,long num,Log &log) { return mvaddstr(y,x,std::to_string(num),log); }
 /* addstr with formatted output */
 int addstr_f(const char * format,...);
 /* mvaddstr with formatted output */
@@ -1199,8 +1196,7 @@ char squadhasitem(squadst &sq,int type,int subtype);
 /*
  stringconversion.cpp
 */
-std::string tostring(long i);
-inline const char* toCstring(long i) { return tostring(i).c_str(); }
+inline const char* toCstring(long i) { return std::to_string(i).c_str(); }
 /* Tries to determine boolean value of a string. Returns 1 for true, 0 for false
    and -1 if unable to determine. */
 int stringtobool(std::string boolstr);
@@ -1209,8 +1205,8 @@ inline char* strcpy(char* dest, const std::string& src) { return strcpy(dest,src
 inline char* strncpy(char* dest, const std::string& src, size_t maxlen) { return strncpy(dest,src.c_str(),maxlen); }
 inline char* strcat(char* dest, const std::string& src) { return strcat(dest,src.c_str()); }
 /* These strcpy and strcat wrappers handle numbers */
-inline char* strcpy(char* dest, long src) { return strcpy(dest,tostring(src)); }
-inline char* strcat(char* dest, long src) { return strcat(dest,tostring(src)); }
+inline char* strcpy(char* dest, long src) { return strcpy(dest,std::to_string(src)); }
+inline char* strcat(char* dest, long src) { return strcat(dest,std::to_string(src)); }
 /* This wrapper allows atoi to handle std::strings */
 inline int atoi(const std::string& str) { return atoi(str.c_str()); }
 /* This wrapper allows atof to handle std::strings */

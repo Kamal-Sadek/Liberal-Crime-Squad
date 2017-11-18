@@ -8,12 +8,12 @@ string Vehicle::showXml() const
    xml.AddElem("vehicle");
    xml.IntoElem();
    xml.AddElem("vtypeidname", vtypeidname_);
-   xml.AddElem("vtypeid", tostring(vtypeid_));
+   xml.AddElem("vtypeid", std::to_string(vtypeid_));
    xml.AddElem("color", color_);
-   xml.AddElem("heat", tostring(heat_));
-   xml.AddElem("location", tostring(location_));
-   xml.AddElem("myear", tostring(myear_));
-   xml.AddElem("id", tostring(id_));
+   xml.AddElem("heat", std::to_string(heat_));
+   xml.AddElem("location", std::to_string(location_));
+   xml.AddElem("myear", std::to_string(myear_));
+   xml.AddElem("id", std::to_string(id_));
    return xml.GetDoc();
 }
 
@@ -76,7 +76,7 @@ string Vehicle::fullname(bool halffull) const
       words++;
    }
    if (myear_!=-1&&words<2) //don't print year if that will make the name too long.
-      s+=tostring(myear_)+" ";
+      s+=std::to_string(myear_)+" ";
    if(halffull) s+=shortname();
    else s+=longname();
 

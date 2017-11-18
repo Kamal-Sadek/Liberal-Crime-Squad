@@ -120,7 +120,7 @@ void equip(vector<Item *> &loot,int loc)
          string s=loot[l]->equip_title();
 
          if(loot[l]->get_number()>1)
-            s+=" x"+tostring(loot[l]->get_number());
+            s+=" x"+std::to_string(loot[l]->get_number());
          str[0]=l-page*18+'A';
          str[1]='\x0';
          strcat(str," - ");
@@ -416,9 +416,9 @@ void moveloot(vector<Item *> &dest,vector<Item *> &source)
          if(source[l]->get_number()>1)
          {
             s+=" ";
-            if(selected[l]>0) s+=tostring(selected[l])+"/";
+            if(selected[l]>0) s+=std::to_string(selected[l])+"/";
             else s+="x";
-            s+=tostring(source[l]->get_number());
+            s+=std::to_string(source[l]->get_number());
          }
 
          str[0]=l-page*18+'A';

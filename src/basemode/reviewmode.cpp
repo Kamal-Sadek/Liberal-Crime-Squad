@@ -139,42 +139,42 @@ void review()
          else if(p==len(squad))
          {
             set_color(COLOR_GREEN,COLOR_BLACK,1);
-            mvaddstr(y,0,"1 - Active Liberals ("+tostring(n[0])+')');
+            mvaddstr(y,0,"1 - Active Liberals ("+std::to_string(n[0])+')');
          }
          else if(p==len(squad)+1)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
-            mvaddstr(y,0,"2 - Hostages ("+tostring(n[1])+')');
+            mvaddstr(y,0,"2 - Hostages ("+std::to_string(n[1])+')');
          }
          else if(p==len(squad)+2)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,1);
-            mvaddstr(y,0,"3 - Hospital ("+tostring(n[2])+')');
+            mvaddstr(y,0,"3 - Hospital ("+std::to_string(n[2])+')');
          }
          else if(p==len(squad)+3)
          {
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            mvaddstr(y,0,"4 - Justice System ("+tostring(n[3])+')');
+            mvaddstr(y,0,"4 - Justice System ("+std::to_string(n[3])+')');
          }
          else if(p==len(squad)+4)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            mvaddstr(y,0,"5 - Sleepers ("+tostring(n[4])+')');
+            mvaddstr(y,0,"5 - Sleepers ("+std::to_string(n[4])+')');
          }
          else if(p==len(squad)+5)
          {
             set_color(COLOR_BLACK,COLOR_BLACK,1);
-            mvaddstr(y,0,"6 - The Dead ("+tostring(n[5])+')');
+            mvaddstr(y,0,"6 - The Dead ("+std::to_string(n[5])+')');
          }
          else if(p==len(squad)+6)
          {
             set_color(COLOR_BLUE,COLOR_BLACK,1);
-            mvaddstr(y,0,"7 - Away ("+tostring(n[6])+')');
+            mvaddstr(y,0,"7 - Away ("+std::to_string(n[6])+')');
          }
          else if(p==len(squad)+7)
          {
             set_color(COLOR_CYAN,COLOR_BLACK,1);
-            mvaddstr(y,0,"8 - Review and Move Equipment ("+tostring(n[7])+')');
+            mvaddstr(y,0,"8 - Review and Move Equipment ("+std::to_string(n[7])+')');
          }
       }
 

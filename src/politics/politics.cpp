@@ -478,7 +478,7 @@ elections(bool clearformess,bool canseethings)
       {
          move(p*3+2,0);
          set_color(COLOR_WHITE,COLOR_BLACK,1);
-         addstr("Proposition "+tostring(propnums[p])+':');
+         addstr("Proposition "+std::to_string(propnums[p])+':');
          move(p*3+2,18);
          addstr("To ");
          set_alignment_color(propdir[p]);

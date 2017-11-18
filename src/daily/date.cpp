@@ -64,7 +64,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          int num_relationships=loveslaves(*pool[p]);
          if(pool[p]->flag&CREATUREFLAG_LOVESLAVE) num_relationships++;
          if(num_relationships==1) addstr("someone!", gamelog);
-         else addstr(tostring(num_relationships)+" people!", gamelog);
+         else addstr(std::to_string(num_relationships)+" people!", gamelog);
          gamelog.newline();
          move(y++,0);
          addstr(pool[p]->name, gamelog);
