@@ -34,7 +34,6 @@ matrix:
       env:
         - BUILD_TARGET=linux
         - COMPILER=clang++-4.0
-  allow_failures:
     - compiler: x86_64-w64-mingw
       addons:
         apt:
