@@ -21,3 +21,7 @@ libpdcurses_la_SOURCES += \
 libpdcurses_la_CPPFLAGS = -I${top_srcdir}/lib/libsdl2/include
 libpdcurses_la_LIBADD = ${top_builddir}/lib/libsdl2/build/libSDL2.la
 
+if BUILD_WIN32
+libpdcurses_la_LDFLAGS = -static -static-libgcc -static-libstdc++ -lgdi32 -lcomdlg32
+endif
+

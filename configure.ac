@@ -10,10 +10,11 @@ AC_CONFIG_AUX_DIR([config.aux])
 AC_CONFIG_MACRO_DIRS([m4])
 AM_INIT_AUTOMAKE([subdir-objects foreign 1.11 -Wno-syntax -Wall])
 AM_SILENT_RULES([yes])
+AC_CANONICAL_HOST
 
 # Checks for programs.
 AM_PROG_AR
-LT_INIT([diable-shared])
+LT_INIT([disable-shared])
 AC_PROG_CC
 AC_PROG_CXX
 AC_LANG(C++)
@@ -46,6 +47,11 @@ AC_CHECK_HEADER([langinfo.h],
 
 dnl do this until libSDL is fully integrated into the project
 AC_DEFINE(DONT_INCLUDE_SDL, [], [Define to avoid including SDL2 and SDL2_mixer.])
+
+# Some special handling for WIndows builds
+AS_CASE([$host_os],
+        [*mingw32],[build_windows=true])
+AM_CONDITIONAL([BUILD_WIN32],[test x$build_windows = xtrue])
 
 AC_CONFIG_SUBDIRS([lib/libsdl2])
 AC_CONFIG_FILES([Makefile lib/Makefile lib/pdcurses/Makefile src/Makefile])
