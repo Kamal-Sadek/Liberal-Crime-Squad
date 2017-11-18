@@ -12,14 +12,15 @@ branches:
 matrix:
   include:
     - compiler: gcc
-      env: BUILD_TARGET=linux
       addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
             - g++-5
-      env: COMPILER=g++-5
+      env:
+        - BUILD_TARGET=linux
+        - COMPILER=g++-5
     - compiler: clang
       env: BUILD_TARGET=linux
       addons:
@@ -30,14 +31,17 @@ matrix:
           packages:
             - g++-5
             - clang-4.0
-      env: COMPILER=clang++-4.0
+      env:
+        - BUILD_TARGET=linux
+        - COMPILER=clang++-4.0
   allow_failures:
     - compiler: x86_64-w64-mingw
-      env: BUILD_TARGET=win64
       addons:
         apt:
           packages:
             - g++-mingw-w64-x86-64 
+      env:
+        - BUILD_TARGET=win64
 
 before_script:
   - autoconf --version
@@ -45,9 +49,9 @@ before_script:
   - mkdir build
   - cd build
   - if [ "$BUILD_TARGET" = "linux" ]; then
-      ../bootstrap CXX=$COMPILER --disable-silent-rules
+      ../bootstrap CXX=$COMPILER --disable-silent-rules;
     elif [ "$BUILD_TARGET" = "win64" ]; then
-      ../bootstrap --host=x86_64-w64-mingw32  --disable-silent-rules
+      ../bootstrap --host=x86_64-w64-mingw32  --disable-silent-rules;
     fi
 
 script:
