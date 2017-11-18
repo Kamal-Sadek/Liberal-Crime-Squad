@@ -1,0 +1,1 @@
+SUBDIRS = libsdl2
