@@ -6,8 +6,8 @@ AC_PREREQ(2.65)
 #The following line has the program name, the program version, and the bug report address.
 AC_INIT([crimesquad], [4.10.0],[kamaljalals@gmail.com])
 AC_CONFIG_HEADER([config.h])
-AC_CONFIG_AUX_DIR([.])
-AC_CONFIG_MACRO_DIRS([m4])
+AC_CONFIG_AUX_DIR([config.aux])
+AC_CONFIG_MACRO_DIRS([config.m4])
 AM_INIT_AUTOMAKE([subdir-objects foreign 1.11 -Wno-syntax -Wall])
 AM_SILENT_RULES([yes])
 AC_CANONICAL_HOST

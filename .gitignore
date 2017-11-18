@@ -16,6 +16,7 @@ depcomp
 game.depend
 game.layout
 install-sh
+!lib/libsdl2/configure
 m4/
 Makefile
 Makefile.in
