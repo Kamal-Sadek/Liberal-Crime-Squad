@@ -5,12 +5,15 @@ AC_PREREQ(2.65)
 
 #The following line has the program name, the program version, and the bug report address.
 AC_INIT([crimesquad], [4.10.0],[kamaljalals@gmail.com])
-AC_CONFIG_SRCDIR([src/cursesgraphics.cpp])
 AC_CONFIG_HEADER([config.h])
-AM_INIT_AUTOMAKE([subdir-objects foreign])
+AC_CONFIG_AUX_DIR([config.aux])
+AC_CONFIG_MACRO_DIRS([m4])
+AM_INIT_AUTOMAKE([subdir-objects foreign 1.11 -Wno-syntax -Wall])
 AM_SILENT_RULES([yes])
 
 # Checks for programs.
+AM_PROG_AR
+LT_INIT([diable-shared])
 AC_PROG_CC
 AC_PROG_CXX
 AC_LANG(C++)
@@ -44,7 +47,6 @@ AC_CHECK_HEADER([langinfo.h],
 dnl do this until libSDL is fully integrated into the project
 AC_DEFINE(DONT_INCLUDE_SDL, [], [Define to avoid including SDL2 and SDL2_mixer.])
 
-
 AC_CONFIG_SUBDIRS([lib/libsdl2])
-AC_CONFIG_FILES([Makefile lib/Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile lib/Makefile lib/pdcurses/Makefile src/Makefile])
 AC_OUTPUT

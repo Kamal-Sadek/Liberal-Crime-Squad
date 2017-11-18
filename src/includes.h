@@ -1005,7 +1005,7 @@ inline int mvaddchar(int y,int x,char ch,Log &log) { log.record(ch); return mvad
 /* Redefining addstr() and mvaddstr() so they use addchar() and mvaddchar(), fixing display of extended characters */
 #undef addstr
 #undef mvaddstr
-#if NCURSES_VERSION_MAJOR < 6
+#if defined(NCURSES_VERSION_MAJOR) && (NCURSES_VERSION_MAJOR < 6)
 inline int addstr(const char* text) { int ret=ERR; for(int i=0;i<len(text);i++) ret=addchar(text[i]); return ret; }
 inline int mvaddstr(int y,int x,const char* text) { int ret=move(y,x); if(ret!=ERR) ret=addstr(text); return ret; }
 #endif

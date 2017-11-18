@@ -1,1 +1,1 @@
-SUBDIRS = libsdl2
+SUBDIRS = libsdl2 pdcurses

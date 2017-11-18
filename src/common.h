@@ -15,10 +15,6 @@
 #ifndef COMMON_H_INCLUDED
 #define COMMON_H_INCLUDED
 
-#if defined __linux__ || defined __APPLE__ // BSD and SVr4 too
-#define NCURSES
-#endif
-
 // uncomment this next line if you want to disable SDL (which is for music/sound)
 //#define DONT_INCLUDE_SDL
 
@@ -42,6 +38,9 @@
 
 #  ifdef KEY_EVENT
 #   undef KEY_EVENT
+#  endif
+#  ifdef MOUSE_MOVED
+#   undef MOUSE_MOVED
 #  endif
    #define GO_PORTABLE
    #include <io.h> //needed for unlink()
