@@ -43,8 +43,6 @@ matrix:
         - BUILD_TARGET=win64
 
 before_script:
-  - autoconf --version
-  - automake --version
   - mkdir build
   - cd build
   - if [ "$BUILD_TARGET" = "linux" ]; then
