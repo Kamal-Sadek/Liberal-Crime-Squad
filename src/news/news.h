@@ -1,5 +1,21 @@
 #include "includes.h"
 
+/* news - graphics */
+void loadgraphics();
+void displaycenterednewsfont(std::string const& str, int y);
+void displaycenteredsmallnews(std::string const& str, int y);
+void displaynewspicture(int p,int y);
+/* news - constructs non-LCS related event stories */
+void constructeventstory(char *story, short view, char positive);
+/* news - draws the specified block of text to the screen */
+void displaynewsstory(char* story, short* storyx_s, short* storyx_e, int y);
+/* news - shows animated news stories */
+void run_television_news_stories();
+/* news - make some filler junk */
+void generatefiller(char* story, int amount);
+/* news - major newspaper reporting on lcs and other topics */
+void majornewspaper(char& clearformess, char canseethings);
+
 void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* storyx_e);
 void squadstory_text_location(newsstoryst& ns,bool liberalguardian,bool ccs,char* story);
 void squadstory_text_opening(newsstoryst& ns,bool liberalguardian,bool ccs,char* story);

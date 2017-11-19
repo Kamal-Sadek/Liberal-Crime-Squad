@@ -27,6 +27,8 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <externs.h>
+#pragma GCC diagnostic ignored "-Wunused-result"
+
 
 /* displays the high score board */
 void viewhighscores(int musicoverride)
