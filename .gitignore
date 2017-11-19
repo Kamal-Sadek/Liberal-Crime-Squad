@@ -7,6 +7,7 @@ config.aux
 config.h
 config.h.in
 config.log
+config.m4
 config.status
 configure
 crimesquad
@@ -16,8 +17,10 @@ depcomp
 game.depend
 game.layout
 install-sh
+!lib/libsdl2/build-scripts/*
 !lib/libsdl2/configure
-m4/
+!lib/libsdl2/Makefile.in
+!lib/libsdl2/test/*
 Makefile
 Makefile.in
 missing
