@@ -1,4 +1,5 @@
-SUBDIRS = src
+SUBDIRS = lib src
+
 lcsdir = $(datadir)/lcs
 artdir = $(lcsdir)/art
 mididir = $(artdir)/midi
