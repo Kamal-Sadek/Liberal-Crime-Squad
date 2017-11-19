@@ -67,6 +67,8 @@
 
 #include <includes.h>
 #include <ctime>
+#include "news/news.h"
+
 
 Log gamelog; //The gamelog.
 Log xmllog; // Log for xml errors or bad values.

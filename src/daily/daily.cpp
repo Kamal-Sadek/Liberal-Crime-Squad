@@ -27,6 +27,8 @@ This file is part of Liberal Crime Squad.                                       
 */
 
 #include <externs.h>
+#include "news/news.h"
+
 
 void advanceday(char &clearformess,char canseethings)
 {

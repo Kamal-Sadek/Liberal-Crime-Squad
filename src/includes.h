@@ -779,8 +779,6 @@ struct newsstoryst
    newsstoryst() : claimed(1),politics_level(0),violence_level(0),cr(NULL),loc(-1) { }
 };
 
-#include "news/news.h"
-
 #define SLOGAN_LEN 80
 
 struct highscorest

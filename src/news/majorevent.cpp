@@ -33,6 +33,8 @@
 // it out for yourself.
 
 #include <externs.h>
+#include "news/news.h"
+
 
 /* news - constructs non-LCS related event stories */
 void constructeventstory(char *story,short view,char positive)
