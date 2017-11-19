@@ -1,37 +1,41 @@
+/**
+ * Monthly updates.
+ */
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
-*/
-
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
+#include "monthly/monthly.h"
+#include <algorithm>
 #include <externs.h>
 
 //TODO: Log the monthly report? --Addictgamer
 
 /* monthly - reports the guardian's power to the player */
-void guardianupdate(char size, int power)
+static void
+guardianupdate(char size, int power)
 {
    music.play(MUSIC_NEWSPAPER);
    erase();
@@ -91,11 +95,12 @@ void guardianupdate(char size, int power)
 
 
 /* monthly - lets the player choose a special edition for the guardian */
-int choosespecialedition(char &clearformess)
+int
+choosespecialedition(char& clearformess)
 {
-   //Temporary, maybe put special edition definition into an xml file. -XML
-	static const string document_types[] =
-	{  // This list MUST be in alphabetical order for binary_search() to work right
+    //Temporary, maybe put special edition definition into an xml file. -XML
+    // This list MUST be in alphabetical order for binary_search() to work right
+    static const vector<string> dox {
       "LOOT_AMRADIOFILES",
       "LOOT_CABLENEWSFILES",
       "LOOT_CCS_BACKERLIST",
@@ -109,8 +114,7 @@ int choosespecialedition(char &clearformess)
       "LOOT_PRISONFILES",
       "LOOT_RESEARCHFILES",
       "LOOT_SECRETDOCUMENTS"
-	};
-	static const vector<string> dox(document_types,document_types+len(document_types));
+    };
 
    int page=0;
 
@@ -262,7 +266,8 @@ int choosespecialedition(char &clearformess)
 
 
 /* monthly - guardian - prints liberal guardian special editions */
-void printnews(short li,short newspaper)
+void
+printnews(short li, short newspaper)
 {
    music.play(MUSIC_NEWSPAPER);
    if(law[LAW_FREESPEECH]==-2)offended_firemen=1;
@@ -691,7 +696,8 @@ void printnews(short li,short newspaper)
 
 
 /* monthly - LCS finances report */
-void fundreport(char &clearformess)
+void
+fundreport(char& clearformess)
 {
    if(disbanding) return;
    music.play(MUSIC_FINANCES);
@@ -727,10 +733,10 @@ void fundreport(char &clearformess)
                set_color(COLOR_WHITE,COLOR_BLACK,0);
                mvaddstr(y,0,dotdotdot);
                set_color(COLOR_GREEN,COLOR_BLACK,0);
-               num="+$"+tostring(ledger.income[i]);
+               num="+$"+std::to_string(ledger.income[i]);
                mvaddstr(y,60-len(num),num);
                if(ledger.dailyIncome[i])
-                  num=" (+$"+tostring(ledger.dailyIncome[i])+")";
+                  num=" (+$"+std::to_string(ledger.dailyIncome[i])+")";
                else
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -776,10 +782,10 @@ void fundreport(char &clearformess)
                set_color(COLOR_WHITE,COLOR_BLACK,0);
                mvaddstr(y,0,dotdotdot);
                set_color(COLOR_RED,COLOR_BLACK,0);
-               num="-$"+tostring(ledger.expense[i]);
+               num="-$"+std::to_string(ledger.expense[i]);
                mvaddstr(y,60-len(num),num);
                if(ledger.dailyExpense[i])
-                  num=" (-$"+tostring(ledger.dailyExpense[i])+")";
+                  num=" (-$"+std::to_string(ledger.dailyExpense[i])+")";
                else
                {
                   set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -828,17 +834,17 @@ void fundreport(char &clearformess)
             if(totalmoney>0) { set_color(COLOR_GREEN,COLOR_BLACK,1); num="+"; }
             else if(totalmoney<0) { set_color(COLOR_RED,COLOR_BLACK,1); num="-"; }
             else { set_color(COLOR_WHITE,COLOR_BLACK,1); num=""; }
-            num+="$"+tostring(abs(totalmoney));
+            num+="$"+std::to_string(abs(totalmoney));
             mvaddstr(y,60-len(num),num);
             if(dailymoney>0)
             {
                set_color(COLOR_GREEN,COLOR_BLACK,1);
-               num=" (+$"+tostring(abs(dailymoney))+")";
+               num=" (+$"+std::to_string(abs(dailymoney))+")";
             }
             else if(dailymoney<0)
             {
                set_color(COLOR_RED,COLOR_BLACK,1);
-               num=" (-$"+tostring(abs(dailymoney))+")";
+               num=" (-$"+std::to_string(abs(dailymoney))+")";
             }
             else
             {
@@ -871,7 +877,7 @@ void fundreport(char &clearformess)
          mvaddstr(y,0,dotdotdot);
          mvaddstr(y,0,"Cash");
          set_color(ledger.get_funds()?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
-         num="$"+tostring(ledger.get_funds());
+         num="$"+std::to_string(ledger.get_funds());
          mvaddstr(y,60-len(num),num);
       }
 
@@ -883,7 +889,7 @@ void fundreport(char &clearformess)
          mvaddstr(y,0,dotdotdot);
          mvaddstr(y,0,"Tools and Weapons");
          set_color(weaponValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
-         num="$"+tostring(weaponValue);
+         num="$"+std::to_string(weaponValue);
          mvaddstr(y,60-len(num),num);
       }
 
@@ -895,7 +901,7 @@ void fundreport(char &clearformess)
          mvaddstr(y,0,dotdotdot);
          mvaddstr(y,0,"Clothing and Armor");
          set_color(armorValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
-         num="$"+tostring(armorValue);
+         num="$"+std::to_string(armorValue);
          mvaddstr(y,60-len(num),num);
       }
 
@@ -907,7 +913,7 @@ void fundreport(char &clearformess)
          mvaddstr(y,0,dotdotdot);
          mvaddstr(y,0,"Ammunition");
          set_color(clipValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
-         num="$"+tostring(clipValue);
+         num="$"+std::to_string(clipValue);
          mvaddstr(y,60-len(num),num);
       }
 
@@ -919,7 +925,7 @@ void fundreport(char &clearformess)
          mvaddstr(y,0,dotdotdot);
          mvaddstr(y,0,"Miscellaneous Loot");
          set_color(lootValue?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,0);
-         num="$"+tostring(lootValue);
+         num="$"+std::to_string(lootValue);
          mvaddstr(y,60-len(num),num);
       }
 
@@ -935,7 +941,7 @@ void fundreport(char &clearformess)
          mvaddstr(y,0,"Total Liquid Assets:");
          long netWorth=ledger.get_funds()+weaponValue+armorValue+clipValue+lootValue;
          set_color(netWorth?COLOR_GREEN:COLOR_WHITE,COLOR_BLACK,1);
-         num="$"+tostring(netWorth);
+         num="$"+std::to_string(netWorth);
          mvaddstr(y,60-len(num),num);
       }
 

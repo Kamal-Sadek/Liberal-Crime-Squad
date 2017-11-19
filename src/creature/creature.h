@@ -5,6 +5,7 @@
 #ifndef CREATURE_H_INCLUDED
 #define CREATURE_H_INCLUDED
 #include "common.h"
+#include <deque>
 #include "augmentation.h"
 
 #define CREATUREFLAG_WHEELCHAIR BIT1

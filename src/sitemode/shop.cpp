@@ -32,9 +32,10 @@
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
+#include <algorithm>
 #include <externs.h>
-
 #include <functional>
+
 
 ShopOption::ShopOption() : description_("UNDEFINED"), letter_(0), letter_defined_(false)
 { }
@@ -514,9 +515,9 @@ int Shop::fenceselect(squadst& customers) const
          if (location[customers.squad[0]->base]->loot[l]->get_number() > 1)
          {
             if(selected[l])
-               itemstr += " " + tostring(selected[l]) + "/";
+               itemstr += " " + std::to_string(selected[l]) + "/";
             else itemstr += " x";
-            itemstr += tostring(location[customers.squad[0]->base]->loot[l]->get_number());
+            itemstr += std::to_string(location[customers.squad[0]->base]->loot[l]->get_number());
          }
 
          outstr = static_cast<char>(l-page*18+'A');
@@ -821,7 +822,7 @@ const std::string Shop::ShopItem::get_description_halfscreen() const
 {
    std::string r=get_description();
    r.resize(26,' ');
-   r+="($"+tostring(adjusted_price())+")";
+   r+="($"+std::to_string(adjusted_price())+")";
    return r;
 }
 
@@ -829,7 +830,7 @@ const std::string Shop::ShopItem::get_description_fullscreen() const
 {
    std::string r=get_description();
    r.resize(35,' ');
-   r+="$"+tostring(adjusted_price());
+   r+="$"+std::to_string(adjusted_price());
    return r;
 }
 

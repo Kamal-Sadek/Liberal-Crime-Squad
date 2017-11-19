@@ -1,30 +1,29 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
-*/
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
 
 #define CONSOLE_SUPPORT // define this BEFORE including anything
 #include <externs.h>
@@ -211,7 +210,7 @@ int checkkey_cap()
 bool unicode_enabled = false;
 
 bool setup_unicode() {
-   #ifdef WIN32
+   #ifdef _WIN32
    #ifdef PDC_WIDE
    unicode_enabled = true; // We're using a version of PDCurses with UTF-8 support (e.g. from pdc34dllu.zip)
    #else
@@ -293,13 +292,13 @@ void set_title(char *s)
 // Initialize the console, depending on the OS and language/code page settings
 void init_console()
 {
-   #ifdef WIN32
+   #ifdef _WIN32
    // This has to be set to Code Page 437 in Windows regardless of Unicode, that's just how PDCurses works on Windows, even the UTF-8 version of PDCurses
    SetConsoleOutputCP(437); // use Code Page 437 (US English code page for DOS) for output, regardless of anything else
    SetConsoleCP(437); // use Code Page 437 (US English code page for DOS) for input, regardless of anything else
    setlocale(LC_ALL,"English_United States.437");
    _setmbcp(_MB_CP_LOCALE); // use same code page as multibyte code page
-   #else // WIN32
+   #else // _WIN32
    #ifdef CH_USE_UNICODE
    setlocale(LC_ALL,"en_US.UTF-8"); // POSIX-compliant OSes DO support UTF-8/Unicode for setlocale, unlike Windows
    #endif
@@ -309,13 +308,13 @@ void init_console()
    #ifdef CH_USE_ASCII_HACK
    setlocale(LC_ALL,"en_US.CP437");
    #endif
-   #endif // WIN32
+   #endif // _WIN32
    #ifdef CH_USE_UNICODE
    setup_unicode();
    #endif
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 #define  FE_FONTSMOOTHINGSTANDARD           1
 #define  FE_FONTSMOOTHINGCLEARTYPE          2
 #define  SPI_GETFONTSMOOTHINGTYPE      0x200A

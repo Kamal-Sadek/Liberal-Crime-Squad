@@ -15,7 +15,7 @@ string Money::showXml() const
    xml.AddElem("money");
    xml.IntoElem();
    addBaseValues(xml);
-   xml.AddElem("amount",tostring(amount_));
+   xml.AddElem("amount",std::to_string(amount_));
    return xml.GetDoc();
 }
 
@@ -47,4 +47,4 @@ bool Money::sort_compare_special(Item* other) const
 { return other&&!other->is_money(); }
 
 string Money::equip_title() const
-{ return "$"+tostring(amount_); }
+{ return "$"+std::to_string(amount_); }

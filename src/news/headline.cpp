@@ -1,4 +1,6 @@
 #include <externs.h>
+#include "news/news.h"
+
 
 std::string getLastNameForHeadline(char* fullName)
 {

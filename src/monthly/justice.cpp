@@ -1,35 +1,654 @@
+/**
+ * The justice system.
+ */
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
-*/
-
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
+#include "monthly/justice.h"
 #include <externs.h>
+#include "politics/politics.h"
 
-/* monthly - hold trial on a liberal */
-void trial(Creature &g)
+
+/**
+ * Sentence a liberal.
+ */
+static void
+penalize(Creature &g, bool lenient)
+{
+   set_color(COLOR_RED,COLOR_BLACK,1);
+   move(3,1);
+   addstr("GUILTY!", gamelog);
+   gamelog.newline();
+
+   getkey();
+
+   short oldsentence=g.sentence;
+   char olddeathpenalty=g.deathpenalty;
+   g.sentence=0,g.deathpenalty=0;
+
+   if(!lenient&&((g.crimes_suspected[LAWFLAG_MURDER])||(g.crimes_suspected[LAWFLAG_TREASON])||
+      ((g.crimes_suspected[LAWFLAG_BURNFLAG])&&law[LAW_FLAGBURNING]==-2)||
+      law[LAW_DEATHPENALTY]==-2))
+   {
+      if(law[LAW_DEATHPENALTY]==-2) g.deathpenalty=1;
+      if(law[LAW_DEATHPENALTY]==-1) g.deathpenalty=LCSrandom(3);
+      if(law[LAW_DEATHPENALTY]==0) g.deathpenalty=LCSrandom(2);
+      if(law[LAW_DEATHPENALTY]==1) g.deathpenalty=!LCSrandom(5);
+      if(law[LAW_DEATHPENALTY]==2) g.deathpenalty=0;
+   }
+
+   for(int l=0;l<LAWFLAGNUM;l++) if(g.crimes_suspected[l]>10) g.crimes_suspected[l]=10;
+
+   //CALC TIME
+   if(!g.deathpenalty)
+   {
+      if(!(g.sentence<0))
+      {
+         g.sentence+=(36+LCSrandom(18))*g.crimes_suspected[LAWFLAG_KIDNAPPING];
+         g.sentence+=(1+LCSrandom(4))*g.crimes_suspected[LAWFLAG_THEFT];
+         //g.sentence+=(4+LCSrandom(12))*(!!g.crimes_suspected[LAWFLAG_GUNUSE])+ // Extra for first incident only
+         //            (2+LCSrandom(4)*g.crimes_suspected[LAWFLAG_GUNUSE]);      // Generally
+         //g.sentence+=(1+LCSrandom(4))*(!!g.crimes_suspected[LAWFLAG_GUNCARRY]);
+         g.sentence+=(6+LCSrandom(7))*g.crimes_suspected[LAWFLAG_CARTHEFT];
+         g.sentence+=(1+LCSrandom(13))*g.crimes_suspected[LAWFLAG_INFORMATION];
+         g.sentence+=(1+LCSrandom(13))*g.crimes_suspected[LAWFLAG_COMMERCE];
+         g.sentence+=(6+LCSrandom(25))*g.crimes_suspected[LAWFLAG_CCFRAUD];
+         g.sentence+=(3+LCSrandom(12))*g.crimes_suspected[LAWFLAG_BURIAL];
+         g.sentence+=(1+LCSrandom(6))*g.crimes_suspected[LAWFLAG_PROSTITUTION];
+         g.sentence+=1*g.crimes_suspected[LAWFLAG_DISTURBANCE];
+         g.sentence+=1*g.crimes_suspected[LAWFLAG_PUBLICNUDITY];
+         //g.sentence+=1*g.crimes_suspected[LAWFLAG_LOITERING];
+         g.sentence+=1*g.crimes_suspected[LAWFLAG_HIREILLEGAL];
+         g.sentence+=(12+LCSrandom(100))*g.crimes_suspected[LAWFLAG_RACKETEERING];
+
+         // How illegal is marijuana?
+         if(law[LAW_DRUGS]==-2) g.sentence+=(3+LCSrandom(360))*g.crimes_suspected[LAWFLAG_BROWNIES]; //insanely illegal
+         else if(law[LAW_DRUGS]==-1) g.sentence+=(3+LCSrandom(120))*g.crimes_suspected[LAWFLAG_BROWNIES]; //very illegal
+         else if(law[LAW_DRUGS]==0) g.sentence+=(3+LCSrandom(12))*g.crimes_suspected[LAWFLAG_BROWNIES]; //moderately illegal
+         // else not illegal
+
+         g.sentence+=1*g.crimes_suspected[LAWFLAG_BREAKING];
+         g.sentence+=(60+LCSrandom(181))*g.crimes_suspected[LAWFLAG_TERRORISM];
+         g.sentence+=(30+LCSrandom(61))*g.crimes_suspected[LAWFLAG_BANKROBBERY];
+         g.sentence+=(30+LCSrandom(61))*g.crimes_suspected[LAWFLAG_JURY];
+         g.sentence+=(30+LCSrandom(61))*g.crimes_suspected[LAWFLAG_HELPESCAPE];
+         g.sentence+=(3+LCSrandom(16))*g.crimes_suspected[LAWFLAG_ESCAPED];
+         g.sentence+=(1+LCSrandom(1))*g.crimes_suspected[LAWFLAG_RESIST];
+         g.sentence+=(6+LCSrandom(1))*g.crimes_suspected[LAWFLAG_EXTORTION];
+
+         g.sentence+=(4+LCSrandom(3))*g.crimes_suspected[LAWFLAG_SPEECH];
+         g.sentence+=1*g.crimes_suspected[LAWFLAG_VANDALISM];
+         g.sentence+=(12+LCSrandom(12))*g.crimes_suspected[LAWFLAG_ARSON];
+         g.sentence+=(12+LCSrandom(1))*g.crimes_suspected[LAWFLAG_ARMEDASSAULT];
+         g.sentence+=(3+LCSrandom(1))*g.crimes_suspected[LAWFLAG_ASSAULT];
+      }
+      if(law[LAW_FLAGBURNING]==-2)
+      {
+         if(!LCSrandom(2)) g.sentence+=(120+LCSrandom(241))*g.crimes_suspected[LAWFLAG_BURNFLAG];
+         else if(g.crimes_suspected[LAWFLAG_BURNFLAG])g.sentence=-1*g.crimes_suspected[LAWFLAG_BURNFLAG];
+      }
+      else if(law[LAW_FLAGBURNING]==-1) g.sentence+=36*g.crimes_suspected[LAWFLAG_BURNFLAG];
+      else if(law[LAW_FLAGBURNING]==0) g.sentence+=1*g.crimes_suspected[LAWFLAG_BURNFLAG];
+
+      if((LCSrandom(4)-g.crimes_suspected[LAWFLAG_MURDER])>0)
+      {
+         if(!(g.sentence<0)) g.sentence+=(120+LCSrandom(241))*g.crimes_suspected[LAWFLAG_MURDER];
+      }
+      else
+      {
+         if(g.sentence<0) g.sentence-=-1*g.crimes_suspected[LAWFLAG_MURDER];
+         else if(g.crimes_suspected[LAWFLAG_MURDER])
+            g.sentence=-1*g.crimes_suspected[LAWFLAG_MURDER];
+      }
+      if(g.sentence<0) g.sentence-=1*g.crimes_suspected[LAWFLAG_TREASON];
+      else if(g.crimes_suspected[LAWFLAG_TREASON]) g.sentence=-1*g.crimes_suspected[LAWFLAG_TREASON];
+      if(lenient&&g.sentence!=-1) g.sentence/=2;
+      if(lenient&&g.sentence==-1) g.sentence=240+LCSrandom(120);
+   }
+   //LENIENCY AND CAPITAL PUNISHMENT DON'T MIX
+   else if(g.deathpenalty&&lenient) g.deathpenalty=0,g.sentence=-1;
+
+   //MENTION LENIENCY
+   if(lenient)
+   {
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(5,1);
+      addstr("During sentencing, the judge grants some leniency.", gamelog);
+      gamelog.newline();
+
+      getkey();
+   }
+
+   //MENTION SENTENCE
+   if(olddeathpenalty)
+   {
+      g.deathpenalty=1;
+      g.sentence=3;
+      set_color(COLOR_RED,COLOR_BLACK,1);
+      move(7,1);
+      addstr(g.propername, gamelog);
+      addstr(", you will be returned to prison to carry out your death sentence.", gamelog);
+      gamelog.newline();
+
+      getkey();
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(9,1);
+      addstr("The execution is scheduled to occur three months from now.", gamelog);
+
+      getkey();
+   }
+   else if(g.deathpenalty)
+   {
+      g.sentence=3;
+      set_color(COLOR_YELLOW,COLOR_RED,1);
+      move(7,1);
+      addstr(g.propername, gamelog);
+      addstr(", you are sentenced to DEATH!", gamelog);
+      gamelog.newline();
+
+      getkey();
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(9,1);
+      addstr("The execution is scheduled to occur three months from now.", gamelog);
+
+      getkey();
+   }
+   // Don't give a time-limited sentence if they already have a life sentence.
+   else if ((g.sentence>=0 && oldsentence<0) ||
+            (g.sentence==0 && oldsentence>0))
+   {
+      g.sentence=oldsentence;
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(7,1);
+      addstr(g.propername, gamelog);
+      addstr(", the court sees no need to add to your existing sentence.", gamelog);
+      move(8,1);
+      addstr("You will be returned to prison to resume it", gamelog);
+      if(g.sentence>1 && lenient)
+      {
+         g.sentence--;
+         addstr(", less a month for time already served.", gamelog);
+      }
+      else addstr(".", gamelog);
+
+      getkey();
+   }
+   else if(g.sentence==0)
+   {
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(7,1);
+      addstr(g.propername, gamelog);
+      addstr(", consider this a warning.  You are free to go.", gamelog);
+
+      getkey();
+   }
+   else
+   {
+      if(g.sentence>=36)g.sentence-=g.sentence%12;
+
+      set_color(COLOR_WHITE,COLOR_BLACK,0);
+      move(7,1);
+      addstr(g.propername, gamelog);
+      addstr(", you are sentenced to ", gamelog);
+      if(g.sentence>1200) g.sentence/=-1200;
+
+      if(g.sentence<=-1)
+      {
+         if(g.sentence<-1)
+         {
+            addstr(-(g.sentence), gamelog);
+            addstr(" consecutive life terms in prison", gamelog);
+            gamelog.newline();
+
+            // Don't bother saying this if the convicted already has one or
+            // more life sentences. Makes the 'consecutively' and 'concurrently'
+            // statements later easier to tack on.
+            if(oldsentence>=0)
+            {
+               addstr(".", gamelog);
+
+               getkey();
+
+               move(9,1);
+               addstr("Have a nice day, ", gamelog);
+               addstr(g.propername, gamelog);
+            }
+         }
+         else addstr("life in prison", gamelog);
+      }
+      else if(g.sentence>=36)
+      {
+         addstr(g.sentence/12, gamelog);
+         addstr(" years in prison", gamelog);
+      }
+      else
+      {
+         addstr(g.sentence, gamelog);
+         addstr(" month", gamelog);
+         if(g.sentence>1)addstr("s", gamelog);
+         addstr(" in prison", gamelog);
+      }
+
+      // Mash together compatible sentences.
+      if((g.sentence>0 && oldsentence>0) ||
+         (g.sentence<0 && oldsentence<0))
+      {
+         addstr(",", gamelog);
+         move(8,1);
+         if(lenient)
+         {
+            if(ABS(oldsentence)>ABS(g.sentence))
+               g.sentence=oldsentence;
+            addstr("to be served concurrently", gamelog);
+         }
+         else
+         {
+            g.sentence+=oldsentence;
+            addstr("to be served consecutively", gamelog);
+         }
+      }
+
+      addstr(".", gamelog);
+
+      //dejuice boss
+      int boss=getpoolcreature(g.hireid);
+      if(boss!=-1&&pool[boss]->juice>50)
+      {
+         int juice=g.juice/10;
+         if(juice<5) juice=5;
+         addjuice(*pool[boss],-juice,0);
+      }
+
+      getkey();
+   }
+   gamelog.nextMessage();
+}
+
+
+/**
+ * Move a liberal to jail.
+ */
+static void
+imprison(Creature &g)
+{
+   g.location=find_site_index_in_city(SITE_GOVERNMENT_PRISON,location[g.location]->city);
+}
+
+
+static void
+reeducation(Creature &g)
+{
+   static const char *reeducation_experiences[] =
+   {
+      " is subjected to rehabilitative therapy in prison.",
+      " works on a prison mural about political diversity.",
+      " routinely sees a Liberal therapist in prison.",
+      " participates in a group therapy session in prison.",
+      " sings songs with prisoners of all political persuasions.",
+      " is encouraged to befriend Conservatives in prison.",
+      " puts on an anti-crime performance in prison.",
+      " sees a video in prison by victims of political crime."
+   };
+
+   erase();
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   move(8,1);
+   addstr(g.name, gamelog);
+   addstr(pickrandom(reeducation_experiences), gamelog);
+   gamelog.newline();
+
+   getkey();
+
+   move(10,1);
+   if(!g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_FORMIDABLE))
+   {
+      if(g.juice>0 && LCSrandom(2))
+      {
+         addstr(g.name, gamelog);
+         addstr(" feels bad about LCS actions, and loses juice!", gamelog);
+         addjuice(g,-50,0);
+      }
+      else if(LCSrandom(15)>g.get_attribute(ATTRIBUTE_WISDOM,true)
+           || g.get_attribute(ATTRIBUTE_WISDOM,true) < g.get_attribute(ATTRIBUTE_HEART,true))
+      {
+         addstr(g.name, gamelog);
+         addstr(" silently grows Wiser...", gamelog);
+         g.adjust_attribute(ATTRIBUTE_WISDOM,+1);
+      }
+      else if(g.align==ALIGN_LIBERAL && g.flag & CREATUREFLAG_LOVESLAVE && LCSrandom(4))
+      {
+         addstr(g.name, gamelog);
+         addstr(" only stays loyal to the LCS for ", gamelog);
+         addstr(pool[g.hireid]->name, gamelog);
+         addstr(".", gamelog);
+      }
+      else
+      {
+         addstr(g.name, gamelog);
+         addstr(" abandons the Liberal Crime Squad!", gamelog);
+
+         //Rat out contact
+         int contact = getpoolcreature(g.hireid);
+         if(contact >= 0)
+         {
+            criminalize(*pool[contact],LAWFLAG_RACKETEERING);
+            pool[contact]->confessions++;
+         }
+
+         g.die();
+         g.location=-1;
+      }
+   }
+   else
+   {
+      addstr(g.name, gamelog);
+      addstr(" remains strong.", gamelog);
+   }
+   gamelog.nextMessage();
+
+   getkey();
+
+   erase();
+
+   return;
+}
+
+
+static void
+laborcamp(Creature &g)
+{
+   int escaped = 0;
+   const char *experience;
+   // Escape attempt!
+   if(g.hireid == -1 && !LCSrandom(3))
+   {
+      escaped = 2;
+      experience = " leads the oppressed prisoners and overwhelms the prison guards!";
+   }
+   else if(g.skill_check(SKILL_DISGUISE, DIFFICULTY_HEROIC) && !LCSrandom(10))
+   {
+      escaped = 1;
+      experience = " wears an electrician's outfit and rides away with some contractors.";
+      g.give_armor(*armortype[getarmortype("ARMOR_WORKCLOTHES")],NULL);
+   }
+   else if(g.skill_check(SKILL_SECURITY, DIFFICULTY_CHALLENGING) && g.skill_check(SKILL_STEALTH, DIFFICULTY_HARD) && !LCSrandom(10))
+   {
+      escaped = 1;
+      experience = " picks the lock on their leg chains and then sneaks away!";
+   }
+   else if(g.skill_check(SKILL_SCIENCE, DIFFICULTY_HARD) && !LCSrandom(10))
+   {
+      escaped = 1;
+      experience = " consumes drugs that simulate death, and is thrown out with the trash!";
+   }
+
+   static const char *labor_camp_experiences[] =
+   {
+      " is forced to operate dangerous machinery in prison.",
+      " is beaten by sadistic prison guards.",
+      " carries heavy burdens back and forth in prison labor camp.",
+      " does back-breaking work all month in prison.",
+      " gets in a brutal fight with another prisoner.",
+      " participates in a quickly-suppressed prison riot.",
+      " participates in a quickly-suppressed prison riot."
+   };
+
+   if(!escaped)experience=pickrandom(labor_camp_experiences);
+
+   erase();
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   move(8,1);
+   addstr(g.name, gamelog);
+   addstr(experience, gamelog);
+   gamelog.newline();
+
+   getkey();
+
+   move(10,1);
+   if(escaped)
+   {
+      int prison = g.location;
+      addstr(g.name, gamelog);
+      addstr(" escaped from prison!", gamelog);
+      addjuice(g,50,1000);
+      criminalize(g, LAWFLAG_ESCAPED);
+      g.location = find_homeless_shelter(g);
+
+      if(escaped==2)
+      {
+         int num_escaped = 0;
+         for(int p=0;p<len(pool);p++)
+         {
+            if(pool[p]->location == prison && !(pool[p]->flag & CREATUREFLAG_SLEEPER))
+            {
+               criminalize(*pool[p], LAWFLAG_ESCAPED);
+               pool[p]->location = g.location;
+               num_escaped++;
+            }
+         }
+         if(num_escaped == 1)
+         {
+            gamelog.nextMessage();
+            mvaddstr(11,1, "Another imprisoned LCS member also gets out!", gamelog);
+         }
+         else if(num_escaped > 1)
+         {
+            gamelog.nextMessage();
+            mvaddstr(11,1, "The LCS will rise again! Multiple LCS members escape!", gamelog);
+         }
+      }
+   }
+   else if(!LCSrandom(4))
+   {
+      if(g.get_attribute(ATTRIBUTE_HEALTH, true) > 1)
+      {
+         addstr(g.name, gamelog);
+         addstr(" is badly hurt in the process.", gamelog);
+         addjuice(g,-40,0);
+         addjuice(g,-10,-50);
+      }
+      else
+      {
+         addstr(g.name, gamelog);
+         addstr(" is found dead.", gamelog);
+
+         g.die();
+         g.location=-1;
+      }
+   }
+   else
+   {
+      addstr(g.name, gamelog);
+      addstr(" managed to avoid lasting injury.", gamelog);
+   }
+   gamelog.nextMessage();
+
+   getkey();
+
+   erase();
+
+   return;
+}
+
+
+static void
+prisonscene(Creature &g)
+{
+   int escaped = 0;
+   int effect = 0;
+   const char *experience;
+   if(g.juice + int(g.hireid==-1)*300 > 500)
+   {
+      // Escape attempt!
+      if(g.hireid == -1 && !LCSrandom(10))
+      {
+         escaped = 2;
+         experience = " leads a riot with dozens of prisoners chanting the LCS slogan!";
+      }
+      else if(g.skill_check(SKILL_COMPUTERS, DIFFICULTY_HARD) && !LCSrandom(5))
+      {
+         escaped = 2;
+         experience = " codes a virus on a smuggled phone that opens all the prison doors!";
+      }
+      else if(g.skill_check(SKILL_DISGUISE, DIFFICULTY_HARD) && !LCSrandom(5))
+      {
+         escaped = 1;
+         experience = " puts on smuggled street clothes and calmly walks out of prison.";
+         g.give_armor(*armortype[getarmortype("ARMOR_CLOTHES")],NULL);
+      }
+      else if(g.skill_check(SKILL_SECURITY, DIFFICULTY_CHALLENGING) && g.skill_check(SKILL_STEALTH, DIFFICULTY_CHALLENGING) && !LCSrandom(5))
+      {
+         escaped = 1;
+         experience = " jimmies the cell door and cuts the outer fence in the dead of night!";
+      }
+      else if(g.skill_check(SKILL_SCIENCE, DIFFICULTY_AVERAGE) && g.skill_check(SKILL_HANDTOHAND, DIFFICULTY_EASY) && !LCSrandom(5))
+      {
+         escaped = 1;
+         experience = " intentionally ODs on smuggled drugs, then breaks out of the medical ward!";
+      }
+   }
+
+   static const char *good_experiences[] =
+   {
+      " advertises the LCS every day to other inmates.",
+      " organizes a group of inmates to beat up on a serial rapist.",
+      " learns lots of little skills from other inmates.",
+      " gets a prison tattoo with the letters L-C-S.",
+      " thinks up new protest songs while in prison."
+   };
+   static const char *bad_experiences[] =
+   {
+      " gets sick for a few days from nasty prison food.",
+      " spends too much time working out at the prison gym.",
+      " is raped by another prison inmate, repeatedly.",
+      " writes a letter to the warden swearing off political activism.",
+      " rats out one of the other inmates in exchange for benefits."
+   };
+   static const char *general_experiences[] =
+   {
+      " mouths off to a prison guard and ends up in solitary.",
+      " gets high off drugs smuggled into the prison.",
+      " does nothing but read books at the prison library.",
+      " gets into a fight and is punished with latrine duty.",
+      " constantly tries thinking how to escape from prison."
+   };
+
+   if(escaped==0)
+   {
+      if(g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_HARD)) {
+         effect = 1;
+         if(LCSrandom(2) > 0) experience = pickrandom(good_experiences);
+         else experience = pickrandom(general_experiences);
+      } else if(g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_CHALLENGING)) {
+         effect = 0;
+         experience = pickrandom(general_experiences);
+      } else {
+         effect = -1;
+         if(LCSrandom(2) > 0) experience = pickrandom(bad_experiences);
+         else experience = pickrandom(general_experiences);
+      }
+   }
+
+   erase();
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   move(8,1);
+   addstr(g.name, gamelog);
+   addstr(experience, gamelog);
+   gamelog.newline();
+
+   getkey();
+
+   move(10,1);
+   if(escaped)
+   {
+      int prison = g.location;
+      addstr(g.name, gamelog);
+      addstr(" escaped from prison!", gamelog);
+      addjuice(g,50,1000);
+      criminalize(g, LAWFLAG_ESCAPED);
+      g.location = find_homeless_shelter(g);
+
+      if(escaped==2)
+      {
+         int num_escaped = 0;
+         for(int p=0;p<len(pool);p++)
+         {
+            if(pool[p]->location == prison && !(pool[p]->flag & CREATUREFLAG_SLEEPER))
+            {
+               criminalize(*pool[p], LAWFLAG_ESCAPED);
+               pool[p]->location = g.location;
+               num_escaped++;
+            }
+         }
+         if(num_escaped == 1)
+         {
+            gamelog.nextMessage();
+            mvaddstr(11,1, "Another imprisoned LCS member also gets out!", gamelog);
+         }
+         else if(num_escaped > 1)
+         {
+            gamelog.nextMessage();
+            mvaddstr(11,1, "The LCS will rise again! Multiple LCS members escape!", gamelog);
+         }
+      }
+   }
+   else if(effect > 0)
+   {
+      addstr(g.name, gamelog);
+      addstr(" has become a more hardened, Juicier criminal.", gamelog);
+      addjuice(g,20,1000);
+   }
+   else if(effect < 0)
+   {
+      addstr(g.name, gamelog);
+      addstr(" is kinda losing it in here. Juice, that is.", gamelog);
+      addjuice(g,-20,-30);
+   }
+   else
+   {
+      addstr(g.name, gamelog);
+      addstr(" seems to be mostly fine, though.", gamelog);
+   }
+   gamelog.nextMessage();
+
+   getkey();
+
+   erase();
+
+   return;
+}
+
+
+/**
+ * Put a liberal on trial.
+ */
+void
+trial(Creature &g)
 {
    music.play(MUSIC_TRIAL);
    // If their old base is no longer under LCS control, wander back to the
@@ -951,273 +1570,15 @@ void trial(Creature &g)
 
 
 
-/* monthly - sentence a liberal */
-void penalize(Creature &g,char lenient)
-{
-   set_color(COLOR_RED,COLOR_BLACK,1);
-   move(3,1);
-   addstr("GUILTY!", gamelog);
-   gamelog.newline();
-
-   getkey();
-
-   short oldsentence=g.sentence;
-   char olddeathpenalty=g.deathpenalty;
-   g.sentence=0,g.deathpenalty=0;
-
-   if(!lenient&&((g.crimes_suspected[LAWFLAG_MURDER])||(g.crimes_suspected[LAWFLAG_TREASON])||
-      ((g.crimes_suspected[LAWFLAG_BURNFLAG])&&law[LAW_FLAGBURNING]==-2)||
-      law[LAW_DEATHPENALTY]==-2))
-   {
-      if(law[LAW_DEATHPENALTY]==-2) g.deathpenalty=1;
-      if(law[LAW_DEATHPENALTY]==-1) g.deathpenalty=LCSrandom(3);
-      if(law[LAW_DEATHPENALTY]==0) g.deathpenalty=LCSrandom(2);
-      if(law[LAW_DEATHPENALTY]==1) g.deathpenalty=!LCSrandom(5);
-      if(law[LAW_DEATHPENALTY]==2) g.deathpenalty=0;
-   }
-
-   for(int l=0;l<LAWFLAGNUM;l++) if(g.crimes_suspected[l]>10) g.crimes_suspected[l]=10;
-
-   //CALC TIME
-   if(!g.deathpenalty)
-   {
-      if(!(g.sentence<0))
-      {
-         g.sentence+=(36+LCSrandom(18))*g.crimes_suspected[LAWFLAG_KIDNAPPING];
-         g.sentence+=(1+LCSrandom(4))*g.crimes_suspected[LAWFLAG_THEFT];
-         //g.sentence+=(4+LCSrandom(12))*(!!g.crimes_suspected[LAWFLAG_GUNUSE])+ // Extra for first incident only
-         //            (2+LCSrandom(4)*g.crimes_suspected[LAWFLAG_GUNUSE]);      // Generally
-         //g.sentence+=(1+LCSrandom(4))*(!!g.crimes_suspected[LAWFLAG_GUNCARRY]);
-         g.sentence+=(6+LCSrandom(7))*g.crimes_suspected[LAWFLAG_CARTHEFT];
-         g.sentence+=(1+LCSrandom(13))*g.crimes_suspected[LAWFLAG_INFORMATION];
-         g.sentence+=(1+LCSrandom(13))*g.crimes_suspected[LAWFLAG_COMMERCE];
-         g.sentence+=(6+LCSrandom(25))*g.crimes_suspected[LAWFLAG_CCFRAUD];
-         g.sentence+=(3+LCSrandom(12))*g.crimes_suspected[LAWFLAG_BURIAL];
-         g.sentence+=(1+LCSrandom(6))*g.crimes_suspected[LAWFLAG_PROSTITUTION];
-         g.sentence+=1*g.crimes_suspected[LAWFLAG_DISTURBANCE];
-         g.sentence+=1*g.crimes_suspected[LAWFLAG_PUBLICNUDITY];
-         //g.sentence+=1*g.crimes_suspected[LAWFLAG_LOITERING];
-         g.sentence+=1*g.crimes_suspected[LAWFLAG_HIREILLEGAL];
-         g.sentence+=(12+LCSrandom(100))*g.crimes_suspected[LAWFLAG_RACKETEERING];
-
-         // How illegal is marijuana?
-         if(law[LAW_DRUGS]==-2) g.sentence+=(3+LCSrandom(360))*g.crimes_suspected[LAWFLAG_BROWNIES]; //insanely illegal
-         else if(law[LAW_DRUGS]==-1) g.sentence+=(3+LCSrandom(120))*g.crimes_suspected[LAWFLAG_BROWNIES]; //very illegal
-         else if(law[LAW_DRUGS]==0) g.sentence+=(3+LCSrandom(12))*g.crimes_suspected[LAWFLAG_BROWNIES]; //moderately illegal
-         // else not illegal
-
-         g.sentence+=1*g.crimes_suspected[LAWFLAG_BREAKING];
-         g.sentence+=(60+LCSrandom(181))*g.crimes_suspected[LAWFLAG_TERRORISM];
-         g.sentence+=(30+LCSrandom(61))*g.crimes_suspected[LAWFLAG_BANKROBBERY];
-         g.sentence+=(30+LCSrandom(61))*g.crimes_suspected[LAWFLAG_JURY];
-         g.sentence+=(30+LCSrandom(61))*g.crimes_suspected[LAWFLAG_HELPESCAPE];
-         g.sentence+=(3+LCSrandom(16))*g.crimes_suspected[LAWFLAG_ESCAPED];
-         g.sentence+=(1+LCSrandom(1))*g.crimes_suspected[LAWFLAG_RESIST];
-         g.sentence+=(6+LCSrandom(1))*g.crimes_suspected[LAWFLAG_EXTORTION];
-
-         g.sentence+=(4+LCSrandom(3))*g.crimes_suspected[LAWFLAG_SPEECH];
-         g.sentence+=1*g.crimes_suspected[LAWFLAG_VANDALISM];
-         g.sentence+=(12+LCSrandom(12))*g.crimes_suspected[LAWFLAG_ARSON];
-         g.sentence+=(12+LCSrandom(1))*g.crimes_suspected[LAWFLAG_ARMEDASSAULT];
-         g.sentence+=(3+LCSrandom(1))*g.crimes_suspected[LAWFLAG_ASSAULT];
-      }
-      if(law[LAW_FLAGBURNING]==-2)
-      {
-         if(!LCSrandom(2)) g.sentence+=(120+LCSrandom(241))*g.crimes_suspected[LAWFLAG_BURNFLAG];
-         else if(g.crimes_suspected[LAWFLAG_BURNFLAG])g.sentence=-1*g.crimes_suspected[LAWFLAG_BURNFLAG];
-      }
-      else if(law[LAW_FLAGBURNING]==-1) g.sentence+=36*g.crimes_suspected[LAWFLAG_BURNFLAG];
-      else if(law[LAW_FLAGBURNING]==0) g.sentence+=1*g.crimes_suspected[LAWFLAG_BURNFLAG];
-
-      if((LCSrandom(4)-g.crimes_suspected[LAWFLAG_MURDER])>0)
-      {
-         if(!(g.sentence<0)) g.sentence+=(120+LCSrandom(241))*g.crimes_suspected[LAWFLAG_MURDER];
-      }
-      else
-      {
-         if(g.sentence<0) g.sentence-=-1*g.crimes_suspected[LAWFLAG_MURDER];
-         else if(g.crimes_suspected[LAWFLAG_MURDER])
-            g.sentence=-1*g.crimes_suspected[LAWFLAG_MURDER];
-      }
-      if(g.sentence<0) g.sentence-=1*g.crimes_suspected[LAWFLAG_TREASON];
-      else if(g.crimes_suspected[LAWFLAG_TREASON]) g.sentence=-1*g.crimes_suspected[LAWFLAG_TREASON];
-      if(lenient&&g.sentence!=-1) g.sentence/=2;
-      if(lenient&&g.sentence==-1) g.sentence=240+LCSrandom(120);
-   }
-   //LENIENCY AND CAPITAL PUNISHMENT DON'T MIX
-   else if(g.deathpenalty&&lenient) g.deathpenalty=0,g.sentence=-1;
-
-   //MENTION LENIENCY
-   if(lenient)
-   {
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(5,1);
-      addstr("During sentencing, the judge grants some leniency.", gamelog);
-      gamelog.newline();
-
-      getkey();
-   }
-
-   //MENTION SENTENCE
-   if(olddeathpenalty)
-   {
-      g.deathpenalty=1;
-      g.sentence=3;
-      set_color(COLOR_RED,COLOR_BLACK,1);
-      move(7,1);
-      addstr(g.propername, gamelog);
-      addstr(", you will be returned to prison to carry out your death sentence.", gamelog);
-      gamelog.newline();
-
-      getkey();
-
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(9,1);
-      addstr("The execution is scheduled to occur three months from now.", gamelog);
-
-      getkey();
-   }
-   else if(g.deathpenalty)
-   {
-      g.sentence=3;
-      set_color(COLOR_YELLOW,COLOR_RED,1);
-      move(7,1);
-      addstr(g.propername, gamelog);
-      addstr(", you are sentenced to DEATH!", gamelog);
-      gamelog.newline();
-
-      getkey();
-
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(9,1);
-      addstr("The execution is scheduled to occur three months from now.", gamelog);
-
-      getkey();
-   }
-   // Don't give a time-limited sentence if they already have a life sentence.
-   else if ((g.sentence>=0 && oldsentence<0) ||
-            (g.sentence==0 && oldsentence>0))
-   {
-      g.sentence=oldsentence;
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(7,1);
-      addstr(g.propername, gamelog);
-      addstr(", the court sees no need to add to your existing sentence.", gamelog);
-      move(8,1);
-      addstr("You will be returned to prison to resume it", gamelog);
-      if(g.sentence>1 && lenient)
-      {
-         g.sentence--;
-         addstr(", less a month for time already served.", gamelog);
-      }
-      else addstr(".", gamelog);
-
-      getkey();
-   }
-   else if(g.sentence==0)
-   {
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(7,1);
-      addstr(g.propername, gamelog);
-      addstr(", consider this a warning.  You are free to go.", gamelog);
-
-      getkey();
-   }
-   else
-   {
-      if(g.sentence>=36)g.sentence-=g.sentence%12;
-
-      set_color(COLOR_WHITE,COLOR_BLACK,0);
-      move(7,1);
-      addstr(g.propername, gamelog);
-      addstr(", you are sentenced to ", gamelog);
-      if(g.sentence>1200) g.sentence/=-1200;
-
-      if(g.sentence<=-1)
-      {
-         if(g.sentence<-1)
-         {
-            addstr(-(g.sentence), gamelog);
-            addstr(" consecutive life terms in prison", gamelog);
-            gamelog.newline();
-
-            // Don't bother saying this if the convicted already has one or
-            // more life sentences. Makes the 'consecutively' and 'concurrently'
-            // statements later easier to tack on.
-            if(oldsentence>=0)
-            {
-               addstr(".", gamelog);
-
-               getkey();
-
-               move(9,1);
-               addstr("Have a nice day, ", gamelog);
-               addstr(g.propername, gamelog);
-            }
-         }
-         else addstr("life in prison", gamelog);
-      }
-      else if(g.sentence>=36)
-      {
-         addstr(g.sentence/12, gamelog);
-         addstr(" years in prison", gamelog);
-      }
-      else
-      {
-         addstr(g.sentence, gamelog);
-         addstr(" month", gamelog);
-         if(g.sentence>1)addstr("s", gamelog);
-         addstr(" in prison", gamelog);
-      }
-
-      // Mash together compatible sentences.
-      if((g.sentence>0 && oldsentence>0) ||
-         (g.sentence<0 && oldsentence<0))
-      {
-         addstr(",", gamelog);
-         move(8,1);
-         if(lenient)
-         {
-            if(ABS(oldsentence)>ABS(g.sentence))
-               g.sentence=oldsentence;
-            addstr("to be served concurrently", gamelog);
-         }
-         else
-         {
-            g.sentence+=oldsentence;
-            addstr("to be served consecutively", gamelog);
-         }
-      }
-
-      addstr(".", gamelog);
-
-      //dejuice boss
-      int boss=getpoolcreature(g.hireid);
-      if(boss!=-1&&pool[boss]->juice>50)
-      {
-         int juice=g.juice/10;
-         if(juice<5) juice=5;
-         addjuice(*pool[boss],-juice,0);
-      }
-
-      getkey();
-   }
-   gamelog.nextMessage();
-}
 
 
-
-/* monthly - move a liberal to jail */
-void imprison(Creature &g)
-{
-   g.location=find_site_index_in_city(SITE_GOVERNMENT_PRISON,location[g.location]->city);
-}
-
-
-
-/* monthly - advances a liberal's prison time or executes them */
-//RETURNS IF SCREEN WAS ERASED
-char prison(Creature &g)
+/**
+ * Advance a liberal's prison time or executes them.
+ *
+ * Returns true is screen was erased.
+ */
+bool
+prison(Creature &g)
 {
    static const char *cruel_and_unusual_execution_methods[] =
    {
@@ -1257,7 +1618,7 @@ char prison(Creature &g)
    static const char *supposedly_painless_execution_method =
       "lethal injection";
 
-   char showed=0;
+   bool showed = false;
 
    // People not on death row or about to be released can have a scene in prison
    if(!g.deathpenalty && g.sentence!=1)
@@ -1349,7 +1710,7 @@ char prison(Creature &g)
 
             g.die();
             stat_dead++;
-            showed=1;
+            showed = true;
          }
          //SET FREE
          else
@@ -1372,7 +1733,7 @@ char prison(Creature &g)
             // homeless shelter instead.
             if(location[g.base]->renting<0) g.base=find_homeless_shelter(g);
             g.location=g.base;
-            showed=1;
+            showed = true;
          }
       }
       //NOTIFY OF IMPENDING THINGS
@@ -1389,7 +1750,7 @@ char prison(Creature &g)
 
             getkey();
 
-            showed=1;
+            showed = true;
          }
          else
          {
@@ -1402,7 +1763,7 @@ char prison(Creature &g)
 
             getkey();
 
-            showed=1;
+            showed = true;
          }
       }
       else
@@ -1420,348 +1781,10 @@ char prison(Creature &g)
 
             getkey();
 
-            showed=1;
+            showed = true;
          }
       }
    }
 
    return showed;
-}
-
-void reeducation(Creature &g)
-{
-   static const char *reeducation_experiences[] =
-   {
-      " is subjected to rehabilitative therapy in prison.",
-      " works on a prison mural about political diversity.",
-      " routinely sees a Liberal therapist in prison.",
-      " participates in a group therapy session in prison.",
-      " sings songs with prisoners of all political persuasions.",
-      " is encouraged to befriend Conservatives in prison.",
-      " puts on an anti-crime performance in prison.",
-      " sees a video in prison by victims of political crime."
-   };
-
-   erase();
-   set_color(COLOR_WHITE,COLOR_BLACK,1);
-   move(8,1);
-   addstr(g.name, gamelog);
-   addstr(pickrandom(reeducation_experiences), gamelog);
-   gamelog.newline();
-
-   getkey();
-
-   move(10,1);
-   if(!g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_FORMIDABLE))
-   {
-      if(g.juice>0 && LCSrandom(2))
-      {
-         addstr(g.name, gamelog);
-         addstr(" feels bad about LCS actions, and loses juice!", gamelog);
-         addjuice(g,-50,0);
-      }
-      else if(LCSrandom(15)>g.get_attribute(ATTRIBUTE_WISDOM,true)
-           || g.get_attribute(ATTRIBUTE_WISDOM,true) < g.get_attribute(ATTRIBUTE_HEART,true))
-      {
-         addstr(g.name, gamelog);
-         addstr(" silently grows Wiser...", gamelog);
-         g.adjust_attribute(ATTRIBUTE_WISDOM,+1);
-      }
-      else if(g.align==ALIGN_LIBERAL && g.flag & CREATUREFLAG_LOVESLAVE && LCSrandom(4))
-      {
-         addstr(g.name, gamelog);
-         addstr(" only stays loyal to the LCS for ", gamelog);
-         addstr(pool[g.hireid]->name, gamelog);
-         addstr(".", gamelog);
-      }
-      else
-      {
-         addstr(g.name, gamelog);
-         addstr(" abandons the Liberal Crime Squad!", gamelog);
-
-         //Rat out contact
-         int contact = getpoolcreature(g.hireid);
-         if(contact >= 0)
-         {
-            criminalize(*pool[contact],LAWFLAG_RACKETEERING);
-            pool[contact]->confessions++;
-         }
-
-         g.die();
-         g.location=-1;
-      }
-   }
-   else
-   {
-      addstr(g.name, gamelog);
-      addstr(" remains strong.", gamelog);
-   }
-   gamelog.nextMessage();
-
-   getkey();
-
-   erase();
-
-   return;
-}
-
-void laborcamp(Creature &g)
-{
-   int escaped = 0;
-   const char *experience;
-   // Escape attempt!
-   if(g.hireid == -1 && !LCSrandom(3))
-   {
-      escaped = 2;
-      experience = " leads the oppressed prisoners and overwhelms the prison guards!";
-   }
-   else if(g.skill_check(SKILL_DISGUISE, DIFFICULTY_HEROIC) && !LCSrandom(10))
-   {
-      escaped = 1;
-      experience = " wears an electrician's outfit and rides away with some contractors.";
-      g.give_armor(*armortype[getarmortype("ARMOR_WORKCLOTHES")],NULL);
-   }
-   else if(g.skill_check(SKILL_SECURITY, DIFFICULTY_CHALLENGING) && g.skill_check(SKILL_STEALTH, DIFFICULTY_HARD) && !LCSrandom(10))
-   {
-      escaped = 1;
-      experience = " picks the lock on their leg chains and then sneaks away!";
-   }
-   else if(g.skill_check(SKILL_SCIENCE, DIFFICULTY_HARD) && !LCSrandom(10))
-   {
-      escaped = 1;
-      experience = " consumes drugs that simulate death, and is thrown out with the trash!";
-   }
-
-   static const char *labor_camp_experiences[] =
-   {
-      " is forced to operate dangerous machinery in prison.",
-      " is beaten by sadistic prison guards.",
-      " carries heavy burdens back and forth in prison labor camp.",
-      " does back-breaking work all month in prison.",
-      " gets in a brutal fight with another prisoner.",
-      " participates in a quickly-suppressed prison riot.",
-      " participates in a quickly-suppressed prison riot."
-   };
-
-   if(!escaped)experience=pickrandom(labor_camp_experiences);
-
-   erase();
-   set_color(COLOR_WHITE,COLOR_BLACK,1);
-   move(8,1);
-   addstr(g.name, gamelog);
-   addstr(experience, gamelog);
-   gamelog.newline();
-
-   getkey();
-
-   move(10,1);
-   if(escaped)
-   {
-      int prison = g.location;
-      addstr(g.name, gamelog);
-      addstr(" escaped from prison!", gamelog);
-      addjuice(g,50,1000);
-      criminalize(g, LAWFLAG_ESCAPED);
-      g.location = find_homeless_shelter(g);
-
-      if(escaped==2)
-      {
-         int num_escaped = 0;
-         for(int p=0;p<len(pool);p++)
-         {
-            if(pool[p]->location == prison && !(pool[p]->flag & CREATUREFLAG_SLEEPER))
-            {
-               criminalize(*pool[p], LAWFLAG_ESCAPED);
-               pool[p]->location = g.location;
-               num_escaped++;
-            }
-         }
-         if(num_escaped == 1)
-         {
-            gamelog.nextMessage();
-            mvaddstr(11,1, "Another imprisoned LCS member also gets out!", gamelog);
-         }
-         else if(num_escaped > 1)
-         {
-            gamelog.nextMessage();
-            mvaddstr(11,1, "The LCS will rise again! Multiple LCS members escape!", gamelog);
-         }
-      }
-   }
-   else if(!LCSrandom(4))
-   {
-      if(g.get_attribute(ATTRIBUTE_HEALTH, true) > 1)
-      {
-         addstr(g.name, gamelog);
-         addstr(" is badly hurt in the process.", gamelog);
-         addjuice(g,-40,0);
-         addjuice(g,-10,-50);
-      }
-      else
-      {
-         addstr(g.name, gamelog);
-         addstr(" is found dead.", gamelog);
-
-         g.die();
-         g.location=-1;
-      }
-   }
-   else
-   {
-      addstr(g.name, gamelog);
-      addstr(" managed to avoid lasting injury.", gamelog);
-   }
-   gamelog.nextMessage();
-
-   getkey();
-
-   erase();
-
-   return;
-}
-
-void prisonscene(Creature &g)
-{
-   int escaped = 0;
-   int effect = 0;
-   const char *experience;
-   if(g.juice + int(g.hireid==-1)*300 > 500)
-   {
-      // Escape attempt!
-      if(g.hireid == -1 && !LCSrandom(10))
-      {
-         escaped = 2;
-         experience = " leads a riot with dozens of prisoners chanting the LCS slogan!";
-      }
-      else if(g.skill_check(SKILL_COMPUTERS, DIFFICULTY_HARD) && !LCSrandom(5))
-      {
-         escaped = 2;
-         experience = " codes a virus on a smuggled phone that opens all the prison doors!";
-      }
-      else if(g.skill_check(SKILL_DISGUISE, DIFFICULTY_HARD) && !LCSrandom(5))
-      {
-         escaped = 1;
-         experience = " puts on smuggled street clothes and calmly walks out of prison.";
-         g.give_armor(*armortype[getarmortype("ARMOR_CLOTHES")],NULL);
-      }
-      else if(g.skill_check(SKILL_SECURITY, DIFFICULTY_CHALLENGING) && g.skill_check(SKILL_STEALTH, DIFFICULTY_CHALLENGING) && !LCSrandom(5))
-      {
-         escaped = 1;
-         experience = " jimmies the cell door and cuts the outer fence in the dead of night!";
-      }
-      else if(g.skill_check(SKILL_SCIENCE, DIFFICULTY_AVERAGE) && g.skill_check(SKILL_HANDTOHAND, DIFFICULTY_EASY) && !LCSrandom(5))
-      {
-         escaped = 1;
-         experience = " intentionally ODs on smuggled drugs, then breaks out of the medical ward!";
-      }
-   }
-
-   static const char *good_experiences[] =
-   {
-      " advertises the LCS every day to other inmates.",
-      " organizes a group of inmates to beat up on a serial rapist.",
-      " learns lots of little skills from other inmates.",
-      " gets a prison tattoo with the letters L-C-S.",
-      " thinks up new protest songs while in prison."
-   };
-   static const char *bad_experiences[] =
-   {
-      " gets sick for a few days from nasty prison food.",
-      " spends too much time working out at the prison gym.",
-      " is raped by another prison inmate, repeatedly.",
-      " writes a letter to the warden swearing off political activism.",
-      " rats out one of the other inmates in exchange for benefits."
-   };
-   static const char *general_experiences[] =
-   {
-      " mouths off to a prison guard and ends up in solitary.",
-      " gets high off drugs smuggled into the prison.",
-      " does nothing but read books at the prison library.",
-      " gets into a fight and is punished with latrine duty.",
-      " constantly tries thinking how to escape from prison."
-   };
-
-   if(escaped==0)
-   {
-      if(g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_HARD)) {
-         effect = 1;
-         if(LCSrandom(2) > 0) experience = pickrandom(good_experiences);
-         else experience = pickrandom(general_experiences);
-      } else if(g.attribute_check(ATTRIBUTE_HEART,DIFFICULTY_CHALLENGING)) {
-         effect = 0;
-         experience = pickrandom(general_experiences);
-      } else {
-         effect = -1;
-         if(LCSrandom(2) > 0) experience = pickrandom(bad_experiences);
-         else experience = pickrandom(general_experiences);
-      }
-   }
-
-   erase();
-   set_color(COLOR_WHITE,COLOR_BLACK,1);
-   move(8,1);
-   addstr(g.name, gamelog);
-   addstr(experience, gamelog);
-   gamelog.newline();
-
-   getkey();
-
-   move(10,1);
-   if(escaped)
-   {
-      int prison = g.location;
-      addstr(g.name, gamelog);
-      addstr(" escaped from prison!", gamelog);
-      addjuice(g,50,1000);
-      criminalize(g, LAWFLAG_ESCAPED);
-      g.location = find_homeless_shelter(g);
-
-      if(escaped==2)
-      {
-         int num_escaped = 0;
-         for(int p=0;p<len(pool);p++)
-         {
-            if(pool[p]->location == prison && !(pool[p]->flag & CREATUREFLAG_SLEEPER))
-            {
-               criminalize(*pool[p], LAWFLAG_ESCAPED);
-               pool[p]->location = g.location;
-               num_escaped++;
-            }
-         }
-         if(num_escaped == 1)
-         {
-            gamelog.nextMessage();
-            mvaddstr(11,1, "Another imprisoned LCS member also gets out!", gamelog);
-         }
-         else if(num_escaped > 1)
-         {
-            gamelog.nextMessage();
-            mvaddstr(11,1, "The LCS will rise again! Multiple LCS members escape!", gamelog);
-         }
-      }
-   }
-   else if(effect > 0)
-   {
-      addstr(g.name, gamelog);
-      addstr(" has become a more hardened, Juicier criminal.", gamelog);
-      addjuice(g,20,1000);
-   }
-   else if(effect < 0)
-   {
-      addstr(g.name, gamelog);
-      addstr(" is kinda losing it in here. Juice, that is.", gamelog);
-      addjuice(g,-20,-30);
-   }
-   else
-   {
-      addstr(g.name, gamelog);
-      addstr(" seems to be mostly fine, though.", gamelog);
-   }
-   gamelog.nextMessage();
-
-   getkey();
-
-   erase();
-
-   return;
 }

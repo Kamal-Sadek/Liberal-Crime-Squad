@@ -25,7 +25,7 @@ void Item::addBaseValues(CMarkup& xml) const
 {
    xml.AddElem("itemtypename",itemtypename_);
    xml.AddElem("itemtypeid",itemtypeid_);
-   xml.AddElem("number",tostring(number_));
+   xml.AddElem("number",std::to_string(number_));
 }
 
 /*Item* Item::split(int number)

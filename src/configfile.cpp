@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <externs.h>
 
 std::ifstream* openFile(const std::string& filename, std::ios_base::openmode format)
@@ -230,7 +231,7 @@ bool readMap(const std::string& filename)
    // Try upper levels (eg "mapCSV_Bank2_Tiles.csv"), but don't sweat it if they don't exist
    for(int z=1;z<MAPZ;z++)
    {
-      std::string str=tostring(z+1);
+      std::string str=std::to_string(z+1);
       if(!readMapFile(prefix+filename+str+"_Tiles.csv", z, readMapCBTiles)) break;
       if(!readMapFile(prefix+filename+str+"_Specials.csv", z, readMapCBSpecials)) break;
    }

@@ -1,25 +1,24 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
-
-//#include <includes.h>
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
+#include "daily/recruit.h"
 #include <externs.h>
 
 /* recruit struct constructor */
@@ -85,7 +84,8 @@ static void getissueeventstring(char* str)
 }
 
 /* recruiting */
-char recruitment_activity(Creature &cr,char &clearformess)
+bool
+recruitment_activity(Creature& cr, char& clearformess)
 {
    clearformess=1;
    int ocursite = cursite;
@@ -131,7 +131,7 @@ char recruitment_activity(Creature &cr,char &clearformess)
          getkey();
 
          cursite = ocursite;
-         return 0;
+         return false;
       } else if(recruitCount == 1) {
          mvaddstr_f(11, 0, "%s managed to set up a meeting with ", cr.name);
          set_alignment_color(encounter[0].align);
@@ -191,11 +191,12 @@ char recruitment_activity(Creature &cr,char &clearformess)
       }
    }
    cursite = ocursite;
-   return 1;
+   return true;
 }
 
 /* daily - recruit - recruit meeting */
-char completerecruitmeeting(recruitst &r,int p,char &clearformess)
+bool
+completerecruitmeeting(recruitst& r, int p, char& clearformess)
 {
    music.play(MUSIC_RECRUITING);
    clearformess=1;
@@ -220,7 +221,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
 
       getkey();
 
-      return 1;
+      return true;
    }
    addstr("Meeting with ", gamelog);
    addstr(r.recruit->name, gamelog);
@@ -324,7 +325,7 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
          r.recruit = NULL;
          stat_recruits++;
 
-         return 1;
+         return true;
       }
       if(c=='b' || (c=='a' && ledger.get_funds()>=50))
       {
@@ -467,13 +468,13 @@ char completerecruitmeeting(recruitst &r,int p,char &clearformess)
 
             getkey();
 
-            return 1;
+            return true;
          }
 
          getkey();
 
-         return 0;
+         return false;
       }
-      if(c=='d') return 1;
+      if(c=='d') return true;
    }
 }

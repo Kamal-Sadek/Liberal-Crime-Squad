@@ -1,4 +1,9 @@
+/**
+ * Interface for justice on a personal level.
+ */
 /*
+ * Copyright 2017 Stephen M. Webb
+ *
  * This file is part of Liberal Crime Squad.
  *
  * Liberal Crime Squad is free software; you can redistribute it and/or
@@ -16,25 +21,18 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-#ifndef LAW_H_INCLUDED
-#define LAW_H_INCLUDED
+#ifndef LCS_MONTHLY_JUSTICE_H
+#define LCS_MONTHLY_JUSTICE_H
 
-#include "common.h"
+class Creature; 
 
-class law
-{
-private:
-   std::string lawtext[5];      // Describes the law for each alignment
-   std::string defeat_lawtext;  // Describes the law when the game is lost
 
-   signed char alignment;
-public:
-   law();        // Default constructor
+/* Put a liberal on trial. */
+void
+trial(Creature &g);
 
-   void addlawtext(bool gameover=false); // Adds the lawtext to the screen
-   void changealignment(signed char align);
+/* Advance a liberal's prison time or executes them. */
+bool
+prison(Creature &g);
 
-   void setlawtext(signed char align,std::string text);
-};
-
-#endif //LAW_H_INCLUDED
+#endif /* LCS_MONTHLY_JUSTICE_H */

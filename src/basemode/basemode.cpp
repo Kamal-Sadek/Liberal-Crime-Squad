@@ -1,30 +1,28 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
-*/
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
 
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
@@ -61,6 +59,9 @@ This file is part of Liberal Crime Squad.                                       
 // it out for yourself.
 
 #include <externs.h>
+#include "daily/siege.h"
+#include "monthly/monthly.h"
+#include "politics/politics.h"
 
 bool show_disbanding_screen(int& oldforcemonth)
 {
@@ -98,12 +99,12 @@ bool show_disbanding_screen(int& oldforcemonth)
    else align=ALIGN_MODERATE; // nobody has a majority
    set_alignment_color(align,true);
    mvaddstr(2,0,"House: ");
-   if(stalinmode) addstr(tostring(housemake[5])+"Sta, ");
-   addstr(tostring(housemake[4])+"Lib+, ");
-   addstr(tostring(housemake[3])+"Lib, ");
-   addstr(tostring(housemake[2])+"Mod, ");
-   addstr(tostring(housemake[1])+"Cons, ");
-   addstr(tostring(housemake[0])+"Cons+");
+   if(stalinmode) addstr(std::to_string(housemake[5])+"Sta, ");
+   addstr(std::to_string(housemake[4])+"Lib+, ");
+   addstr(std::to_string(housemake[3])+"Lib, ");
+   addstr(std::to_string(housemake[2])+"Mod, ");
+   addstr(std::to_string(housemake[1])+"Cons, ");
+   addstr(std::to_string(housemake[0])+"Cons+");
 
    int senatemake[6]={0,0,0,0,0,0};
    for(int s=0;s<SENATENUM;s++) senatemake[senate[s]+2]++;
@@ -117,12 +118,12 @@ bool show_disbanding_screen(int& oldforcemonth)
    set_alignment_color(align,true);
    senatemake[exec[EXEC_VP]+2]--; // Vice President isn't actually a Senator though
    mvaddstr(3,0,"Senate: ");
-   if(stalinmode) addstr(tostring(senatemake[5])+"Sta, ");
-   addstr(tostring(senatemake[4])+"Lib+, ");
-   addstr(tostring(senatemake[3])+"Lib, ");
-   addstr(tostring(senatemake[2])+"Mod, ");
-   addstr(tostring(senatemake[1])+"Cons, ");
-   addstr(tostring(senatemake[0])+"Cons+");
+   if(stalinmode) addstr(std::to_string(senatemake[5])+"Sta, ");
+   addstr(std::to_string(senatemake[4])+"Lib+, ");
+   addstr(std::to_string(senatemake[3])+"Lib, ");
+   addstr(std::to_string(senatemake[2])+"Mod, ");
+   addstr(std::to_string(senatemake[1])+"Cons, ");
+   addstr(std::to_string(senatemake[0])+"Cons+");
 
    int courtmake[6]={0,0,0,0,0,0};
    for(int s=0;s<COURTNUM;s++) courtmake[court[s]+2]++;
@@ -134,12 +135,12 @@ bool show_disbanding_screen(int& oldforcemonth)
    else align=ALIGN_MODERATE; // nobody has a majority
    set_alignment_color(align,true);
    mvaddstr(4,0,"Supreme Court: ");
-   if(stalinmode) addstr(tostring(courtmake[5])+"Sta, ");
-   addstr(tostring(courtmake[4])+"Lib+, ");
-   addstr(tostring(courtmake[3])+"Lib, ");
-   addstr(tostring(courtmake[2])+"Mod, ");
-   addstr(tostring(courtmake[1])+"Cons, ");
-   addstr(tostring(courtmake[0])+"Cons+");
+   if(stalinmode) addstr(std::to_string(courtmake[5])+"Sta, ");
+   addstr(std::to_string(courtmake[4])+"Lib+, ");
+   addstr(std::to_string(courtmake[3])+"Lib, ");
+   addstr(std::to_string(courtmake[2])+"Mod, ");
+   addstr(std::to_string(courtmake[1])+"Cons, ");
+   addstr(std::to_string(courtmake[0])+"Cons+");
 
    for(int l=0;l<LAWNUM;l++)
    {
@@ -570,7 +571,7 @@ void mode_base()
             set_color(COLOR_WHITE,COLOR_BLACK,0);
             mvaddstr(7,5,"Time passes...",gamelog);
             mvaddstr(9,12,getmonth(month,true)+" ",gamelog);
-            mvaddstr(9,17,tostring(day)+", ",gamelog);
+            mvaddstr(9,17,std::to_string(day)+", ",gamelog);
             mvaddstr(9,21,year,gamelog);
             gamelog.nextMessage(); //Write out buffer to prepare for the next message.
             refresh();

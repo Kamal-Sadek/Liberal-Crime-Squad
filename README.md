@@ -1,21 +1,39 @@
-## Liberal Crime Squad
+Liberal Crime Squad
+===================
 
-Welcome to Liberal Crime Squad! The Conservatives have taken the Executive, Legislative, and Judicial branches of government. Over time, the Liberal laws of this nation will erode and turn the country into a BACKWOODS YET CORPORATE NIGHTMARE. To prevent this from happening, the Liberal Crime Squad was established. The mood of the country is shifting, and we need to turn things around. Go out on the streets and indoctrinate Conservative automatons. That is, let them see their True Liberal Nature. Then arm them and send them forth to Stop Evil.
+On Febuary 4, 1974, the Symbionese Liberation Army, an American self-styled
+urban gurrilla warfare group kidnapped 19-year-old media heiress Patricia Hearst
+as she and her 26-year-old boyfriend, Steven Weed, sat relaxing in their
+Berkeley, California home....
 
-This version of Liberal Crime Squad is an unofficial transfer from SourceForge. A full list of authors is available in AUTHORS.
+Liberal Crime Squad is a satirical ASCII-style political role-playing/strategy
+game in which you recruit a team of Elite Liberal radicals and try to save the
+United States from a descent into Arch-Conservatism.  Gameplay is based loosely
+on the classic 1983 RPG Oubliette.
 
-Read [COMPILE_README.txt](COMPILE_README.txt) for instructions on how to compile on all platforms.
+This Fork
+---------
 
-## Augmentations
+LCS was originally developed by Tarn Adams at Bay 12 Games (2002-2004).  It was
+then taken over by community developers lead by Jonathan Stickles and Chris Johnson
+hosted at SourceForge (2007-2014).  This fork is derived from Kamal Sadek's augmentation
+fork ar GitHub.  It's purely a sandbox version, but since it's licensed under
+the GPLv2+, I can make any modifications I want as along as I make the source
+available, and if anyone is uncomfortable with that let me know and I'll change
+the name of the project.
 
-This version of Liberal Crime Squad includes changes such as small bug fixes, game mechanic tweaks so that it plays better, and new features, such as the new Augmentation system!
+Building From Source
+--------------------
 
-The fight against the Conservative Swine is a long and dangerous one, and Liberals need every advantage they can get. As we turn to modern technology, we find yet another way to help the Liberal Cause: We can make our Liberals faster, stronger, and better than ever before through the use of Augmentations!
+I'm a fan of automated integration, and to that end I have set up an automated
+integration build from the GitHub repo through the Travis-CI service.  I'm
+targeting Win32, Win64, and Linux binaries, and everything is built or
+cross-built on a Linux host.  I've removed most of the support for building
+though an arbitrary IDE:  if you want to clone the code and build, you're going
+to need a POSIX shell and tools or a GUI that can cope with an autotool build
+directly.  It's my sandbox, I get to be tinpot about it.
 
-To tap into this newfound science, Activate a Liberal who has a science skill of 1 or greater, go into the 'D - Recruitment' menu, and '5 - Augment' task. From here, you can select a Brave Liberal Pioneer to test this new technology and advance the Liberal Cause.
+*If it's too serious for you, just skip it -- we don't take the game seriously,
+either, so no worries.*
 
-## Save Files
-
-You can now have multiple save files! When you load up LCS, you have the option to choose from previous save files or make a new one. So you can now hold the battle against the Conservative Swine in multiple dimensions!
-
-Go Forth, and Pursue your Liberal Agenda!
+**Go Forth, and Pursue your Liberal Agenda!**

@@ -1,4 +1,6 @@
 #include <externs.h>
+#include "news/news.h"
+
 
 void displaysinglead(bool liberalguardian,char addplace[2][3],short* storyx_s,short* storyx_e,int& it2)
 {

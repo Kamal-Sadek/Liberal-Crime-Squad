@@ -419,10 +419,10 @@ void MusicClass::loadsong(int i,const char* filename)
    erase();
    if(oggsupport)
    {
-      mvaddstr(12,0,"Loading Ogg Vorbis music ("+tostring(i+1)+"/"+tostring(MUSIC_OFF)+"): "+artdir+"ogg/"+filename+".ogg");
+      mvaddstr(12,0,"Loading Ogg Vorbis music ("+std::to_string(i+1)+"/"+std::to_string(MUSIC_OFF)+"): "+artdir+"ogg/"+filename+".ogg");
       mvaddstr(13,0,string("(with ")+artdir+"midi/"+filename+".mid as MIDI fallback)");
    }
-   else mvaddstr(12,0,"Loading MIDI music ("+tostring(i+1)+"/"+tostring(MUSIC_OFF)+"): "+artdir+"midi/"+filename+".mid");
+   else mvaddstr(12,0,"Loading MIDI music ("+std::to_string(i+1)+"/"+std::to_string(MUSIC_OFF)+"): "+artdir+"midi/"+filename+".mid");
    refresh();
    if(oggsupport) songs[i]=Mix_LoadMUS((string(artdir)+"ogg/"+filename+".ogg").c_str()); // only attempt loading Ogg if we have Ogg support
    if(!songs[i]||!oggsupport) // it failed to load Ogg Vorbis music or Ogg support doesn't exist, let's try MIDI instead

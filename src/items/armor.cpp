@@ -27,7 +27,7 @@ string Armor::showXml() const
    addBaseValues(xml);
    xml.AddElem("bloody",(bloody_?"true":"false"));
    xml.AddElem("damaged",(damaged_?"true":"false"));
-   xml.AddElem("quality",tostring(quality_));
+   xml.AddElem("quality",std::to_string(quality_));
    return xml.GetDoc();
 }
 
@@ -41,7 +41,7 @@ string Armor::equip_title(bool full) const
    {
       et+="[";
       if(quality_>9) et+="X";
-      else if(quality_>1) et+=tostring(quality_);
+      else if(quality_>1) et+=std::to_string(quality_);
       if(bloody_) et+="B";
       if(damaged_) et+="D";
       et+="]";

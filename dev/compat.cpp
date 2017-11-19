@@ -79,7 +79,7 @@
 #include <config.h>
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
   #include <windows.h>
   #define HAS_STRICMP
   #define HAS_ITOA
@@ -199,13 +199,13 @@ void initalarm()
     }
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
   unsigned int ptime=GetTickCount();
 #endif
 
 void alarmset(int t)
 {
-#ifdef WIN32
+#ifdef _WIN32
   ptime=GetTickCount() + t;
 #else
   /* If the signal handler is not set up set it up now */
@@ -223,7 +223,7 @@ void alarmset(int t)
 
 void alarmwait()
 {
-#ifdef WIN32
+#ifdef _WIN32
  while(ptime > GetTickCount());
 #else
   struct itimerval timer_now;
@@ -249,7 +249,7 @@ void pause_ms(int t)
   pause();
 
  #else
-   #ifdef WIN32
+   #ifdef _WIN32
   ptime=GetTickCount() + t;
 
  // Sadler - In 3.05 this while() was also checking that time <= GetTickCount()

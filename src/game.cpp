@@ -1,24 +1,23 @@
-//////////////////////////////////////////////////////////////////////////////////////////
-//                                                                                      //
-//Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-//                                                                                      //
-//////////////////////////////////////////////////////////////////////////////////////////
-//This file is part of Liberal Crime Squad.                                             //
-//                                                                                      //
-//      Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-//      it under the terms of the GNU General Public License as published by            //
-//      the Free Software Foundation; either version 2 of the License, or               //
-//      (at your option) any later version.                                             //
-//                                                                                      //
-//      Liberal Crime Squad is distributed in the hope that it will be useful,          //
-//      but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-//      GNU General Public License for more details.                                    //
-//                                                                                      //
-//      You should have received a copy of the GNU General Public License               //
-//      along with Liberal Crime Squad; if not, write to the Free Software              //
-//      Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-//////////////////////////////////////////////////////////////////////////////////////////
+/*
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 //outstanding issues
    //site trucker-type bug still happens (latte-stand)
@@ -67,6 +66,8 @@
 
 #include <includes.h>
 #include <ctime>
+#include "news/news.h"
+
 
 Log gamelog; //The gamelog.
 Log xmllog; // Log for xml errors or bad values.
@@ -242,7 +243,7 @@ newsstoryst *sitestory=NULL;
 highscorest score[SCORENUM];
 int yourscore=-1;
 
-#ifdef WIN32
+#ifdef _WIN32
 bool fixcleartype=false;
 #endif
 
@@ -461,7 +462,7 @@ int main(int argc, char* argv[])
 /* Free memory and exit the game */
 void end_game(int err)
 {
-   #ifdef WIN32
+   #ifdef _WIN32
    end_cleartype_fix(); // won't do anything unless fixcleartype is true
    #endif
 

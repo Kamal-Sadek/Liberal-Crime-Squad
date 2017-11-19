@@ -22,7 +22,7 @@ VehicleType::VehicleType(MCD_STR xmlstring)
 
    idname_ = xmlfile.GetAttrib("idname");
    if (idname_ == "")
-      idname_ = "LACKS IDNAME " + tostring(id_);
+      idname_ = "LACKS IDNAME " + std::to_string(id_);
 
    xmlfile.IntoElem();
 

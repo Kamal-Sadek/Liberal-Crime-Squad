@@ -159,12 +159,12 @@ bool liberalagenda(signed char won)
             else align=ALIGN_MODERATE; // nobody has a majority
             set_alignment_color(align,true);
             mvaddstr(10,0,"House: ");
-            if(stalinmode) addstr(tostring(housemake[5])+"Sta, ");
-            addstr(tostring(housemake[4])+"Lib+, ");
-            addstr(tostring(housemake[3])+"Lib, ");
-            addstr(tostring(housemake[2])+"Mod, ");
-            addstr(tostring(housemake[1])+"Cons, ");
-            addstr(tostring(housemake[0])+"Cons+");
+            if(stalinmode) addstr(std::to_string(housemake[5])+"Sta, ");
+            addstr(std::to_string(housemake[4])+"Lib+, ");
+            addstr(std::to_string(housemake[3])+"Lib, ");
+            addstr(std::to_string(housemake[2])+"Mod, ");
+            addstr(std::to_string(housemake[1])+"Cons, ");
+            addstr(std::to_string(housemake[0])+"Cons+");
 
             int senatemake[6]={0,0,0,0,0,0};
             for(int s=0;s<SENATENUM;s++) senatemake[senate[s]+2]++;
@@ -178,12 +178,12 @@ bool liberalagenda(signed char won)
             set_alignment_color(align,true);
             senatemake[exec[EXEC_VP]+2]--; // Vice President isn't actually a Senator though
             mvaddstr(11,0,"Senate: ");
-            if(stalinmode) addstr(tostring(senatemake[5])+"Sta, ");
-            addstr(tostring(senatemake[4])+"Lib+, ");
-            addstr(tostring(senatemake[3])+"Lib, ");
-            addstr(tostring(senatemake[2])+"Mod, ");
-            addstr(tostring(senatemake[1])+"Cons, ");
-            addstr(tostring(senatemake[0])+"Cons+");
+            if(stalinmode) addstr(std::to_string(senatemake[5])+"Sta, ");
+            addstr(std::to_string(senatemake[4])+"Lib+, ");
+            addstr(std::to_string(senatemake[3])+"Lib, ");
+            addstr(std::to_string(senatemake[2])+"Mod, ");
+            addstr(std::to_string(senatemake[1])+"Cons, ");
+            addstr(std::to_string(senatemake[0])+"Cons+");
          }
 
          if(won==-1||won==-2) set_color(COLOR_RED,COLOR_BLACK,1);

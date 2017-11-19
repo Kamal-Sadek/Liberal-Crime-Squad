@@ -18,14 +18,6 @@
 // uncomment this next line if you want to disable SDL (which is for music/sound)
 //#define DONT_INCLUDE_SDL
 
-/* some compilers sometimes define _WIN32 but not WIN32 on Windows, but LCS usually
-   just checks if WIN32's defined, so the next couple lines fix that so it works */
-#ifdef _WIN32
-   #ifndef WIN32
-      #define WIN32 _WIN32
-   #endif /* !WIN32 */
-#endif /* _WIN32 */
-
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif
@@ -33,7 +25,7 @@
 #include <langinfo.h>
 #endif
 
-#ifdef WIN32 // safe to do now that we did that earlier thing defining WIN32 if _WIN32 was defined
+#ifdef _WIN32
    #include <windows.h>
 
 #  ifdef KEY_EVENT
@@ -51,8 +43,6 @@
    //Visual C++ .NET (7) includes the STL with vector, so we
    //will use that, otherwise the HP STL Vector.h will be used.
    #ifdef __MINGW32__
-      #include <iostream>
-      #include <fstream>
       #include <vector>
       #include <map>
    #else
@@ -60,14 +50,10 @@
          #define WIN32_DOTNET
          #include <ciso646> // alternate keywords included in the ISO C++ standard
                             // but not directly supported by Microsoft Visual Studio C++
-         #include <iostream>
-         #include <fstream>
          #include <vector>
          #include <map>
       #else
          #define WIN32_PRE_DOTNET
-         #include <iostream.h>
-         #include <fstream.h>
          #include "vector.h"
          #include "map.h"
       #endif
@@ -85,11 +71,8 @@
 #else
    #include <vector>
    #include <map>
-   #include <iostream>
-   #include <fstream>
    #include <ctype.h>
    #include <unistd.h>
-   #include <ctype.h>
    #define GO_PORTABLE
 
    #if defined(HAVE_WIDE_NCURSES) && defined(__STDC_ISO_10646__)
@@ -175,22 +158,9 @@
    #endif
 #endif
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <sstream>
-#include <deque>
-#include <algorithm>
-#include <queue>
-#include <math.h>
-#include <cstring>
 #include "cmarkup/Markup.h" //For XML.
 
-#include <locale.h>
-#ifdef WIN32
+#ifdef _WIN32
 #ifdef __STRICT_ANSI__ /* mbctype.h doesn't work in strict ansi mode so this hack makes it work */
 #define STRICT_ANSI_TEMP_OFF
 #undef __STRICT_ANSI__

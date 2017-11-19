@@ -1,30 +1,28 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-//
-This file is part of Liberal Crime Squad.                                             //
-//
-Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-it under the terms of the GNU General Public License as published by            //
-the Free Software Foundation; either version 2 of the License, or               //
-(at your option) any later version.                                             //
-//
-Liberal Crime Squad is distributed in the hope that it will be useful,          //
-but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-GNU General Public License for more details.                                    //
-//
-You should have received a copy of the GNU General Public License               //
-along with Liberal Crime Squad; if not, write to the Free Software              //
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-This file was created by Chris Johnson (grundee@users.sourceforge.net)
-by copying code from game.cpp.
-To see descriptions of files and functions, see the list at
-the bottom of includes.h in the top src folder.
-*/
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
 
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
@@ -61,6 +59,7 @@ the bottom of includes.h in the top src folder.
 // it out for yourself.
 
 #include <externs.h>
+#include <sstream>
 
 vector<Creature *> activatable_liberals()
 {
@@ -1797,7 +1796,7 @@ void select_augmentation(Creature *cr) //TODO: Finish and general cleanup
          addstr((char)(toupper(selected_attribute.at(0))) +
             selected_attribute.substr(1) +
             (selected_aug->get_effect() >= 0 ? " +" : " ") +
-            tostring(selected_aug->get_effect()));
+            std::to_string(selected_aug->get_effect()));
 
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          mvaddstr(5, 0, "Chance at Success: ");
@@ -2059,7 +2058,7 @@ void select_makeclothing(Creature *cr)
          }
 
          set_color(COLOR_GREEN,COLOR_BLACK,1);
-         string price = '$'+tostring(armortype[armortypei[p]]->get_make_price());
+         string price = '$'+std::to_string(armortype[armortypei[p]]->get_make_price());
          move(y,64-len(price));
          addstr(price);
       }

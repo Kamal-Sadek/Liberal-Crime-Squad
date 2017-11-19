@@ -1,4 +1,5 @@
 #include <externs.h>
+#include "politics/politics.h"
 
 // Assign a value to an Interval from a string or log error.
 void assign_interval(Interval& i, const std::string& value,
@@ -104,8 +105,8 @@ CreatureType::CreatureType(const std::string& xmlstring)
    idname_=xml.GetAttrib("idname");
    if(!len(idname_))
    {
-      idname_ = "LACKS IDNAME "+tostring(id_);
-      xmllog.log("Creature type "+tostring(id_)+" lacks idname.");
+      idname_ = "LACKS IDNAME "+std::to_string(id_);
+      xmllog.log("Creature type "+std::to_string(id_)+" lacks idname.");
    }
    type_=creaturetype_string_to_enum(idname_);
 

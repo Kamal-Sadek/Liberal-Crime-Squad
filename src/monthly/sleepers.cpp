@@ -1,87 +1,26 @@
+/**
+ * Sleeper activities.
+ */
 /*
-This file is part of Liberal Crime Squad.                                           //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
-
-/* monthly - sleeper behavior */
-
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
+#include "monthly/sleepers.h"
 #include <externs.h>
-
-/**********************************************************************
-** *JDS*
-** ----- The sleeper system has been completely reworked.
-** - Sleepers no longer directly influence the issues. They now affect
-** the broad "liberal power" stats across many issues, which are used
-** as a kind of monthly liberal roll akin to AM Radio and Cable News.
-** - Each sleeper can affect one or more issue, throwing their power
-** into the "abstracted debate" on that issue.
-** - After all of the sleepers have contributed to the liberal power
-** stats, a roll is made on each issue to see whether the liberals
-** make background progress on those issues.
-** - Several sleepers have special abilities. Lawyers and Judges, as
-** always, can aid your people in the legal system. Police officers,
-** corporate managers, CEOs, and agents can all now leak secret
-** documents of the appropriate types, and they will make a check
-** each month. This will only happen if the homeless shelter is not
-** under siege, and "canseethings" is enabled (eg, you're not in prison
-** or disbanded or some other situation where your sleeper can't get
-** in touch with anyone in your squad).
-** - News Anchors and Radio Personalities remain the two most powerful
-** sleepers.
-**********************************************************************/
-void sleepereffect(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM])
-{
-   if(disbanding)cr.activity.type = ACTIVITY_SLEEPER_LIBERAL;
-   int infiltrate = 1;
-
-   switch(cr.activity.type)
-   {
-      case ACTIVITY_SLEEPER_LIBERAL:
-         sleeper_influence(cr,clearformess,canseethings,libpower);
-         cr.infiltration-=0.02f;
-         break;
-      case ACTIVITY_SLEEPER_EMBEZZLE:
-         sleeper_embezzle(cr,clearformess,canseethings,libpower);
-         break;
-      case ACTIVITY_SLEEPER_STEAL:
-         sleeper_steal(cr,clearformess,canseethings,libpower);
-         infiltrate = 0;
-         break;
-      case ACTIVITY_SLEEPER_RECRUIT:
-         sleeper_recruit(cr,clearformess,canseethings,libpower);
-         break;
-      case ACTIVITY_SLEEPER_SPY:
-         sleeper_spy(cr,clearformess,canseethings,libpower);
-         break;
-      case ACTIVITY_SLEEPER_SCANDAL:
-         sleeper_scandal(cr,clearformess,canseethings,libpower);
-         break;
-      case ACTIVITY_NONE:
-      case ACTIVITY_SLEEPER_JOINLCS:
-      default:
-         break;
-   }
-
-   if(infiltrate) cr.infiltration+=LCSrandom(8)*0.01f-0.02f;
-
-   if(cr.infiltration>=1)
-      cr.infiltration=1;
-   if(cr.infiltration<=0)
-      cr.infiltration=0;
-}
 
 
 /*********************************
@@ -90,7 +29,8 @@ void sleepereffect(Creature &cr,char &clearformess,char canseethings,int (&libpo
 **     PUBLIC OPINION
 **
 **********************************/
-void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM])
+static void
+sleeper_influence(Creature& cr, char& clearformess, bool canseethings, int (&libpower)[VIEWNUM])
 {
    int power=(cr.get_attribute(ATTRIBUTE_CHARISMA,true)+
               cr.get_attribute(ATTRIBUTE_HEART,true)+
@@ -324,7 +264,8 @@ void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int (&l
 **   SLEEPERS SNOOPING AROUND
 **
 **********************************/
-void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM])
+static void
+sleeper_spy(Creature& cr, char& clearformess, bool canseethings, int (&libpower)[VIEWNUM])
 {
    int homes=find_homeless_shelter(cr);
 
@@ -561,12 +502,14 @@ void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int (&libpowe
    if(pause) getkey();
 }
 
+
 /*********************************
 **
 **   SLEEPERS EMBEZZLING FUNDS
 **
 **********************************/
-void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM])
+static void
+sleeper_embezzle(Creature& cr, char& clearformess, bool canseethings, int (&libpower)[VIEWNUM])
 {
    if(LCSrandom(100) > 100*cr.infiltration)
    {
@@ -618,12 +561,14 @@ void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int (&li
    ledger.add_funds(income,INCOME_EMBEZZLEMENT);
 }
 
+
 /*********************************
 **
 **   SLEEPERS STEALING THINGS
 **
 **********************************/
-void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM])
+static void
+sleeper_steal(Creature& cr, char& clearformess, bool canseethings, int (&libpower)[VIEWNUM])
 {
    if(LCSrandom(100) > 100*cr.infiltration)
    {
@@ -909,7 +854,8 @@ void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int (&libpo
 **   SLEEPERS CREATING SCANDALS
 **
 **********************************/
-void sleeper_scandal(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM])
+static void
+sleeper_scandal(Creature& cr, char& clearformess, bool canseethings, int (&libpower)[VIEWNUM])
 {
    // Add content here!
    return;
@@ -921,7 +867,8 @@ void sleeper_scandal(Creature &cr,char &clearformess,char canseethings,int (&lib
 **   SLEEPERS RECRUITING
 **
 **********************************/
-void sleeper_recruit(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM])
+static void
+sleeper_recruit(Creature& cr, char& clearformess, bool canseethings, int (&libpower)[VIEWNUM])
 {
    if(subordinatesleft(cr))
    {
@@ -970,3 +917,69 @@ void sleeper_recruit(Creature &cr,char &clearformess,char canseethings,int (&lib
    }
    return;
 }
+
+
+/**********************************************************************
+** *JDS*
+** ----- The sleeper system has been completely reworked.
+** - Sleepers no longer directly influence the issues. They now affect
+** the broad "liberal power" stats across many issues, which are used
+** as a kind of monthly liberal roll akin to AM Radio and Cable News.
+** - Each sleeper can affect one or more issue, throwing their power
+** into the "abstracted debate" on that issue.
+** - After all of the sleepers have contributed to the liberal power
+** stats, a roll is made on each issue to see whether the liberals
+** make background progress on those issues.
+** - Several sleepers have special abilities. Lawyers and Judges, as
+** always, can aid your people in the legal system. Police officers,
+** corporate managers, CEOs, and agents can all now leak secret
+** documents of the appropriate types, and they will make a check
+** each month. This will only happen if the homeless shelter is not
+** under siege, and "canseethings" is enabled (eg, you're not in prison
+** or disbanded or some other situation where your sleeper can't get
+** in touch with anyone in your squad).
+** - News Anchors and Radio Personalities remain the two most powerful
+** sleepers.
+**********************************************************************/
+void
+sleepereffect(Creature& cr, char& clearformess, bool canseethings, int (&libpower)[VIEWNUM])
+{
+   if(disbanding)cr.activity.type = ACTIVITY_SLEEPER_LIBERAL;
+   int infiltrate = 1;
+
+   switch(cr.activity.type)
+   {
+      case ACTIVITY_SLEEPER_LIBERAL:
+         sleeper_influence(cr,clearformess,canseethings,libpower);
+         cr.infiltration-=0.02f;
+         break;
+      case ACTIVITY_SLEEPER_EMBEZZLE:
+         sleeper_embezzle(cr,clearformess,canseethings,libpower);
+         break;
+      case ACTIVITY_SLEEPER_STEAL:
+         sleeper_steal(cr,clearformess,canseethings,libpower);
+         infiltrate = 0;
+         break;
+      case ACTIVITY_SLEEPER_RECRUIT:
+         sleeper_recruit(cr,clearformess,canseethings,libpower);
+         break;
+      case ACTIVITY_SLEEPER_SPY:
+         sleeper_spy(cr,clearformess,canseethings,libpower);
+         break;
+      case ACTIVITY_SLEEPER_SCANDAL:
+         sleeper_scandal(cr,clearformess,canseethings,libpower);
+         break;
+      case ACTIVITY_NONE:
+      case ACTIVITY_SLEEPER_JOINLCS:
+      default:
+         break;
+   }
+
+   if(infiltrate) cr.infiltration+=LCSrandom(8)*0.01f-0.02f;
+
+   if(cr.infiltration>=1)
+      cr.infiltration=1;
+   if(cr.infiltration<=0)
+      cr.infiltration=0;
+}
+

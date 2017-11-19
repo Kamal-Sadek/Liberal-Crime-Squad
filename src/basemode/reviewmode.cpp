@@ -1,30 +1,28 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-//
-This file is part of Liberal Crime Squad.                                             //
-//
-Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-it under the terms of the GNU General Public License as published by            //
-the Free Software Foundation; either version 2 of the License, or               //
-(at your option) any later version.                                             //
-//
-Liberal Crime Squad is distributed in the hope that it will be useful,          //
-but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-GNU General Public License for more details.                                    //
-//
-You should have received a copy of the GNU General Public License               //
-along with Liberal Crime Squad; if not, write to the Free Software              //
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-This file was created by Chris Johnson (grundee@users.sourceforge.net)
-by copying code from game.cpp.
-To see descriptions of files and functions, see the list at
-the bottom of includes.h in the top src folder.
-*/
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
 
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
@@ -61,6 +59,7 @@ the bottom of includes.h in the top src folder.
 // it out for yourself.
 
 #include <externs.h>
+#include "monthly/monthly.h"
 
 /* base - review and reorganize liberals */
 void review()
@@ -138,42 +137,42 @@ void review()
          else if(p==len(squad))
          {
             set_color(COLOR_GREEN,COLOR_BLACK,1);
-            mvaddstr(y,0,"1 - Active Liberals ("+tostring(n[0])+')');
+            mvaddstr(y,0,"1 - Active Liberals ("+std::to_string(n[0])+')');
          }
          else if(p==len(squad)+1)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
-            mvaddstr(y,0,"2 - Hostages ("+tostring(n[1])+')');
+            mvaddstr(y,0,"2 - Hostages ("+std::to_string(n[1])+')');
          }
          else if(p==len(squad)+2)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,1);
-            mvaddstr(y,0,"3 - Hospital ("+tostring(n[2])+')');
+            mvaddstr(y,0,"3 - Hospital ("+std::to_string(n[2])+')');
          }
          else if(p==len(squad)+3)
          {
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            mvaddstr(y,0,"4 - Justice System ("+tostring(n[3])+')');
+            mvaddstr(y,0,"4 - Justice System ("+std::to_string(n[3])+')');
          }
          else if(p==len(squad)+4)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            mvaddstr(y,0,"5 - Sleepers ("+tostring(n[4])+')');
+            mvaddstr(y,0,"5 - Sleepers ("+std::to_string(n[4])+')');
          }
          else if(p==len(squad)+5)
          {
             set_color(COLOR_BLACK,COLOR_BLACK,1);
-            mvaddstr(y,0,"6 - The Dead ("+tostring(n[5])+')');
+            mvaddstr(y,0,"6 - The Dead ("+std::to_string(n[5])+')');
          }
          else if(p==len(squad)+6)
          {
             set_color(COLOR_BLUE,COLOR_BLACK,1);
-            mvaddstr(y,0,"7 - Away ("+tostring(n[6])+')');
+            mvaddstr(y,0,"7 - Away ("+std::to_string(n[6])+')');
          }
          else if(p==len(squad)+7)
          {
             set_color(COLOR_CYAN,COLOR_BLACK,1);
-            mvaddstr(y,0,"8 - Review and Move Equipment ("+tostring(n[7])+')');
+            mvaddstr(y,0,"8 - Review and Move Equipment ("+std::to_string(n[7])+')');
          }
       }
 

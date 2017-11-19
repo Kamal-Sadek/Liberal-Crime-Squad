@@ -1,30 +1,32 @@
+/**
+ * Constitutional amendments.
+ */
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
-*/
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
 
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
@@ -60,10 +62,90 @@ This file is part of Liberal Crime Squad.                                       
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
+#include "monthly/monthly.h"
+
 #include <externs.h>
+#include "monthly/justice.h"
+#include "monthly/sleepers.h"
+#include "politics/politics.h"
+
+
+/* rename various buildings according to the new laws */
+static void
+updateworld_laws(short *law,short *oldlaw)
+{  // NOTE: make sure to keep code here matching code in initlocation() in locations.cpp for when names are changed
+   if(((law[   LAW_POLICEBEHAVIOR]==-2&&law[   LAW_DEATHPENALTY]==-2)||
+       (oldlaw[LAW_POLICEBEHAVIOR]==-2&&oldlaw[LAW_DEATHPENALTY]==-2))&&
+       (law[LAW_POLICEBEHAVIOR]   !=    oldlaw[LAW_POLICEBEHAVIOR]||
+        law[LAW_DEATHPENALTY  ]   !=    oldlaw[LAW_DEATHPENALTY  ]))
+      for(int l=0;l<len(location);l++)
+         if(location[l]->type==SITE_GOVERNMENT_POLICESTATION) // Police Station or Death Squad HQ?
+            initlocation(*location[l]);
+
+   if((law[LAW_DEATHPENALTY]==-2||oldlaw[LAW_DEATHPENALTY]==-2)&&
+       law[LAW_DEATHPENALTY]  !=  oldlaw[LAW_DEATHPENALTY])
+      for(int l=0;l<len(location);l++)
+         if(location[l]->type==SITE_GOVERNMENT_COURTHOUSE) // Courthouse or judge hall?
+            initlocation(*location[l]);
+
+   if((law[LAW_FREESPEECH]==-2||oldlaw[LAW_FREESPEECH]==-2)&&
+       law[LAW_FREESPEECH]  !=  oldlaw[LAW_FREESPEECH])
+      for(int l=0;l<len(location);l++)
+         if(location[l]->type==SITE_GOVERNMENT_FIRESTATION) // Fire station or Fireman HQ?
+            initlocation(*location[l]);
+
+   if((law[LAW_PRISONS]==-2||oldlaw[LAW_PRISONS]==-2)&&
+       law[LAW_PRISONS]  !=  oldlaw[LAW_PRISONS])
+      for(int l=0;l<len(location);l++)
+         if(location[l]->type==SITE_GOVERNMENT_PRISON) // Prison or re-ed camp?
+            initlocation(*location[l]);
+
+   if((law[LAW_NUCLEARPOWER]==2||oldlaw[LAW_NUCLEARPOWER]==2)&&
+       law[LAW_NUCLEARPOWER] !=  oldlaw[LAW_NUCLEARPOWER])
+      for(int l=0;l<len(location);l++)
+         if(location[l]->type==SITE_INDUSTRY_NUCLEAR) // Nuclear Power Plant, or Nuclear Waste Center?
+            initlocation(*location[l]);
+
+   if(((law[   LAW_PRIVACY]==-2&&law[   LAW_POLICEBEHAVIOR]==-2)||
+       (oldlaw[LAW_PRIVACY]==-2&&oldlaw[LAW_POLICEBEHAVIOR]==-2))&&
+       (law[LAW_PRIVACY       ]!=oldlaw[LAW_PRIVACY       ]||
+        law[LAW_POLICEBEHAVIOR]!=oldlaw[LAW_POLICEBEHAVIOR]))
+      for(int l=0;l<len(location);l++)
+         if(location[l]->type==SITE_GOVERNMENT_INTELLIGENCEHQ) // Intelligence HQ or ministry of love?
+            initlocation(*location[l]);
+
+   if((law[LAW_MILITARY]==-2||oldlaw[LAW_MILITARY]==-2)&&
+       law[LAW_MILITARY]  !=  oldlaw[LAW_MILITARY])
+      for(int l=0;l<len(location);l++)
+         if(location[l]->type==SITE_GOVERNMENT_ARMYBASE) // Army Base or Ministry of Peace?
+            initlocation(*location[l]);
+
+   if((law[LAW_GUNCONTROL]==2||oldlaw[LAW_GUNCONTROL]==2)&&
+       law[LAW_GUNCONTROL] !=  oldlaw[LAW_GUNCONTROL])
+      for(int l=0;l<len(location);l++)
+         if(location[l]->type==SITE_BUSINESS_PAWNSHOP) // Do they mention guns in the title?
+            initlocation(*location[l]);
+
+   if(((law[   LAW_CORPORATE]==-2&&law[   LAW_TAX]==-2)||
+       (oldlaw[LAW_CORPORATE]==-2&&oldlaw[LAW_TAX]==-2))&&
+       (law[LAW_CORPORATE]   !=    oldlaw[LAW_CORPORATE]||
+        law[LAW_TAX      ]   !=    oldlaw[LAW_TAX      ]))
+      for(int l=0;l<len(location);l++)
+         if(location[l]->type==SITE_CORPORATE_HOUSE) // CEO house or CEO Castle?
+            initlocation(*location[l]);
+
+   if((law[LAW_DRUGS]==2||oldlaw[LAW_DRUGS]==2)&&
+       law[LAW_DRUGS] !=  oldlaw[LAW_DRUGS])
+      for(int l=0;l<len(location);l++)
+         if(location[l]->type==SITE_BUSINESS_CRACKHOUSE  // Crack House, or Recreational Drugs Center?
+          &&location[l]->renting<0) // Only rename locations not under LCS control, to avoid switching names around under the player
+            initlocation(*location[l]);
+}
+
 
 /* does end of month actions */
-void passmonth(char &clearformess,char canseethings)
+void
+passmonth(char& clearformess, bool canseethings)
 {
    short oldlaw[LAWNUM];
    memmove(oldlaw,law,sizeof(short)*LAWNUM);
@@ -637,73 +719,3 @@ void passmonth(char &clearformess,char canseethings)
    }
 }
 
-/* rename various buildings according to the new laws */
-void updateworld_laws(short *law,short *oldlaw)
-{  // NOTE: make sure to keep code here matching code in initlocation() in locations.cpp for when names are changed
-   if(((law[   LAW_POLICEBEHAVIOR]==-2&&law[   LAW_DEATHPENALTY]==-2)||
-       (oldlaw[LAW_POLICEBEHAVIOR]==-2&&oldlaw[LAW_DEATHPENALTY]==-2))&&
-       (law[LAW_POLICEBEHAVIOR]   !=    oldlaw[LAW_POLICEBEHAVIOR]||
-        law[LAW_DEATHPENALTY  ]   !=    oldlaw[LAW_DEATHPENALTY  ]))
-      for(int l=0;l<len(location);l++)
-         if(location[l]->type==SITE_GOVERNMENT_POLICESTATION) // Police Station or Death Squad HQ?
-            initlocation(*location[l]);
-
-   if((law[LAW_DEATHPENALTY]==-2||oldlaw[LAW_DEATHPENALTY]==-2)&&
-       law[LAW_DEATHPENALTY]  !=  oldlaw[LAW_DEATHPENALTY])
-      for(int l=0;l<len(location);l++)
-         if(location[l]->type==SITE_GOVERNMENT_COURTHOUSE) // Courthouse or judge hall?
-            initlocation(*location[l]);
-
-   if((law[LAW_FREESPEECH]==-2||oldlaw[LAW_FREESPEECH]==-2)&&
-       law[LAW_FREESPEECH]  !=  oldlaw[LAW_FREESPEECH])
-      for(int l=0;l<len(location);l++)
-         if(location[l]->type==SITE_GOVERNMENT_FIRESTATION) // Fire station or Fireman HQ?
-            initlocation(*location[l]);
-
-   if((law[LAW_PRISONS]==-2||oldlaw[LAW_PRISONS]==-2)&&
-       law[LAW_PRISONS]  !=  oldlaw[LAW_PRISONS])
-      for(int l=0;l<len(location);l++)
-         if(location[l]->type==SITE_GOVERNMENT_PRISON) // Prison or re-ed camp?
-            initlocation(*location[l]);
-
-   if((law[LAW_NUCLEARPOWER]==2||oldlaw[LAW_NUCLEARPOWER]==2)&&
-       law[LAW_NUCLEARPOWER] !=  oldlaw[LAW_NUCLEARPOWER])
-      for(int l=0;l<len(location);l++)
-         if(location[l]->type==SITE_INDUSTRY_NUCLEAR) // Nuclear Power Plant, or Nuclear Waste Center?
-            initlocation(*location[l]);
-
-   if(((law[   LAW_PRIVACY]==-2&&law[   LAW_POLICEBEHAVIOR]==-2)||
-       (oldlaw[LAW_PRIVACY]==-2&&oldlaw[LAW_POLICEBEHAVIOR]==-2))&&
-       (law[LAW_PRIVACY       ]!=oldlaw[LAW_PRIVACY       ]||
-        law[LAW_POLICEBEHAVIOR]!=oldlaw[LAW_POLICEBEHAVIOR]))
-      for(int l=0;l<len(location);l++)
-         if(location[l]->type==SITE_GOVERNMENT_INTELLIGENCEHQ) // Intelligence HQ or ministry of love?
-            initlocation(*location[l]);
-
-   if((law[LAW_MILITARY]==-2||oldlaw[LAW_MILITARY]==-2)&&
-       law[LAW_MILITARY]  !=  oldlaw[LAW_MILITARY])
-      for(int l=0;l<len(location);l++)
-         if(location[l]->type==SITE_GOVERNMENT_ARMYBASE) // Army Base or Ministry of Peace?
-            initlocation(*location[l]);
-
-   if((law[LAW_GUNCONTROL]==2||oldlaw[LAW_GUNCONTROL]==2)&&
-       law[LAW_GUNCONTROL] !=  oldlaw[LAW_GUNCONTROL])
-      for(int l=0;l<len(location);l++)
-         if(location[l]->type==SITE_BUSINESS_PAWNSHOP) // Do they mention guns in the title?
-            initlocation(*location[l]);
-
-   if(((law[   LAW_CORPORATE]==-2&&law[   LAW_TAX]==-2)||
-       (oldlaw[LAW_CORPORATE]==-2&&oldlaw[LAW_TAX]==-2))&&
-       (law[LAW_CORPORATE]   !=    oldlaw[LAW_CORPORATE]||
-        law[LAW_TAX      ]   !=    oldlaw[LAW_TAX      ]))
-      for(int l=0;l<len(location);l++)
-         if(location[l]->type==SITE_CORPORATE_HOUSE) // CEO house or CEO Castle?
-            initlocation(*location[l]);
-
-   if((law[LAW_DRUGS]==2||oldlaw[LAW_DRUGS]==2)&&
-       law[LAW_DRUGS] !=  oldlaw[LAW_DRUGS])
-      for(int l=0;l<len(location);l++)
-         if(location[l]->type==SITE_BUSINESS_CRACKHOUSE  // Crack House, or Recreational Drugs Center?
-          &&location[l]->renting<0) // Only rename locations not under LCS control, to avoid switching names around under the player
-            initlocation(*location[l]);
-}

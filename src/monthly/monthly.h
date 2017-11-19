@@ -1,4 +1,9 @@
+/**
+ * Interface for the monthly updates module.
+ */
 /*
+ * Copyright 2017 Stephen M. Webb
+ *
  * This file is part of Liberal Crime Squad.
  *
  * Liberal Crime Squad is free software; you can redistribute it and/or
@@ -16,25 +21,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-#ifndef LAW_H_INCLUDED
-#define LAW_H_INCLUDED
+#ifndef LCS_MONTHLY_MONTHLY_H
+#define LCS_MONTHLY_MONTHLY_H
 
-#include "common.h"
 
-class law
-{
-private:
-   std::string lawtext[5];      // Describes the law for each alignment
-   std::string defeat_lawtext;  // Describes the law when the game is lost
+/* Do end-of-month actions. */
+void
+passmonth(char& clearformess, bool canseethings);
 
-   signed char alignment;
-public:
-   law();        // Default constructor
+/* Lets the player choose a special edition for the guardian. */
+int
+choosespecialedition(char& clearformess);
 
-   void addlawtext(bool gameover=false); // Adds the lawtext to the screen
-   void changealignment(signed char align);
+/* Print Liberal Guardian special editions. */
+void
+printnews(short l, short newspaper);
 
-   void setlawtext(signed char align,std::string text);
-};
+/* Show finances report */
+void fundreport(char& clearformess);
 
-#endif //LAW_H_INCLUDED
+#endif /* LCS_MONTHLY_MONTHLY_H */
