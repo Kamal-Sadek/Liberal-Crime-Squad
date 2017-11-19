@@ -1675,12 +1675,4 @@ void halloweenstore(int loc);
 /* choose buyer */
 void choose_buyer(short &buyer);
 
-/*
- date.cpp
-*/
-/* daily - date - dater p gets back from vacation */
-char completevacation(datest &d,int p,char &clearformess);
-/* daily - date - dater p goes on some dates */
-char completedate(datest &d,int p,char &clearformess);
-
 #endif // INCLUDES_H_INCLUDED

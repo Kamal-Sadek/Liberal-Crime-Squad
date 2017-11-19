@@ -23,6 +23,7 @@
  * This file was created by Chris Johnson (grundee@users.sourceforge.net)
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
+#include "daily/date.h"
 #include <externs.h>
 
 enum DateResults
@@ -369,7 +370,8 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
 }
 
 /* daily - date - dater p gets back from vacation */
-char completevacation(datest &d,int p,char &clearformess)
+bool
+completevacation(datest& d, int p, char& clearformess)
 {
    music.play(MUSIC_DATING);
    int e=0;
@@ -440,7 +442,8 @@ char completevacation(datest &d,int p,char &clearformess)
 
 
 /* daily - date - dater p goes on some dates */
-char completedate(datest &d,int p,char &clearformess)
+bool
+completedate(datest& d, int p, char& clearformess)
 {
    music.play(MUSIC_DATING);
    int e;
