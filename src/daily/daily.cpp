@@ -24,10 +24,11 @@
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
 #include <externs.h>
+#include "daily/siege.h"
 #include "news/news.h"
 
 
-void advanceday(char &clearformess,char canseethings)
+void advanceday(char& clearformess, char canseethings)
 {
    int p;
    showcarprefs=0;

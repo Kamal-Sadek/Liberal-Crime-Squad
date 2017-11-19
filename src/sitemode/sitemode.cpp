@@ -25,6 +25,7 @@
  */
 
 #include <externs.h>
+#include "daily/siege.h"
 
 void fight_subdued()
 {

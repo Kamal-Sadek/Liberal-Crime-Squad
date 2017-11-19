@@ -59,6 +59,7 @@
 // it out for yourself.
 
 #include <externs.h>
+#include "daily/siege.h"
 #include "monthly/monthly.h"
 #include "politics/politics.h"
 

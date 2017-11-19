@@ -60,6 +60,7 @@
 // it out for yourself.
 
 #include <externs.h>
+#include "daily/siege.h"
 
 // Sets the text color to the thematic color for the given alignment
 // extended_range forces colors to be set on a 5 point scale instead
