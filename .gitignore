@@ -17,10 +17,6 @@ depcomp
 game.depend
 game.layout
 install-sh
-!lib/libsdl2/build-scripts/*
-!lib/libsdl2/configure
-!lib/libsdl2/Makefile.in
-!lib/libsdl2/test/*
 Makefile
 Makefile.in
 missing
@@ -31,3 +27,7 @@ stamp-h1
 /workspaces/Release/*.obj
 /workspaces/Release/*.pdb
 /workspaces/Release/*.tlog
+!lib/libsdl2/build-scripts/*
+!lib/libsdl2/configure
+!lib/libsdl2/Makefile.in
+!lib/libsdl2/test/*
