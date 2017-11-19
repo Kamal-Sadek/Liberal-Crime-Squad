@@ -1683,12 +1683,4 @@ char completevacation(datest &d,int p,char &clearformess);
 /* daily - date - dater p goes on some dates */
 char completedate(datest &d,int p,char &clearformess);
 
-/*
- recruit.cpp
-*/
-/* automatic finding recruits from the activity screen */
-char recruitment_activity(Creature &cr,char &clearformess);
-/* daily - recruit - recruit meeting*/
-char completerecruitmeeting(recruitst &d,int p,char &clearformess);
-
 #endif // INCLUDES_H_INCLUDED
