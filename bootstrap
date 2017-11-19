@@ -12,7 +12,7 @@ if [ -z "$srcdir" ]; then
 fi
 
 cd "$srcdir"
-autoreconf -i -f -v
+autoreconf --install --force --no-recursive --verbose
 
 cd "$blddir"
 if [ -z "$NOCONFIGURE" ]; then
