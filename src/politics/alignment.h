@@ -1,6 +1,10 @@
 /*
  * This file is part of Liberal Crime Squad.
  *
+ * Copyright 2008, 2009 Jonathan Stickles  <jonathansfox@users.sourceforge.net>
+ * Copyright 2014 Rich McGrew (yetisyny)
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
  * Liberal Crime Squad is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -19,14 +23,38 @@
 #ifndef ALIGNMENT_H_INCLUDED
 #define ALIGNMENT_H_INCLUDED
 
-enum Alignment
+#include <string>
+
+
+enum class Alignment
 {
-   ALIGN_ARCHCONSERVATIVE = -2,
-   ALIGN_CONSERVATIVE,
-   ALIGN_MODERATE,
-   ALIGN_LIBERAL,
-   ALIGN_ELITELIBERAL,
-   ALIGN_STALINIST
+  PUBLIC_MOOD = -100,
+  ARCH_CONSERVATIVE = -2,
+  CONSERVATIVE,
+  MODERATE,
+  LIBERAL,
+  ELITE_LIBERAL,
+  STALINIST
 };
+
+
+/**
+ * Unmarshall an Alignment.
+ *
+ * @param[in]  text      A string.
+ * @param[out] alignment An alignment.
+ * @return true if successful, false if the string can not be converted.
+ */
+bool
+from_string(std::string const& text, Alignment& alignment);
+
+/**
+ * Marshall an Alignment.
+ *
+ * @param[in] alignment An alignment.
+ * @return A string of a marshalled alignment.
+ */
+std::string
+to_string(Alignment alignment);
 
 #endif //ALIGNMENT_H_INCLUDED

@@ -34,7 +34,7 @@ crimesquad_SOURCES = \
  daily/siege.h          daily/siege.cpp\
  monthly/justice.h      monthly/justice.cpp \
  monthly/monthly.h      monthly/monthly.cpp monthly/lcsmonthly.cpp \
- politics/alignment.h \
+ politics/alignment.h   politics/alignment.cpp \
  politics/amendments.h  politics/amendments.cpp \
  politics/law.h         politics/law.cpp \
  politics/politics.h    politics/politics.cpp \
