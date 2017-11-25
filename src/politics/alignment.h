@@ -49,6 +49,18 @@ Alignment
 choose(std::initializer_list<Alignment> choices);
 
 /**
+ * Return a more liberal alignment.
+ */
+Alignment
+shift_left(Alignment alignment, int amount=1);
+
+/**
+ * Return a more conservative alignment.
+ */
+Alignment
+shift_right(Alignment alignment, int amount=1);
+
+/**
  * Pretty-print an alignment.
  */
 std::string

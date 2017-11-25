@@ -59,6 +59,56 @@ choose(std::initializer_list<Alignment> choices)
 }
 
 
+Alignment
+shift_left(Alignment alignment, int amount)
+{
+  for( ; amount; --amount)
+  {
+    switch (alignment)
+    {
+      case Alignment::ARCH_CONSERVATIVE:
+        alignment = Alignment::CONSERVATIVE;
+        break;
+      case Alignment::CONSERVATIVE:
+        alignment = Alignment::MODERATE;
+        break;
+      case Alignment::MODERATE:
+        alignment = Alignment::LIBERAL;
+        break;
+      default:
+        alignment = Alignment::ELITE_LIBERAL;
+        break;
+    }
+  }
+  return alignment;
+}
+
+
+Alignment
+shift_right(Alignment alignment, int amount)
+{
+  for( ; amount; --amount)
+  {
+    switch (alignment)
+    {
+      case Alignment::ELITE_LIBERAL:
+        alignment = Alignment::LIBERAL;
+        break;
+      case Alignment::LIBERAL:
+        alignment = Alignment::MODERATE;
+        break;
+      case Alignment::MODERATE:
+        alignment = Alignment::CONSERVATIVE;
+        break;
+      default:
+        alignment = Alignment::ARCH_CONSERVATIVE;
+        break;
+    }
+  }
+  return alignment;
+}
+
+
 std::string
 as_printable(Alignment alignment, bool capitalize)
 {
