@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -43,11 +44,13 @@ recruitst::~recruitst()
 
 char recruitst::eagerness()
 {
-   char eagerness_temp=eagerness1;
+   char eagerness_temp = eagerness1;
    //Moderates are decidedly less interested
-   if(recruit->align==0) eagerness_temp-=2;
+   if (recruit->align == Alignment::MODERATE)
+     eagerness_temp -= 2;
    //Conservatives are extremely uninterested
-   if(recruit->align==-1) eagerness_temp-=4;
+   if (recruit->align == Alignment::CONSERVATIVE)
+     eagerness_temp -= 4;
    return eagerness_temp;
 }
 
@@ -443,7 +446,7 @@ completerecruitmeeting(recruitst& r, int p, char& clearformess)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
             move(y++,0);
-            if(r.recruit->talkreceptive() && r.recruit->align==ALIGN_LIBERAL)
+            if(r.recruit->talkreceptive() && r.recruit->align==Alignment::LIBERAL)
             {
                addstr(r.recruit->name, gamelog);
                addstr(" isn't convinced ", gamelog);

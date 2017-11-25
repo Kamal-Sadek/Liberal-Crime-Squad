@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copytright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -568,11 +569,14 @@ void survey(Creature *cr)
             else addstr("protecting the traditional family.");
             break;
          case VIEW_DEATHPENALTY:
-            if(attitude[VIEW_DEATHPENALTY]>50) addstr("the unjust death penalty.");
+            if (attitude[VIEW_DEATHPENALTY] > 50)
+              addstr("the unjust death penalty.");
             else
             {
-               if(law[LAW_DEATHPENALTY]==2) addstr("restoring the death penalty.");
-               else addstr("protecting the death penalty.");
+               if (law[LAW_DEATHPENALTY] == Alignment::ELITE_LIBERAL)
+                 addstr("restoring the death penalty.");
+               else
+                 addstr("protecting the death penalty.");
             }
             break;
          case VIEW_TAXES:
@@ -580,11 +584,14 @@ void survey(Creature *cr)
             else addstr("the excessive tax burden.");
             break;
          case VIEW_NUCLEARPOWER:
-            if(attitude[VIEW_NUCLEARPOWER]>50) addstr("the dangers of nuclear power.");
+            if (attitude[VIEW_NUCLEARPOWER] > 50)
+              addstr("the dangers of nuclear power.");
             else
             {
-               if(law[LAW_NUCLEARPOWER]==2) addstr("legalizing nuclear power.");
-               else  addstr("threats to nuclear power.");
+               if (law[LAW_NUCLEARPOWER] == Alignment::ELITE_LIBERAL)
+                 addstr("legalizing nuclear power.");
+               else
+                 addstr("threats to nuclear power.");
             }
             break;
          case VIEW_ANIMALRESEARCH:
@@ -636,11 +643,14 @@ void survey(Creature *cr)
          //   else addstr("political terrorism.");
          //   break;
          case VIEW_IMMIGRATION:
-            if(attitude[VIEW_IMMIGRATION]>50) addstr("immigrant rights.");
+            if (attitude[VIEW_IMMIGRATION] > 50)
+              addstr("immigrant rights.");
             else
             {
-               if(law[LAW_IMMIGRATION]>=1) addstr("uncontrolled immigration.");
-               else addstr("illegal immigration.");
+               if (law[LAW_IMMIGRATION] == Alignment::ELITE_LIBERAL)
+                 addstr("wide-open immigration.");
+               else
+                 addstr("illegal immigration.");
             }
             break;
          case VIEW_DRUGS:
@@ -785,10 +795,18 @@ void survey(Creature *cr)
          case VIEW_WOMEN: addstr("favored doing more for gender equality"); break;
          case VIEW_CIVILRIGHTS: addstr("felt more work was needed for racial equality"); break;
          case VIEW_GUNCONTROL: addstr("are concerned about gun violence"); break;
-         case VIEW_DRUGS: if(law[LAW_DRUGS]>=1) addstr("supported keeping marijuana legal");
-                          else addstr("believed in legalizing marijuana"); break;
-         case VIEW_IMMIGRATION: if(law[LAW_IMMIGRATION]>=1) addstr("condemned unnecessary immigration regulations");
-                                else addstr("wanted amnesty for illegal immigrants"); break;
+         case VIEW_DRUGS:
+           if (law[LAW_DRUGS] == Alignment::LIBERAL
+            || law[LAW_DRUGS] == Alignment::ELITE_LIBERAL)
+             addstr("supported keeping marijuana legal");
+           else
+             addstr("believed in legalizing marijuana"); break;
+         case VIEW_IMMIGRATION:
+           if (law[LAW_IMMIGRATION] == Alignment::LIBERAL
+            || law[LAW_IMMIGRATION] == Alignment::ELITE_LIBERAL)
+             addstr("condemned unnecessary immigration regulations");
+           else
+             addstr("wanted amnesty for illegal immigrants"); break;
          case VIEW_MILITARY: addstr("opposed increasing military spending"); break;
          case VIEW_LIBERALCRIMESQUAD: addstr("respected the power of the Liberal Crime Squad"); break;
          case VIEW_LIBERALCRIMESQUADPOS: addstr("of these held the Liberal Crime Squad in high regard"); break;
@@ -1120,13 +1138,14 @@ void doActivitySellBrownies(vector<Creature *> &brownies, char &clearformess)
    for(int s=0;s<len(brownies);s++)
    {
       //Check for police search
-      int dodgelawroll=LCSrandom(1+30*law[LAW_DRUGS]+3);
+      int dodgelawroll = LCSrandom(1 + 30*to_index(law[LAW_DRUGS]));
 
       //Saved by street sense?
       if(dodgelawroll==0)
          dodgelawroll=brownies[s]->skill_check(SKILL_STREETSENSE,DIFFICULTY_AVERAGE);
 
-      if(dodgelawroll==0 && law[LAW_DRUGS]<=0) // Busted!
+      if (dodgelawroll == 0
+        && (law[LAW_DRUGS] != Alignment::LIBERAL && law[LAW_DRUGS] != Alignment::ELITE_LIBERAL)) // Busted!
       {
          newsstoryst *ns=new newsstoryst;
          ns->type=NEWSSTORY_DRUGARREST;
@@ -1143,10 +1162,10 @@ void doActivitySellBrownies(vector<Creature *> &brownies, char &clearformess)
                    brownies[s]->skill_roll(SKILL_STREETSENSE);
 
       // more money when more illegal
-      if(law[LAW_DRUGS]==-2) money*=4;
-      if(law[LAW_DRUGS]==-1) money*=2;
-      if(law[LAW_DRUGS]==1) money/=4;
-      if(law[LAW_DRUGS]==2) money/=8;
+      if(law[LAW_DRUGS] == Alignment::ARCH_CONSERVATIVE) money*=4;
+      if(law[LAW_DRUGS] == Alignment::CONSERVATIVE)      money*=2;
+      if(law[LAW_DRUGS] == Alignment::LIBERAL)           money/=4;
+      if(law[LAW_DRUGS] == Alignment::ELITE_LIBERAL)     money/=8;
 
       brownies[s]->income=money;
       ledger.add_funds(money,INCOME_BROWNIES);
@@ -1832,7 +1851,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
                break;
             case 1:
             {
-               if(law[LAW_GAY]<2)
+               if (law[LAW_GAY] != Alignment::ELITE_LIBERAL)
                {
                   addstr("disrupted a traditional wedding at a church!", gamelog);
                   change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
@@ -1847,7 +1866,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
             }
             case 2:
             {
-               if(law[LAW_ABORTION]<2)
+               if (law[LAW_ABORTION] != Alignment::ELITE_LIBERAL)
                {
                   addstr("posted horrifying dead abortion doctor pictures downtown!", gamelog);
                   change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
@@ -1861,7 +1880,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
             }
             case 3:
             {
-               if(law[LAW_POLICEBEHAVIOR]<2)
+               if (law[LAW_POLICEBEHAVIOR] != Alignment::ELITE_LIBERAL)
                {
                   addstr("gone downtown and reenacted a police beating!", gamelog);
                   change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
@@ -1876,7 +1895,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
             }
             case 4:
             {
-               if(law[LAW_NUCLEARPOWER]<2)
+               if (law[LAW_NUCLEARPOWER] != Alignment::ELITE_LIBERAL)
                {
                   if(len(trouble)>1)addstr("dressed up and pretended to be radioactive mutants!", gamelog);
                   else addstr("dressed up and pretended to be a radioactive mutant!", gamelog);
@@ -1892,7 +1911,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
             }
             case 5:
             {
-               if(law[LAW_POLLUTION]<2)
+               if (law[LAW_POLLUTION] != Alignment::ELITE_LIBERAL)
                {
                   addstr("squirted business people with fake polluted water!", gamelog);
                   change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
@@ -1907,7 +1926,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
             }
             case 6:
             {
-               if(law[LAW_DEATHPENALTY]<2)
+               if (law[LAW_DEATHPENALTY] != Alignment::ELITE_LIBERAL)
                {
                   addstr("distributed fliers graphically illustrating executions!", gamelog);
                   change_public_opinion(VIEW_LIBERALCRIMESQUAD,mod);
@@ -1937,7 +1956,7 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
                change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,mod,0,70);
                public_interest[VIEW_CORPORATECULTURE]+=mod;
                background_liberal_influence[VIEW_CORPORATECULTURE]+=mod;
-               if(law[LAW_CORPORATE]==-2)
+               if (law[LAW_CORPORATE] == Alignment::ARCH_CONSERVATIVE)
                {               // In extreme corporate culture cases this should give a flag burning charge! -- kviiri
                   juiceval=2;  // Done -- SlatersQuest
                   crime=LAWFLAG_BURNFLAG;
@@ -2089,9 +2108,10 @@ void doActivityTrouble(vector<Creature *> &trouble, char &clearformess)
                         move(8,1);
                         addstr(trouble[t]->name, gamelog);
                         addstr(" beat the ", gamelog);
-                        if(law[LAW_FREESPEECH]==-2)
-                           addstr("[tar]", gamelog);
-                        else addstr("shit", gamelog);
+                        if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
+                          addstr("[tar]", gamelog);
+                        else
+                          addstr("shit", gamelog);
                         addstr(" out of everyone who got close!", gamelog);
 
                         gamelog.nextMessage();
@@ -2285,7 +2305,7 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
       {
          //If they're at the location
          if(pool[p]->location==teachers[t]->location &&
-            pool[p]->align==ALIGN_LIBERAL &&
+            pool[p]->align==Alignment::LIBERAL &&
             pool[p]->alive)
          {
             //Step through the array of skills to train
@@ -2315,7 +2335,7 @@ void doActivityTeach(vector<Creature *> &teachers, char &clearformess)
       {
          //If they're at the location
          if(pool[p]->location==teachers[t]->location &&
-            pool[p]->align==ALIGN_LIBERAL &&
+            pool[p]->align==Alignment::LIBERAL &&
             pool[p]->alive)
          {
             //Step through the array of skills to train
@@ -2842,7 +2862,8 @@ bool stealcar(Creature &cr,char &clearformess)
             {
                set_color(COLOR_GREEN,COLOR_BLACK,1);
                move(y++,0);
-               if(law[LAW_FREESPEECH]==-2)addstr("Holy [Car Keys]!  ", gamelog); // Holy car keys Batman!
+               if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
+                 addstr("Holy [Car Keys]!  ", gamelog); // Holy car keys Batman!
                else addstr("Holy shit!  ", gamelog);
                addstr(cr.name, gamelog);
                addstr(" found the keys ", gamelog);
@@ -2884,12 +2905,14 @@ bool stealcar(Creature &cr,char &clearformess)
                   {
                      case 0:addstr("Please be in here somewhere...", gamelog);break;
                      case 1:
-                        if(law[LAW_FREESPEECH]==-2)addstr("[Shoot]!  Where are they?!", gamelog);
+                        if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
+                          addstr("[Shoot]!  Where are they?!", gamelog);
                         else addstr("Fuck!  Where are they?!", gamelog);
                         break;
                      case 2:addstr("Come on, baby, come to me...", gamelog);break;
                      case 3:
-                        if(law[LAW_FREESPEECH]==-2)addstr("[Darn] it...", gamelog);
+                        if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
+                          addstr("[Darn] it...", gamelog);
                         else addstr("Dammit...", gamelog);
                         break;
                      case 4:addstr("I wish I could hotwire this thing...", gamelog);break;
