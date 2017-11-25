@@ -27,7 +27,7 @@ extern short senate[SENATENUM];
 extern short court[COURTNUM];
 extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
 
-extern signed char exec[EXECNUM];
+extern Alignment exec[EXECNUM];
 extern short execterm;
 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 extern short presparty;

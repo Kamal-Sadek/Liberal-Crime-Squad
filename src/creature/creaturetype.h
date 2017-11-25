@@ -2,6 +2,7 @@
 #define CREATURE_TYPE_H
 
 #include "includes.h"
+#include "politics/alignment.h"
 
 class CreatureType
 {
@@ -18,7 +19,9 @@ class CreatureType
       long get_id() const { return id_; }
       short get_type() const { return type_; }
 
-      int get_alignment() const;
+      Alignment
+      get_alignment() const;
+
       int roll_gender() const;
       float roll_infiltration() const;
       std::string get_encounter_name() const;
@@ -52,7 +55,6 @@ class CreatureType
       std::string type_name_;
       std::string encounter_name_;
       Interval age_;
-      bool alignment_public_mood_;
       Alignment alignment_;
       Interval attribute_points_;
       Interval attributes_[ATTNUM];

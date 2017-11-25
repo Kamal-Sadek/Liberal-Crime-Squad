@@ -22,6 +22,9 @@
  * 02110-1301, USA.
  */
 #include "politics/alignment.h"
+
+#include "common.h" // for LCSrandom() -- which should be moved into its own header
+#include <iterator>
 #include <utility>
 #include <vector>
 
@@ -46,6 +49,16 @@ std::vector<Mapping> mapping =
 } // anonymous namespace
 
 
+Alignment
+choose(std::initializer_list<Alignment> choices)
+{
+  long selection = LCSrandom(choices.size());
+  auto idx = choices.begin();
+  std::advance(idx, selection);
+  return *idx;
+}
+
+
 bool
 from_string(std::string const& text, Alignment& alignment)
 {
@@ -57,6 +70,7 @@ from_string(std::string const& text, Alignment& alignment)
       return true;
     }
   }
+  alignment = Alignment::PUBLIC_MOOD;
   return false;
 }
 

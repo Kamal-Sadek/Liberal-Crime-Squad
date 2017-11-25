@@ -88,7 +88,7 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner
 }
 
 CreatureType::CreatureType(const std::string& xmlstring)
- : age_(18,57), alignment_public_mood_(true),
+ : age_(18,57),
    attribute_points_(40),
    gender_liberal_(GENDER_RANDOM), gender_conservative_(GENDER_RANDOM),
    infiltration_(0), juice_(0), money_(20,40)
@@ -118,26 +118,11 @@ CreatureType::CreatureType(const std::string& xmlstring)
 
       if (element == "alignment")
       {
-         std::string alignment = xml.GetData();
-         if (alignment == "PUBLIC MOOD")
-            alignment_public_mood_ = true;
-         else if (alignment == "LIBERAL")
-         {
-            alignment_ = ALIGN_LIBERAL;
-            alignment_public_mood_ = false;
-         }
-         else if (alignment == "MODERATE")
-         {
-            alignment_ = ALIGN_MODERATE;
-            alignment_public_mood_ = false;
-         }
-         else if (alignment == "CONSERVATIVE")
-         {
-            alignment_ = ALIGN_CONSERVATIVE;
-            alignment_public_mood_ = false;
-         }
-         else
-            xmllog.log("Invalid alignment for " + idname_ + ": " + alignment);
+        std::string alignment = xml.GetData();
+        if (!from_string(alignment, alignment_))
+        {
+         xmllog.log("Invalid alignment for " + idname_ + ": " + alignment);
+        }
       }
       else if (element == "age")
       {
@@ -236,7 +221,7 @@ CreatureType::CreatureType(const std::string& xmlstring)
 void CreatureType::make_creature(Creature& cr) const
 {
    cr.type_idname=idname_;
-   cr.align=get_alignment();
+   cr.align = get_alignment();
    cr.age=age_.roll();
    cr.juice=juice_.roll();
    cr.gender_liberal=cr.gender_conservative=roll_gender();
@@ -248,18 +233,21 @@ void CreatureType::make_creature(Creature& cr) const
    give_weapon(cr);
 }
 
-int CreatureType::get_alignment() const
+
+Alignment
+CreatureType::get_alignment() const
 {
-   if(alignment_public_mood_)
+   if (this->alignment_ == Alignment::PUBLIC_MOOD)
    {
-      int mood=publicmood(-1);
-      int a=ALIGN_CONSERVATIVE;
-      if(LCSrandom(100)<mood) a++;
-      if(LCSrandom(100)<mood) a++;
+      Alignment a = Alignment::CONSERVATIVE;
+      int mood = publicmood(-1);
+      if (LCSrandom(100) < mood) a = Alignment::MODERATE;
+      if (LCSrandom(100) < mood) a = Alignment::LIBERAL;
       return a;
    }
-   else return alignment_;
+   return this->alignment_;
 }
+
 
 int CreatureType::roll_gender() const
 {

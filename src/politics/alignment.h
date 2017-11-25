@@ -23,6 +23,7 @@
 #ifndef ALIGNMENT_H_INCLUDED
 #define ALIGNMENT_H_INCLUDED
 
+#include <initializer_list>
 #include <string>
 
 
@@ -37,6 +38,15 @@ enum class Alignment
   STALINIST
 };
 
+
+using AlignmentChoices = std::initializer_list<Alignment>;
+
+
+/**
+ * Choose an alignment from a manifets list of choices.
+ */
+Alignment
+choose(std::initializer_list<Alignment> choices);
 
 /**
  * Unmarshall an Alignment.

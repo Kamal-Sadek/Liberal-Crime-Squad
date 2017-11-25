@@ -80,10 +80,10 @@ void makecreature(Creature &cr,short type)
          cr.reload(false);
          if(disguisesite(sitetype))
          {
-            cr.align=ALIGN_CONSERVATIVE;
+            cr.align=Alignment::CONSERVATIVE;
             cr.infiltration=0.1f*LCSrandom(4);
          }
-         else cr.align=ALIGN_MODERATE;
+         else cr.align=Alignment::MODERATE;
          break;
       case CREATURE_SECURITYGUARD:
          if(law[LAW_GUNCONTROL]==-2)
@@ -130,7 +130,8 @@ void makecreature(Creature &cr,short type)
          crtype->give_weapon_civilian(cr);
          if(!cr.is_armed())
             cr.give_weapon(*weapontype[getweapontype("WEAPON_CHAIN")],NULL);
-         if(cr.align==ALIGN_LIBERAL) cr.align=LCSrandom(2)-1;
+         if(cr.align==Alignment::LIBERAL)
+           cr.align = choose({Alignment::CONSERVATIVE, Alignment::MODERATE});
          break;
       case CREATURE_WORKER_SWEATSHOP:
          cr.flag|=CREATUREFLAG_ILLEGALALIEN;
@@ -206,9 +207,9 @@ void makecreature(Creature &cr,short type)
          cr.reload(false);
          break;
       case CREATURE_COP:
-         if(law[LAW_POLICEBEHAVIOR]==2 && cr.align==ALIGN_LIBERAL && !LCSrandom(3)) // Peace Officer
+         if(law[LAW_POLICEBEHAVIOR]==2 && cr.align==Alignment::LIBERAL && !LCSrandom(3)) // Peace Officer
          {
-            cr.align=ALIGN_MODERATE;
+            cr.align=Alignment::MODERATE;
             strcpy(cr.name,"Police Negotiator");
             cr.set_skill(SKILL_PERSUASION,LCSrandom(4)+1);
             cr.set_skill(SKILL_PISTOL,LCSrandom(3)+1);
@@ -234,7 +235,7 @@ void makecreature(Creature &cr,short type)
             else
                cr.give_weapon(*weapontype[getweapontype("WEAPON_NIGHTSTICK")],NULL);
             cr.reload(false);
-            cr.align=ALIGN_CONSERVATIVE;
+            cr.align=Alignment::CONSERVATIVE;
             cr.set_skill(SKILL_PISTOL,LCSrandom(4)+1);
             cr.set_skill(SKILL_SHOTGUN,LCSrandom(3)+1);
             cr.set_skill(SKILL_CLUB,LCSrandom(2)+1);
@@ -250,7 +251,7 @@ void makecreature(Creature &cr,short type)
             cr.reload(false);
             cr.set_skill(SKILL_HEAVYWEAPONS,LCSrandom(3)+2);
             strcpy(cr.name,"Fireman");
-            cr.align=ALIGN_CONSERVATIVE;
+            cr.align=Alignment::CONSERVATIVE;
          }
          else
          {
@@ -425,14 +426,15 @@ void makecreature(Creature &cr,short type)
          cr.juice=crtype->juice_.roll();
          cr.gender_liberal=cr.gender_conservative=crtype->roll_gender();
          strcpy(cr.name,crtype->get_encounter_name());
-         if(cr.align==ALIGN_CONSERVATIVE)
-            cr.align=LCSrandom(2);
+         if(cr.align==Alignment::CONSERVATIVE)
+           cr.align = choose({Alignment::LIBERAL, Alignment::MODERATE});
          break;
       case CREATURE_BUM:
          crtype->give_weapon_civilian(cr);
          if(!cr.is_armed()&&!LCSrandom(5))
             cr.give_weapon(*weapontype[getweapontype("WEAPON_SHANK")],NULL);
-         if(cr.align==ALIGN_CONSERVATIVE)cr.align=LCSrandom(2);
+         if(cr.align==Alignment::CONSERVATIVE)
+           cr.align = choose({Alignment::LIBERAL, Alignment::MODERATE});
          break;
       case CREATURE_MUTANT:
          crtype->give_weapon_civilian(cr);
@@ -474,7 +476,7 @@ void makecreature(Creature &cr,short type)
             cr.give_weapon(*weapontype[getweapontype("WEAPON_COMBATKNIFE")],NULL);
          cr.reload(false);
          // We'll make the crack house a bit dicey
-         if(location[cursite]->type==SITE_BUSINESS_CRACKHOUSE)cr.align=ALIGN_CONSERVATIVE;
+         if(location[cursite]->type==SITE_BUSINESS_CRACKHOUSE)cr.align=Alignment::CONSERVATIVE;
          if(!LCSrandom(2))switch(LCSrandom(3))
          {
          case 0://cr.crimes_committed[LAWFLAG_BROWNIES]++;
@@ -489,7 +491,8 @@ void makecreature(Creature &cr,short type)
          crtype->give_weapon_civilian(cr);
          if(!LCSrandom(5))
             cr.give_weapon(*weapontype[getweapontype("WEAPON_SHANK")],NULL);
-         if(cr.align==ALIGN_CONSERVATIVE)cr.align=LCSrandom(2);
+         if(cr.align==Alignment::CONSERVATIVE)
+           cr.align = choose({Alignment::LIBERAL, Alignment::MODERATE});
          attcap[ATTRIBUTE_HEALTH]=1+LCSrandom(5);
          break;
       case CREATURE_FASTFOODWORKER:
@@ -506,7 +509,8 @@ void makecreature(Creature &cr,short type)
       case CREATURE_PROSTITUTE:
          if(LCSrandom(7))cr.gender_conservative=cr.gender_liberal=GENDER_FEMALE;
          else if(!LCSrandom(3))cr.gender_liberal=GENDER_FEMALE;
-         if(cr.align==ALIGN_CONSERVATIVE)cr.align=LCSrandom(2);
+         if(cr.align==Alignment::CONSERVATIVE)
+           cr.align = choose({Alignment::LIBERAL, Alignment::MODERATE});
          if(!LCSrandom(3))cr.crimes_suspected[LAWFLAG_PROSTITUTION]++;
          break;
       case CREATURE_HIPPIE:
@@ -613,8 +617,8 @@ void makecreature(Creature &cr,short type)
    {
       int i=LCSrandom(len(possible));
       int a=possible[i];
-      if(a==ATTRIBUTE_WISDOM&&cr.align==ALIGN_LIBERAL&&LCSrandom(4)) a=ATTRIBUTE_HEART;
-      if(a==ATTRIBUTE_HEART&&cr.align==ALIGN_CONSERVATIVE&&LCSrandom(4)) a=ATTRIBUTE_WISDOM;
+      if(a==ATTRIBUTE_WISDOM&&cr.align==Alignment::LIBERAL&&LCSrandom(4)) a=ATTRIBUTE_HEART;
+      if(a==ATTRIBUTE_HEART&&cr.align==Alignment::CONSERVATIVE&&LCSrandom(4)) a=ATTRIBUTE_WISDOM;
       if(cr.get_attribute(a,false)<attcap[a])
       {
          cr.adjust_attribute(a,+1);
@@ -622,8 +626,8 @@ void makecreature(Creature &cr,short type)
       }
       else possible.erase(possible.begin()+i);
    }
-   if(cr.align==ALIGN_LIBERAL) cr.infiltration=0.15f+(LCSrandom(10)-5)*0.01f;
-   else if(cr.align==ALIGN_MODERATE) cr.infiltration=0.25f+(LCSrandom(10)-5)*0.01f;
+   if(cr.align==Alignment::LIBERAL) cr.infiltration=0.15f+(LCSrandom(10)-5)*0.01f;
+   else if(cr.align==Alignment::MODERATE) cr.infiltration=0.25f+(LCSrandom(10)-5)*0.01f;
    else cr.infiltration+=0.35f*(1-cr.infiltration)+(LCSrandom(10)-5)*0.01f;
    if(cr.infiltration<0) cr.infiltration=0;
    if(cr.infiltration>1) cr.infiltration=1;
@@ -650,7 +654,7 @@ void makecreature(Creature &cr,short type)
       }
       // 90% chance of not allowing some skills, other than
       //   for conservatives
-      if(LCSrandom(10)&&cr.align!=ALIGN_CONSERVATIVE)
+      if(LCSrandom(10)&&cr.align!=Alignment::CONSERVATIVE)
       {
          if(randomskill==SKILL_SHOTGUN) continue;
          if(randomskill==SKILL_PISTOL) continue;
@@ -677,7 +681,10 @@ void makecreature(Creature &cr,short type)
       else possible.erase(possible.begin()+i);
    }
    //ALIENATION
-   if((sitealienate>=1&&cr.align==ALIGN_MODERATE)||(sitealienate==2&&cr.align==ALIGN_LIBERAL))conservatise(cr);
+   if ((sitealienate>=1&&cr.align==Alignment::MODERATE)||(sitealienate==2&&cr.align==Alignment::LIBERAL))
+   {
+     conservatise(cr);
+   }
 }
 
 /* ensures that the creature's work location is appropriate to its type */
