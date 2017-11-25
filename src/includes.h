@@ -953,7 +953,7 @@ void end_game(int err=EXIT_SUCCESS);
 // Sets the text color to the thematic color for the given alignment
 // extended_range forces colors to be set on a 5 point scale instead
 // of just basic liberal-moderate-conservative
-void set_alignment_color(signed char alignment,bool extended_range=false);
+void set_alignment_color(Alignment alignment, bool extended_range=false);
 /* Sets the text color per activity type */
 void set_activity_color(long activity_type);
 /* location and squad header */

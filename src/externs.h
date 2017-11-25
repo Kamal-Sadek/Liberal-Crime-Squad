@@ -20,11 +20,11 @@ extern vector<configSiteMap *> sitemaps; // stores site map info read in from co
 extern bool multipleCityMode;
 extern int oldMapMode;
 extern unsigned long seed[RNG_SIZE];
-extern short law[LAWNUM];
+extern Alignment law[LAWNUM];
 
-extern short house[HOUSENUM];
-extern short senate[SENATENUM];
-extern short court[COURTNUM];
+extern Alignment house[HOUSENUM];
+extern Alignment senate[SENATENUM];
+extern Alignment court[COURTNUM];
 extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
 
 extern Alignment exec[EXECNUM];

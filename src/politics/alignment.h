@@ -43,13 +43,29 @@ using AlignmentChoices = std::initializer_list<Alignment>;
 
 
 /**
- * Choose an alignment from a manifets list of choices.
+ * Choose an alignment from a manifest list of choices.
  */
 Alignment
 choose(std::initializer_list<Alignment> choices);
 
 /**
- * Unmarshall an Alignment.
+ * Pretty-print an alignment.
+ */
+std::string
+as_printable(Alignment alignment, bool capitalize = true);
+
+/**
+ * Use an Alignment as an array index.
+ *
+ * The use of this should be replaced by something more sophisticated otherwise
+ * there are too many dependencies between the underlying implementation of
+ * Alignment and thingd that use it.
+ */
+std::size_t
+to_index(Alignment alignment);
+
+/**
+ * Unmarshall an Alignment from a string..
  *
  * @param[in]  text      A string.
  * @param[out] alignment An alignment.
@@ -59,7 +75,7 @@ bool
 from_string(std::string const& text, Alignment& alignment);
 
 /**
- * Marshall an Alignment.
+ * Marshall an Alignment to a string.
  *
  * @param[in] alignment An alignment.
  * @return A string of a marshalled alignment.

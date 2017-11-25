@@ -59,6 +59,38 @@ choose(std::initializer_list<Alignment> choices)
 }
 
 
+std::string
+as_printable(Alignment alignment, bool capitalize)
+{
+  switch (alignment)
+  {
+    case Alignment::ARCH_CONSERVATIVE: return "Arch-Conservative";
+    case Alignment::CONSERVATIVE: return "Conservative";
+    case Alignment::MODERATE: return (capitalize?"Moderate":"moderate");
+    case Alignment::LIBERAL: return "Liberal";
+    case Alignment::ELITE_LIBERAL: return "Elite Liberal";
+    case Alignment::STALINIST: return "Stalinist";
+    default: return "Buggy";
+  }
+}
+
+
+std::size_t
+to_index(Alignment alignment)
+{
+  switch (alignment)
+  {
+    case Alignment::ARCH_CONSERVATIVE: return 0;
+    case Alignment::CONSERVATIVE: return 1;
+    case Alignment::MODERATE: return 2;
+    case Alignment::LIBERAL: return 3;
+    case Alignment::ELITE_LIBERAL: return 4;
+    case Alignment::STALINIST: return 5;
+    default: -1;
+  }
+}
+
+
 bool
 from_string(std::string const& text, Alignment& alignment)
 {
