@@ -49,7 +49,7 @@ void noticecheck(int exclude,int difficulty)
          addstr(encounter[e].name, gamelog);
          addstr(" observes your Liberal activity ", gamelog);
          move(17,1);
-         if(encounter[e].align==ALIGN_CONSERVATIVE)
+         if(encounter[e].align==Alignment::CONSERVATIVE)
             addstr("and lets forth a piercing Conservative alarm cry!", gamelog);
          else addstr("and shouts for help!", gamelog);
          gamelog.newline();
@@ -85,7 +85,7 @@ char alienationcheck(char mistake)
       // types, so we'll go by name instead
       if(!strcmp(encounter[e].name,"Prisoner")) continue;
 
-      if(encounter[e].exists&&encounter[e].alive&&(encounter[e].align==0||(encounter[e].align==1&&mistake)))
+      if (encounter[e].exists&&encounter[e].alive && (encounter[e].align == Alignment::MODERATE ||(encounter[e].align == Alignment::LIBERAL && mistake)))
          noticer.push_back(e);
    }
 
@@ -99,7 +99,8 @@ char alienationcheck(char mistake)
          n=noticer[an];
          noticer.erase(noticer.begin() + an);
 
-         if(encounter[n].align==1) alienatebig=1;
+         if (encounter[n].align == Alignment::LIBERAL)
+           alienatebig = 1;
          else alienate=1;
       } while(len(noticer));
 
@@ -120,8 +121,8 @@ char alienationcheck(char mistake)
          sitealarm=1;
 
          for(int i=0;i<ENCMAX;i++)
-            if(encounter[i].exists && encounter[i].align != ALIGN_CONSERVATIVE)
-               if(encounter[i].align == ALIGN_MODERATE || alienatebig)
+            if(encounter[i].exists && encounter[i].align != Alignment::CONSERVATIVE)
+               if(encounter[i].align == Alignment::MODERATE || alienatebig)
                   conservatise(encounter[i]);
 
          if(mode==GAMEMODE_CHASECAR||
@@ -428,7 +429,7 @@ void disguisecheck(int timer)
          {
             addstr(" sees the Squad's Liberal Weapons ", gamelog);
             move(17,1);
-            if(encounter[n].align==ALIGN_CONSERVATIVE)
+            if(encounter[n].align==Alignment::CONSERVATIVE)
                addstr("and lets forth a piercing Conservative alarm cry!", gamelog);
             else
                addstr("and shouts for help!", gamelog);
@@ -447,7 +448,7 @@ void disguisecheck(int timer)
          {
             addstr(" looks at the Squad with Intolerance ", gamelog);
             move(17,1);
-            if(encounter[n].align==ALIGN_CONSERVATIVE)
+            if(encounter[n].align==Alignment::CONSERVATIVE)
             {
                if(encounter[n].type==CREATURE_GUARDDOG)
                   addstr("and launches into angry Conservative barking!", gamelog);
@@ -493,7 +494,7 @@ char weapon_in_character(const string& wtype, const string& atype)
    {
       if(atype == "ARMOR_SWATARMOR")
          return CREATURE_SWAT;
-      else if(atype == "ARMOR_SECURITYUNIFORM" && law[LAW_GUNCONTROL]==-2)
+      else if(atype == "ARMOR_SECURITYUNIFORM" && law[LAW_GUNCONTROL] == Alignment::ARCH_CONSERVATIVE)
          return CREATURE_SECURITYGUARD;
       else if(atype == "ARMOR_MILITARY" || atype == "ARMOR_ARMYARMOR")
          return CREATURE_SOLDIER;
@@ -511,7 +512,7 @@ char weapon_in_character(const string& wtype, const string& atype)
    if(wtype == "WEAPON_AXE" && atype == "ARMOR_BUNKERGEAR")
       return CREATURE_FIREFIGHTER;
 
-   if(wtype == "WEAPON_FLAMETHROWER" && atype == "ARMOR_BUNKERGEAR" && law[LAW_FREESPEECH]==-2)
+   if(wtype == "WEAPON_FLAMETHROWER" && atype == "ARMOR_BUNKERGEAR" && law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
       return CREATURE_FIREFIGHTER;
 
    if(atype == "ARMOR_PRISONGUARD" && (wtype == "WEAPON_SMG_MP5" ||
@@ -520,7 +521,7 @@ char weapon_in_character(const string& wtype, const string& atype)
 
    if((atype == "ARMOR_OVERALLS" || atype == "ARMOR_WIFEBEATER") &&
       (wtype == "WEAPON_TORCH" || wtype == "WEAPON_PITCHFORK" ||
-      (law[LAW_GUNCONTROL]==-2 && wtype == "WEAPON_SHOTGUN_PUMP")))
+      (law[LAW_GUNCONTROL] == Alignment::ARCH_CONSERVATIVE && wtype == "WEAPON_SHOTGUN_PUMP")))
       return CREATURE_HICK;
 
    if(wtype == "WEAPON_SHANK" && atype == "ARMOR_PRISONER")
@@ -651,7 +652,7 @@ char hasdisguise(const Creature &cr)
                uniformed=0;
                if(cr.get_armor().get_itemtypename()=="ARMOR_POLICEUNIFORM")uniformed=1;
                if(cr.get_armor().get_itemtypename()=="ARMOR_POLICEARMOR")uniformed=1;
-               if(law[LAW_POLICEBEHAVIOR]==-2 && law[LAW_DEATHPENALTY]==-2 &&
+               if(law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE && law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE &&
                   cr.get_armor().get_itemtypename()=="ARMOR_DEATHSQUADUNIFORM")uniformed=1;
                if(cr.get_armor().get_itemtypename()=="ARMOR_SWATARMOR")uniformed=(location[cursite]->highsecurity?1:2);
             }
@@ -684,7 +685,7 @@ char hasdisguise(const Creature &cr)
                if(cr.get_armor().get_itemtypename()=="ARMOR_EXPENSIVEDRESS")uniformed=1;
                if(cr.get_armor().get_itemtypename()=="ARMOR_POLICEUNIFORM")uniformed=1;
                if(cr.get_armor().get_itemtypename()=="ARMOR_POLICEARMOR")uniformed=1;
-               if(law[LAW_POLICEBEHAVIOR]==-2 && law[LAW_DEATHPENALTY]==-2 &&
+               if(law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE && law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE &&
                   cr.get_armor().get_itemtypename()=="ARMOR_DEATHSQUADUNIFORM")uniformed=1;
                if(cr.get_armor().get_itemtypename()=="ARMOR_SWATARMOR")uniformed=(location[cursite]->highsecurity?1:2);
             }
@@ -693,7 +694,7 @@ char hasdisguise(const Creature &cr)
             if(levelmap[locx][locy][locz].flag & SITEBLOCK_RESTRICTED)
             {
                uniformed=0;
-               if(law[LAW_POLICEBEHAVIOR]==-2 && law[LAW_DEATHPENALTY]==-2)
+               if(law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE && law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE)
                {
                   if(cr.get_armor().get_itemtypename()=="ARMOR_LABCOAT")uniformed=1;
                }
@@ -729,7 +730,7 @@ char hasdisguise(const Creature &cr)
                {
                   if(cr.get_armor().get_itemtypename()=="ARMOR_POLICEUNIFORM")uniformed=1;
                   if(cr.get_armor().get_itemtypename()=="ARMOR_POLICEARMOR")uniformed=1;
-                  if(law[LAW_POLICEBEHAVIOR]==-2 && law[LAW_DEATHPENALTY]==-2 &&
+                  if(law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE && law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE &&
                      cr.get_armor().get_itemtypename()=="ARMOR_DEATHSQUADUNIFORM")uniformed=1;
                   if(cr.get_armor().get_itemtypename()=="ARMOR_SWATARMOR")uniformed=1;
                }
@@ -744,7 +745,7 @@ char hasdisguise(const Creature &cr)
                if(cr.get_armor().get_itemtypename()=="ARMOR_SECURITYUNIFORM")uniformed=1;
                if(cr.get_armor().get_itemtypename()=="ARMOR_POLICEUNIFORM")uniformed=1;
                if(cr.get_armor().get_itemtypename()=="ARMOR_POLICEARMOR")uniformed=1;
-               if(law[LAW_POLICEBEHAVIOR]==-2 && law[LAW_DEATHPENALTY]==-2 &&
+               if(law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE && law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE &&
                   cr.get_armor().get_itemtypename()=="ARMOR_DEATHSQUADUNIFORM")uniformed=1;
                if(cr.get_armor().get_itemtypename()=="ARMOR_SWATARMOR")uniformed=(location[cursite]->highsecurity?1:2);
                if(location[cursite]->highsecurity)
@@ -841,7 +842,7 @@ char hasdisguise(const Creature &cr)
    {
       if(cr.get_armor().get_itemtypename()=="ARMOR_POLICEUNIFORM")uniformed=2;
       if(cr.get_armor().get_itemtypename()=="ARMOR_POLICEARMOR")uniformed=2;
-      if(law[LAW_POLICEBEHAVIOR]==-2 && law[LAW_DEATHPENALTY]==-2 &&
+      if(law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE && law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE &&
          cr.get_armor().get_itemtypename()=="ARMOR_DEATHSQUADUNIFORM")uniformed=2;
       if(location[cursite]->highsecurity &&
          cr.get_armor().get_itemtypename()=="ARMOR_SWATARMOR")uniformed=2;

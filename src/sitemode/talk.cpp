@@ -48,13 +48,13 @@ char talk(Creature &a,int t)
    Creature &tk = encounter[t];
 
    // TALKING TO DOGS
-   if(tk.type == CREATURE_GUARDDOG && tk.align != ALIGN_LIBERAL)
+   if(tk.type == CREATURE_GUARDDOG && tk.align != Alignment::LIBERAL)
    {
       return heyMisterDog(a, tk);
    }
 
    // TALKING TO MONSTERS
-   if(tk.type == CREATURE_GENETIC && tk.align != ALIGN_LIBERAL)
+   if(tk.type == CREATURE_GENETIC && tk.align != Alignment::LIBERAL)
    {
       return heyMisterMonster(a, tk);
    }
@@ -300,13 +300,13 @@ char talkToGeneric(Creature &a, Creature &tk)
    addstr(" talks to ");
    switch(tk.align)
    {
-   case ALIGN_CONSERVATIVE:
+   case Alignment::CONSERVATIVE:
       set_color(COLOR_RED,COLOR_BLACK,1);
       break;
-   case ALIGN_LIBERAL:
+   case Alignment::LIBERAL:
       set_color(COLOR_GREEN,COLOR_BLACK,1);
       break;
-   case ALIGN_MODERATE:
+   case Alignment::MODERATE:
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       break;
    }
@@ -705,7 +705,7 @@ char heyINeedAGun(Creature &a, Creature &tk)
    if(a.get_armor().get_itemtypename() == "ARMOR_POLICEUNIFORM" ||
       a.get_armor().get_itemtypename() == "ARMOR_POLICEARMOR" ||
       a.get_armor().get_itemtypename() == "ARMOR_SWATARMOR" ||
-      (law[LAW_POLICEBEHAVIOR]==-2 && law[LAW_DEATHPENALTY]==-2 &&
+      (law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE && law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE &&
       a.get_armor().get_itemtypename() == "ARMOR_DEATHSQUADUNIFORM"))
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -785,7 +785,7 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
    if(!interested && a.skill_check(SKILL_PERSUASION,DIFFICULTY_AVERAGE))
       interested = true;
 
-   if((tk.animalgloss==ANIMALGLOSS_ANIMAL&&tk.align!=ALIGN_LIBERAL)||
+   if((tk.animalgloss==ANIMALGLOSS_ANIMAL&&tk.align!=Alignment::LIBERAL)||
       tk.animalgloss==ANIMALGLOSS_TANK)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -824,7 +824,7 @@ char wannaHearSomethingDisturbing(Creature &a, Creature &tk)
       move(13,1);
       if(strcmp(tk.name,"Prisoner")==0)
       {
-         if(tk.align==ALIGN_LIBERAL)
+         if(tk.align==Alignment::LIBERAL)
             addstr("\"Now's not the time!\"", gamelog);
          else addstr("\"Leave me alone.\"", gamelog);
       }
@@ -848,7 +848,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
    set_color(COLOR_GREEN,COLOR_BLACK,1);
    move(10,1);
    int line;
-   if(law[LAW_FREESPEECH]==-2)
+   if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
    {
       line=LCSrandom(3);
       switch(line)
@@ -943,8 +943,9 @@ char doYouComeHereOften(Creature &a, Creature &tk)
    if(a.skill_check(SKILL_SEDUCTION,difficulty))
       succeeded = true;
 
-   if((tk.animalgloss==ANIMALGLOSS_ANIMAL&&law[LAW_ANIMALRESEARCH]!=2&&a.animalgloss!=ANIMALGLOSS_ANIMAL)||
-      tk.animalgloss==ANIMALGLOSS_TANK)
+   if ((tk.animalgloss == ANIMALGLOSS_ANIMAL
+     && law[LAW_ANIMALRESEARCH] != Alignment::ELITE_LIBERAL && a.animalgloss != ANIMALGLOSS_ANIMAL)
+     || tk.animalgloss==ANIMALGLOSS_TANK)
    {
       set_color(COLOR_WHITE,COLOR_BLACK,1);
       move(y++,1);addstr(tk.name, gamelog);
@@ -964,7 +965,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
          case 1:addstr("\"What?! Ugh, I'm going to toss my kibble.\"", gamelog);break;
          case 2:addstr("\"Okay, you need to stop petting me now.\"", gamelog);break;
          }
-         tk.align=ALIGN_CONSERVATIVE;
+         tk.align=Alignment::CONSERVATIVE;
          tk.cantbluff=1;
          break;
       case CREATURE_GENETIC:
@@ -982,7 +983,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
          case 6:addstr("\"I am above such mortal sins!\"", gamelog);break;
          case 7:addstr("\"You foul, disgusting human...!\"", gamelog);break;
          }
-         tk.align=ALIGN_CONSERVATIVE;
+         tk.align=Alignment::CONSERVATIVE;
          tk.cantbluff=1;
          break;
       default:
@@ -1000,7 +1001,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
    if((a.get_armor().get_itemtypename() == "ARMOR_POLICEUNIFORM" // Police property on armor? -XML
       || a.get_armor().get_itemtypename() == "ARMOR_POLICEARMOR"
       || a.get_armor().get_itemtypename() == "ARMOR_SWATARMOR"
-      || (law[LAW_POLICEBEHAVIOR]==-2 && law[LAW_DEATHPENALTY]==-2
+      || (law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE && law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE
       && a.get_armor().get_itemtypename() == "ARMOR_DEATHSQUADUNIFORM"))
       && tk.type==CREATURE_PROSTITUTE)
    {
@@ -1023,7 +1024,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
       set_color(COLOR_CYAN,COLOR_BLACK,1);
       move(y++,1);
 
-      if(law[LAW_FREESPEECH]==-2)
+      if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
       {
          switch(line)
          {
@@ -1152,7 +1153,7 @@ char doYouComeHereOften(Creature &a, Creature &tk)
             addstr("\"I'm a happily married man, sweetie.\"", gamelog);
          else addstr("\"This ain't Brokeback Mountain, son.\"", gamelog);
       }
-      else if(law[LAW_FREESPEECH]==-2)
+      else if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
       {
          switch(line)
          {  // all 3 of these lines are from Darth Vader (the 3rd one from back when he's a little kid)
@@ -1328,7 +1329,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
 
    if(!(a.attribute_check(ATTRIBUTE_INTELLIGENCE,DIFFICULTY_EASY)))
       you_are_stupid = true;
-   else if(law[lw]==ALIGN_ELITELIBERAL && newscherrybusted)
+   else if(law[lw]==Alignment::ELITE_LIBERAL && newscherrybusted)
       issue_too_liberal = true;
 
    clearcommandarea();clearmessagearea();clearmaparea();
@@ -1344,7 +1345,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
       case LAW_ABORTION:      addstr("\"Conservatives make women turn to coat hangers.\"", gamelog);break;
       case LAW_ANIMALRESEARCH:addstr("\"Richard Gere put a gerbil in his butt!\"", gamelog);break;
       case LAW_POLICEBEHAVIOR:
-                              if(law[LAW_FREESPEECH]==ALIGN_ARCHCONSERVATIVE)
+                              if(law[LAW_FREESPEECH]==Alignment::ARCH_CONSERVATIVE)
                                   addstr("\"[The police are not doing their job very well!]\"", gamelog);
                               else
                                   addstr("\"The cops suck!\"", gamelog);
@@ -1497,7 +1498,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
 
    int difficulty = DIFFICULTY_VERYEASY;
 
-   if(tk.align == ALIGN_CONSERVATIVE)
+   if(tk.align == Alignment::CONSERVATIVE)
       difficulty += 7;
    if(!(tk.talkreceptive()))
       difficulty += 7;
@@ -1584,7 +1585,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
       }
       else
       {
-         if(tk.align==ALIGN_CONSERVATIVE && you_are_stupid)
+         if(tk.align==Alignment::CONSERVATIVE && you_are_stupid)
          {
             move(y++,1);
             if(tk.type==CREATURE_GANGUNIT)
@@ -1608,7 +1609,7 @@ char talkAboutIssues(Creature &a, Creature &tk)
                }
             }
          }
-         else if(tk.align != ALIGN_LIBERAL && tk.attribute_check(ATTRIBUTE_WISDOM,DIFFICULTY_AVERAGE))
+         else if(tk.align != Alignment::LIBERAL && tk.attribute_check(ATTRIBUTE_WISDOM,DIFFICULTY_AVERAGE))
          {
             move(y++,1);
             switch(lw)
@@ -1667,9 +1668,9 @@ char talkInCombat(Creature &a, Creature &tk)
    addstr(" talks to ", gamelog);
    switch(tk.align)
    {
-   case ALIGN_CONSERVATIVE: set_color(COLOR_RED,COLOR_BLACK,1); break;
-   case ALIGN_LIBERAL: set_color(COLOR_GREEN,COLOR_BLACK,1); break;
-   case ALIGN_MODERATE: set_color(COLOR_WHITE,COLOR_BLACK,1); break;
+   case Alignment::CONSERVATIVE: set_color(COLOR_RED,COLOR_BLACK,1); break;
+   case Alignment::LIBERAL: set_color(COLOR_GREEN,COLOR_BLACK,1); break;
+   case Alignment::MODERATE: set_color(COLOR_WHITE,COLOR_BLACK,1); break;
    }
    addstr(tk.name, gamelog);
    set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -1821,7 +1822,7 @@ char talkInCombat(Creature &a, Creature &tk)
       case 3:addstr("\"I'll do it! I'll kill this one!\"", gamelog);break;
       case 4:addstr("\"You gonna tell the family you pushed me?!\"", gamelog);break;
       case 5:
-             if(law[LAW_FREESPEECH]==-2)addstr("\"Don't [play] with me!\"", gamelog);
+             if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)addstr("\"Don't [play] with me!\"", gamelog);
              else addstr("\"Don't fuck with me!\"", gamelog);
              break;
       }
@@ -1863,8 +1864,8 @@ char talkInCombat(Creature &a, Creature &tk)
                   addstr(": ", gamelog);
                   move(17,1);
 
-                  if(encounter[e].align!=ALIGN_CONSERVATIVE||
-                     (encounter[e].type==CREATURE_SECRET_SERVICE&&exec[EXEC_PRESIDENT]>ALIGN_CONSERVATIVE))
+                  if(encounter[e].align!=Alignment::CONSERVATIVE||
+                     (encounter[e].type==CREATURE_SECRET_SERVICE&&exec[EXEC_PRESIDENT]>Alignment::CONSERVATIVE))
                   {
                      set_color(COLOR_GREEN,COLOR_BLACK,1);
                      switch(LCSrandom(5))
@@ -1884,7 +1885,7 @@ char talkInCombat(Creature &a, Creature &tk)
                         encounter[e].type==CREATURE_MERC||
                         encounter[e].type==CREATURE_CCS_ARCHCONSERVATIVE||
                         encounter[e].type==CREATURE_GANGUNIT))
-                        &&encounter[e].align==ALIGN_CONSERVATIVE)
+                        &&encounter[e].align==Alignment::CONSERVATIVE)
                      {
                         switch(LCSrandom(5))
                         {
@@ -1932,7 +1933,7 @@ char talkInCombat(Creature &a, Creature &tk)
             {
                if(encounter[i].exists&&
                   encounter[i].alive&&
-                  encounter[i].align<=-1)
+                  to_right_of(encounter[i].align, Alignment::MODERATE))
                {
                   delenc(i,0);
                }
@@ -2037,7 +2038,7 @@ char talkInCombat(Creature &a, Creature &tk)
                   addstr(": ", gamelog);
                   set_color(COLOR_RED,COLOR_BLACK,1);
                   move(17,1);
-                  if(law[LAW_FREESPEECH]>ALIGN_ARCHCONSERVATIVE)
+                  if(law[LAW_FREESPEECH]>Alignment::ARCH_CONSERVATIVE)
                      addstr("\"Fuck! ", gamelog);
                   else addstr("\"[No!] ", gamelog);
                   switch(LCSrandom(5))
@@ -2085,7 +2086,7 @@ char talkInCombat(Creature &a, Creature &tk)
                   encounter[e].type==CREATURE_MERC||
                   encounter[e].type==CREATURE_CCS_ARCHCONSERVATIVE||
                   encounter[e].type==CREATURE_GANGUNIT)&&
-                  LCSrandom(2))&&encounter[e].align==ALIGN_CONSERVATIVE)
+                  LCSrandom(2))&&encounter[e].align==Alignment::CONSERVATIVE)
                {
                   clearmessagearea();
                   set_color(COLOR_WHITE,COLOR_BLACK,1);
@@ -2302,7 +2303,7 @@ char talkInCombat(Creature &a, Creature &tk)
          else
          {
             addstr(encounter[e].name, gamelog);
-            if(law[LAW_FREESPEECH]==ALIGN_ARCHCONSERVATIVE)
+            if(law[LAW_FREESPEECH]==Alignment::ARCH_CONSERVATIVE)
                addstr(" is not fooled by that [act].", gamelog);
             else addstr(" is not fooled by that crap.", gamelog);
          }
@@ -2507,7 +2508,7 @@ char heyMisterDog(Creature &a, Creature &tk)
    if(success)
       for(int i=0;i<ENCMAX;i++)
          if(encounter[i].type == CREATURE_GUARDDOG)
-            encounter[i].align = ALIGN_LIBERAL;
+            encounter[i].align = Alignment::LIBERAL;
 
    return 1;
 }
@@ -2665,7 +2666,7 @@ char heyMisterMonster(Creature &a, Creature &tk)
    if(success)
       for(int i=0;i<ENCMAX;i++)
          if(encounter[i].type == CREATURE_GENETIC)
-            encounter[i].align = ALIGN_LIBERAL;
+            encounter[i].align = Alignment::LIBERAL;
 
    return 1;
 }
