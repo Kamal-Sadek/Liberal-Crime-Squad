@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -933,7 +934,7 @@ void evasiverun()
             {
             case CREATURE_COP:
                addstr(" is seized, ", gamelog);
-               if(law[LAW_POLICEBEHAVIOR]>=ALIGN_LIBERAL)
+               if (to_left_of(law[LAW_POLICEBEHAVIOR], Alignment::MODERATE))
                {
                   addstr("pushed to the ground, and handcuffed!", gamelog);
                   gamelog.newline(); //...Newline.
@@ -1248,10 +1249,16 @@ void makechasers(long sitetype,long sitecrime)
             if(pnum>6)pnum=6;
             for(n=0;n<pnum;n++)
             {
-               if(law[LAW_DEATHPENALTY]==-2&&
-                  law[LAW_POLICEBEHAVIOR]==-2){makecreature(encounter[encslot++],CREATURE_DEATHSQUAD);chaseseq.canpullover=0;}
-               else if(law[LAW_POLICEBEHAVIOR]<=-1)makecreature(encounter[encslot++],CREATURE_GANGUNIT);
-               else makecreature(encounter[encslot++],CREATURE_COP);
+               if(law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE 
+               && law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)
+               {
+                 makecreature(encounter[encslot++],CREATURE_DEATHSQUAD);
+                 chaseseq.canpullover=0;
+               }
+               else if (to_right_of(law[LAW_POLICEBEHAVIOR], Alignment::MODERATE))
+                 makecreature(encounter[encslot++],CREATURE_GANGUNIT);
+               else
+                 makecreature(encounter[encslot++],CREATURE_COP);
             }
             break;
       }
@@ -1575,8 +1582,9 @@ void crashfriendlycar(int v)
             // Record death if living Liberal is hauled
             if(activesquad->squad[p]->prisoner->squadid!=-1)
             {
-               if(activesquad->squad[p]->prisoner->alive&&
-                  activesquad->squad[p]->prisoner->align==1)stat_dead++;
+               if (activesquad->squad[p]->prisoner->alive
+                && activesquad->squad[p]->prisoner->align == Alignment::LIBERAL)
+                 stat_dead++;
 
                activesquad->squad[p]->prisoner->die();
                activesquad->squad[p]->prisoner->location=-1;
@@ -1612,7 +1620,7 @@ void crashfriendlycar(int v)
             victimsum++;
 
             // Account for deaths for high score
-            if(activesquad->squad[p]->align == ALIGN_LIBERAL)stat_dead++;
+            if(activesquad->squad[p]->align == Alignment::LIBERAL)stat_dead++;
 
             // Remove dead Liberal from squad
             activesquad->squad[p]=NULL;
