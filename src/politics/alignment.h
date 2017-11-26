@@ -41,6 +41,23 @@ enum class Alignment
 
 using AlignmentChoices = std::initializer_list<Alignment>;
 
+/**
+ * Indicates if the alignment is extremist.
+ */
+bool
+is_extreme(Alignment alignment);
+
+/**
+ * Indicates @p lhs is to the left of (more liberal than) @p rhs.
+ */
+bool
+to_left_of(Alignment lhs, Alignment rhs);
+
+/**
+ * Indicates @p lhs is to the right of (more conservative than) @p rhs.
+ */
+bool
+to_right_of(Alignment lhs, Alignment rhs);
 
 /**
  * Choose an alignment from a manifest list of choices.
@@ -61,6 +78,12 @@ Alignment
 shift_right(Alignment alignment, int amount=1);
 
 /**
+ * Shuft to the left (positive) or right (negative).
+ */
+Alignment
+shift(Alignment alignment, int steps);
+
+/**
  * Pretty-print an alignment.
  */
 std::string
@@ -75,6 +98,13 @@ as_printable(Alignment alignment, bool capitalize = true);
  */
 std::size_t
 to_index(Alignment alignment);
+
+/**
+ * Get a numeric difference in magnitude between two alignments.
+ */
+std::size_t
+diff(Alignment lhs, Alignment rhs);
+
 
 /**
  * Unmarshall an Alignment from a string..

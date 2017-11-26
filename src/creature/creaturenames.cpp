@@ -130,6 +130,14 @@ void generate_name(char *first, char *last, char gender)
 }
 
 
+std::string
+generate_name(char gender)
+{
+  char name[POLITICIAN_NAMELEN];
+  generate_name(name, gender);
+  return name;
+}
+
 
 /* get a first, middle, and last name for the same person */
 void generate_long_name(char *first, char *middle, char *last, char gender)

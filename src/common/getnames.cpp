@@ -818,16 +818,3 @@ std::string getmonth(int month, bool shortname)
    }
 }
 
-std::string getalign(signed char alignment,bool capitalize)
-{
-   switch(alignment)
-   {
-   case ALIGN_ARCHCONSERVATIVE: return "Arch-Conservative";
-   case ALIGN_CONSERVATIVE: return "Conservative";
-   case ALIGN_MODERATE: return (capitalize?"Moderate":"moderate");
-   case ALIGN_LIBERAL: return "Liberal";
-   case ALIGN_ELITELIBERAL: return "Elite Liberal";
-   case ALIGN_STALINIST: return "Stalinist";
-   default: return "Buggy";
-   }
-}

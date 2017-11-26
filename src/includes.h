@@ -88,7 +88,6 @@ const int lowestloadscoreversion=31203;
 #include "compat.h"
 #include "cursesmovie.h"
 #include "cursesgraphics.h"
-#include "politics/alignment.h"
 
 #define TAB 9
 #define ENTER 10
@@ -1137,7 +1136,6 @@ std::string cityname(); /* random city name */
 void enter_name(int y,int x,char *name,int len,const char *defname=NULL);
 std::string getlawflag(int type);
 std::string getmonth(int month,bool shortname=false);
-std::string getalign(signed char alignment,bool capitalize=false);
 
 /*
  translateid.cpp
@@ -1228,6 +1226,7 @@ void makecreature(Creature &cr,short type);
 void generate_name(char *str, char gender = GENDER_NEUTRAL);
 /* get a first and last name for the same person */
 void generate_name(char *first, char *last, char gender = GENDER_NEUTRAL);
+std::string generate_name(char gender = GENDER_NEUTRAL);
 /* get a first, middle, and last name for the same person */
 void generate_long_name(char *first, char *middle, char *last, char gender = GENDER_NEUTRAL);
 /* gets a random first name */

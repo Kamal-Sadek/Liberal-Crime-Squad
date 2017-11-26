@@ -59,6 +59,32 @@ choose(std::initializer_list<Alignment> choices)
 }
 
 
+bool
+is_extreme(Alignment alignment)
+{
+  if (alignment == Alignment::CONSERVATIVE
+   || alignment == Alignment::MODERATE
+   || alignment == Alignment::LIBERAL)
+  {
+    return false;
+  }
+  return true;
+}
+
+bool
+to_left_of(Alignment lhs, Alignment rhs)
+{
+  return to_index(lhs) > to_index(rhs);
+}
+
+
+bool
+to_right_of(Alignment lhs, Alignment rhs)
+{
+  return to_index(lhs) < to_index(rhs);
+}
+
+
 Alignment
 shift_left(Alignment alignment, int amount)
 {
@@ -109,6 +135,16 @@ shift_right(Alignment alignment, int amount)
 }
 
 
+Alignment
+shift(Alignment alignment, int steps)
+{
+  if (steps >= 0)
+    return shift_left(alignment, steps);
+  else
+    return shift_right(alignment, -steps);
+}
+
+
 std::string
 as_printable(Alignment alignment, bool capitalize)
 {
@@ -138,6 +174,15 @@ to_index(Alignment alignment)
     case Alignment::STALINIST: return 5;
     default: -1;
   }
+}
+
+
+std::size_t
+diff(Alignment lhs, Alignment rhs)
+{
+  std::size_t lhsi = to_index(lhs);
+  std::size_t rhsi = to_index(rhs);
+  return (lhsi > rhsi) ? (lhsi - rhsi) : (rhsi - lhsi);
 }
 
 
