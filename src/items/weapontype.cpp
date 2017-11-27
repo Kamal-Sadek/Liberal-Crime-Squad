@@ -554,5 +554,5 @@ bool WeaponType::is_throwable() const
 
 bool WeaponType::is_legal() const
 {
-   return legality_>=law[LAW_GUNCONTROL];
+   return legality_ >= to_index(law[LAW_GUNCONTROL])-2;
 }

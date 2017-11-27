@@ -194,7 +194,7 @@ void savegame(const string& filename)
          fwrite(creatureStr.c_str(),creatureSize,1,h);
          //fwrite(pool[pl],sizeof(Creature),1,h);
          //write extra interrogation data if applicable
-         if(pool[pl]->align==-1 && pool[pl]->alive)
+         if (pool[pl]->align == Alignment::CONSERVATIVE && pool[pl]->alive)
          {
             interrogation* &intr = pool[pl]->activity.intr();
             fwrite(intr->techniques,sizeof(bool[6]),1,h);
@@ -549,7 +549,7 @@ char load(const string& filename)
             //pool[pl]=new Creature;
             //fread(pool[pl],sizeof(Creature),1,h);
             //read extra interrogation data if applicable
-            if(pool[pl]->align==-1 && pool[pl]->alive)
+            if (pool[pl]->align == Alignment::CONSERVATIVE && pool[pl]->alive)
             {
                interrogation* &intr = pool[pl]->activity.intr();
                intr = new interrogation;

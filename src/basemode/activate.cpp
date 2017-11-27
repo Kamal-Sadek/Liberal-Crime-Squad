@@ -326,8 +326,10 @@ void activate(Creature *cr)
    char havedead=0;
    for(int p=0;p<len(pool);p++)
    {
-      if(pool[p]->alive&&pool[p]->align!=1&&pool[p]->location==cr->location) hostagecount++;
-      if(!pool[p]->alive) havedead=1;
+      if (pool[p]->alive && pool[p]->align != Alignment::LIBERAL && pool[p]->location==cr->location)
+        hostagecount++;
+      if (!pool[p]->alive)
+        havedead=1;
    }
 
    while(true)
@@ -1279,9 +1281,9 @@ void select_tendhostage(Creature *cr)
 
    for(int p=0;p<len(pool);p++)
    {
-      if(pool[p]->align!=1&&
-         pool[p]->alive&&
-         pool[p]->location==cr->location)
+      if (pool[p]->align != Alignment::LIBERAL &&
+          pool[p]->alive &&
+          pool[p]->location==cr->location)
       {
          temppool.push_back(pool[p]);
       }
@@ -1496,9 +1498,9 @@ void recruitSelect(Creature &cr)
       // Dynamic difficulty for certain creatures, recalculated each time the function is called
       if(recruitable_creatures[i].type == CREATURE_MUTANT)
       {
-         if(law[LAW_NUCLEARPOWER] == -2 && law[LAW_POLLUTION] == -2)
+         if(law[LAW_NUCLEARPOWER] == Alignment::ARCH_CONSERVATIVE && law[LAW_POLLUTION] == Alignment::ARCH_CONSERVATIVE)
             recruitable_creatures[i].difficulty = 2;
-         else if(law[LAW_NUCLEARPOWER] == -2 || law[LAW_POLLUTION] == -2)
+         else if(law[LAW_NUCLEARPOWER] == Alignment::ARCH_CONSERVATIVE || law[LAW_POLLUTION] == Alignment::ARCH_CONSERVATIVE)
             recruitable_creatures[i].difficulty = 6;
          else
             recruitable_creatures[i].difficulty = 9;
@@ -1976,7 +1978,7 @@ void select_makeclothing(Creature *cr)
          continue;
 
       if(armortype[a]->deathsquad_legality()
-         && (law[LAW_POLICEBEHAVIOR]!=-2 || law[LAW_DEATHPENALTY]!=-2))
+         && (law[LAW_POLICEBEHAVIOR] != Alignment::ARCH_CONSERVATIVE || law[LAW_DEATHPENALTY] != Alignment::ARCH_CONSERVATIVE))
          continue;
 
       armortypei.push_back(a);

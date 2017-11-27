@@ -69,7 +69,7 @@ void set_alignment_color(Alignment alignment, bool extended_range)
 {
    switch(alignment)
    {
-   case Alignment::ARCHCONSERVATIVE:
+   case Alignment::ARCH_CONSERVATIVE:
       set_color(COLOR_RED,COLOR_BLACK,1);
       break;
    case Alignment::CONSERVATIVE:
@@ -85,7 +85,7 @@ void set_alignment_color(Alignment alignment, bool extended_range)
          set_color(COLOR_CYAN,COLOR_BLACK,1);
       else set_color(COLOR_GREEN,COLOR_BLACK,1);
       break;
-   case Alignment::ELITELIBERAL:
+   case Alignment::ELITE_LIBERAL:
       set_color(COLOR_GREEN,COLOR_BLACK,1);
       break;
    case Alignment::STALINIST:
@@ -1625,13 +1625,13 @@ void printhealthstat(Creature &g,int y,int x,char smll)
    }
    else
    {
-      if(g.align==-1)
+      if (g.align == Alignment::CONSERVATIVE)
       {
          set_color(COLOR_RED,COLOR_BLACK,1);
          if(smll)addstr("Consrvtv");
          else addstr("Conservative");
       }
-      else if(g.align==0)
+      else if (g.align == Alignment::MODERATE)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          addstr("Moderate");

@@ -173,11 +173,11 @@ std::string getactivity(activityst &act)
 
 std::string gettitle(Creature &cr)
 {
-   if(cr.align==-1)
+   if (cr.align == Alignment::CONSERVATIVE)
    {
       if(cr.juice<=-50)
       {
-         if(law[LAW_FREESPEECH]==-2) return "[Darn] Worthless";
+         if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) return "[Darn] Worthless";
          else return "Damn Worthless";
       }
       else if(cr.juice<=-10) return "Conservative Dregs";
@@ -186,23 +186,23 @@ std::string gettitle(Creature &cr)
       else if(cr.juice<50) return "Wrong-Thinker";
       else if(cr.juice<100)
       {
-         if(law[LAW_FREESPEECH]==-2) return "Stubborn as [Heck]";
+         if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) return "Stubborn as [Heck]";
          else return "Stubborn as Hell";
       }
       else if(cr.juice<200)
       {
-         if(law[LAW_FREESPEECH]==-2) return "Heartless [Jerk]";
+         if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) return "Heartless [Jerk]";
          else return "Heartless Bastard";
       }
       else if(cr.juice<500) return "Insane Vigilante";
       else if(cr.juice<1000) return "Arch-Conservative";
       else return "Evil Incarnate";
    }
-   else if(cr.align==0)
+   else if (cr.align == Alignment::MODERATE)
    {
       if(cr.juice<=-50)
       {
-         if(law[LAW_FREESPEECH]==-2) return "[Darn] Worthless";
+         if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) return "[Darn] Worthless";
          else return "Damn Worthless";
       }
       else if(cr.juice<=-10) return "Society's Dregs";
@@ -219,7 +219,7 @@ std::string gettitle(Creature &cr)
    {
       if(cr.juice<=-50)
       {
-         if(law[LAW_FREESPEECH]==-2) return "[Darn] Worthless";
+         if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) return "[Darn] Worthless";
          else return "Damn Worthless";
       }
       else if(cr.juice<=-10) return "Society's Dregs";
@@ -767,7 +767,7 @@ std::string getlawflag(int type)
    case LAWFLAG_KIDNAPPING:return "Kidnapping";
    case LAWFLAG_BANKROBBERY:return "Bank robbery";
    case LAWFLAG_ARSON:return "Arson";
-   case LAWFLAG_BURNFLAG:return(law[LAW_FLAGBURNING]==-2?"Flag Murder":"Flag burning");
+   case LAWFLAG_BURNFLAG:return(law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE?"Flag Murder":"Flag burning");
    case LAWFLAG_SPEECH:return "Harmful speech";
    case LAWFLAG_BROWNIES:return "Drug dealing";
    case LAWFLAG_ESCAPED:return "Escaping prison";
@@ -781,7 +781,7 @@ std::string getlawflag(int type)
    case LAWFLAG_CCFRAUD:return "Credit card fraud";
    case LAWFLAG_THEFT:return "Theft";
    case LAWFLAG_PROSTITUTION:return "Prostitution";
-   case LAWFLAG_HIREILLEGAL:return(law[LAW_IMMIGRATION]<1?"Hiring illegal aliens":"Hiring undocumented workers");
+   case LAWFLAG_HIREILLEGAL:return(to_right_of(law[LAW_IMMIGRATION],Alignment::LIBERAL)?"Hiring illegal aliens":"Hiring undocumented workers");
    //case LAWFLAG_GUNUSE:return "Firing illegal weapons";
    //case LAWFLAG_GUNCARRY:return "Carrying illegal weapons";
    case LAWFLAG_COMMERCE:return "Electronic sabotage";

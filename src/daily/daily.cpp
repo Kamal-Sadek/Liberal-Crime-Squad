@@ -486,8 +486,9 @@ void advanceday(char& clearformess, char canseethings)
    //HOSTAGES
    if(!disbanding) for(p=len(pool)-1;p>=0;p--)
    {
-      if(!pool[p]->alive) continue;
-      if(pool[p]->align!=1)
+      if (!pool[p]->alive)
+        continue;
+      if (pool[p]->align != Alignment::LIBERAL)
          tendhostage(pool[p],clearformess);
    }
 
@@ -570,7 +571,9 @@ void advanceday(char& clearformess, char canseethings)
          pool[p]->activity.type=ACTIVITY_NONE;
          break;
       case ACTIVITY_NONE:
-         if(pool[p]->align==1&&!pool[p]->is_imprisoned()&&(pool[p]->get_armor().is_bloody()||pool[p]->get_armor().is_damaged()))
+         if (pool[p]->align == Alignment::LIBERAL
+             && !pool[p]->is_imprisoned()
+             && (pool[p]->get_armor().is_bloody() || pool[p]->get_armor().is_damaged()))
             repairarmor(*pool[p],clearformess);
          break;
       }
@@ -761,8 +764,8 @@ void advanceday(char& clearformess, char canseethings)
             pool[p]->blood-=damage;
 
             if(transfer&&pool[p]->location>-1&&
-               pool[p]->alive==1&&
-               pool[p]->align==1&&
+               pool[p]->alive == 1&&
+               pool[p]->align == Alignment::LIBERAL&&
                location[pool[p]->location]->renting!=RENTING_NOCONTROL&&
                location[pool[p]->location]->type!=SITE_HOSPITAL_UNIVERSITY)
             {
@@ -1340,7 +1343,7 @@ bool promotesubordinates(Creature &cr, char &clearformess)
    {
       if(pool[p]->id==cr.id)continue;
       if(pool[p]->id==cr.hireid)bigboss=p;
-      if(pool[p]->hireid==cr.id && pool[p]->alive && pool[p]->align==1)
+      if(pool[p]->hireid==cr.id && pool[p]->alive && pool[p]->align==Alignment::LIBERAL)
       {
          subordinates++;
          //Brainwashed people inelligible for promotion to founder

@@ -483,7 +483,7 @@ char radio_broadcast()
    {
       if(encounter[e].exists&&encounter[e].alive)
       {
-         if(encounter[e].align==-1)enemy++;
+         if(encounter[e].align == Alignment::CONSERVATIVE)enemy++;
       }
    }
 
@@ -748,7 +748,7 @@ char news_broadcast()
    {
       if(encounter[e].exists&&encounter[e].alive)
       {
-         if(encounter[e].align==-1)enemy++;
+         if(encounter[e].align == Alignment::CONSERVATIVE)enemy++;
       }
    }
 

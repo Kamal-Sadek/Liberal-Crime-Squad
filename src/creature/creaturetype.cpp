@@ -258,16 +258,16 @@ int CreatureType::roll_gender() const
    case GENDER_MALE:    return GENDER_MALE;
    case GENDER_FEMALE:  return GENDER_FEMALE;
    case GENDER_MALE_BIAS:
-      if(law[LAW_WOMEN]==-2||
-        (law[LAW_WOMEN]==-1&&LCSrandom(25))||
-        (law[LAW_WOMEN]== 0&&LCSrandom(10))||
-        (law[LAW_WOMEN]== 1&&LCSrandom( 4)))
+      if(law[LAW_WOMEN] == Alignment::ARCH_CONSERVATIVE||
+        (law[LAW_WOMEN] == Alignment::CONSERVATIVE&&LCSrandom(25))||
+        (law[LAW_WOMEN] == Alignment::MODERATE&&LCSrandom(10))||
+        (law[LAW_WOMEN] == Alignment::LIBERAL&&LCSrandom( 4)))
          return GENDER_MALE;
    case GENDER_FEMALE_BIAS:
-      if(law[LAW_WOMEN]==-2||
-        (law[LAW_WOMEN]==-1&&LCSrandom(25))||
-        (law[LAW_WOMEN]== 0&&LCSrandom(10))||
-        (law[LAW_WOMEN]== 1&&LCSrandom( 4)))
+      if(law[LAW_WOMEN] == Alignment::ARCH_CONSERVATIVE||
+        (law[LAW_WOMEN] == Alignment::CONSERVATIVE&&LCSrandom(25))||
+        (law[LAW_WOMEN] == Alignment::MODERATE&&LCSrandom(10))||
+        (law[LAW_WOMEN] == Alignment::LIBERAL&&LCSrandom( 4)))
          return GENDER_FEMALE;
    }
    return gender;
@@ -290,19 +290,19 @@ std::string CreatureType::get_type_name() const
    switch(type_) // Hardcoded special cases.
    {
    case CREATURE_WORKER_SERVANT:
-      if(law[LAW_LABOR]==-2&&law[LAW_CORPORATE]==-2) return "Slave";
+      if(law[LAW_LABOR] == Alignment::ARCH_CONSERVATIVE&&law[LAW_CORPORATE] == Alignment::ARCH_CONSERVATIVE) return "Slave";
       break;
    case CREATURE_WORKER_JANITOR:
-      if(law[LAW_LABOR]==2) return "Custodian";
+      if (law[LAW_LABOR] == Alignment::ELITE_LIBERAL) return "Custodian";
       break;
    case CREATURE_WORKER_SWEATSHOP:
-      if(law[LAW_LABOR]==2&&law[LAW_IMMIGRATION]==2) return "Migrant Worker";
+      if(law[LAW_LABOR] == Alignment::ELITE_LIBERAL&&law[LAW_IMMIGRATION] == Alignment::ELITE_LIBERAL) return "Migrant Worker";
 	   break;
    case CREATURE_CARSALESMAN:
-      if(law[LAW_WOMEN]==-2) return "Car Salesman";
+      if(law[LAW_WOMEN] == Alignment::ARCH_CONSERVATIVE) return "Car Salesman";
       break;
    case CREATURE_FIREFIGHTER:
-      if(law[LAW_FREESPEECH]==-2) return "Fireman";
+      if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) return "Fireman";
       break;
    }
    return type_name_;
@@ -330,13 +330,13 @@ void CreatureType::give_weapon(Creature& cr) const
 
 void CreatureType::give_weapon_civilian(Creature& cr) const
 {
-   if (law[LAW_GUNCONTROL] == -1 && !LCSrandom(30))
+   if (law[LAW_GUNCONTROL] == Alignment::CONSERVATIVE && !LCSrandom(30))
    {
       cr.give_weapon(*weapontype[getweapontype("WEAPON_REVOLVER_38")], NULL);
       cr.take_clips(*cliptype[getcliptype("CLIP_38")], 4);
       cr.reload(false);
    }
-   else if (law[LAW_GUNCONTROL] == -2)
+   else if (law[LAW_GUNCONTROL] == Alignment::ARCH_CONSERVATIVE)
    {
       if (!LCSrandom(10))
       {

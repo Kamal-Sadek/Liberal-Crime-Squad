@@ -601,10 +601,14 @@ void printencounter()
    {
       if(encounter[e].exists)
       {
-         if(!encounter[e].alive) set_color(COLOR_BLACK,COLOR_BLACK,1);
-         else if(encounter[e].align==0) set_color(COLOR_WHITE,COLOR_BLACK,1);
-         else if(encounter[e].align==1) set_color(COLOR_GREEN,COLOR_BLACK,1);
-         else set_color(COLOR_RED,COLOR_BLACK,1);
+         if (!encounter[e].alive)
+           set_color(COLOR_BLACK,COLOR_BLACK,1);
+         else if (encounter[e].align == Alignment::MODERATE)
+           set_color(COLOR_WHITE,COLOR_BLACK,1);
+         else if (encounter[e].align == Alignment::LIBERAL)
+           set_color(COLOR_GREEN,COLOR_BLACK,1);
+         else
+            set_color(COLOR_RED,COLOR_BLACK,1);
          mvaddstr(py,px,encounter[e].name);
       }
 
