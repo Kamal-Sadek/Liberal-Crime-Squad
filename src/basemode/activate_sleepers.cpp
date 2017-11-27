@@ -29,7 +29,7 @@ void activate_sleepers()
       // Select only sleepers that can work
       if(pool[p]->alive==true&&
          pool[p]->flag & CREATUREFLAG_SLEEPER&&
-         pool[p]->align==ALIGN_LIBERAL&&
+         pool[p]->align == Alignment::LIBERAL &&
          pool[p]->hiding==false&&
          pool[p]->clinic==false&&
          pool[p]->dating==false)

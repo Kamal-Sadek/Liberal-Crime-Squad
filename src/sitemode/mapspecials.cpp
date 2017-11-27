@@ -79,7 +79,7 @@ void special_bouncer_assess_squad()
          autoadmit=1;
          strcpy(sleepername,pool[p]->name);
          strcpy(encounter[0].name,sleepername);
-         encounter[0].align=1;
+         encounter[0].align = Alignment::LIBERAL;
          break;
       }
    }
@@ -142,7 +142,7 @@ void special_bouncer_assess_squad()
             if(sitetype==SITE_BUSINESS_CIGARBAR &&
                (activesquad->squad[s]->gender_conservative!=GENDER_MALE ||
                 activesquad->squad[s]->gender_liberal == GENDER_FEMALE) &&
-                law[LAW_WOMEN]<1)
+                to_right_of(law[LAW_WOMEN], Alignment::LIBERAL))
             {
                // Are you passing as a man? Are you skilled enough to pull it off?
                if(activesquad->squad[s]->gender_liberal == GENDER_FEMALE)
@@ -150,7 +150,8 @@ void special_bouncer_assess_squad()
                   // Not a man by your own definition either
                   if(rejected>REJECTED_FEMALE)rejected=REJECTED_FEMALE;
                }
-               else if(disguisesite(sitetype) && !(activesquad->squad[s]->skill_check(SKILL_DISGUISE,DIFFICULTY_HARD)) && law[LAW_GAY]!=2)
+               else if (disguisesite(sitetype) && !(activesquad->squad[s]->skill_check(SKILL_DISGUISE,DIFFICULTY_HARD))
+                        && law[LAW_GAY] != Alignment::ELITE_LIBERAL)
                {
                   // Not skilled enough to pull it off
                   if(rejected>REJECTED_FEMALEISH)rejected=REJECTED_FEMALEISH;
@@ -242,9 +243,12 @@ void special_bouncer_assess_squad()
          case 3:addstr("\"Take a shower.\"", gamelog);break;
          case 4:addstr("\"You'd just harass the others, wouldn't you?\"", gamelog);break;
          case 5:
-                if(law[LAW_FREESPEECH]==-2)addstr("\"Get the [heck] out of here.\"", gamelog);
-                else if(law[LAW_FREESPEECH]==2)addstr("\"Get the fuck out of here.\"", gamelog);
-                else addstr("\"Get the hell out of here.\"", gamelog);break;
+                if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
+                  addstr("\"Get the [heck] out of here.\"", gamelog);
+                else if(law[LAW_FREESPEECH] == Alignment::ELITE_LIBERAL)
+                  addstr("\"Get the fuck out of here.\"", gamelog);
+                else
+                  addstr("\"Get the hell out of here.\"", gamelog);break;
          }
          break;
       case REJECTED_BLOODYCLOTHES:
@@ -434,7 +438,7 @@ void special_nuclear_onoff()
       clearmessagearea();
 
       set_color(COLOR_WHITE,COLOR_BLACK,1);
-      if(law[LAW_NUCLEARPOWER]==2)
+      if(law[LAW_NUCLEARPOWER] == Alignment::ELITE_LIBERAL)
       {
          move(16,1);
          addstr("You see the nuclear waste center control room.", gamelog);
@@ -496,7 +500,7 @@ void special_nuclear_onoff()
 
             getkey();
 
-            if(law[LAW_NUCLEARPOWER]==2)
+            if(law[LAW_NUCLEARPOWER] == Alignment::ELITE_LIBERAL)
             {
                move(17,1);
                addstr("The nuclear waste gets released into the state's water supply!", gamelog);
@@ -957,26 +961,26 @@ void special_prison_control(short prison_control_type)
          {
             switch(law[LAW_DEATHPENALTY])
             {
-               case -1: numleft=LCSrandom(6)+2;break;
-               case -2: numleft=LCSrandom(3)+1;break;
+              case Alignment::CONSERVATIVE: numleft=LCSrandom(6)+2;break;
+              case Alignment::ARCH_CONSERVATIVE: numleft=LCSrandom(3)+1;break;
             }
          }
          else if(prison_control_type==SPECIAL_PRISON_CONTROL_MEDIUM)
          {
             switch(law[LAW_DEATHPENALTY])
             {
-               case 2: numleft=LCSrandom(4)+1;
-               case 1: numleft=LCSrandom(6)+1;
+              case Alignment::ELITE_LIBERAL: numleft=LCSrandom(4)+1;
+              case Alignment::LIBERAL: numleft=LCSrandom(6)+1;
             }
          }
          else if(prison_control_type==SPECIAL_PRISON_CONTROL_HIGH)
          {
             switch(law[LAW_DEATHPENALTY])
             {
-               case  2: numleft=0;break;
-               case  1: numleft=LCSrandom(4);break;
-               case -1: numleft+=LCSrandom(4);break;
-               case -2: numleft+=LCSrandom(4)+2;break;
+              case Alignment::ELITE_LIBERAL: numleft=0;break;
+              case Alignment::LIBERAL: numleft=LCSrandom(4);break;
+              case Alignment::CONSERVATIVE: numleft+=LCSrandom(4);break;
+              case Alignment::ARCH_CONSERVATIVE: numleft+=LCSrandom(4)+2;break;
             }
          }
 
@@ -1895,7 +1899,7 @@ void special_security(bool metaldetect)
             autoadmit=2;
             strcpy(sleepername,pool[p]->name);
             strcpy(encounter[0].name,sleepername);
-            encounter[0].align=1;
+            encounter[0].align = Alignment::LIBERAL;
             encounter[0].cantbluff=1;
             break;
          }

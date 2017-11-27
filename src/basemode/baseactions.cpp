@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webB@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -528,7 +529,7 @@ void investlocation()
 
       if(!(location[loc]->compound_walls & COMPOUND_AAGUN))
       {
-         if(law[LAW_GUNCONTROL]==ALIGN_ARCHCONSERVATIVE)
+         if (law[LAW_GUNCONTROL] == Alignment::ARCH_CONSERVATIVE)
          {
             if(ledger.get_funds()>=35000) set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(13,1);
@@ -619,7 +620,7 @@ void investlocation()
       if(c=='a')
       {
          int aagunPrice = 200000;
-         if(law[LAW_GUNCONTROL]==ALIGN_ARCHCONSERVATIVE)
+         if (law[LAW_GUNCONTROL] == Alignment::ARCH_CONSERVATIVE)
             aagunPrice = 35000;
 
          if(!(location[loc]->compound_walls & COMPOUND_AAGUN)&&ledger.get_funds()>=aagunPrice)

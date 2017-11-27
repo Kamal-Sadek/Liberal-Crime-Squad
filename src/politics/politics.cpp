@@ -30,6 +30,7 @@
 
 #include <algorithm>
 #include <externs.h>
+#include "politics/alignment.h"
 #include "politics/amendments.h"
 
 //TODO: Not sure if anything in here should be logged...Perhaps only a summary of the results? --Addictgamer
@@ -44,16 +45,18 @@
  * the liberal/libertarian end of the spectrum, high conservative/Stalinist bias
  * only rolls on the conservative/Stalinist end of the spectrum.
  */
-static int
+static Alignment
 getswingvoter(bool stalin)
 {
-   int bias = publicmood(-1-stalin)-LCSrandom(100), vote=-2;
-   if(bias> 25)bias= 25;
-   if(bias<-25)bias=-25;
-   for(int i=0;i<4;i++)
+   Alignment vote = Alignment::ARCH_CONSERVATIVE;
+   int bias = publicmood(-1-stalin) - LCSrandom(100);
+   if (bias >  25) bias= 25;
+   if (bias < -25) bias=-25;
+   for (int i=0; i<4; i++)
    {
-      int issue=randomissue(true);
-      if(25+LCSrandom(50)-bias<((stalin&&stalinview(issue,false))?100-attitude[issue]:attitude[issue])) vote++;
+      int issue = randomissue(true);
+      if (25+LCSrandom(50)-bias<((stalin&&stalinview(issue,false))?100-attitude[issue]:attitude[issue]))
+        shift_left(vote);
    }
    return vote;
 }
@@ -62,14 +65,23 @@ getswingvoter(bool stalin)
 /**
  * Get the leaning of a partyline voter for an election.
  *
+ * He vote here works by shifting the voter's leaning one step to the right, and
+ * then possibly shifting left up to two times.  That means a Conservative party
+ * supported might end up voting Arch Conservative, Conservative, or Moderate
+ * and a Liberal supported might end up voting for Moderate, Liberal, or Elite
+ * Liberal.  There is no mention of undecided or undeclared voters at this
+ * point.  Maybe in a later version.
+ *
  * No need for this to deal with Stalinism, this function deliberately only deals with the
  * liberal vs. conservative spectrum.
  */
-static int
-getsimplevoter(int leaning)
+static Alignment
+getsimplevoter(Alignment leaning)
 {
-   int vote=leaning-1;
-   for(int i=0;i<2;i++) if(LCSrandom(100)<attitude[randomissue(true)]) vote++;
+   Alignment vote = shift_right(leaning);
+   for (int i=0; i<2; i++)
+     if (LCSrandom(100) < attitude[randomissue(true)])
+       shift_left(vote);
    return vote;
 }
 
@@ -81,14 +93,18 @@ static void
 fillCabinetPost(int position)
 {
    // Set alignment
-   if(exec[EXEC_PRESIDENT]==ALIGN_ARCHCONSERVATIVE) exec[position]=ALIGN_ARCHCONSERVATIVE;
-   else if(exec[EXEC_PRESIDENT]==ALIGN_ELITELIBERAL) exec[position]=ALIGN_ELITELIBERAL;
-   else if(exec[EXEC_PRESIDENT]==ALIGN_STALINIST) exec[position]=ALIGN_STALINIST;
-   else exec[position]=exec[EXEC_PRESIDENT]+LCSrandom(3)-1;
-   // Set name
-   if(exec[position]==ALIGN_ARCHCONSERVATIVE) generate_name(execname[position],GENDER_WHITEMALEPATRIARCH);
-   else if(exec[position]==ALIGN_CONSERVATIVE) generate_name(execname[position],GENDER_MALE);
-   else generate_name(execname[position]);
+  if (is_extreme(exec[EXEC_PRESIDENT]))
+    exec[position] = exec[EXEC_PRESIDENT];
+  else
+    exec[position] = shift(exec[EXEC_PRESIDENT], LCSrandom(3)-1);
+
+  // Set name
+  if (exec[position] == Alignment::ARCH_CONSERVATIVE)
+    generate_name(execname[position], GENDER_WHITEMALEPATRIARCH);
+  else if (exec[position] == Alignment::CONSERVATIVE)
+    generate_name(execname[position], GENDER_MALE);
+  else
+    generate_name(execname[position]);
 }
 
 
@@ -107,7 +123,7 @@ presidentapproval()
       else                                    // Swing issue voter   (~50%) (should be more than in the real election)
       {
          // Get their leanings as an issue voter
-         int vote=getswingvoter(exec[EXEC_PRESIDENT]==ALIGN_STALINIST);
+         Alignment vote = getswingvoter(exec[EXEC_PRESIDENT]==Alignment::STALINIST);
          // If their views are close to the President's views, they should
          // approve, but might not if their party leaning conflicts with
          // the president's
@@ -115,8 +131,11 @@ presidentapproval()
          // by moderates and Conservatives
          // Moderate president from the Liberal party is only supported
          // by moderates and Liberals
-         int presalign=exec[EXEC_PRESIDENT]==ALIGN_STALINIST?ALIGN_ARCHCONSERVATIVE:exec[EXEC_PRESIDENT];
-         if(DIFF(presalign,vote)<=1&&(presparty!=LIBERAL_PARTY?vote<=0:vote>=0)) approval++;
+         Alignment presalign = exec[EXEC_PRESIDENT] == Alignment::STALINIST ? Alignment::ARCH_CONSERVATIVE
+                                                                            : exec[EXEC_PRESIDENT];
+         if (diff(presalign, vote) <= 1 && (presparty != LIBERAL_PARTY ? to_right_of(vote, Alignment::LIBERAL)
+                                                                       : to_left_of(vote, Alignment::CONSERVATIVE)))
+           approval++;
       }
    }
    return approval;
@@ -129,31 +148,35 @@ presidentapproval()
 void
 promoteVP()
 {
-   exec[EXEC_PRESIDENT]=exec[EXEC_VP]; // VP takes over as President
+   exec[EXEC_PRESIDENT] = exec[EXEC_VP]; // VP takes over as President
    strcpy(execname[EXEC_PRESIDENT], execname[EXEC_VP]);
    switch(exec[EXEC_PRESIDENT])
    { // make sure presparty is set correctly (if old President was moderate they could've been in Liberal OR Conservative Party,
-   case ALIGN_ARCHCONSERVATIVE: // and new President might have a political alignment incompatible with that party)
-   case ALIGN_CONSERVATIVE:
+   case Alignment::ARCH_CONSERVATIVE: // and new President might have a political alignment incompatible with that party)
+   case Alignment::CONSERVATIVE:
       presparty=CONSERVATIVE_PARTY; break; // Conservatives and Arch-Conservatives align with the Conservative Party
-   case ALIGN_MODERATE:
+   case Alignment::MODERATE:
       break; // same party as previous President (either Liberal Party or Conservative Party)
-   case ALIGN_LIBERAL:
-   case ALIGN_ELITELIBERAL:
+   case Alignment::LIBERAL:
+   case Alignment::ELITE_LIBERAL:
       presparty=LIBERAL_PARTY; break; // Liberals and Elite Liberals align with the Liberal Party
-   case ALIGN_STALINIST:
+   case Alignment::STALINIST:
       presparty=STALINIST_PARTY; break; // Stalinists align with the Stalinist Party
    }
    fillCabinetPost(EXEC_VP); // the vacant VP slot needs to be filled
-   if(abs(exec[EXEC_PRESIDENT])>1)
+   if (is_extreme(exec[EXEC_PRESIDENT]))
    {  // new President has extreme views... make sure all cabinet members agree with new President
-      if(exec[EXEC_PRESIDENT]!=exec[EXEC_STATE]) fillCabinetPost(EXEC_STATE);
-      if(exec[EXEC_PRESIDENT]!=exec[EXEC_ATTORNEY]) fillCabinetPost(EXEC_ATTORNEY);
+      if (exec[EXEC_PRESIDENT] != exec[EXEC_STATE])
+        fillCabinetPost(EXEC_STATE);
+      if (exec[EXEC_PRESIDENT] != exec[EXEC_ATTORNEY])
+        fillCabinetPost(EXEC_ATTORNEY);
    }
    else
    {  // new President has fairly moderate views, but anyone who differs too much from them must be replaced
-      if(DIFF(exec[EXEC_PRESIDENT],exec[EXEC_STATE])>1) fillCabinetPost(EXEC_STATE);
-      if(DIFF(exec[EXEC_PRESIDENT],exec[EXEC_ATTORNEY])>1) fillCabinetPost(EXEC_ATTORNEY);
+      if (diff(exec[EXEC_PRESIDENT], exec[EXEC_STATE]) > 1)
+        fillCabinetPost(EXEC_STATE);
+      if (diff(exec[EXEC_PRESIDENT], exec[EXEC_ATTORNEY]) > 1)
+        fillCabinetPost(EXEC_ATTORNEY);
    }
 }
 
@@ -197,50 +220,79 @@ elections(bool clearformess,bool canseethings)
          else addstr("After a long primary campaign, the people have rallied around two leaders...");
       }
 
-      char candidate[3][POLITICIAN_NAMELEN+1];
+      struct Candidate
+      {
+        Alignment   alignment;
+        std::string name;
+      } candidate[3];
       int votes[3]={0,0,0};
 
       //Primaries
       int approvepres=0, approveveep=0;              // presidential & vice-presidential approval within own party
-      int libvotes[3]={0,0,0}, consvotes[3]={0,0,0}; // liberal & conservative parties' candidates votes received
+      int libvotes[5]  = {0, 0, 0, 0 ,0};
+      int consvotes[5] = {0, 0, 0, 0, 0}; // liberal & conservative parties' candidates votes received
 
       // run primaries for 100 voters
-      for(int i=0;i<100;i++)
+      for(int i=0; i<100; i++)
       {
-         int voters[2]={getsimplevoter(1),getsimplevoter(1)}; // liberal & conservative party voter both decide
-         if(presparty!=STALINIST_PARTY) // Stalinist Party doesn't do primaries
+         Alignment voters[2] =
+         {
+           getsimplevoter(Alignment::LIBERAL),
+           getsimplevoter(Alignment::CONSERVATIVE)
+         }; // liberal & conservative party voter both decide
+
+         if (presparty != STALINIST_PARTY) // Stalinist Party doesn't do primaries
          {
             // Incumbent can win primary automatically if their approval in their party is over 50%,
             // so we need to know what their inter-party approval rating is.
             // check if this voter supports the president (1/2 chance if closely aligned)
-            if(voters[presparty]==exec[EXEC_PRESIDENT]+presparty*2||(DIFF(exec[EXEC_PRESIDENT]+presparty*2,voters[presparty])==1&&!LCSrandom(2))) approvepres++;
+            if (voters[presparty] == exec[EXEC_PRESIDENT]
+             || (diff(exec[EXEC_PRESIDENT], voters[presparty]) == 1 && !LCSrandom(2)))
+            {
+              approvepres++;
+            }
+
             // check if this voter supports the vice-president (1/3 chance if closely aligned)
-            if(voters[presparty]==exec[EXEC_VP]+presparty*2||(DIFF(exec[EXEC_VP]+presparty*2,voters[presparty])==1&&!LCSrandom(3))) approveveep++;
+            if (voters[presparty] == exec[EXEC_VP]
+             || (diff(exec[EXEC_VP], voters[presparty]) == 1 && !LCSrandom(3)))
+            {
+              approveveep++;
+            }
          }
-         consvotes[voters[CONSERVATIVE_PARTY]]++, libvotes[voters[LIBERAL_PARTY]]++; // count ballots
+         consvotes[to_index(voters[CONSERVATIVE_PARTY])]++;
+         libvotes[to_index(voters[LIBERAL_PARTY])]++; // count ballots
       }
 
       // determine conservative winner
-      if(consvotes[0]>consvotes[1]&&consvotes[0]>consvotes[2]) candidate[CONSERVATIVE_PARTY][0]=ALIGN_ARCHCONSERVATIVE;
-      else if(consvotes[1]>consvotes[2]) candidate[CONSERVATIVE_PARTY][0]=ALIGN_CONSERVATIVE;
-      else candidate[CONSERVATIVE_PARTY][0]=ALIGN_MODERATE;
+      if (consvotes[0] > consvotes[1] && consvotes[0] > consvotes[2])
+        candidate[CONSERVATIVE_PARTY].alignment = Alignment::ARCH_CONSERVATIVE;
+      else if (consvotes[1] > consvotes[2])
+        candidate[CONSERVATIVE_PARTY].alignment = Alignment::CONSERVATIVE;
+      else
+        candidate[CONSERVATIVE_PARTY].alignment = Alignment::MODERATE;
 
       // determine liberal winner
-      if(libvotes[0]>libvotes[1]&&libvotes[0]>libvotes[2]) candidate[LIBERAL_PARTY][0]=ALIGN_MODERATE;
-      else if(libvotes[1]>libvotes[2]) candidate[LIBERAL_PARTY][0]=ALIGN_LIBERAL;
-      else candidate[LIBERAL_PARTY][0]=ALIGN_ELITELIBERAL;
+      if (libvotes[2] > libvotes[3] && libvotes[2] > libvotes[4])
+        candidate[LIBERAL_PARTY].alignment = Alignment::MODERATE;
+      else if (libvotes[3] > libvotes[4])
+        candidate[LIBERAL_PARTY].alignment = Alignment::LIBERAL;
+      else
+        candidate[LIBERAL_PARTY].alignment = Alignment::ELITE_LIBERAL;
 
       // Stalinist winner is always Stalinist
-      candidate[STALINIST_PARTY][0]=ALIGN_STALINIST;
+      candidate[STALINIST_PARTY].alignment=Alignment::STALINIST;
       // approval within own party of Stalinist pres and VP is 100%, since all Stalinist party members have the same political views
       if(presparty==STALINIST_PARTY) approvepres=100,approveveep=100;
 
       // name the candidates
-      if(candidate[CONSERVATIVE_PARTY][0]==-2) generate_name(candidate[CONSERVATIVE_PARTY]+1,GENDER_WHITEMALEPATRIARCH);
-      else if(candidate[CONSERVATIVE_PARTY][0]==-1) generate_name(candidate[CONSERVATIVE_PARTY]+1,GENDER_MALE);
-      else generate_name(candidate[CONSERVATIVE_PARTY]+1);
-      generate_name(candidate[LIBERAL_PARTY]+1);
-      generate_name(candidate[STALINIST_PARTY]+1);
+      if (candidate[CONSERVATIVE_PARTY].alignment == Alignment::ARCH_CONSERVATIVE)
+        candidate[CONSERVATIVE_PARTY].name = generate_name(GENDER_WHITEMALEPATRIARCH);
+      else if (candidate[CONSERVATIVE_PARTY].alignment == Alignment::CONSERVATIVE)
+        candidate[CONSERVATIVE_PARTY].name = generate_name(GENDER_MALE);
+      else
+        candidate[CONSERVATIVE_PARTY].name = generate_name();
+      candidate[LIBERAL_PARTY].name = generate_name();
+      candidate[STALINIST_PARTY].name = generate_name();
 
       // Special Incumbency Rules: If the incumbent president or vice president
       // has approval of over 50% in their party, they win their primary
@@ -251,18 +303,21 @@ elections(bool clearformess,bool canseethings)
       // someone else).
       if(execterm==1) // President running for re-election
       {
-         if(approvepres>=50) candidate[presparty][0]=exec[EXEC_PRESIDENT];
-         if(candidate[presparty][0]==exec[EXEC_PRESIDENT]) strcpy(candidate[presparty]+1,execname[EXEC_PRESIDENT]);
-         else execterm=2; // Boom! Incumbent president was defeated in their
+         if (approvepres >= 50)
+           candidate[presparty].alignment = exec[EXEC_PRESIDENT];
+         if (candidate[presparty].alignment == exec[EXEC_PRESIDENT])
+           candidate[presparty].name.copy(execname[EXEC_PRESIDENT], POLITICIAN_NAMELEN-1);
+         else
+           execterm=2; // Boom! Incumbent president was defeated in their
       }                   // own party. New candidate works with a clean slate.
-      else if(approveveep>=50 &&                                              // Vice-President running for President
-             (presparty!=LIBERAL_PARTY||exec[EXEC_VP]!=ALIGN_CONSERVATIVE) && // We don't want conservative liberals
-             (presparty!=CONSERVATIVE_PARTY||exec[EXEC_VP]!=ALIGN_LIBERAL))   // or liberal conservatives.
+      else if (approveveep >= 50 &&                                              // Vice-President running for President
+              (presparty != LIBERAL_PARTY || exec[EXEC_VP] != Alignment::CONSERVATIVE) && // We don't want conservative liberals
+              (presparty != CONSERVATIVE_PARTY || exec[EXEC_VP] != Alignment::LIBERAL))   // or liberal conservatives.
       {
-         if(approvepres>=50)
+         if (approvepres >= 50)
          {
-            candidate[presparty][0]=exec[EXEC_VP];
-            strcpy(candidate[presparty]+1,execname[EXEC_VP]);
+           candidate[presparty].alignment = exec[EXEC_VP];
+           candidate[presparty].name.copy(execname[EXEC_VP], POLITICIAN_NAMELEN-1);
          }
       }
 
@@ -272,13 +327,13 @@ elections(bool clearformess,bool canseethings)
          for(c=0;c<2+stalinmode;c++)
          {
             // Pick color by political orientation
-            set_alignment_color(candidate[c][0],true);
+            set_alignment_color(candidate[c].alignment,true);
 
             move(8-((c+1)%3)*2,0);
             // Choose title -- president or vice president special titles, otherwise
             // pick based on historically likely titles (eg, governor most likely...)
             if(c==presparty&&execterm==1) addstr("President ");
-            else if(c==presparty&&!strcmp(candidate[c]+1,execname[EXEC_VP])) addstr("Vice President ");
+            else if(c==presparty&&!strcmp(candidate[c].name.c_str(),execname[EXEC_VP])) addstr("Vice President ");
             else if(LCSrandom(2)) addstr("Governor ");
             else if(LCSrandom(2)) addstr("Senator ");
             else if(LCSrandom(2)) addstr("Ret. General ");
@@ -286,8 +341,8 @@ elections(bool clearformess,bool canseethings)
             else if(LCSrandom(2)) addstr("Mr. ");
             else addstr("Mrs. ");
 
-            addstr(candidate[c]+1);
-            addstr(", "+getalign(candidate[c][0],false));
+            addstr(candidate[c].name);
+            addstr(", "+as_printable(candidate[c].alignment, false));
          }
 
          if(!disbanding)
@@ -308,36 +363,43 @@ elections(bool clearformess,bool canseethings)
       {
          if(l%2==0&&LCSrandom(5))
          {  // Partyline Liberals (~40%) - except when stalin mode is enabled they can go Stalinist sometimes
-            if(!stalinmode||getswingvoter(true)!=-2||getswingvoter(false)==2) // if we aren't in stalin mode or they don't agree with Stalinism or they are an Elite Liberal
-               votes[LIBERAL_PARTY]++;                                        // go with Liberal Party affiliation (Good Loyal Liberal!)
-            else votes[STALINIST_PARTY]++;                                    // otherwise, this Liberal's gone Stalinist and betrayed Liberalism (TRAITOR!)
+            if (!stalinmode
+                || getswingvoter(true) != Alignment::ARCH_CONSERVATIVE
+                || getswingvoter(false) == Alignment::ELITE_LIBERAL) // if we aren't in stalin mode or they don't agree with Stalinism or they are an Elite Liberal
+              votes[LIBERAL_PARTY]++;                                        // go with Liberal Party affiliation (Good Loyal Liberal!)
+            else
+              votes[STALINIST_PARTY]++;                                    // otherwise, this Liberal's gone Stalinist and betrayed Liberalism (TRAITOR!)
          }
-         else if(l%2==1&&LCSrandom(5))
+         else if (l%2 == 1 && LCSrandom(5))
          {  // Partyline Conservatives (~40%) - except when stalin mode is enabled they can go Stalinist sometimes
-            if(!stalinmode||getswingvoter(true)!=-2||getswingvoter(false)==-2) // if we aren't in stalin mode or they don't agree with Stalinism or they are an Arch-Conservative
-               votes[CONSERVATIVE_PARTY]++;                                    // go with Conservative Party affiliation (Good Loyal Conservative!)
-            else votes[STALINIST_PARTY]++;                                     // otherwise, this Conservative's gone Stalinist and betrayed Conservatism (TRAITOR!)
+            if (!stalinmode
+                || getswingvoter(true) != Alignment::ARCH_CONSERVATIVE
+                || getswingvoter(false) == Alignment::ARCH_CONSERVATIVE) // if we aren't in stalin mode or they don't agree with Stalinism or they are an Arch-Conservative
+              votes[CONSERVATIVE_PARTY]++;                                    // go with Conservative Party affiliation (Good Loyal Conservative!)
+            else
+              votes[STALINIST_PARTY]++;                                     // otherwise, this Conservative's gone Stalinist and betrayed Conservatism (TRAITOR!)
          }
          else // Swing Issue Voters (~20%)
          {
             // Get the leanings of an issue voter
-            int vote=getswingvoter(false);
+            Alignment vote = getswingvoter(false);
             // If they agree with the Stalinist candidate and Stalinist mode is enabled,
             // cast a vote for the Stalinist candidate
-            if(stalinmode&&getswingvoter(true)==-2)
+            if (stalinmode && getswingvoter(true) == Alignment::ARCH_CONSERVATIVE)
                votes[STALINIST_PARTY]++;
             // If they are to the left or equal to the liberal candidate,
             // and they disagree with the other candidate(s), cast a
             // vote for the liberal candidate.
-            else if(vote>=candidate[LIBERAL_PARTY][0]&&vote!=candidate[CONSERVATIVE_PARTY][0])
+            else if (vote >= candidate[LIBERAL_PARTY].alignment && vote != candidate[CONSERVATIVE_PARTY].alignment)
                votes[LIBERAL_PARTY]++;
             // If they are to the right or equal to the conservative candidate,
             // and they disagree with the other candidate(s), cast a vote
             // for the conservative candidate.
-            else if(vote<=candidate[CONSERVATIVE_PARTY][0]&&vote!=candidate[LIBERAL_PARTY][0])
+            else if (vote <= candidate[CONSERVATIVE_PARTY].alignment && vote != candidate[LIBERAL_PARTY].alignment)
                votes[CONSERVATIVE_PARTY]++;
             // If they disagree with all the candidates, vote randomly.
-            else votes[LCSrandom(2+stalinmode)]++;
+            else
+              votes[LCSrandom(2+stalinmode)]++;
          }
 
          if(l%5==4)
@@ -380,12 +442,16 @@ elections(bool clearformess,bool canseethings)
       //else if(disbanding) pause_ms(800);
 
       //CONSTRUCT EXECUTIVE BRANCH
-      if(winner==presparty&&execterm==1) execterm=2;
+      if (winner == presparty && execterm == 1)
+        execterm = 2;
       else
       {
-         presparty=winner, execterm=1, exec[EXEC_PRESIDENT]=candidate[winner][0];
-         strcpy(execname[EXEC_PRESIDENT],candidate[winner]+1);
-         for(int e=EXEC_PRESIDENT+1;e<EXECNUM;e++) fillCabinetPost(e);
+         presparty = winner;
+         execterm = 1;
+         exec[EXEC_PRESIDENT] = candidate[winner].alignment;
+         candidate[winner].name.copy(execname[EXEC_PRESIDENT], POLITICIAN_NAMELEN);
+         for (int e=EXEC_PRESIDENT+1; e<EXECNUM; e++)
+           fillCabinetPost(e);
       }
    }
 
@@ -416,22 +482,24 @@ elections(bool clearformess,bool canseethings)
    memset(lawpriority,0,LAWNUM*sizeof(int));
    char lawdir[LAWNUM];
    memset(lawdir,0,LAWNUM*sizeof(char));
+
    //DETERMINE PROPS
-   int pmood, pvote;
    for(l=0;l<LAWNUM;l++)
    {
-      pmood=publicmood(l);
-      pvote=-2;
-      for(int i=0;i<4;i++) if(LCSrandom(100)<pmood) pvote++;
+      int pmood=publicmood(l);
+      Alignment xvote = Alignment::ARCH_CONSERVATIVE;
+      for (int i=0; i<4; i++)
+        if (LCSrandom(100) < pmood)
+          shift_left(xvote);
 
-      if(law[l]<pvote) lawdir[l]=1;
-      if(law[l]>=pvote) lawdir[l]=-1;
-      if(law[l]==-2) lawdir[l]=1;
-      if(law[l]==2) lawdir[l]=-1;
+      if (to_right_of(law[l], xvote)) lawdir[l] = 1;
+      if (to_left_of(law[l], xvote)) lawdir[l] = -1;
+      if (law[l] == Alignment::ARCH_CONSERVATIVE) lawdir[l]=1;
+      if (law[l] == Alignment::ELITE_LIBERAL) lawdir[l]=-1;
 
-      pvote=(law[l]+2)*25; //CALC PRIORITY
+      int pvote = to_index(law[l]) * 25; //CALC PRIORITY
 
-      lawpriority[l]=DIFF(pvote,pmood)+LCSrandom(10)+public_interest[l];
+      lawpriority[l] = DIFF(pvote,pmood)+LCSrandom(10)+public_interest[l];
    }
 
    prop.resize(pnum);
@@ -481,7 +549,7 @@ elections(bool clearformess,bool canseethings)
          addstr("Proposition "+std::to_string(propnums[p])+':');
          move(p*3+2,18);
          addstr("To ");
-         set_alignment_color(propdir[p]);
+         set_alignment_color(shift(Alignment::MODERATE, propdir[p]));
          switch(prop[p])
          {
             case LAW_ABORTION:
@@ -571,10 +639,13 @@ elections(bool clearformess,bool canseethings)
             case LAW_PRISONS:
                if(propdir[p]==1)
                {
-                  if(law[LAW_PRISONS]==1) addstr("Establish Prison Rehabilitation"); // was "Mandate Prison Rehabilitation"
-                  else addstr("Improve Prison Conditions"); // was "Expand Prisoners' Rights"
+                  if (law[LAW_PRISONS] == Alignment::LIBERAL)
+                    addstr("Establish Prison Rehabilitation"); // was "Mandate Prison Rehabilitation"
+                  else
+                    addstr("Improve Prison Conditions"); // was "Expand Prisoners' Rights"
                }
-               else addstr("Enhance Prison Security"); // was "Limit Prisoners' Rights"
+               else
+                 addstr("Enhance Prison Security"); // was "Limit Prisoners' Rights"
                break;
          }
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -638,7 +709,8 @@ elections(bool clearformess,bool canseethings)
          addstr("A Recount was Necessary");
       }
 
-      if(yeswin) law[prop[p]]+=propdir[p];
+      if (yeswin)
+        law[prop[p]] = shift(law[prop[p]], propdir[p]);
    }
 
    if(canseethings)
@@ -678,7 +750,7 @@ elections_senate(int senmod,bool canseethings)
       if(canseethings)
       {
          set_alignment_color(senate[s],true);
-         mvaddstr(y,x,getalign(senate[s],false));
+         mvaddstr(y,x,as_printable(senate[s], false));
       }
 
       x+=20;
@@ -694,7 +766,8 @@ elections_senate(int senmod,bool canseethings)
       getkey();
    }
 
-   int vote,change[6]={0,0,0,0,0,0};
+   int change[6]={0,0,0,0,0,0};
+   Alignment vote;
 
    x=0,y=2;
 
@@ -702,40 +775,53 @@ elections_senate(int senmod,bool canseethings)
    {
       if(senmod!=-1 && s%3!=senmod) continue;
 
-      vote=-2;
-      for(int i=0;i<4;i++) if(mood>LCSrandom(100)) vote++;
-      if(stalinmode&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)) vote=3;
+      vote = Alignment::ARCH_CONSERVATIVE;
+      for(int i=0; i<4; i++)
+        if (mood > LCSrandom(100))
+          shift_left(vote);
+      if (stalinmode&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100))
+        vote = Alignment::STALINIST;
 
-      change[senate[s]+2]--;
-      if(termlimits) senate[s]=vote;
+      change[to_index(senate[s])]--;
+      if (termlimits)
+        senate[s] = vote;
       else
       {
-         int vote2;
+         Alignment vote2;
          bool first=true;
          do {
-            vote2=-2;
-            for(int i=0;i<4;i++) if(mood>LCSrandom(100)) vote2++;
-            if(stalinmode&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)) vote2=3;
+            vote2 = Alignment::ARCH_CONSERVATIVE;
+            for (int i=0; i<4; i++)
+              if (mood>LCSrandom(100))
+                shift_left(vote2);
+            if (stalinmode&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100))
+              vote2 = Alignment::STALINIST;
 
-            if(first) switch(law[LAW_ELECTIONS])
-            {
-            case -2: if( LCSrandom(3)) vote2=senate[s]; break; // 2/3 chance of incumbent winning no matter what (huge   advantage)
-            case -1: if( LCSrandom(2)) vote2=senate[s]; break; // 1/2 chance of incumbent winning no matter what (big    advantage)
-            case  0: if(!LCSrandom(3)) vote2=senate[s]; break; // 1/3 chance of incumbent winning no matter what (medium advantage)
-            case  1: if(!LCSrandom(5)) vote2=senate[s]; break; // 1/5 chance of incumbent winning no matter what (small  advantage)
-            case  2: if(!LCSrandom(8)) vote2=senate[s]; break; // 1/8 chance of incumbent winning no matter what (tiny   advantage)
-            }
+            if (first)
+              switch (law[LAW_ELECTIONS])
+              {
+                case Alignment::ARCH_CONSERVATIVE:
+                  if( LCSrandom(3)) vote2=senate[s]; break; // 2/3 chance of incumbent winning no matter what (huge   advantage)
+                case Alignment::CONSERVATIVE:
+                  if( LCSrandom(2)) vote2=senate[s]; break; // 1/2 chance of incumbent winning no matter what (big    advantage)
+                case  Alignment::MODERATE:
+                  if(!LCSrandom(3)) vote2=senate[s]; break; // 1/3 chance of incumbent winning no matter what (medium advantage)
+                case  Alignment::LIBERAL:
+                  if(!LCSrandom(5)) vote2=senate[s]; break; // 1/5 chance of incumbent winning no matter what (small  advantage)
+                case  Alignment::ELITE_LIBERAL:
+                  if(!LCSrandom(8)) vote2=senate[s]; break; // 1/8 chance of incumbent winning no matter what (tiny   advantage)
+              }
             first=false;
          } while(vote2!=senate[s]&&vote2!=vote);
          senate[s]=vote2;
       }
-      change[senate[s]+2]++;
+      change[to_index(senate[s])]++;
 
       if(canseethings)
       {
          set_alignment_color(senate[s],true);
          mvaddstr(y,x,"                    ");
-         mvaddstr(y,x,getalign(senate[s],false));
+         mvaddstr(y,x,as_printable(senate[s], false));
       }
 
       x+=20;
@@ -777,40 +863,49 @@ elections_senate(int senmod,bool canseethings)
    if(canseethings)
    {
       move(21,0);
-      signed char winner;
+      Alignment winner;
       if(change[5]>0&&change[5]>change[0]+change[1]&&change[5]>change[3]+change[4]) // Stalinist increased and Stalinist gain is more than C or L side gain/loss
-         winner=ALIGN_STALINIST;
+         winner = Alignment::STALINIST;
       else if(change[0]+change[1]>change[3]+change[4]) // C side gain/loss is more than L side gain/loss
       {
-         if(change[1]<0 && mood<25) winner=ALIGN_ARCHCONSERVATIVE;
-         else winner=ALIGN_CONSERVATIVE;
+         if(change[1]<0 && mood<25)
+           winner = Alignment::ARCH_CONSERVATIVE;
+         else
+           winner = Alignment::CONSERVATIVE;
       }
       else if(change[3]+change[4]>change[0]+change[1]) // L side gain/loss is more than C side gain/loss
       {
-         if(change[3]<0 && mood>75) winner=ALIGN_ELITELIBERAL;
-         else winner=ALIGN_LIBERAL;
+         if(change[3]<0 && mood>75)
+           winner = Alignment::ELITE_LIBERAL;
+         else
+           winner = Alignment::LIBERAL;
       }
       else if(change[0]>0&&change[4]<=0&&change[5]<=0) // C+ increased and L+ and Stalinist both same or decreased
       {
-         if(mood<25) winner=ALIGN_ARCHCONSERVATIVE;
-         else winner=ALIGN_CONSERVATIVE;
+         if(mood<25)
+           winner = Alignment::ARCH_CONSERVATIVE;
+         else
+           winner = Alignment::CONSERVATIVE;
       }
       else if(change[4]>0&&change[0]<=0&&change[5]<=0) // L+ increased and C+ and Stalinist both same or decreased
       {
-         if(mood>75) winner=ALIGN_ELITELIBERAL;
-         else winner=ALIGN_LIBERAL;
+         if(mood>75)
+           winner = Alignment::ELITE_LIBERAL;
+         else
+           winner = Alignment::LIBERAL;
       }
       else if(change[5]>0&&change[0]<=0&&change[4]<=0) // Stalinist increased and C+ and L+ both same or decreased
-         winner=ALIGN_STALINIST;
-      else winner=ALIGN_MODERATE; // nobody won
+        winner = Alignment::STALINIST;
+      else
+        winner = Alignment::MODERATE; // nobody won
       switch(winner)
       {
-      case ALIGN_ARCHCONSERVATIVE: addstr("The $$ U.S.A. Flag Eagle $$ Conservative Tea Party claims victory!"); break;
-      case ALIGN_CONSERVATIVE: addstr("The Conservative Party claims victory!"); break;
-      case ALIGN_MODERATE: addstr("The next two years promise to be more of the same."); break;
-      case ALIGN_LIBERAL: addstr("The Liberal Party claims victory!"); break;
-      case ALIGN_ELITELIBERAL: addstr("The Progressive Elite Social Liberal Green Party claims victory!"); break;
-      case ALIGN_STALINIST: addstr("The Stalinist Party claims victory!"); break;
+      case Alignment::ARCH_CONSERVATIVE: addstr("The $$ U.S.A. Flag Eagle $$ Conservative Tea Party claims victory!"); break;
+      case Alignment::CONSERVATIVE: addstr("The Conservative Party claims victory!"); break;
+      case Alignment::MODERATE: addstr("The next two years promise to be more of the same."); break;
+      case Alignment::LIBERAL: addstr("The Liberal Party claims victory!"); break;
+      case Alignment::ELITE_LIBERAL: addstr("The Progressive Elite Social Liberal Green Party claims victory!"); break;
+      case Alignment::STALINIST: addstr("The Stalinist Party claims victory!"); break;
       }
 
       move(22,0);
@@ -846,27 +941,27 @@ elections_house(bool canseethings)
       {
          move(y,x);
 
-         if(house[h]==-2)
+         if (house[h] == Alignment::ARCH_CONSERVATIVE)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
             addstr("C+");
          }
-         else if(house[h]==-1)
+         else if (house[h] == Alignment::CONSERVATIVE)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
             addstr("C ");
          }
-         else if(house[h]==0)
+         else if (house[h] == Alignment::MODERATE)
          {
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
             addstr("m ");
          }
-         else if(house[h]==1)
+         else if (house[h] == Alignment::LIBERAL)
          {
             set_color(COLOR_CYAN,COLOR_BLACK,1);
             addstr("L ");
          }
-         else if(house[h]==2)
+         else if (house[h] == Alignment::ELITE_LIBERAL)
          {
             set_color(COLOR_GREEN,COLOR_BLACK,1);
             addstr("L+");
@@ -891,66 +986,90 @@ elections_house(bool canseethings)
       getkey();
    }
 
-   int vote,change[6]={0,0,0,0,0,0};
+   int change[6]={0,0,0,0,0,0};
 
    x=0,y=2;
 
    for(h=0;h<HOUSENUM;h++)
    {
-      vote=-2;
-      for(int i=0;i<4;i++) if(mood>LCSrandom(100)) vote++;
-      if(stalinmode&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)) vote=3;
+      Alignment vote = Alignment::ARCH_CONSERVATIVE;
+      for (int i=0; i<4; i++)
+        if (mood>LCSrandom(100))
+          shift_left(vote);
+      if(stalinmode&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100))
+        vote = Alignment::STALINIST;
 
-      change[house[h]+2]--;
+      change[to_index(house[h])]--;
       if(termlimits) house[h]=vote;
       else
       {
-         int vote2;
+         Alignment vote2;
          bool first=true;
          do {
-            vote2=-2;
-            for(int i=0;i<4;i++) if(mood>LCSrandom(100)) vote2++;
-            if(stalinmode&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)&&stalinmood<LCSrandom(100)) vote2=3;
+            vote2 = Alignment::ARCH_CONSERVATIVE;
+            for (int i=0; i<4; i++)
+              if (mood>LCSrandom(100))
+                shift_left(vote2);
+            if (stalinmode && stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100) && stalinmood < LCSrandom(100) && stalinmood <LCSrandom(100))
+              vote2 = Alignment::STALINIST;
 
-            if(first) switch(law[LAW_ELECTIONS])
+            if(first)
             {
-            case -2: if( LCSrandom(3)) vote2=house[h]; break; // 2/3 chance of incumbent winning no matter what (huge   advantage)
-            case -1: if( LCSrandom(2)) vote2=house[h]; break; // 1/2 chance of incumbent winning no matter what (big    advantage)
-            case  0: if(!LCSrandom(3)) vote2=house[h]; break; // 1/3 chance of incumbent winning no matter what (medium advantage)
-            case  1: if(!LCSrandom(5)) vote2=house[h]; break; // 1/5 chance of incumbent winning no matter what (small  advantage)
-            case  2: if(!LCSrandom(8)) vote2=house[h]; break; // 1/8 chance of incumbent winning no matter what (tiny   advantage)
+              switch(law[LAW_ELECTIONS])
+              {
+                case Alignment::ARCH_CONSERVATIVE:
+                  if (LCSrandom(3))
+                    vote2 = house[h];
+                  break; // 2/3 chance of incumbent winning no matter what (huge   advantage)
+                case Alignment::CONSERVATIVE:
+                  if (LCSrandom(2))
+                    vote2 = house[h];
+                  break; // 1/2 chance of incumbent winning no matter what (big    advantage)
+                case  Alignment::MODERATE:
+                  if (!LCSrandom(3))
+                    vote2 = house[h];
+                  break; // 1/3 chance of incumbent winning no matter what (medium advantage)
+                case  Alignment::LIBERAL:
+                  if (!LCSrandom(5))
+                    vote2 = house[h];
+                  break; // 1/5 chance of incumbent winning no matter what (small  advantage)
+                case  Alignment::ELITE_LIBERAL:
+                  if (!LCSrandom(8))
+                    vote2=house[h];
+                  break; // 1/8 chance of incumbent winning no matter what (tiny   advantage)
+              }
             }
             first=false;
          } while(vote2!=house[h]&&vote2!=vote);
          house[h]=vote2;
       }
-      change[house[h]+2]++;
+      change[to_index(house[h])]++;
 
       if(canseethings)
       {
          move(y,x);
 
-         if(house[h]==-2)
+         if (house[h] == Alignment::ARCH_CONSERVATIVE)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
             addstr("C+");
          }
-         else if(house[h]==-1)
+         else if (house[h] == Alignment::CONSERVATIVE)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
             addstr("C ");
          }
-         else if(house[h]==0)
+         else if (house[h] == Alignment::MODERATE)
          {
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
             addstr("m ");
          }
-         else if(house[h]==1)
+         else if (house[h] == Alignment::LIBERAL)
          {
             set_color(COLOR_CYAN,COLOR_BLACK,1);
             addstr("L ");
          }
-         else if(house[h]==2)
+         else if (house[h] == Alignment::ELITE_LIBERAL)
          {
             set_color(COLOR_GREEN,COLOR_BLACK,1);
             addstr("L+");
@@ -1001,40 +1120,49 @@ elections_house(bool canseethings)
    if(canseethings)
    {
       move(21,0);
-      signed char winner;
+      Alignment winner;
       if(change[5]>0&&change[5]>change[0]+change[1]&&change[5]>change[3]+change[4]) // Stalinist increased and Stalinist gain is more than C or L side gain/loss
-         winner=ALIGN_STALINIST;
+         winner = Alignment::STALINIST;
       else if(change[0]+change[1]>change[3]+change[4]) // C side gain/loss is more than L side gain/loss
       {
-         if(change[1]<0 && mood<25) winner=ALIGN_ARCHCONSERVATIVE;
-         else winner=ALIGN_CONSERVATIVE;
+         if(change[1]<0 && mood<25)
+           winner = Alignment::ARCH_CONSERVATIVE;
+         else
+           winner = Alignment::CONSERVATIVE;
       }
       else if(change[3]+change[4]>change[0]+change[1]) // L side gain/loss is more than C side gain/loss
       {
-         if(change[3]<0 && mood>75) winner=ALIGN_ELITELIBERAL;
-         else winner=ALIGN_LIBERAL;
+         if (change[3]<0 && mood>75)
+           winner = Alignment::ELITE_LIBERAL;
+         else
+           winner = Alignment::LIBERAL;
       }
       else if(change[0]>0&&change[4]<=0&&change[5]<=0) // C+ increased and L+ and Stalinist both same or decreased
       {
-         if(mood<25) winner=ALIGN_ARCHCONSERVATIVE;
-         else winner=ALIGN_CONSERVATIVE;
+         if(mood<25)
+           winner = Alignment::ARCH_CONSERVATIVE;
+         else
+           winner = Alignment::CONSERVATIVE;
       }
       else if(change[4]>0&&change[0]<=0&&change[5]<=0) // L+ increased and C+ and Stalinist both same or decreased
       {
-         if(mood>75) winner=ALIGN_ELITELIBERAL;
-         else winner=ALIGN_LIBERAL;
+         if(mood>75)
+           winner = Alignment::ELITE_LIBERAL;
+         else
+           winner = Alignment::LIBERAL;
       }
       else if(change[5]>0&&change[0]<=0&&change[4]<=0) // Stalinist increased and C+ and L+ both same or decreased
-         winner=ALIGN_STALINIST;
-      else winner=ALIGN_MODERATE; // nobody won
+        winner = Alignment::STALINIST;
+      else
+        winner = Alignment::MODERATE; // nobody won
       switch(winner)
       {
-      case ALIGN_ARCHCONSERVATIVE: addstr("The $$ U.S.A. Flag Eagle $$ Conservative Tea Party claims victory!"); break;
-      case ALIGN_CONSERVATIVE: addstr("The Conservative Party claims victory!"); break;
-      case ALIGN_MODERATE: addstr("The next two years promise to be more of the same."); break;
-      case ALIGN_LIBERAL: addstr("The Liberal Party claims victory!"); break;
-      case ALIGN_ELITELIBERAL: addstr("The Progressive Elite Social Liberal Green Party claims victory!"); break;
-      case ALIGN_STALINIST: addstr("The Stalinist Party claims victory!"); break;
+      case Alignment::ARCH_CONSERVATIVE: addstr("The $$ U.S.A. Flag Eagle $$ Conservative Tea Party claims victory!"); break;
+      case Alignment::CONSERVATIVE: addstr("The Conservative Party claims victory!"); break;
+      case Alignment::MODERATE: addstr("The next two years promise to be more of the same."); break;
+      case Alignment::LIBERAL: addstr("The Liberal Party claims victory!"); break;
+      case Alignment::ELITE_LIBERAL: addstr("The Progressive Elite Social Liberal Green Party claims victory!"); break;
+      case Alignment::STALINIST: addstr("The Stalinist Party claims victory!"); break;
       }
       if(!disbanding)
       {
@@ -1103,8 +1231,10 @@ supremecourt(bool clearformess, bool canseethings)
       else if(scase[c]==LAW_GUNCONTROL)bias=-1;
       else bias=0;
 
-      if(law[scase[c]]==2)scasedir[c]=-1;
-      else if(law[scase[c]]==-2)scasedir[c]=1;
+      if (law[scase[c]] == Alignment::ELITE_LIBERAL)
+        scasedir[c]=-1;
+      else if (law[scase[c]] == Alignment::ARCH_CONSERVATIVE)
+        scasedir[c]=1;
       else
       {
          if(bias)scasedir[c]=bias;
@@ -1232,10 +1362,13 @@ supremecourt(bool clearformess, bool canseethings)
             case LAW_PRISONS:
                if(scasedir[c]==1)
                {
-                  if(law[LAW_PRISONS]==1) addstr("Establish Prison Rehabilitation"); // was "Mandate Prison Rehabilitation"
-                  else addstr("Improve Prison Conditions"); // was "Expand Prisoners' Rights"
+                  if (law[LAW_PRISONS] == Alignment::LIBERAL)
+                    addstr("Establish Prison Rehabilitation"); // was "Mandate Prison Rehabilitation"
+                  else
+                    addstr("Improve Prison Conditions"); // was "Expand Prisoners' Rights"
                }
-               else addstr("Enhance Prison Security"); // was "Limit Prisoners' Rights"
+               else
+                 addstr("Enhance Prison Security"); // was "Limit Prisoners' Rights"
                break;
          }
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1256,7 +1389,8 @@ supremecourt(bool clearformess, bool canseethings)
    for(c=0;c<cnum;c++)
    {
       char yeswin=0;
-      int yesvotes=0,vote;
+      int yesvotes=0;
+      Alignment vote;
       //Constitutional bias -- free speech, flag burning issues, supreme court
       //is extra liberal, gun control, supreme court is extra conservative
       //"All court justices will vote according to alignment and bias and do not consult
@@ -1267,16 +1401,19 @@ supremecourt(bool clearformess, bool canseethings)
 
       for(int l=0;l<COURTNUM;l++)
       {
-         vote=court[l];
-         if(vote==ALIGN_STALINIST)
+         vote = court[l];
+         if (vote == Alignment::STALINIST)
          {
-            if(stalinview(scase[c],true)) vote=ALIGN_ELITELIBERAL;
-            else vote=ALIGN_ARCHCONSERVATIVE;
+            if(stalinview(scase[c],true))
+              vote = Alignment::ELITE_LIBERAL;
+            else
+              vote = Alignment::ARCH_CONSERVATIVE;
          }
-         if(vote>=-1&&vote<=1) vote+=bias;
+         if (!is_extreme(vote))
+           vote = shift(vote, bias);
 
-         if(law[scase[c]]>vote && scasedir[c]==-1) yesvotes++;
-         if(law[scase[c]]<vote && scasedir[c]==1) yesvotes++;
+         if (to_left_of(law[scase[c]], vote) && scasedir[c] == -1) yesvotes++;
+         if (to_right_of(law[scase[c]], vote) && scasedir[c] == 1) yesvotes++;
 
          if(l==COURTNUM-1&&yesvotes>=COURTMAJORITY) yeswin=1;
 
@@ -1300,7 +1437,8 @@ supremecourt(bool clearformess, bool canseethings)
          }
       }
 
-      if(yeswin) law[scase[c]]+=scasedir[c];
+      if (yeswin)
+        law[scase[c]] = shift(law[scase[c]], scasedir[c]);
    }
 
    if(canseethings)
@@ -1333,7 +1471,7 @@ supremecourt(bool clearformess, bool canseethings)
          addstr("Justice ");
          addstr(courtname[j]);
          addstr(", ");
-         addstr(getalign(court[j],false));
+         addstr(as_printable(court[j], false));
          addstr(", is stepping down.");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1343,23 +1481,24 @@ supremecourt(bool clearformess, bool canseethings)
          getkey();
       }
 
-      float president=(exec[EXEC_PRESIDENT]==ALIGN_STALINIST?-3:exec[EXEC_PRESIDENT]);
+      float president = (exec[EXEC_PRESIDENT] == Alignment::STALINIST ? -3.0f : float(to_index(exec[EXEC_PRESIDENT]) - 2));
       float sen=0;
-      for(int s=0;s<100;s++) sen+=(senate[s]==ALIGN_STALINIST?-3:senate[s]);
-      sen/=100.0f;
+      for (int s=0; s<100; s++)
+        sen += (senate[s] == Alignment::STALINIST ? -3.0f : float(to_index(senate[s]) - 2));
+      sen /= 100.0f;
 
       float consensus=(president+sen)*.5f;
 
-      if(consensus<-2.1f) court[j]=ALIGN_STALINIST;
-      else if(consensus<-1.5f) court[j]=ALIGN_ARCHCONSERVATIVE;
-      else if(consensus<-.5f) court[j]=ALIGN_CONSERVATIVE;
-      else if(consensus<.5f) court[j]=ALIGN_MODERATE;
-      else if(consensus<1.5f) court[j]=ALIGN_LIBERAL;
-      else court[j]=ALIGN_ELITELIBERAL;
+      if(consensus<-2.1f) court[j]=Alignment::STALINIST;
+      else if(consensus<-1.5f) court[j]=Alignment::ARCH_CONSERVATIVE;
+      else if(consensus<-.5f) court[j]=Alignment::CONSERVATIVE;
+      else if(consensus<.5f) court[j]=Alignment::MODERATE;
+      else if(consensus<1.5f) court[j]=Alignment::LIBERAL;
+      else court[j]=Alignment::ELITE_LIBERAL;
 
       do
       {
-         if(court[j]==ALIGN_ARCHCONSERVATIVE)
+         if(court[j]==Alignment::ARCH_CONSERVATIVE)
             generate_name(courtname[j],GENDER_WHITEMALEPATRIARCH);
          else generate_name(courtname[j]);
       } while(len(courtname[j])>20);
@@ -1369,11 +1508,13 @@ supremecourt(bool clearformess, bool canseethings)
          move(4,0);
          addstr("After much debate and televised testimony, a new justice,");
          move(5,0);
-         if(court[j]==ALIGN_STALINIST) addstr("Comrade ");
-         else addstr("the Honorable ");
+         if(court[j]==Alignment::STALINIST)
+           addstr("Comrade ");
+         else
+           addstr("the Honorable ");
          addstr(courtname[j]);
          addstr(", ");
-         addstr(getalign(court[j],false));
+         addstr(as_printable(court[j], false));
          addstr(", is appointed to the bench.");
 
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1402,34 +1543,44 @@ enum BillStatus
  * deviate from their alignment.  More extreme politicians are less likely to
  * deviate from their views. Moderates always consult public opinion.
  */
-static char
-determine_politician_vote(char alignment, int law)
+static Alignment
+determine_politician_vote(Alignment alignment, int law)
 {
-   char vote=alignment;
+   Alignment vote = alignment;
    int mood=publicmood(law);
-   if(vote==ALIGN_STALINIST)
+   if (vote==Alignment::STALINIST)
    {
       // Stalinist -- Will not accept public opinion
-      if(stalinview(law,true)) vote=ALIGN_ELITELIBERAL;
-      else vote=ALIGN_ARCHCONSERVATIVE;
+      if (stalinview(law,true))
+        vote = Alignment::ELITE_LIBERAL;
+      else
+        vote = Alignment::ARCH_CONSERVATIVE;
    }
-   else if(vote==-2 || vote==2)
+   else if (is_extreme(vote))
    {
       // Extremist -- Damn public opinion, I'm doing what I think is right
    }
-   else if(vote==-1 || vote==1)
+   else if (vote == Alignment::CONSERVATIVE || vote == Alignment::LIBERAL)
    {
       // Partisan -- Listens to public opinion, but won't accept opposing views
-      vote=-2;
-      for(int i=0;i<4;i++)if(LCSrandom(100)<mood)vote++;
-      if(abs(vote-alignment)>1)vote=0;
+      vote = Alignment::ARCH_CONSERVATIVE;
+      for (int i=0; i<4; i++)
+        if (LCSrandom(100) < mood)
+          vote = shift_left(vote);
+      if (diff(vote, alignment) > 1)
+        vote = Alignment::MODERATE;
    }
-   else if(vote==0)
+   else
    {
       // Moderate -- Listens to public opinion, but won't accept either extreme
-      vote=-2;
-      for(int i=0;i<4;i++)if(LCSrandom(100)<mood)vote++;
-      if(abs(vote)>1)vote=vote/2;
+      vote = Alignment::ARCH_CONSERVATIVE;
+      for (int i=0; i<4; i++)
+        if (LCSrandom(100) < mood)
+          vote = shift_left(vote);
+      if (vote == Alignment::ARCH_CONSERVATIVE)
+        vote = Alignment::CONSERVATIVE;
+      else if (vote == Alignment::ELITE_LIBERAL)
+        vote = Alignment::LIBERAL;
    }
    return vote;
 }
@@ -1483,44 +1634,64 @@ congress(bool clearformess, bool canseethings)
       pup=0,pdown=0,pprior=0;
 
       // Consult House
-      for(int cl=0;cl<HOUSENUM;cl++)
+      for(int cl=0; cl<HOUSENUM; cl++)
       {
-         short housealign=house[cl];
-         if(housealign==ALIGN_STALINIST)
+         Alignment housealign = house[cl];
+         if (housealign == Alignment::STALINIST)
          {
-            if(stalinview(l,true)) housealign=ALIGN_ELITELIBERAL;
-            else housealign=ALIGN_ARCHCONSERVATIVE;
+            if (stalinview(l,true))
+              housealign = Alignment::ELITE_LIBERAL;
+            else
+              housealign = Alignment::ARCH_CONSERVATIVE;
          }
-         if(law[l]<housealign)pup++;
-         else if(law[l]>housealign)pdown++;
-         pprior+=DIFF(housealign,law[l]);
+         if (to_right_of(law[l], housealign))
+           pup++;
+         else if (to_left_of(law[l], housealign))
+           pdown++;
+         pprior += diff(housealign, law[l]);
       }
+
       // Consult Senate
-      for(int sl=0;sl<SENATENUM;sl++)
+      for (int sl=0; sl<SENATENUM; sl++)
       {
-         short senatealign=senate[sl];
-         if(senatealign==ALIGN_STALINIST)
+         Alignment senatealign = senate[sl];
+         if (senatealign==Alignment::STALINIST)
          {
-            if(stalinview(l,true)) senatealign=ALIGN_ELITELIBERAL;
-            else senatealign=ALIGN_ARCHCONSERVATIVE;
+            if(stalinview(l,true))
+              senatealign = Alignment::ELITE_LIBERAL;
+            else
+              senatealign = Alignment::ARCH_CONSERVATIVE;
          }
-         if(law[l]<senatealign)pup+=4;
-         else if(law[l]>senatealign)pdown+=4;
-         pprior+=DIFF(senatealign,law[l])*4;
+         if (to_right_of(law[l], senatealign))
+           pup += 4;
+         else if (to_left_of(law[l], senatealign))
+           pdown += 4;
+         pprior += diff(senatealign, law[l]) * 4;
       }
+
       // Consult Public Opinion
       int mood=publicmood(l);
-      int public_position=-2;
-      for(int i=0;i<4;i++)if(10+20*i<mood)public_position++;
-      if(law[l]<public_position)pup+=600;
-      if(law[l]>public_position)pdown+=600;
-      pprior+=DIFF(public_position,law[l])*600;
+      Alignment public_position = Alignment::ARCH_CONSERVATIVE;
+      for(int i=0; i<4; i++)
+        if (10+20*i<mood)
+          shift_left(public_position);
+      if (to_right_of(law[l], public_position))
+        pup += 600;
+      if (to_left_of(law[l], public_position))
+        pdown += 600;
+      pprior += diff(public_position, law[l]) * 600;
 
-      if(pup>pdown) lawdir[l]=1;
-      else if(pup==pdown) lawdir[l]=LCSrandom(2)*2-1;
-      else lawdir[l]=-1;
-      if(law[l]==-2) lawdir[l]=1;
-      if(law[l]==2) lawdir[l]=-1;
+      if (pup > pdown)
+        lawdir[l] = 1;
+      else if (pup == pdown)
+        lawdir[l] = LCSrandom(2)*2-1;
+      else
+        lawdir[l]=-1;
+
+      if (law[l] == Alignment::ARCH_CONSERVATIVE)
+        lawdir[l] = 1;
+      if (law[l] == Alignment::ELITE_LIBERAL)
+        lawdir[l] = -1;
 
       //CALC PRIORITY
       lawpriority[l]=pprior;
@@ -1649,12 +1820,15 @@ congress(bool clearformess, bool canseethings)
                else addstr("Enhance Interrogations to Fight Terrorism"); // was "Permit Strong Tactics in Interrogations"
                break;
             case LAW_PRISONS:
-               if(billdir[c]==1)
+               if (billdir[c] == 1)
                {
-                  if(law[LAW_PRISONS]==1) addstr("Establish Prison Rehabilitation"); // was "Mandate Prison Rehabilitation"
-                  else addstr("Improve Prison Conditions"); // was "Expand Prisoners' Rights"
+                  if (law[LAW_PRISONS] == Alignment::LIBERAL)
+                    addstr("Establish Prison Rehabilitation"); // was "Mandate Prison Rehabilitation"
+                  else
+                    addstr("Improve Prison Conditions"); // was "Expand Prisoners' Rights"
                }
-               else addstr("Enhance Prison Security"); // was "Limit Prisoners' Rights"
+               else
+                 addstr("Enhance Prison Security"); // was "Limit Prisoners' Rights"
                break;
          }
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1681,11 +1855,12 @@ congress(bool clearformess, bool canseethings)
    {
       char yeswin_h=0, yeswin_s=0;
       int yesvotes_h=0, yesvotes_s=0;
-      int vote, s=0;
+      int s=0;
+      Alignment vote;
 
       for(int l=0;l<HOUSENUM;l++)
       {
-         vote=determine_politician_vote(house[l],bill[c]);
+         vote = determine_politician_vote(house[l],bill[c]);
 
          if(law[bill[c]]>vote&&billdir[c]==-1) yesvotes_h++;
          if(law[bill[c]]<vote&&billdir[c]==1) yesvotes_h++;
@@ -1715,10 +1890,10 @@ congress(bool clearformess, bool canseethings)
 
          if(l%4==0&&s<SENATENUM)
          {
-            vote=determine_politician_vote(senate[s++],bill[c]);
+            vote = determine_politician_vote(senate[s++], bill[c]);
 
-            if(law[bill[c]]>vote&&billdir[c]==-1) yesvotes_s++;
-            if(law[bill[c]]<vote&&billdir[c]==1) yesvotes_s++;
+            if (to_left_of(law[bill[c]], vote) && billdir[c]==-1) yesvotes_s++;
+            if (to_right_of(law[bill[c]], vote) && billdir[c]==1) yesvotes_s++;
          }
 
          if(l==HOUSENUM-1)
@@ -1727,25 +1902,32 @@ congress(bool clearformess, bool canseethings)
             if(yesvotes_s<SENATESUPERMAJORITY&&killbill[c]==BILL_OVERRIDE_VETO) killbill[c]=BILL_PASSED_CONGRESS;
             if(yesvotes_s==SENATEMAJORITY-1)
             {  //TIE BREAKER
-               int vote;
-               if((exec[EXEC_VP]>=-1&&exec[EXEC_VP]<=1)||
-                  (exec[EXEC_PRESIDENT]>=-1&&exec[EXEC_PRESIDENT]<=1))
-                  vote=(exec[EXEC_PRESIDENT]+ // only consult Cabinet and random number generator if alignment between -1 and 1
-                        exec[EXEC_VP]+        // for President and/or Vice President
-                        exec[EXEC_STATE]+
-                        exec[EXEC_ATTORNEY]+LCSrandom(9)-4)/4;
+               Alignment vote;
+               if (!is_extreme(exec[EXEC_VP]) || !is_extreme(exec[EXEC_PRESIDENT]))
+               {
+                std::size_t sum = to_index(exec[EXEC_PRESIDENT]) // only consult Cabinet and random number generator if President
+                                + to_index(exec[EXEC_VP])        // or VP is not an extremist.
+                                + to_index(exec[EXEC_STATE])
+                                + to_index(exec[EXEC_ATTORNEY])
+                                + LCSrandom(9)
+                                - 4;
+                std::size_t avg = sum / 5;
+                vote = shift_left(Alignment::ARCH_CONSERVATIVE, avg);
+               }
                else
                {
-                  vote=exec[EXEC_VP];
-                  if(vote==ALIGN_STALINIST)
-                  {
-                     if(stalinview(bill[c],true)) vote=ALIGN_ELITELIBERAL;
-                     else vote=ALIGN_ARCHCONSERVATIVE;
-                  }
+                 vote = exec[EXEC_VP];
+                 if (vote == Alignment::STALINIST)
+                 {
+                    if (stalinview(bill[c],true))
+                      vote = Alignment::ELITE_LIBERAL;
+                    else
+                      vote = Alignment::ARCH_CONSERVATIVE;
+                 }
                }
 
-               if(law[bill[c]]>vote&&billdir[c]==-1) yeswin_s=1;
-               if(law[bill[c]]<vote&&billdir[c]==1) yeswin_s=1;
+               if (to_left_of(law[bill[c]], vote) && billdir[c] == -1) yeswin_s=1;
+               if (to_right_of(law[bill[c]], vote) && billdir[c] == 1) yeswin_s=1;
 
                //ASSURED SIGNING BY PRESIDENT IF VP VOTED YES
                if(yeswin_s) killbill[c]=BILL_SIGNED;
@@ -1810,25 +1992,34 @@ congress(bool clearformess, bool canseethings)
 
       for(int c=0;c<len(bill);c++)
       {
-         if(killbill[c]!=BILL_FAILED)
+         if (killbill[c] != BILL_FAILED)
          {
-            int vote;
-            if(exec[EXEC_PRESIDENT]>=-1&&exec[EXEC_PRESIDENT]<=1)
-               vote=(exec[EXEC_PRESIDENT]+ // only consult Cabinet and random number generator if alignment between -1 and 1
-                     exec[EXEC_VP]+        // for President
-                     exec[EXEC_STATE]+
-                     exec[EXEC_ATTORNEY]+LCSrandom(9)-4)/4;
+            Alignment vote;
+            if (!is_extreme(exec[EXEC_PRESIDENT]))
+            {
+              std::size_t sum = to_index(exec[EXEC_PRESIDENT]) // only consult Cabinet and random number generator if President
+                              + to_index(exec[EXEC_VP])        // is not an extremist.
+                              + to_index(exec[EXEC_STATE])
+                              + to_index(exec[EXEC_ATTORNEY])
+                              + LCSrandom(9)
+                              - 4;
+              std::size_t avg = sum / 5;
+              vote = shift_left(Alignment::ARCH_CONSERVATIVE, avg);
+            }
             else
             {
-               vote=exec[EXEC_PRESIDENT];
-               if(vote==ALIGN_STALINIST)
+               vote = exec[EXEC_PRESIDENT];
+               if (vote == Alignment::STALINIST)
                {
-                  if(stalinview(bill[c],true)) vote=ALIGN_ELITELIBERAL;
-                  else vote=ALIGN_ARCHCONSERVATIVE;
+                  if(stalinview(bill[c],true))
+                    vote = Alignment::ELITE_LIBERAL;
+                  else
+                    vote = Alignment::ARCH_CONSERVATIVE;
                }
             }
 
-            if((law[bill[c]]>vote&&billdir[c]==-1)||(law[bill[c]]<vote&&billdir[c]==1)) killbill[c]=BILL_SIGNED;
+            if ((law[bill[c]] > vote && billdir[c] == -1) || (law[bill[c]] < vote && billdir[c] == 1))
+              killbill[c] = BILL_SIGNED;
          }
 
          if(canseethings)
@@ -1858,7 +2049,8 @@ congress(bool clearformess, bool canseethings)
             pause_ms(500);
          }
 
-         if(killbill[c]==BILL_SIGNED||killbill[c]==BILL_OVERRIDE_VETO) law[bill[c]]+=billdir[c];
+         if (killbill[c]==BILL_SIGNED||killbill[c]==BILL_OVERRIDE_VETO)
+           law[bill[c]] = shift(law[bill[c]], billdir[c]);
       }
 
       if(canseethings)
@@ -1883,14 +2075,17 @@ congress(bool clearformess, bool canseethings)
 
    //CONGRESS CONSTITUTION CHANGES
    int housemake[6]={0,0,0,0,0,0};
-   for(int h=0;h<HOUSENUM;h++) housemake[house[h]+2]++;
+   for(int h=0; h<HOUSENUM; h++)
+     housemake[to_index(house[h])]++;
 
    int senatemake[6]={0,0,0,0,0,0};
-   for(int s=0;s<SENATENUM;s++) senatemake[senate[s]+2]++;
+   for(int s=0; s<SENATENUM; s++)
+     senatemake[to_index(senate[s])]++;
 
    // Throw out non-L+ Justices?
    bool tossj=false;
-   for(int j=0;j<COURTNUM;j++) if(court[j]!=ALIGN_ELITELIBERAL) tossj=true;
+   for(int j=0; j<COURTNUM; j++)
+     if(court[j]!=Alignment::ELITE_LIBERAL) tossj=true;
    if(housemake[4]+housemake[3]/2>=HOUSESUPERMAJORITY&&senatemake[4]+senatemake[3]/2>=SENATESUPERMAJORITY&&tossj&&!nocourtpurge)
       tossjustices(canseethings);
 
@@ -1914,37 +2109,40 @@ congress(bool clearformess, bool canseethings)
 char
 wincheck()
 {
-   for(int e=0;e<EXECNUM;e++) if(exec[e]<ALIGN_ELITELIBERAL) return 0;
+   for(int e=0;e<EXECNUM;e++) if(exec[e]<Alignment::ELITE_LIBERAL) return 0;
 
-   if(wincondition==WINCONDITION_ELITE) for(int l=0;l<LAWNUM;l++) if(law[l]<ALIGN_ELITELIBERAL) return 0;
+   if(wincondition==WINCONDITION_ELITE) for(int l=0;l<LAWNUM;l++) if(law[l]<Alignment::ELITE_LIBERAL) return 0;
    else
    {
       int liberalLaws=0,eliteLaws=0;
       for(int l=0;l<LAWNUM;l++)
       {
-         if(law[l]<ALIGN_LIBERAL) return 0;
-         if(law[l]==ALIGN_LIBERAL) liberalLaws++;
+         if(law[l]<Alignment::LIBERAL) return 0;
+         if(law[l]==Alignment::LIBERAL) liberalLaws++;
          else eliteLaws++;
       }
       if(eliteLaws<liberalLaws) return 0;
    }
 
    int housemake[6]={0,0,0,0,0,0};
-   for(int h=0;h<HOUSENUM;h++) housemake[house[h]+2]++;
+   for(int h=0; h<HOUSENUM; h++)
+     housemake[to_index(house[h])]++;
    if(housemake[4]+housemake[3]/2<((wincondition==WINCONDITION_ELITE)?HOUSESUPERMAJORITY:HOUSECOMFYMAJORITY)) return 0; // Elite Libs plus half of Libs >= 3/5 for easy, 2/3 for elite
    if(housemake[4]<((wincondition==WINCONDITION_ELITE)?HOUSECOMFYMAJORITY:HOUSEMAJORITY)) return 0; // Elite Libs themselves >= 1/2 for easy, 3/5 for elite
 
    int senatemake[6]={0,0,0,0,0,0};
-   for(int s=0;s<SENATENUM;s++) senatemake[senate[s]+2]++;
+   for(int s=0; s<SENATENUM; s++)
+     senatemake[to_index(senate[s])]++;
    if(senatemake[4]+senatemake[3]/2<((wincondition==WINCONDITION_ELITE)?SENATESUPERMAJORITY:SENATECOMFYMAJORITY)) return 0; // Elite Libs plus half of Libs >= 3/5 for easy, 2/3 for elite
-   if(wincondition!=WINCONDITION_ELITE) senatemake[exec[EXEC_VP]+2]++; // VP counts as Senator only for breaking ties (so counts for 1/2 fraction but not higher fractions)
+   if (wincondition != WINCONDITION_ELITE)
+     senatemake[to_index(exec[EXEC_VP])]++; // VP counts as Senator only for breaking ties (so counts for 1/2 fraction but not higher fractions)
    if(senatemake[4]<((wincondition==WINCONDITION_ELITE)?SENATECOMFYMAJORITY:SENATEMAJORITY)) return 0; // Elite Libs themselves >= 1/2 for easy, 3/5 for elite
 
    int elibjudge=0,libjudge=0;
-   for(int c=0;c<COURTNUM;c++)
+   for(int c=0; c<COURTNUM; c++)
    {
-      if(court[c]==ALIGN_ELITELIBERAL) elibjudge++;
-      if(court[c]==ALIGN_LIBERAL) libjudge++;
+      if(court[c]==Alignment::ELITE_LIBERAL) elibjudge++;
+      if(court[c]==Alignment::LIBERAL) libjudge++;
    }
    if(elibjudge<COURTMAJORITY&&(wincondition==WINCONDITION_ELITE||elibjudge+libjudge/2<COURTSUPERMAJORITY)) return 0;
 

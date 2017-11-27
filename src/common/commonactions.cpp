@@ -34,8 +34,8 @@ char endcheck(char cause)
 {
    bool dead=true;
    for(int p=0;p<len(pool)&&dead;p++)
-      if(pool[p]->alive&&pool[p]->align==1&&
-       !(pool[p]->flag&CREATUREFLAG_SLEEPER&&pool[p]->hireid!=-1)) // Allow sleepers to lead LCS without losing
+      if (pool[p]->alive && pool[p]->align == Alignment::LIBERAL
+        && !(pool[p]->flag&CREATUREFLAG_SLEEPER&&pool[p]->hireid!=-1)) // Allow sleepers to lead LCS without losing
          dead=false;
 
    if(dead) // Did we just lose the game?
@@ -495,7 +495,7 @@ int maxsubordinates(const Creature& cr)
    else if(cr.juice >= 100) recruitcap += 3;
    else if(cr.juice >= 50)  recruitcap += 1;
    //Cap for founder
-   if(cr.hireid == -1 && cr.align == 1) recruitcap += 6;
+   if (cr.hireid == -1 && cr.align == Alignment::LIBERAL) recruitcap += 6;
    return recruitcap;
 }
 

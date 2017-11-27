@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -125,37 +126,37 @@ void setup_newgame()
    if(nightmarelaws)
    {
       for(int l=0;l<LAWNUM;l++)
-         law[l]=ALIGN_ARCHCONSERVATIVE;
+         law[l]=Alignment::ARCH_CONSERVATIVE;
       for(int a=0;a<VIEWNUM-3;a++)
          attitude[a]=LCSrandom(20);
       for(int s=0;s<SENATENUM;s++)
       {
-         if(s<55) senate[s]=ALIGN_ARCHCONSERVATIVE;
-         else if(s<70) senate[s]=ALIGN_CONSERVATIVE;
-         else if(s<80) senate[s]=ALIGN_MODERATE;
-         else if(s<97) senate[s]=ALIGN_LIBERAL;
-         else senate[s]=ALIGN_ELITELIBERAL;
+         if(s<55) senate[s]=Alignment::ARCH_CONSERVATIVE;
+         else if(s<70) senate[s]=Alignment::CONSERVATIVE;
+         else if(s<80) senate[s]=Alignment::MODERATE;
+         else if(s<97) senate[s]=Alignment::LIBERAL;
+         else senate[s]=Alignment::ELITE_LIBERAL;
       }
 
       for(int h=0;h<HOUSENUM;h++)
       {
-         if(h<220) house[h]=ALIGN_ARCHCONSERVATIVE;
-         else if(h<350) house[h]=ALIGN_CONSERVATIVE;
-         else if(h<400) house[h]=ALIGN_MODERATE;
-         else if(h<425) house[h]=ALIGN_LIBERAL;
-         else house[h]=ALIGN_ELITELIBERAL;
+         if(h<220) house[h]=Alignment::ARCH_CONSERVATIVE;
+         else if(h<350) house[h]=Alignment::CONSERVATIVE;
+         else if(h<400) house[h]=Alignment::MODERATE;
+         else if(h<425) house[h]=Alignment::LIBERAL;
+         else house[h]=Alignment::ELITE_LIBERAL;
       }
 
       for(int c=0;c<COURTNUM;c++)
       {
-         if(c<5) court[c]=ALIGN_ARCHCONSERVATIVE;
-         else if(c<7) court[c]=ALIGN_CONSERVATIVE;
-         else if(c<8) court[c]=ALIGN_MODERATE;
-         else if(c<8) court[c]=ALIGN_LIBERAL;
-         else court[c]=ALIGN_ELITELIBERAL;
+         if(c<5) court[c]=Alignment::ARCH_CONSERVATIVE;
+         else if(c<7) court[c]=Alignment::CONSERVATIVE;
+         else if(c<8) court[c]=Alignment::MODERATE;
+         else if(c<8) court[c]=Alignment::LIBERAL;
+         else court[c]=Alignment::ELITE_LIBERAL;
          do
          {
-            if(court[c]==ALIGN_ARCHCONSERVATIVE)
+            if(court[c]==Alignment::ARCH_CONSERVATIVE)
                generate_name(courtname[c],GENDER_WHITEMALEPATRIARCH);
             else generate_name(courtname[c]);
          } while(len(courtname[c])>20);
@@ -267,7 +268,7 @@ enum recruits
 void makecharacter()
 {
    Creature *newcr=new Creature;
-   newcr->align=1;
+   newcr->align = Alignment::LIBERAL;
 
 #ifdef BLIND
    newcr->special[SPECIALWOUND_RIGHTEYE]=1;
@@ -1317,7 +1318,7 @@ void makecharacter()
                   recruit->reload(false);
                }
 
-               recruit->align=ALIGN_LIBERAL;
+               recruit->align=Alignment::LIBERAL;
                recruit->set_attribute(ATTRIBUTE_HEART,
                                       recruit->get_attribute(ATTRIBUTE_HEART,false)+
                                       recruit->get_attribute(ATTRIBUTE_WISDOM,false)/2);
@@ -1389,7 +1390,7 @@ void makecharacter()
       lawyer->namecreature();
       lawyer->flag|=CREATUREFLAG_SLEEPER;
       lawyer->flag|=CREATUREFLAG_LOVESLAVE;
-      lawyer->align=ALIGN_LIBERAL;
+      lawyer->align=Alignment::LIBERAL;
       lawyer->infiltration=0.3f;
       lawyer->age=28;
 

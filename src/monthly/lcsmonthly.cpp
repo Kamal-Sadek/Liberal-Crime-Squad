@@ -270,7 +270,8 @@ void
 printnews(short li, short newspaper)
 {
    music.play(MUSIC_NEWSPAPER);
-   if(law[LAW_FREESPEECH]==-2)offended_firemen=1;
+   if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
+     offended_firemen = 1;
    erase();
    set_color(COLOR_WHITE,COLOR_BLACK,1);
 

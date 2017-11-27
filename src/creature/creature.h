@@ -4,9 +4,10 @@
 
 #ifndef CREATURE_H_INCLUDED
 #define CREATURE_H_INCLUDED
+#include "augmentation.h"
 #include "common.h"
 #include <deque>
-#include "augmentation.h"
+#include "politics/alignment.h"
 
 #define CREATUREFLAG_WHEELCHAIR BIT1
 #define CREATUREFLAG_JUSTESCAPED BIT2
@@ -326,7 +327,7 @@ public:
    int birthday_month;
    int birthday_day;
    bool exists;
-   char align;
+   Alignment  align;
    bool alive;
    void die();
    short type;

@@ -56,7 +56,7 @@ amendmentheading()
  * Check if a constitutional amendment is ratified.
  */
 static bool
-ratify(int level, int lawview, int view, char congress, bool canseethings)
+ratify(Alignment level, int lawview, int view, char congress, bool canseethings)
 {
    if(canseethings)
    {
@@ -98,16 +98,25 @@ ratify(int level, int lawview, int view, char congress, bool canseethings)
       }
 
       bool yeswin_h=false,yeswin_s=false;
-      int yesvotes_h=0,yesvotes_s=0,vote,s=0;
+      int yesvotes_h=0,yesvotes_s=0,s=0;
 
-      for(int l=0;l<HOUSENUM;l++)
+      for(int l=0; l<HOUSENUM; l++)
       {
-         vote=house[l];
-         if(vote>=-1&&vote<=1) vote+=LCSrandom(3)-1;
+         Alignment vote = house[l];
+         if (vote == Alignment::CONSERVATIVE
+          || vote == Alignment::MODERATE
+          || vote == Alignment::LIBERAL)
+         {
+           int waffle = LCSrandom(3) - 1;
+           vote = waffle > 0 ? shift_left(vote, waffle) : shift_right(vote, -waffle);
+         }
 
-         if(level==vote) yesvotes_h++;
+         if (level == vote)
+           yesvotes_h++;
 
-         if(l==HOUSENUM-1) if(yesvotes_h>=HOUSESUPERMAJORITY) yeswin_h=true;
+         if (l == HOUSENUM-1)
+           if (yesvotes_h >= HOUSESUPERMAJORITY)
+             yeswin_h = true;
 
          if(canseethings)
          {
@@ -126,15 +135,23 @@ ratify(int level, int lawview, int view, char congress, bool canseethings)
             addstr(" Nay");
          }
 
-         if(l%4==0&&s<SENATENUM)
+         if (l%4 == 0 && s < SENATENUM)
          {
-            vote=senate[s++];
-            if(vote>=-1&&vote<=1) vote+=LCSrandom(3)-1;
+             vote = senate[s++];
+             if (vote == Alignment::CONSERVATIVE
+              || vote == Alignment::MODERATE
+              || vote == Alignment::LIBERAL)
+             {
+               int waffle = LCSrandom(3) - 1;
+               vote = waffle > 0 ? shift_left(vote, waffle) : shift_right(vote, -waffle);
+             }
 
-            if(level==vote) yesvotes_s++;
+             if (level == vote)
+               yesvotes_s++;
          }
 
-         if(l==HOUSENUM-1&&yesvotes_s>=SENATESUPERMAJORITY) yeswin_s=true;
+         if (l == HOUSENUM-1 && yesvotes_s >= SENATESUPERMAJORITY)
+           yeswin_s = true;
 
          if(canseethings)
          {
@@ -156,13 +173,18 @@ ratify(int level, int lawview, int view, char congress, bool canseethings)
          }
       }
 
-      if(!yeswin_h||!yeswin_s) ratified=false;
+      if (!yeswin_h||!yeswin_s)
+        ratified=false;
 
       y+=4;
    }
-   else ratified=true;
+   else
+   {
+     ratified=true;
+   }
 
-   if(level==3) level=-2; // special case for Stalinists: do this after Congress but before the states
+   if (level == Alignment::STALINIST)
+     level = Alignment::ARCH_CONSERVATIVE; // special case for Stalinists: do this after Congress but before the states
 
    //STATES
    if(ratified)
@@ -189,8 +211,9 @@ ratify(int level, int lawview, int view, char congress, bool canseethings)
          getkey();
       }
 
-      int vote,smood;
-      for(int s=0;s<STATENUM;s++)
+      Alignment vote = Alignment::MODERATE;
+      int smood;
+      for (int s=0; s<STATENUM; s++)
       {
          smood=mood;
 
@@ -250,13 +273,13 @@ ratify(int level, int lawview, int view, char congress, bool canseethings)
             case 49:smood-=5*multiplier;break; // Wyoming
          }
 
-         vote=-2;
-         if(LCSrandom(100)<smood)vote++;
-         if(LCSrandom(100)<smood)vote++;
-         if(LCSrandom(100)<smood)vote++;
-         if(LCSrandom(100)<smood)vote++;
-         if(vote==1&&!LCSrandom(2)) vote=2;
-         if(vote==-1&&!LCSrandom(2)) vote=-2;
+         vote = shift_right(vote, 2);
+         if (LCSrandom(100)<smood) vote = shift_left(vote);
+         if (LCSrandom(100)<smood) vote = shift_left(vote);
+         if (LCSrandom(100)<smood) vote = shift_left(vote);
+         if (LCSrandom(100)<smood) vote = shift_left(vote);
+         if (vote == Alignment::LIBERAL && !LCSrandom(2)) vote = shift_left(vote, 2);
+         if (vote == Alignment::CONSERVATIVE && !LCSrandom(2)) vote = shift_right(vote, 2);
 
          if(canseethings)
          {
@@ -265,12 +288,16 @@ ratify(int level, int lawview, int view, char congress, bool canseethings)
             else if(s<34) move(5+s-17,49);
             else move(5+s-34,76);
          }
-         if(vote==level)
+         if (vote==level)
          {
             yesstate++;
-            if(canseethings) addstr("Yea");
+            if (canseethings)
+              addstr("Yea");
          }
-         else if(canseethings) addstr("Nay");
+         else if (canseethings)
+         {
+           addstr("Nay");
+         }
 
          if(canseethings)
          {
@@ -331,7 +358,7 @@ tossjustices(bool canseethings)
    if(canseethings)
    {
       int tossnum=0;
-      for(j=0;j<COURTNUM;j++) if(court[j]!=ALIGN_ELITELIBERAL) tossnum++;
+      for(j=0;j<COURTNUM;j++) if(court[j]!=Alignment::ELITE_LIBERAL) tossnum++;
 
       amendmentheading();
 
@@ -343,7 +370,7 @@ tossjustices(bool canseethings)
 
       int y=4;
 
-      for(j=0;j<COURTNUM;j++) if(court[j]!=ALIGN_ELITELIBERAL)
+      for(j=0;j<COURTNUM;j++) if(court[j]!=Alignment::ELITE_LIBERAL)
       {
          move(y++,0);
          addstr(courtname[j]);
@@ -379,13 +406,13 @@ tossjustices(bool canseethings)
       while(getkey()!='c');
    }
 
-   if(ratify(2,-1,-1,1,canseethings))
+   if(ratify(Alignment::ELITE_LIBERAL,-1,-1,1,canseethings))
    {
       //BLAST JUSTICES
-      for(int j=0;j<COURTNUM;j++) if(court[j]!=ALIGN_ELITELIBERAL)
+      for(int j=0;j<COURTNUM;j++) if(court[j]!=Alignment::ELITE_LIBERAL)
       {
          do generate_name(courtname[j]); while(len(courtname[j])>20);
-         court[j]=ALIGN_ELITELIBERAL;
+         court[j]=Alignment::ELITE_LIBERAL;
       }
 
       amendnum++;
@@ -406,7 +433,9 @@ tossjustices(bool canseethings)
 void
 amendment_termlimits(bool canseethings)
 {
-   if(termlimits)return; // Durr~! Don't pass this amendment if it's already passed!
+   if (termlimits)
+     return; // Durr~! Don't pass this amendment if it's already passed!
+
    if(canseethings)
    {
       music.play(MUSIC_ELECTIONS);
@@ -444,7 +473,7 @@ amendment_termlimits(bool canseethings)
       while(getkey()!='c');
    }
 
-   if(ratify(2,-1,-1,0,canseethings))
+   if (ratify(Alignment::ELITE_LIBERAL, -1, -1, 0, canseethings))
    {
       termlimits = true;
       if(canseethings)
@@ -529,7 +558,7 @@ reaganify(bool canseethings)
       while(getkey()!='c');
    }
 
-   if(ratify(-2,-1,-1,1,canseethings))
+   if(ratify(Alignment::ARCH_CONSERVATIVE,-1,-1,1,canseethings))
    {
       music.play(MUSIC_REAGANIFIED);
       if(canseethings)
@@ -549,8 +578,8 @@ reaganify(bool canseethings)
          strcpy(execname[EXEC_VP],"Strom Thurmond");
          strcpy(execname[EXEC_STATE],"Jesse Helms");
          strcpy(execname[EXEC_ATTORNEY],"Jerry Falwell");
-         for(int e=0;e<EXECNUM;e++) exec[e]=ALIGN_ARCHCONSERVATIVE;
-         for(int l=0;l<LAWNUM;l++) law[l]=ALIGN_ARCHCONSERVATIVE;
+         for(int e=0;e<EXECNUM;e++) exec[e]=Alignment::ARCH_CONSERVATIVE;
+         for(int l=0;l<LAWNUM;l++) law[l]=Alignment::ARCH_CONSERVATIVE;
          liberalagenda(-1);
          savehighscore(END_REAGAN);
       }
@@ -741,7 +770,7 @@ stalinize(bool canseethings)
       while(getkey()!='c');
    }
 
-   if(ratify(3,-2,-2,1,canseethings))
+   if(ratify(Alignment::STALINIST,-2,-2,1,canseethings))
    {
       music.play(MUSIC_STALINIZED);
       if(canseethings)
@@ -761,8 +790,10 @@ stalinize(bool canseethings)
          strcpy(execname[EXEC_VP],"Josef Stalin");
          strcpy(execname[EXEC_STATE],"Vyacheslav Molotov");
          strcpy(execname[EXEC_ATTORNEY],"Lavrentiy Beria");
-         for(int e=0;e<EXECNUM;e++) exec[e]=ALIGN_STALINIST;
-         for(int l=0;l<LAWNUM;l++) law[l]=stalinview(l,true)?ALIGN_ELITELIBERAL:ALIGN_ARCHCONSERVATIVE;
+         for (int e=0; e<EXECNUM; e++)
+           exec[e] = Alignment::STALINIST;
+         for (int l=0; l<LAWNUM; l++)
+           law[l] = stalinview(l,true) ? Alignment::ELITE_LIBERAL : Alignment::ARCH_CONSERVATIVE;
          liberalagenda(-2);
          savehighscore(END_STALIN);
       }

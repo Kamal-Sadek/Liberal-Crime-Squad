@@ -335,8 +335,8 @@ void advancecreature(Creature &cr)
          cr.die();
 
          if(cr.squadid!=-1)
-         {  if(cr.align==1) stat_dead++; }
-         else if(cr.align==-1&&(cr.animalgloss!=ANIMALGLOSS_ANIMAL||law[LAW_ANIMALRESEARCH]==2))
+         {  if(cr.align==Alignment::LIBERAL) stat_dead++; }
+         else if(cr.align == Alignment::CONSERVATIVE&&(cr.animalgloss!=ANIMALGLOSS_ANIMAL||law[LAW_ANIMALRESEARCH]==Alignment::ELITE_LIBERAL))
          {
             stat_kills++;
             if(location[cursite]->siege.siege) location[cursite]->siege.kills++;
@@ -387,8 +387,9 @@ void advancecreature(Creature &cr)
          cr.die();
 
          if(cr.squadid!=-1)
-         {  if(cr.align==1) stat_dead++; }
-         else if(cr.align==-1&&(cr.animalgloss!=ANIMALGLOSS_ANIMAL||law[LAW_ANIMALRESEARCH]==2))
+         {  if(cr.align==Alignment::LIBERAL) stat_dead++; }
+         else if (cr.align == Alignment::CONSERVATIVE
+              &&(cr.animalgloss!=ANIMALGLOSS_ANIMAL||law[LAW_ANIMALRESEARCH]==Alignment::ELITE_LIBERAL))
          {
             stat_kills++;
             if(location[cursite]->siege.siege)location[cursite]->siege.kills++;

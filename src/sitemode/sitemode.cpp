@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -242,7 +243,7 @@ void mode_site()
       int partysize=squadsize(activesquad),partyalive=squadalive(activesquad),hostages=0,encsize=0,freeable=0,enemy=0,majorenemy=0,talkers=0;
       for(p=0;p<6;p++)
          if(activesquad->squad[p]!=NULL)
-            if(activesquad->squad[p]->prisoner&&activesquad->squad[p]->prisoner->align!=ALIGN_LIBERAL)
+            if(activesquad->squad[p]->prisoner&&activesquad->squad[p]->prisoner->align!=Alignment::LIBERAL)
                hostages++;
       for(int e=0;e<ENCMAX;e++)
       {
@@ -253,8 +254,11 @@ void mode_site()
             if(encounter[e].type==CREATURE_WORKER_SERVANT||
                encounter[e].type==CREATURE_WORKER_FACTORY_CHILD||
                encounter[e].type==CREATURE_WORKER_SWEATSHOP||
-               (strcmp(encounter[e].name,"Prisoner")==0&&encounter[e].align==1))freeable++;
-            else if((encounter[e].cantbluff!=1||sitealarm)&&!(encounter[e].align==1&&sitealarm&&enemy))talkers++;
+               (strcmp(encounter[e].name,"Prisoner") == 0
+                && encounter[e].align == Alignment::LIBERAL))
+              freeable++;
+            else if ((encounter[e].cantbluff != 1 || sitealarm) && !(encounter[e].align == Alignment::LIBERAL && sitealarm && enemy))
+              talkers++;
             if(encounter[e].type==CREATURE_CORPORATE_CEO||
                encounter[e].type==CREATURE_RADIOPERSONALITY||
                encounter[e].type==CREATURE_NEWSANCHOR||
@@ -273,7 +277,7 @@ void mode_site()
       }
       int libnum=0;
       for(p=0;p<len(pool);p++)
-         if(pool[p]->align==1&&
+         if(pool[p]->align == Alignment::LIBERAL &&
             pool[p]->alive&&
             pool[p]->location==cursite&&
           !(pool[p]->flag&CREATUREFLAG_SLEEPER)) libnum++;
@@ -333,8 +337,9 @@ void mode_site()
                {
                   addstr(": CCS VIGILANTIES RESPONDING");
                }
-               else if(law[LAW_DEATHPENALTY]==-2&&
-                  law[LAW_POLICEBEHAVIOR]==-2)addstr(": DEATH SQUADS RESPONDING");
+               else if (law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE
+                     && law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)
+                 addstr(": DEATH SQUADS RESPONDING");
                else addstr(": POLICE RESPONDING");
                break;
             }
@@ -844,13 +849,13 @@ void mode_site()
                                  addstr(" - ");
                                  switch(encounter[t].align)
                                  {
-                                 case ALIGN_CONSERVATIVE:
+                                 case Alignment::CONSERVATIVE:
                                     set_color(COLOR_RED,COLOR_BLACK,1);
                                     break;
-                                 case ALIGN_LIBERAL:
+                                 case Alignment::LIBERAL:
                                     set_color(COLOR_GREEN,COLOR_BLACK,1);
                                     break;
-                                 case ALIGN_MODERATE:
+                                 case Alignment::MODERATE:
                                     set_color(COLOR_WHITE,COLOR_BLACK,1);
                                     break;
                                  }
@@ -1105,7 +1110,8 @@ void mode_site()
                   if((encounter[e].type==CREATURE_WORKER_SERVANT||
                      encounter[e].type==CREATURE_WORKER_FACTORY_CHILD||
                      encounter[e].type==CREATURE_WORKER_SWEATSHOP||
-                     (strcmp(encounter[e].name,"Prisoner")==0 && encounter[e].align==1))&&!flipstart)
+                     (strcmp(encounter[e].name,"Prisoner") == 0 
+                    && encounter[e].align == Alignment::LIBERAL)) && !flipstart)
                   {
                      if(strcmp(encounter[e].name,"Prisoner")==0)
                      {
@@ -1311,7 +1317,7 @@ void mode_site()
                         string rndWeps[] = {"WEAPON_BASEBALLBAT", "WEAPON_COMBATKNIFE", "WEAPON_DAISHO", "WEAPON_SHOTGUN_PUMP",
                            "WEAPON_REVOLVER_44", "WEAPON_SEMIPISTOL_45", "WEAPON_SEMIRIFLE_AR15", "WEAPON_AUTORIFLE_M16"};
                         //make sure the number of types matches the random range...
-                        newWeaponType=rndWeps[LCSrandom(6 - law[LAW_GUNCONTROL])];
+                        newWeaponType=rndWeps[LCSrandom(8 - to_index(law[LAW_GUNCONTROL]))];
                      }
                      else if(!LCSrandom(20))
                      {
@@ -1342,14 +1348,14 @@ void mode_site()
                         string rndWeps[] = {"WEAPON_NIGHTSTICK", "WEAPON_NIGHTSTICK", "WEAPON_SHOTGUN_PUMP", "WEAPON_SEMIPISTOL_9MM",
                            "WEAPON_SMG_MP5", "WEAPON_CARBINE_M4", "WEAPON_AUTORIFLE_M16", "WEAPON_AUTORIFLE_M16"};
                         //make sure the number of types matches the random range...
-                        newWeaponType=rndWeps[LCSrandom(4) + 2 - law[LAW_GUNCONTROL]];
+                        newWeaponType = rndWeps[LCSrandom(4) + 4 - to_index(law[LAW_GUNCONTROL])];
                      }
                      else if(!LCSrandom(25))
                      {
                         string rndArmors[] = {"ARMOR_POLICEUNIFORM", "ARMOR_POLICEUNIFORM", "ARMOR_POLICEARMOR", "ARMOR_POLICEUNIFORM",
                            "ARMOR_SWATARMOR", "ARMOR_POLICEUNIFORM", "ARMOR_POLICEARMOR", "ARMOR_DEATHSQUADUNIFORM"};
                         //make sure the number of types matches the random range...
-                        newArmorType=rndArmors[LCSrandom(4) + 2 - law[LAW_GUNCONTROL]];
+                        newArmorType = rndArmors[LCSrandom(4) + 4 - to_index(law[LAW_GUNCONTROL])];
                      }
                      else if(!LCSrandom(20))newLootType="LOOT_POLICERECORDS";
                      else if(!LCSrandom(3))newLootType="LOOT_CELLPHONE";
@@ -2355,7 +2361,7 @@ void mode_site()
                         clearmessagearea(false);
                         set_color(COLOR_WHITE,COLOR_BLACK,1);
                         move(16,1);
-                        if(law[LAW_FREESPEECH]!=ALIGN_ARCHCONSERVATIVE)
+                        if (law[LAW_FREESPEECH] != Alignment::ARCH_CONSERVATIVE)
                            addstr("Damn! ", gamelog);
                         else
                            addstr("[Rats!] ", gamelog);

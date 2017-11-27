@@ -248,7 +248,7 @@ sleeper_influence(Creature& cr, char& clearformess, bool canseethings, int (&lib
          }
          break;
       case CREATURE_FIREFIGHTER:
-         if(law[LAW_FREESPEECH]==-2)
+         if(law[LAW_FREESPEECH]==Alignment::ARCH_CONSERVATIVE)
          {
             libpower[VIEW_FREESPEECH]+=power;
             break;
@@ -315,7 +315,7 @@ sleeper_spy(Creature& cr, char& clearformess, bool canseethings, int (&libpower)
       // Agents can leak intelligence files to you
       if(!location[homes]->siege.siege&&canseethings)
       {
-         if(LCSrandom(law[LAW_PRIVACY] + 3)) break;
+         if (LCSrandom(to_index(law[LAW_PRIVACY]))) break;
          Item *it=new Loot(*loottype[getloottype("LOOT_SECRETDOCUMENTS")]);
          location[homes]->loot.push_back(it);
 
@@ -338,7 +338,7 @@ sleeper_spy(Creature& cr, char& clearformess, bool canseethings, int (&libpower)
       // Cops can leak police files to you
       if(!location[homes]->siege.siege&&canseethings)
       {
-         if(LCSrandom(law[LAW_POLICEBEHAVIOR] + 3)) break;
+         if (LCSrandom(to_index(law[LAW_POLICEBEHAVIOR]))) break;
          Item *it=new Loot(*loottype[getloottype("LOOT_POLICERECORDS")]);
          location[homes]->loot.push_back(it);
 
@@ -359,7 +359,7 @@ sleeper_spy(Creature& cr, char& clearformess, bool canseethings, int (&libpower)
       // Can leak corporate files to you
       if(!location[homes]->siege.siege&&canseethings)
       {
-         if(LCSrandom(law[LAW_CORPORATE] + 3) && cr.type!=CREATURE_CORPORATE_CEO) break;
+         if (LCSrandom(to_index(law[LAW_CORPORATE])) && cr.type!=CREATURE_CORPORATE_CEO) break;
          Item *it=new Loot(*loottype[getloottype("LOOT_CORPFILES")]);
          location[homes]->loot.push_back(it);
 
@@ -379,7 +379,7 @@ sleeper_spy(Creature& cr, char& clearformess, bool canseethings, int (&libpower)
    case CREATURE_PRISONGUARD:
       if(!location[homes]->siege.siege&&canseethings)
       {
-         if(LCSrandom(law[LAW_POLICEBEHAVIOR] + 3)) break;
+         if (LCSrandom(to_index(law[LAW_POLICEBEHAVIOR]))) break;
          Item *it=new Loot(*loottype[getloottype("LOOT_PRISONFILES")]);
          location[homes]->loot.push_back(it);
 
@@ -401,7 +401,7 @@ sleeper_spy(Creature& cr, char& clearformess, bool canseethings, int (&libpower)
          // More likely to leak these documents the more restrictive
          // free speech is -- because the more free the society, the
          // less any particular action the media takes seems scandalous
-         if(LCSrandom(law[LAW_FREESPEECH] + 3)) break;
+         if (LCSrandom(to_index(law[LAW_FREESPEECH]))) break;
          Item *it=new Loot(*loottype[getloottype("LOOT_CABLENEWSFILES")]);
          location[homes]->loot.push_back(it);
 
@@ -423,7 +423,7 @@ sleeper_spy(Creature& cr, char& clearformess, bool canseethings, int (&libpower)
          // More likely to leak these documents the more restrictive
          // free speech is -- because the more free the society, the
          // less any particular action the media takes seems scandalous
-         if(LCSrandom(law[LAW_FREESPEECH] + 3)) break;
+         if (LCSrandom(to_index(law[LAW_FREESPEECH]))) break;
          Item *it=new Loot(*loottype[getloottype("LOOT_AMRADIOFILES")]);
          location[homes]->loot.push_back(it);
 
@@ -443,7 +443,7 @@ sleeper_spy(Creature& cr, char& clearformess, bool canseethings, int (&libpower)
    case CREATURE_SCIENTIST_EMINENT:
       if(!location[homes]->siege.siege&&canseethings)
       {
-         if(LCSrandom(law[LAW_ANIMALRESEARCH] + 3)) break;
+         if (LCSrandom(to_index(law[LAW_ANIMALRESEARCH]))) break;
          Item *it=new Loot(*loottype[getloottype("LOOT_RESEARCHFILES")]);
          location[homes]->loot.push_back(it);
 
@@ -744,7 +744,9 @@ sleeper_steal(Creature& cr, char& clearformess, bool canseethings, int (&libpowe
          }
          else if(!LCSrandom(2))
          {
-            if(law[LAW_POLICEBEHAVIOR]==-2 && law[LAW_DEATHPENALTY]==-2 && !LCSrandom(4))item="ARMOR_DEATHSQUADUNIFORM";
+            if (law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE
+                && law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE
+                && !LCSrandom(4))item="ARMOR_DEATHSQUADUNIFORM";
             else if(!LCSrandom(3))item="ARMOR_POLICEUNIFORM";
             else if(!LCSrandom(2))item="ARMOR_SWATARMOR";
             else item="ARMOR_POLICEARMOR";
@@ -879,7 +881,7 @@ sleeper_recruit(Creature& cr, char& clearformess, bool canseethings, int (&libpo
             break;
          if(encounter[e].worklocation == cr.worklocation || !LCSrandom(5))
          {
-            if(encounter[e].align!=1&&LCSrandom(5))continue;
+            if (encounter[e].align != Alignment::LIBERAL &&LCSrandom(5))continue;
 
             Creature* recruit = new Creature(encounter[e]);
             liberalize(*recruit,0);

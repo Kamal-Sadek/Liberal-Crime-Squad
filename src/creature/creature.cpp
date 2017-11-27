@@ -338,7 +338,7 @@ bool Creature::reports_to_police() const
 
 bool Creature::is_lcs_sleeper() const
 {
-   return(alive && align==ALIGN_LIBERAL && clinic==0 &&
+   return(alive && align==Alignment::LIBERAL && clinic==0 &&
       dating==0 && hiding==0 && (flag & CREATUREFLAG_SLEEPER));
 }
 
@@ -351,7 +351,7 @@ bool Creature::is_imprisoned() const
 
 bool Creature::is_active_liberal() const
 {
-   return(alive && align==ALIGN_LIBERAL && clinic==0 && dating==0 &&
+   return(alive && align==Alignment::LIBERAL && clinic==0 && dating==0 &&
       hiding==0 && !(flag & CREATUREFLAG_SLEEPER) &&
       !::location[this->location]->part_of_justice_system());
 }
@@ -468,7 +468,7 @@ void Creature::creatureinit()
    money=0;
    income=0;
    exists=true;
-   align=LCSrandom(3)-1;
+   align = choose({Alignment::CONSERVATIVE, Alignment::MODERATE, Alignment::LIBERAL});
    infiltration=0.0f;
    type=CREATURE_WORKER_JANITOR;
    type_idname="CREATURE_WORKER_JANITOR";
@@ -529,7 +529,7 @@ Creature::Creature(const std::string& inputXml)
       else if (tag == "exists")
          exists = atoi(xml.GetData());
       else if (tag == "align")
-         align = atoi(xml.GetData());
+         from_string(xml.GetData(), align);
       else if (tag == "alive")
          alive = atoi(xml.GetData());
       else if (tag == "type")
@@ -668,7 +668,7 @@ string Creature::showXml() const
    xml.AddElem("birthday_month", birthday_month);
    xml.AddElem("birthday_day", birthday_day);
    xml.AddElem("exists", exists);
-   xml.AddElem("align", align);
+   xml.AddElem("align", to_string(align));
    xml.AddElem("alive", alive);
    xml.AddElem("type", type);
    xml.AddElem("type_idname", type_idname);
@@ -834,8 +834,8 @@ int Creature::get_attribute(int attribute, bool usejuice) const
    if(!usejuice)return ret;
 
    // Never use juice to increase stats for the opposite ideology!
-   if(attribute==ATTRIBUTE_WISDOM && align!=ALIGN_CONSERVATIVE)usejuice=false;
-   if(attribute==ATTRIBUTE_HEART  && align!=ALIGN_LIBERAL)usejuice=false;
+   if(attribute==ATTRIBUTE_WISDOM && align!=Alignment::CONSERVATIVE)usejuice=false;
+   if(attribute==ATTRIBUTE_HEART  && align!=Alignment::LIBERAL)usejuice=false;
 
    // Effects of juice on the character's attributes
    if(usejuice)
@@ -1175,9 +1175,9 @@ void Creature::skill_up()
 
 bool Creature::enemy() const
 {
-   if(align==ALIGN_CONSERVATIVE)
+   if(align==Alignment::CONSERVATIVE)
       return true;
-   else if(type==CREATURE_COP && align==ALIGN_MODERATE)
+   else if(type==CREATURE_COP && align==Alignment::MODERATE)
    {
       for(int i=0;i<len(pool);i++)
          if(pool[i]==this)
@@ -1190,9 +1190,9 @@ bool Creature::enemy() const
 /* turns a creature into a conservative */
 void conservatise(Creature &cr)
 {
-   if(cr.align==ALIGN_LIBERAL && cr.juice>0)cr.juice=0;
+   if(cr.align==Alignment::LIBERAL && cr.juice>0)cr.juice=0;
 
-   cr.align=ALIGN_CONSERVATIVE;
+   cr.align=Alignment::CONSERVATIVE;
 
    switch(cr.type)
    {
@@ -1208,9 +1208,9 @@ void conservatise(Creature &cr)
 /* turns a creature into a liberal */
 void liberalize(Creature &cr,bool rename)
 {
-   if(cr.align==ALIGN_CONSERVATIVE && cr.juice>0)cr.juice=0;
+   if(cr.align==Alignment::CONSERVATIVE && cr.juice>0)cr.juice=0;
 
-   cr.align=ALIGN_LIBERAL;
+   cr.align=Alignment::LIBERAL;
 
    if(cr.id == uniqueCreatures.CEO().id)
       uniqueCreatures.newCEO();
@@ -1346,15 +1346,15 @@ void UniqueCreatures::newPresident()
    strcpy(Pres_.name,"President "+pres_name.substr(pres_name.find(' ')+1));
    strcpy(Pres_.propername,execname[EXEC_PRESIDENT]);
    switch(exec[EXEC_PRESIDENT])
-   { // we don't do anything for ALIGN_ARCHCONSERVATIVE or ALIGN_CONSERVATIVE so having them here is unnecessary
-   case ALIGN_MODERATE:
-      Pres_.align=ALIGN_MODERATE;
+   { // we don't do anything for Alignment::ARCH_CONSERVATIVE or Alignment::CONSERVATIVE so having them here is unnecessary
+   case Alignment::MODERATE:
+      Pres_.align=Alignment::MODERATE;
       Pres_.set_attribute(ATTRIBUTE_WISDOM,Pres_.get_attribute(ATTRIBUTE_WISDOM,false)/2);
       Pres_.set_attribute(ATTRIBUTE_HEART,Pres_.get_attribute(ATTRIBUTE_WISDOM,false));
       break;
-   case ALIGN_LIBERAL:
-   case ALIGN_ELITELIBERAL:
-      Pres_.align=ALIGN_LIBERAL;
+   case Alignment::LIBERAL:
+   case Alignment::ELITE_LIBERAL:
+      Pres_.align=Alignment::LIBERAL;
       Pres_.set_attribute(ATTRIBUTE_HEART,Pres_.get_attribute(ATTRIBUTE_WISDOM,false));
       Pres_.set_attribute(ATTRIBUTE_WISDOM,1);
       break;

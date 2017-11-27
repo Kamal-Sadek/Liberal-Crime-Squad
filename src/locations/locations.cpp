@@ -19,8 +19,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-
 #include <externs.h>
+#include "politics/alignment.h"
 
 // Finds a location with the corresponding type and returns
 // its index in the location array
@@ -290,9 +290,12 @@ void Location::update_heat_protection()
       break;
    }
 
-   if(law[LAW_FLAGBURNING]==-2&&location[l]->haveflag) heat_protection+=6; // More protection if the flag is sacred
-   else if(law[LAW_FLAGBURNING]!=-2&&location[l]->haveflag) heat_protection+=2; // Some if the flag isn't
-   else if(law[LAW_FLAGBURNING]==-2&&!(location[l]->haveflag)) heat_protection-=2; // Lose some if it is and you have no flag
+   if (law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE && location[l]->haveflag)
+     heat_protection+=6; // More protection if the flag is sacred
+   else if (law[LAW_FLAGBURNING] != Alignment::ARCH_CONSERVATIVE && location[l]->haveflag)
+     heat_protection+=2; // Some if the flag isn't
+   else if (law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE && !(location[l]->haveflag))
+     heat_protection-=2; // Lose some if it is and you have no flag
    else { } // None if it isn't and you have no flag
 
    if(heat_protection<0) heat_protection=0;
@@ -331,19 +334,23 @@ void initlocation(Location &loc)
    case SITE_OUTOFTOWN: loc.rename("City Outskirts", "Outskirts"); break;
    case SITE_TRAVEL: loc.rename("Travel", "Travel"); break;
    case SITE_GOVERNMENT_POLICESTATION:
-      if(law[LAW_POLICEBEHAVIOR]==-2&&law[LAW_DEATHPENALTY]==-2) {
+      if (law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE
+        &&law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE)
+      {
          loc.rename("Death Squad HQ", "Death Squad HQ");
       } else {
          loc.rename("Police Station", "Police Station");
       } break;
    case SITE_GOVERNMENT_COURTHOUSE:
-      if(law[LAW_DEATHPENALTY]==-2) {
+      if (law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE)
+      {
          loc.rename("Halls of Ultimate Judgment", "Judge Hall");
       } else {
          loc.rename("Courthouse", "Courthouse");
       } break;
    case SITE_GOVERNMENT_FIRESTATION:
-      if(law[LAW_FREESPEECH]==-2) {
+      if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
+      {
          loc.rename("Fireman HQ", "Fireman HQ");
          loc.hidden = false;
       } else {
@@ -351,7 +358,7 @@ void initlocation(Location &loc)
          loc.hidden = true;
       } break;
    case SITE_GOVERNMENT_PRISON:
-      if(law[LAW_PRISONS]==-2)
+      if (law[LAW_PRISONS] == Alignment::ARCH_CONSERVATIVE)
       {
          switch(LCSrandom(5))
          {
@@ -381,19 +388,19 @@ void initlocation(Location &loc)
       }
       break;
    case SITE_INDUSTRY_NUCLEAR:
-      if(law[LAW_NUCLEARPOWER]==2) {
+      if (law[LAW_NUCLEARPOWER] == Alignment::ELITE_LIBERAL) {
          loc.rename("Nuclear Waste Center", "NWaste Center");
       } else {
          loc.rename("Nuclear Power Plant", "NPower Plant");
       } break;
    case SITE_GOVERNMENT_INTELLIGENCEHQ:
-      if(law[LAW_PRIVACY]==-2 && law[LAW_POLICEBEHAVIOR]==-2) {
+      if (law[LAW_PRIVACY]==Alignment::ARCH_CONSERVATIVE && law[LAW_POLICEBEHAVIOR]==Alignment::ARCH_CONSERVATIVE) {
          loc.rename("Ministry of Love", "Miniluv");
       } else {
          loc.rename("Intelligence HQ", "Int. HQ");
       } break;
    case SITE_GOVERNMENT_ARMYBASE:
-      if(law[LAW_MILITARY]==-2) {
+      if (law[LAW_MILITARY] == Alignment::ARCH_CONSERVATIVE) {
          loc.rename("Ministry of Peace", "Minipax");
       } else {
          lastname(loc.name,true);
@@ -411,14 +418,14 @@ void initlocation(Location &loc)
       break;
    case SITE_BUSINESS_PAWNSHOP:
       lastname(loc.name,true);
-      if(law[LAW_GUNCONTROL]==ALIGN_ELITELIBERAL)
+      if(law[LAW_GUNCONTROL]==Alignment::ELITE_LIBERAL)
          strcat(loc.name,"'s Pawnshop");
       else
          strcat(loc.name," Pawn & Gun");
       strcpy(loc.shortname,"Pawnshop");
       break;
    case SITE_CORPORATE_HOUSE:
-      if(law[LAW_CORPORATE]==-2&&law[LAW_TAX]==-2)
+      if (law[LAW_CORPORATE]==Alignment::ARCH_CONSERVATIVE&&law[LAW_TAX]==Alignment::ARCH_CONSERVATIVE)
          loc.rename("CEO Castle", "CEO Castle");
       else
          loc.rename("CEO Residence", "CEO House");
@@ -566,7 +573,7 @@ void initlocation(Location &loc)
       do {
          lastname(loc.name,true);
          strcat(loc.name," St. ");
-         if(law[LAW_DRUGS]==2)
+         if (law[LAW_DRUGS] == Alignment::ELITE_LIBERAL)
          {
             switch(LCSrandom(4))
             {

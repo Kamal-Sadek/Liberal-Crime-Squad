@@ -65,30 +65,30 @@
 // Sets the text color to the thematic color for the given alignment
 // extended_range forces colors to be set on a 5 point scale instead
 // of just basic liberal-moderate-conservative
-void set_alignment_color(signed char alignment, bool extended_range)
+void set_alignment_color(Alignment alignment, bool extended_range)
 {
    switch(alignment)
    {
-   case ALIGN_ARCHCONSERVATIVE:
+   case Alignment::ARCH_CONSERVATIVE:
       set_color(COLOR_RED,COLOR_BLACK,1);
       break;
-   case ALIGN_CONSERVATIVE:
+   case Alignment::CONSERVATIVE:
       if(extended_range)
          set_color(COLOR_MAGENTA,COLOR_BLACK,1);
       else set_color(COLOR_RED,COLOR_BLACK,1);
       break;
-   case ALIGN_MODERATE:
+   case Alignment::MODERATE:
       set_color(COLOR_YELLOW,COLOR_BLACK,1);
       break;
-   case ALIGN_LIBERAL:
+   case Alignment::LIBERAL:
       if(extended_range)
          set_color(COLOR_CYAN,COLOR_BLACK,1);
       else set_color(COLOR_GREEN,COLOR_BLACK,1);
       break;
-   case ALIGN_ELITELIBERAL:
+   case Alignment::ELITE_LIBERAL:
       set_color(COLOR_GREEN,COLOR_BLACK,1);
       break;
-   case ALIGN_STALINIST:
+   case Alignment::STALINIST:
       set_color(COLOR_RED,COLOR_BLACK,1);
       break;
    default: // This should not happen! Set a strange color to indicate an error!
@@ -1625,13 +1625,13 @@ void printhealthstat(Creature &g,int y,int x,char smll)
    }
    else
    {
-      if(g.align==-1)
+      if (g.align == Alignment::CONSERVATIVE)
       {
          set_color(COLOR_RED,COLOR_BLACK,1);
          if(smll)addstr("Consrvtv");
          else addstr("Conservative");
       }
-      else if(g.align==0)
+      else if (g.align == Alignment::MODERATE)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,1);
          addstr("Moderate");

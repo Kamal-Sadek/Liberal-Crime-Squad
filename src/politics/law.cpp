@@ -1,4 +1,8 @@
 /*
+ * Copyright 2008, 2009 Jonathan Stickles  <jonathansfox@users.sourceforge.net>
+ * Copyright 2014 Rich McGrew (yetisyny)
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
  * This file is part of Liberal Crime Squad.
  *
  * Liberal Crime Squad is free software; you can redistribute it and/or
@@ -22,36 +26,37 @@
 
 // Default constructor
 law::law()
-{
-   return;
-}
+{ }
 
 // Adds the lawtext to the screen
-void law::addlawtext(bool gameover)
+void
+law::addlawtext(bool gameover)
 {
-   // Set the appropriate color, then add the appropriate text
-   if(gameover)
-   {
-      set_alignment_color(ALIGN_ARCHCONSERVATIVE,true);
-      addstr(defeat_lawtext);
-   }
-   else
-   {
-      set_alignment_color(alignment,true);
-      addstr(lawtext[alignment+2]); // Alignment starts at -2, array starts at 0
-   }
+  // Set the appropriate color, then add the appropriate text
+  if (gameover)
+  {
+    set_alignment_color(Alignment::ARCH_CONSERVATIVE, true);
+    addstr(defeat_lawtext);
+  }
+  else
+  {
+    set_alignment_color(alignment, true);
+    addstr(lawtext[to_index(alignment)]);
+  }
 }
 
 // Set law's alignment
-void law::changealignment(signed char align)
+void
+law::changealignment(Alignment align)
 {
    alignment = align;
 }
 
 // Set law's text for an alignment
-void law::setlawtext(signed char align,string text)
+void
+law::setlawtext(signed char align, string text)
 {
-   if(align==-3) // Defeat
-      defeat_lawtext = text;
-   else lawtext[align+2] = text;
+  if (align == -3) // Defeat
+    defeat_lawtext = text;
+  else lawtext[align+2] = text;
 }

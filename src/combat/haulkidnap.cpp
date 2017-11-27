@@ -78,10 +78,11 @@ void kidnapattempt()
    vector<int> target;
 
    for(int e=0;e<ENCMAX;e++)
-      if(encounter[e].exists&&encounter[e].alive&&encounter[e].align==-1&&
-        (encounter[e].animalgloss==ANIMALGLOSS_NONE||law[LAW_ANIMALRESEARCH]==2)&&
-       (!encounter[e].get_weapon().protects_against_kidnapping()||
-         encounter[e].blood<=20)&&encounter[e].animalgloss!=ANIMALGLOSS_TANK)
+      if (encounter[e].exists&&encounter[e].alive
+       && encounter[e].align == Alignment::CONSERVATIVE
+       && (encounter[e].animalgloss==ANIMALGLOSS_NONE || law[LAW_ANIMALRESEARCH] == Alignment::ELITE_LIBERAL)
+       && (!encounter[e].get_weapon().protects_against_kidnapping()
+        || encounter[e].blood<=20)&&encounter[e].animalgloss!=ANIMALGLOSS_TANK)
          target.push_back(e);
 
    if(len(target))
@@ -183,7 +184,9 @@ void releasehostage()
    char availslot[6]={0,0,0,0,0,0};
    for(int p=0;p<6;p++)
       if(activesquad->squad[p]!=NULL)
-         if(activesquad->squad[p]->alive&&activesquad->squad[p]->prisoner!=NULL&&activesquad->squad[p]->prisoner->align!=ALIGN_LIBERAL)
+         if (activesquad->squad[p]->alive
+          && activesquad->squad[p]->prisoner != NULL
+          && activesquad->squad[p]->prisoner->align != Alignment::LIBERAL)
             available++,availslot[p]=1;
 
    if(!available)
@@ -314,8 +317,10 @@ bool kidnap(Creature &a,Creature &t,bool &amateur)
       move(17,1);
       addstr("and says, ", gamelog);
       set_color(COLOR_GREEN,COLOR_BLACK,1);
-      if(law[LAW_FREESPEECH]==-2)addstr("\"[Please], be cool.\"", gamelog);
-      else addstr("\"Bitch, be cool.\"", gamelog);
+      if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
+        addstr("\"[Please], be cool.\"", gamelog);
+      else
+        addstr("\"Bitch, be cool.\"", gamelog);
 
       a.prisoner=new Creature;
       *a.prisoner=t;
