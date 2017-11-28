@@ -35,7 +35,9 @@
 class Interval
 {
 public:
-  Interval(int low = 0, int high = 0);
+  Interval();
+  Interval(int value);
+  Interval(int low, int high);
 
   /**
    * Generates a random number unformly distributed on the range

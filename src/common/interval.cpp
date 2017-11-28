@@ -47,6 +47,20 @@ valid(std::string const& v)
 
 
 Interval::
+Interval()
+: min(0)
+, max(0)
+{ }
+
+
+Interval::
+Interval(int value)
+: min(value)
+, max(value)
+{ }
+
+
+Interval::
 Interval(int low, int high)
 : min(low)
 , max(high)
