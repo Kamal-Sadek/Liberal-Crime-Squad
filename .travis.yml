@@ -52,9 +52,9 @@ before_script:
     fi
 
 script:
-  - make
+  - make -j2
   - if [ "$BUILD_TARGET" = "linux" ]; then
-      make check
+      make check;
     fi
 
 notifications:
