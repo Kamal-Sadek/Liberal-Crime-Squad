@@ -53,6 +53,9 @@ before_script:
 
 script:
   - make
+  - if [ "$BUILD_TARGET" = "linux" ]; then
+      make check
+    fi
 
 notifications:
   email:
