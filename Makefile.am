@@ -17,7 +17,7 @@
 
 ACLOCAL_AMFLAGS = -I config.m4
 AM_MAKEFLAGS = --no-print-directory
-SUBDIRS = lib src
+SUBDIRS = lib src tests
 
 lcsdir = $(datadir)/lcs
 artdir = $(lcsdir)/art
