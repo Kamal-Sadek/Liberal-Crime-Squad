@@ -57,7 +57,8 @@ crimesquad_SOURCES = \
  items/weapon.cpp items/weapon.h items/weapontype.cpp items/armor.h\
  sitemode/shop.h sitemode/shop.cpp log/log.h log/log.cpp locations/locations.cpp\
  title/initfile.cpp locations/world.cpp locations/locations.h common.h creature/augmenttype.h\
- creature/creaturetype.h creature/creaturetype.cpp common/stringconversion.cpp
+ creature/creaturetype.h creature/creaturetype.cpp common/stringconversion.cpp \
+ tinydir.h
 
 crimesquad_CPPFLAGS = \
   -DINSTALL_DATA_DIR=\"$(datadir)\" \

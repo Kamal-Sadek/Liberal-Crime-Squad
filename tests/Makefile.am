@@ -30,3 +30,5 @@ test_lcs_CPPFLAGS = \
 LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) $(top_srcdir)/config.aux/tap-driver.sh
 
 TESTS = $(check_PROGRAMS)
+
+EXTRA_DIST = include
