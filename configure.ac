@@ -51,5 +51,9 @@ AS_CASE([$host_os],
 AM_CONDITIONAL([BUILD_WIN32],[test x$build_windows = xtrue])
 
 AC_CONFIG_SUBDIRS([lib/libsdl2])
-AC_CONFIG_FILES([Makefile lib/Makefile lib/pdcurses/Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile])
+AC_CONFIG_FILES([lib/Makefile])
+AC_CONFIG_FILES([lib/pdcurses/Makefile])
+AC_CONFIG_FILES([src/Makefile])
+AC_CONFIG_FILES([tests/Makefile])
 AC_OUTPUT

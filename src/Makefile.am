@@ -16,13 +16,18 @@
 #
 
 bin_PROGRAMS = crimesquad
+noinst_LTLIBRARIES = libcrimesquad.la
 
 crimesquad_SOURCES = \
- game.cpp lcsio.cpp cursesmovie.cpp compat.cpp\
+ game.cpp 
+
+libcrimesquad_la_SOURCES = \
+ lcsio.cpp cursesmovie.cpp compat.cpp\
  cursesgraphics.cpp lcsio.h cursesmovie.h compat.h cursesgraphics.h includes.h\
- externs.h common/commondisplay.cpp common/commonactions.cpp\
+ common/commondisplay.cpp common/commonactions.cpp\
  common/consolesupport.cpp common/getnames.cpp common/translateid.cpp\
  common/equipment.cpp creature/augmentation.cpp creature/creature.cpp title/titlescreen.cpp\
+ common/interval.h      common/interval.cpp \
  title/highscore.cpp title/newgame.cpp title/saveload.cpp basemode/basemode.cpp\
  basemode/baseactions.cpp basemode/activate.cpp basemode/reviewmode.cpp\
  sitemode/advance.cpp sitemode/mapspecials.cpp sitemode/newencounter.cpp\
@@ -56,15 +61,20 @@ crimesquad_SOURCES = \
  items/weapon.cpp items/weapon.h items/weapontype.cpp items/armor.h\
  sitemode/shop.h sitemode/shop.cpp log/log.h log/log.cpp locations/locations.cpp\
  title/initfile.cpp locations/world.cpp locations/locations.h common.h creature/augmenttype.h\
- creature/creaturetype.h creature/creaturetype.cpp common/stringconversion.cpp
+ creature/creaturetype.h creature/creaturetype.cpp common/stringconversion.cpp \
+ externs.h              globals.cpp \
+ tinydir.h
 
 crimesquad_CPPFLAGS = \
   -DINSTALL_DATA_DIR=\"$(datadir)\" \
   -I$(top_srcdir)/lib/libsdl2 \
   -I$(top_srcdir)/lib/pdcurses
 
-crimesquad_LDADD = ${top_builddir}/lib/pdcurses/libpdcurses.la
+libcrimesquad_la_CPPFLAGS = $(crimesquad_CPPFLAGS)
+
+libcrimesquad_la_LIBADD = ${top_builddir}/lib/pdcurses/libpdcurses.la
 if BUILD_WIN32
-crimesquad_LDFLAGS = -static -static-libgcc -static-libstdc++
+libcrimesquad_la_LDFLAGS = -static -static-libgcc -static-libstdc++
 endif
 
+crimesquad_LDADD = libcrimesquad.la

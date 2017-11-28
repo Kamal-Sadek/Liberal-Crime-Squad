@@ -17,7 +17,7 @@
 
 ACLOCAL_AMFLAGS = -I config.m4
 AM_MAKEFLAGS = --no-print-directory
-SUBDIRS = lib src
+SUBDIRS = lib src tests
 
 lcsdir = $(datadir)/lcs
 artdir = $(lcsdir)/art
@@ -74,10 +74,11 @@ dist_app_DATA = crimesquad.desktop
 #man_MANS = man/crimesquad.6
 dist_man_MANS = man/crimesquad.6
 EXTRA_DIST = \
- 	     AUTHORS \
+ AUTHORS \
  COPYING \
+ INSTALL \
+ README.md \
  docs/conventions.txt \
  docs/cpcimageformat.txt \
  docs/CrimeSquadManual.txt \
- INSTALL \
- README.md
+ config.aux/tap-driver.sh

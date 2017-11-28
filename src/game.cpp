@@ -85,7 +85,6 @@ char artdir[MAX_PATH_SIZE];
 vector<configSiteMap *> sitemaps; // stores site map info read in from config file
 
 bool multipleCityMode;
-unsigned long seed[RNG_SIZE];
 
 vector<ClipType *> cliptype;
 vector<WeaponType *> weapontype;

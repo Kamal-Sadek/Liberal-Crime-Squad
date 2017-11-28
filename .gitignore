@@ -30,6 +30,7 @@ stamp-h1
 /workspaces/Release/*.tlog
 
 # Keep these separate from the above because order is important.
+!config.aux/tap-driver.sh
 !config.m4/ax_cxx_compile_stdcxx_11.m4
 !lib/libsdl2/build-scripts/*
 !lib/libsdl2/configure

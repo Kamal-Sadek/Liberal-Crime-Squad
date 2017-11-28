@@ -1,11 +1,9 @@
 
-include_HEADERS = \
-  acs_defs.h curses.h curspriv.h panel.h term.h
 
 noinst_LTLIBRARIES = libpdcurses.la
 
 libpdcurses_la_SOURCES = \
-  ${include_HEADERS} \
+  acs_defs.h curses.h curspriv.h panel.h term.h \
   addch.c addchstr.c addstr.c attr.c beep.c bkgd.c border.c \
   clear.c color.c debug.c delch.c deleteln.c deprec.c getch.c \
   getstr.c getyx.c inch.c inchstr.c initscr.c inopts.c insch.c \
