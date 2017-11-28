@@ -21,11 +21,16 @@
 check_PROGRAMS = test-lcs
 
 test_lcs_SOURCES = \
-  test-lcs.cpp
+  test-lcs.cpp \
+  common/test-interval.cpp
 
 test_lcs_CPPFLAGS = \
   -I$(top_srcdir) \
+  -I$(top_srcdir)/src \
   -I$(top_srcdir)/tests/include
+
+test_lcs_LDADD = \
+  ${top_builddir}/src/libcrimesquad.la
 
 LOG_DRIVER = env AM_TAP_AWK='$(AWK)' $(SHELL) $(top_srcdir)/config.aux/tap-driver.sh
 
