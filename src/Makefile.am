@@ -23,6 +23,7 @@ crimesquad_SOURCES = \
  externs.h common/commondisplay.cpp common/commonactions.cpp\
  common/consolesupport.cpp common/getnames.cpp common/translateid.cpp\
  common/equipment.cpp creature/augmentation.cpp creature/creature.cpp title/titlescreen.cpp\
+ common/interval.h      common/interval.cpp \
  title/highscore.cpp title/newgame.cpp title/saveload.cpp basemode/basemode.cpp\
  basemode/baseactions.cpp basemode/activate.cpp basemode/reviewmode.cpp\
  sitemode/advance.cpp sitemode/mapspecials.cpp sitemode/newencounter.cpp\

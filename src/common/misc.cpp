@@ -386,31 +386,6 @@ void romannumeral(int amendnum)
    }
 }
 
-// Sets the interval according to a string that is either a number or two
-// number separated by a dash. Returns false and does not change the
-// interval if the given string is not a valid interval.
-bool Interval::set_interval(const string& interval)
-{
-   if(!len(interval) ||
-      interval.find_first_not_of("1234567890-")!=string::npos)
-      return false;
-
-   size_t dashpos=interval.find('-',1);
-   if(dashpos==string::npos) // Just a constant.
-   {
-      if(!valid(interval)) return false;
-      max=min=atoi(interval);
-   }
-   else
-   {
-      string smin=interval.substr(0,dashpos),smax=interval.substr(dashpos+1);
-      if(!valid(smin)||!valid(smax)) return false;
-      int tmin=atoi(smin),tmax=atoi(smax);
-      if(tmin>tmax) return false;
-      min=tmin,max=tmax;
-   }
-   return true;
-}
 
 #ifndef DONT_INCLUDE_SDL
 /* helper function for initsongs() */
