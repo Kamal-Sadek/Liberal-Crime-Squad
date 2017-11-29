@@ -22,7 +22,8 @@ check_PROGRAMS = test-lcs
 
 test_lcs_SOURCES = \
   test-lcs.cpp \
-  common/test-interval.cpp
+  common/test-interval.cpp \
+  politics/test-alignment.cpp
 
 test_lcs_CPPFLAGS = \
   -I$(top_srcdir) \
