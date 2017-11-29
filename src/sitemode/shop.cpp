@@ -883,7 +883,9 @@ int Shop::ShopItem::adjusted_price() const
 {
    int p=price_;
    if(increase_price_with_illegality_&&itemclass_==WEAPON&&valid_item())
-      for(int i=weapontype[getweapontype(itemtypename_)]->get_legality();i<law[LAW_GUNCONTROL];i++)
+      for (int i=weapontype[getweapontype(itemtypename_)]->get_legality();
+           i < to_index(law[LAW_GUNCONTROL])-2;
+           i++)
          p*=2;
    return p;
 }

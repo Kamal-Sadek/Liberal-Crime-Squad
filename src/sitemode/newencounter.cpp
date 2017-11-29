@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -66,18 +67,21 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_HICK]=1000;
             break;
          case SITE_GOVERNMENT_POLICESTATION:
-            if(law[LAW_DEATHPENALTY]==-2&&
-               law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]=1000;
+            if(law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE&&
+               law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_DEATHSQUAD]=1000;
             else creaturearray[CREATURE_SWAT]=1000;
             break;
          default:
-            if(law[LAW_DEATHPENALTY]==-2&&
-               law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]=1000;
-            else if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]=1000;
+            if (law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE
+             && law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)
+              creaturearray[CREATURE_DEATHSQUAD] = 1000;
+            else if (to_right_of(law[LAW_POLICEBEHAVIOR], Alignment::MODERATE))
+              creaturearray[CREATURE_GANGUNIT] = 1000;
             else creaturearray[CREATURE_COP]=1000;
             break;
       }
-      if(siteonfire && law[LAW_FREESPEECH]!=-2)creaturearray[CREATURE_FIREFIGHTER]=1000;
+      if (siteonfire && law[LAW_FREESPEECH] != Alignment::ARCH_CONSERVATIVE)
+        creaturearray[CREATURE_FIREFIGHTER] = 1000;
    }
 
    if(location[cursite]->renting==RENTING_CCS)
@@ -107,10 +111,10 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_MATHEMATICIAN]+=1;
             creaturearray[CREATURE_HSDROPOUT]+=30;
             creaturearray[CREATURE_BUM]+=200;
-            if(law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=2;
-            if(law[LAW_POLLUTION]==-2)creaturearray[CREATURE_MUTANT]+=2;
-            if(law[LAW_POLLUTION]==-2&&
-               law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=50;
+            if(law[LAW_NUCLEARPOWER] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=2;
+            if(law[LAW_POLLUTION] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=2;
+            if(law[LAW_POLLUTION] == Alignment::ARCH_CONSERVATIVE&&
+               law[LAW_NUCLEARPOWER] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=50;
             creaturearray[CREATURE_GANGMEMBER]+=200;
             creaturearray[CREATURE_CRACKHEAD]+=200;
             creaturearray[CREATURE_PROSTITUTE]+=200;
@@ -189,9 +193,11 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_SCIENTIST_EMINENT]+=1;
             creaturearray[CREATURE_CORPORATE_MANAGER]+=30;
             creaturearray[CREATURE_COP]=+5;
-            if(law[LAW_DEATHPENALTY]==-2&&
-               law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]+=2;
-            if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]+=2;
+            if (law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE
+             && law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)
+              creaturearray[CREATURE_DEATHSQUAD] += 2;
+            if (to_right_of(law[LAW_POLICEBEHAVIOR], Alignment::MODERATE))
+              creaturearray[CREATURE_GANGUNIT] += 2;
             creaturearray[CREATURE_JUDGE_CONSERVATIVE]+=1;
             creaturearray[CREATURE_RADIOPERSONALITY]+=1;
             creaturearray[CREATURE_NEWSANCHOR]+=1;
@@ -240,7 +246,7 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_AGENT]+=2;
             if(sec)creaturearray[CREATURE_SECRET_SERVICE]+=100;
             else creaturearray[CREATURE_SECRET_SERVICE]+=5;
-            if(endgamestate<ENDGAME_CCS_DEFEATED && endgamestate>ENDGAME_NONE && exec[EXEC_PRESIDENT] < ALIGN_CONSERVATIVE)
+            if(endgamestate<ENDGAME_CCS_DEFEATED && endgamestate>ENDGAME_NONE && exec[EXEC_PRESIDENT] < Alignment::CONSERVATIVE)
                creaturearray[CREATURE_CCS_ARCHCONSERVATIVE]+=1;
             creaturearray[CREATURE_MILITARYOFFICER]+=3;
             creaturearray[CREATURE_LAWYER]+=3;
@@ -275,14 +281,18 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_SCIENTIST_EMINENT]+=1;
             creaturearray[CREATURE_CORPORATE_MANAGER]+=10;
             creaturearray[CREATURE_WORKER_JANITOR]+=5;
-            if(law[LAW_LABOR]<2)creaturearray[CREATURE_WORKER_FACTORY_NONUNION]+=5;
-            creaturearray[CREATURE_WORKER_SECRETARY]+=15;
-            if(law[LAW_LABOR]>=0)creaturearray[CREATURE_WORKER_FACTORY_UNION]+=5;
+            if (to_right_of(law[LAW_LABOR], Alignment::ELITE_LIBERAL))
+              creaturearray[CREATURE_WORKER_FACTORY_NONUNION] += 5;
+            creaturearray[CREATURE_WORKER_SECRETARY] += 15;
+            if (to_left_of(law[LAW_LABOR], Alignment::CONSERVATIVE))
+              creaturearray[CREATURE_WORKER_FACTORY_UNION] += 5;
             creaturearray[CREATURE_TEENAGER]+=5;
             creaturearray[CREATURE_COP]+=5;
-            if(law[LAW_DEATHPENALTY]==-2&&
-                law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]+=2;
-            if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]+=2;
+            if (law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE
+             && law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)
+              creaturearray[CREATURE_DEATHSQUAD] += 2;
+            if (to_right_of(law[LAW_POLICEBEHAVIOR], Alignment::MODERATE))
+              creaturearray[CREATURE_GANGUNIT] += 2;
             creaturearray[CREATURE_JUDGE_LIBERAL]+=1;
             creaturearray[CREATURE_JUDGE_CONSERVATIVE]+=1;
             creaturearray[CREATURE_AGENT]+=1;
@@ -302,10 +312,10 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_TEACHER]+=5;
             creaturearray[CREATURE_HSDROPOUT]+=1;
             creaturearray[CREATURE_BUM]+=1;
-            if(law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=1;
-            if(law[LAW_POLLUTION]==-2)creaturearray[CREATURE_MUTANT]+=1;
-            if(law[LAW_POLLUTION]==-2&&
-               law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=2;
+            if(law[LAW_NUCLEARPOWER] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=1;
+            if(law[LAW_POLLUTION] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=1;
+            if(law[LAW_POLLUTION] == Alignment::ARCH_CONSERVATIVE&&
+               law[LAW_NUCLEARPOWER] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=2;
             creaturearray[CREATURE_GANGMEMBER]+=1;
             creaturearray[CREATURE_CRACKHEAD]+=1;
             creaturearray[CREATURE_PRIEST]+=1;
@@ -328,8 +338,8 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_MERC]+=1;
             creaturearray[CREATURE_SOLDIER]+=1;
             creaturearray[CREATURE_VETERAN]+=3;
-            if(law[LAW_DEATHPENALTY]==-2&&
-               law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]+=1;
+            if(law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE&&
+               law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_EDUCATOR]+=1;
             else creaturearray[CREATURE_PRISONGUARD]+=1;
             creaturearray[CREATURE_HIPPIE]+=1;
             creaturearray[CREATURE_CRITIC_ART]+=1;
@@ -375,10 +385,10 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_TEACHER]+=1;
             creaturearray[CREATURE_HSDROPOUT]+=10;
             creaturearray[CREATURE_BUM]+=1;
-            if(law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=1;
-            if(law[LAW_POLLUTION]==-2)creaturearray[CREATURE_MUTANT]+=1;
-            if(law[LAW_POLLUTION]==-2&&
-               law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=2;
+            if(law[LAW_NUCLEARPOWER] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=1;
+            if(law[LAW_POLLUTION] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=1;
+            if(law[LAW_POLLUTION] == Alignment::ARCH_CONSERVATIVE&&
+               law[LAW_NUCLEARPOWER] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=2;
             creaturearray[CREATURE_HIPPIE]+=50;
             creaturearray[CREATURE_CRITIC_ART]+=1;
             creaturearray[CREATURE_CRITIC_MUSIC]+=1;
@@ -440,10 +450,10 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_MUSICIAN]+=3;
             creaturearray[CREATURE_MATHEMATICIAN]+=1;
             creaturearray[CREATURE_BUM]+=200;
-            if(law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=2;
-            if(law[LAW_POLLUTION]==-2)creaturearray[CREATURE_MUTANT]+=2;
-            if(law[LAW_POLLUTION]==-2&&
-               law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=50;
+            if(law[LAW_NUCLEARPOWER] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=2;
+            if(law[LAW_POLLUTION] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=2;
+            if(law[LAW_POLLUTION] == Alignment::ARCH_CONSERVATIVE&&
+               law[LAW_NUCLEARPOWER] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=50;
             creaturearray[CREATURE_GANGMEMBER]+=5;
             creaturearray[CREATURE_CRACKHEAD]+=50;
             creaturearray[CREATURE_PROSTITUTE]+=10;
@@ -470,9 +480,11 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_SECURITYGUARD]+=1;
             creaturearray[CREATURE_SCIENTIST_LABTECH]+=1;
             creaturearray[CREATURE_WORKER_JANITOR]+=3;
-            if(law[LAW_LABOR]<2)creaturearray[CREATURE_WORKER_FACTORY_NONUNION]+=1;
-            creaturearray[CREATURE_WORKER_SECRETARY]+=2;
-            if(law[LAW_LABOR]>=0)creaturearray[CREATURE_WORKER_FACTORY_UNION]+=1;
+            if (to_right_of(law[LAW_LABOR], Alignment::ELITE_LIBERAL))
+              creaturearray[CREATURE_WORKER_FACTORY_NONUNION] += 1;
+            creaturearray[CREATURE_WORKER_SECRETARY] += 2;
+            if (to_left_of(law[LAW_LABOR], Alignment::CONSERVATIVE))
+              creaturearray[CREATURE_WORKER_FACTORY_UNION] += 1;
             creaturearray[CREATURE_TEENAGER]+=5;
             creaturearray[CREATURE_SEWERWORKER]+=1;
             creaturearray[CREATURE_COLLEGESTUDENT]+=1;
@@ -481,10 +493,10 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_TEACHER]+=1;
             creaturearray[CREATURE_HSDROPOUT]+=3;
             creaturearray[CREATURE_BUM]+=3;
-            if(law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=2;
-            if(law[LAW_POLLUTION]==-2)creaturearray[CREATURE_MUTANT]+=2;
-            if(law[LAW_POLLUTION]==-2&&
-               law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=5;
+            if(law[LAW_NUCLEARPOWER] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=2;
+            if(law[LAW_POLLUTION] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=2;
+            if(law[LAW_POLLUTION] == Alignment::ARCH_CONSERVATIVE&&
+               law[LAW_NUCLEARPOWER] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=5;
             creaturearray[CREATURE_GANGMEMBER]+=3;
             creaturearray[CREATURE_CRACKHEAD]+=3;
             creaturearray[CREATURE_FASTFOODWORKER]+=1;
@@ -501,8 +513,8 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_HICK]+=1;
             creaturearray[CREATURE_SOLDIER]+=1;
             creaturearray[CREATURE_VETERAN]+=2;
-            if(law[LAW_DEATHPENALTY]==-2&&
-               law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]+=1;
+            if(law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE&&
+               law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_EDUCATOR]+=1;
             else creaturearray[CREATURE_PRISONGUARD]+=1;
             creaturearray[CREATURE_HIPPIE]+=1;
             creaturearray[CREATURE_BIKER]+=1;
@@ -535,14 +547,18 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_SCIENTIST_LABTECH]=1;
             creaturearray[CREATURE_CORPORATE_MANAGER]=1;
             creaturearray[CREATURE_WORKER_JANITOR]=1;
-            if(law[LAW_LABOR]<2)creaturearray[CREATURE_WORKER_FACTORY_NONUNION]=1;
-            creaturearray[CREATURE_WORKER_SECRETARY]=1;
-            if(law[LAW_LABOR]>=0)creaturearray[CREATURE_WORKER_FACTORY_UNION]=1;
+            if (to_right_of(law[LAW_LABOR], Alignment::ELITE_LIBERAL))
+              creaturearray[CREATURE_WORKER_FACTORY_NONUNION] = 1;
+            creaturearray[CREATURE_WORKER_SECRETARY] = 1;
+            if (to_left_of(law[LAW_LABOR], Alignment::CONSERVATIVE))
+              creaturearray[CREATURE_WORKER_FACTORY_UNION] = 1;
             creaturearray[CREATURE_TEENAGER]=3;
             creaturearray[CREATURE_COP]+=1;
-            if(law[LAW_DEATHPENALTY]==-2&&
-               law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]+=1;
-            if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]+=1;
+            if (law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE
+             && law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)
+              creaturearray[CREATURE_DEATHSQUAD] += 1;
+            if (to_right_of(law[LAW_POLICEBEHAVIOR], Alignment::MODERATE))
+              creaturearray[CREATURE_GANGUNIT] += 1;
             creaturearray[CREATURE_LAWYER]=1;
             creaturearray[CREATURE_SEWERWORKER]=1;
             creaturearray[CREATURE_COLLEGESTUDENT]=1;
@@ -570,8 +586,8 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_AMATEURMAGICIAN]=1;
             creaturearray[CREATURE_SOLDIER]=1;
             creaturearray[CREATURE_VETERAN]=2;
-            if(law[LAW_DEATHPENALTY]==-2&&
-               law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]+=1;
+            if(law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE&&
+               law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_EDUCATOR]+=1;
             else creaturearray[CREATURE_PRISONGUARD]+=1;
             creaturearray[CREATURE_HIPPIE]=1;
             creaturearray[CREATURE_CRITIC_ART]=1;
@@ -615,14 +631,18 @@ void prepareencounter(short type,char sec)
                creaturearray[CREATURE_BANK_MANAGER]=20;
                creaturearray[CREATURE_SCIENTIST_LABTECH]=1;
                creaturearray[CREATURE_WORKER_JANITOR]=1;
-               if(law[LAW_LABOR]<2)creaturearray[CREATURE_WORKER_FACTORY_NONUNION]=1;
+               if (to_right_of(law[LAW_LABOR], Alignment::ELITE_LIBERAL))
+                 creaturearray[CREATURE_WORKER_FACTORY_NONUNION] = 1;
                creaturearray[CREATURE_WORKER_SECRETARY]=1;
-               if(law[LAW_LABOR]>=0)creaturearray[CREATURE_WORKER_FACTORY_UNION]=1;
+               if (to_left_of(law[LAW_LABOR], Alignment::CONSERVATIVE))
+                 creaturearray[CREATURE_WORKER_FACTORY_UNION] = 1;
                creaturearray[CREATURE_TEENAGER]=3;
                creaturearray[CREATURE_COP]+=1;
-               if(law[LAW_DEATHPENALTY]==-2&&
-                  law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]+=1;
-               if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]+=1;
+               if(law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE
+               && law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)
+                 creaturearray[CREATURE_DEATHSQUAD] += 1;
+               if (to_right_of(law[LAW_POLICEBEHAVIOR], Alignment::MODERATE))
+                 creaturearray[CREATURE_GANGUNIT] += 1;
                creaturearray[CREATURE_LAWYER]=1;
                creaturearray[CREATURE_SEWERWORKER]=1;
                creaturearray[CREATURE_COLLEGESTUDENT]=1;
@@ -650,8 +670,8 @@ void prepareencounter(short type,char sec)
                creaturearray[CREATURE_AMATEURMAGICIAN]=1;
                creaturearray[CREATURE_SOLDIER]=1;
                creaturearray[CREATURE_VETERAN]=2;
-               if(law[LAW_DEATHPENALTY]==-2&&
-                  law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]+=1;
+               if(law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE&&
+                  law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_EDUCATOR]+=1;
                else creaturearray[CREATURE_PRISONGUARD]+=1;
                creaturearray[CREATURE_HIPPIE]=1;
                creaturearray[CREATURE_CRITIC_ART]=1;
@@ -705,10 +725,11 @@ void prepareencounter(short type,char sec)
                else if(mode==GAMEMODE_SITE && sec)
                {
                    //inside someone's room when security is high. Might meet a policeman.
-                   if(law[LAW_DEATHPENALTY]==-2&&law[LAW_POLICEBEHAVIOR]==-2)
-                       creaturearray[CREATURE_DEATHSQUAD]+=5;
-                   if(law[LAW_POLICEBEHAVIOR]<=-1)
-                       creaturearray[CREATURE_GANGUNIT]+=10;
+                   if (law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE
+                    && law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)
+                       creaturearray[CREATURE_DEATHSQUAD] += 5;
+                   if (to_right_of(law[LAW_POLICEBEHAVIOR], Alignment::MODERATE))
+                       creaturearray[CREATURE_GANGUNIT] += 10;
                    creaturearray[CREATURE_COP]+=15;
                }
             creaturearray[CREATURE_SCIENTIST_EMINENT]+=1;
@@ -816,15 +837,21 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_SCIENTIST_LABTECH]=1;
             creaturearray[CREATURE_CORPORATE_MANAGER]=1;
             creaturearray[CREATURE_WORKER_JANITOR]=50;
-            if(law[LAW_LABOR]<2)creaturearray[CREATURE_WORKER_FACTORY_NONUNION]=1;
-            creaturearray[CREATURE_WORKER_SECRETARY]=1;
-            if(law[LAW_LABOR]>=0)creaturearray[CREATURE_WORKER_FACTORY_UNION]=1;
-            creaturearray[CREATURE_TEENAGER]=5;
-            if(sec)creaturearray[CREATURE_COP]+=1000;
-            else creaturearray[CREATURE_COP]+=500;
-            if(law[LAW_DEATHPENALTY]==-2&&
-               law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]+=400;
-            if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]+=400;
+            if (to_right_of(law[LAW_LABOR], Alignment::ELITE_LIBERAL))
+              creaturearray[CREATURE_WORKER_FACTORY_NONUNION] = 1;
+            creaturearray[CREATURE_WORKER_SECRETARY] = 1;
+            if (to_left_of(law[LAW_LABOR], Alignment::CONSERVATIVE))
+              creaturearray[CREATURE_WORKER_FACTORY_UNION] = 1;
+            creaturearray[CREATURE_TEENAGER] = 5;
+            if (sec)
+              creaturearray[CREATURE_COP]+=1000;
+            else
+              creaturearray[CREATURE_COP]+=500;
+            if (law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE
+             && law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)
+              creaturearray[CREATURE_DEATHSQUAD] += 400;
+            if (to_right_of(law[LAW_POLICEBEHAVIOR], Alignment::MODERATE))
+              creaturearray[CREATURE_GANGUNIT] += 400;
             creaturearray[CREATURE_JUDGE_LIBERAL]=1;
             creaturearray[CREATURE_JUDGE_CONSERVATIVE]=1;
             creaturearray[CREATURE_AGENT]=1;
@@ -842,10 +869,10 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_TEACHER]=1;
             creaturearray[CREATURE_HSDROPOUT]=10;
             creaturearray[CREATURE_BUM]=10;
-            if(law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=2;
-            if(law[LAW_POLLUTION]==-2)creaturearray[CREATURE_MUTANT]+=2;
-            if(law[LAW_POLLUTION]==-2&&
-               law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=5;
+            if(law[LAW_NUCLEARPOWER] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=2;
+            if(law[LAW_POLLUTION] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=2;
+            if(law[LAW_POLLUTION] == Alignment::ARCH_CONSERVATIVE&&
+               law[LAW_NUCLEARPOWER] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=5;
             creaturearray[CREATURE_GANGMEMBER]=10;
             creaturearray[CREATURE_CRACKHEAD]=10;
             creaturearray[CREATURE_PRIEST]=5;
@@ -868,8 +895,8 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_HICK]=1;
             creaturearray[CREATURE_SOLDIER]+=1;
             creaturearray[CREATURE_VETERAN]+=2;
-            if(law[LAW_DEATHPENALTY]==-2&&
-               law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]=1;
+            if(law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE&&
+               law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_EDUCATOR]=1;
             else creaturearray[CREATURE_PRISONGUARD]=1;
             creaturearray[CREATURE_HIPPIE]=1;
             creaturearray[CREATURE_CRITIC_ART]=1;
@@ -914,13 +941,17 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_SCIENTIST_EMINENT]=1;
             creaturearray[CREATURE_CORPORATE_MANAGER]=1;
             creaturearray[CREATURE_WORKER_JANITOR]=50;
-            if(law[LAW_LABOR]<2)creaturearray[CREATURE_WORKER_FACTORY_NONUNION]=1;
+            if (to_right_of(law[LAW_LABOR], Alignment::ELITE_LIBERAL))
+              creaturearray[CREATURE_WORKER_FACTORY_NONUNION] = 1;
             creaturearray[CREATURE_WORKER_SECRETARY]=50;
-            if(law[LAW_LABOR]>=0)creaturearray[CREATURE_WORKER_FACTORY_UNION]=1;
-            creaturearray[CREATURE_TEENAGER]=1;
-            if(law[LAW_DEATHPENALTY]==-2&&
-               law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]=80;
-            if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]=80;
+            if (to_left_of(law[LAW_LABOR], Alignment::CONSERVATIVE))
+              creaturearray[CREATURE_WORKER_FACTORY_UNION] = 1;
+            creaturearray[CREATURE_TEENAGER] = 1;
+            if (law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE
+             && law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)
+              creaturearray[CREATURE_DEATHSQUAD] = 80;
+            if (to_right_of(law[LAW_POLICEBEHAVIOR], Alignment::MODERATE))
+              creaturearray[CREATURE_GANGUNIT] = 80;
             creaturearray[CREATURE_JUDGE_LIBERAL]=20;
             creaturearray[CREATURE_JUDGE_CONSERVATIVE]=20;
             creaturearray[CREATURE_AGENT]=1;
@@ -936,10 +967,10 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_TEACHER]=1;
             creaturearray[CREATURE_HSDROPOUT]=1;
             creaturearray[CREATURE_BUM]=1;
-            if(law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=1;
-            if(law[LAW_POLLUTION]==-2)creaturearray[CREATURE_MUTANT]+=1;
-            if(law[LAW_POLLUTION]==-2&&
-               law[LAW_NUCLEARPOWER]==-2)creaturearray[CREATURE_MUTANT]+=2;
+            if(law[LAW_NUCLEARPOWER] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=1;
+            if(law[LAW_POLLUTION] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=1;
+            if(law[LAW_POLLUTION] == Alignment::ARCH_CONSERVATIVE&&
+               law[LAW_NUCLEARPOWER] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_MUTANT]+=2;
             creaturearray[CREATURE_GANGMEMBER]=1;
             creaturearray[CREATURE_CRACKHEAD]=1;
             creaturearray[CREATURE_PRIEST]=1;
@@ -962,8 +993,8 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_HICK]=1;
             creaturearray[CREATURE_SOLDIER]=1;
             creaturearray[CREATURE_VETERAN]=2;
-            if(law[LAW_DEATHPENALTY]==-2&&
-               law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]=1;
+            if(law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE&&
+               law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_EDUCATOR]=1;
             else creaturearray[CREATURE_PRISONGUARD]=1;
             creaturearray[CREATURE_HIPPIE]=1;
             creaturearray[CREATURE_CRITIC_ART]=1;
@@ -1007,10 +1038,13 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_WORKER_SECRETARY]=2;
             if(sec)
             {
-               if(law[LAW_DEATHPENALTY]==-2&&
-                  law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_DEATHSQUAD]+=50;
-               else if(law[LAW_POLICEBEHAVIOR]<=-1)creaturearray[CREATURE_GANGUNIT]+=50;
-               else creaturearray[CREATURE_COP]+=50;
+               if (law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE
+                && law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)
+                 creaturearray[CREATURE_DEATHSQUAD] += 50;
+               else if (to_right_of(law[LAW_POLICEBEHAVIOR], Alignment::MODERATE))
+                 creaturearray[CREATURE_GANGUNIT] += 50;
+               else
+                 creaturearray[CREATURE_COP] += 50;
             }
             creaturearray[CREATURE_NURSE]=2;
             creaturearray[CREATURE_PRIEST]=5;
@@ -1032,14 +1066,14 @@ void prepareencounter(short type,char sec)
                creaturearray[CREATURE_PRISONER]=8; // prisoners only in restricted areas
             if(sec)
             {
-               if(law[LAW_DEATHPENALTY]==-2&&
-                  law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]+=3;
+               if(law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE&&
+                  law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_EDUCATOR]+=3;
                else creaturearray[CREATURE_PRISONGUARD]+=3;
             }
             else
             {
-               if(law[LAW_DEATHPENALTY]==-2&&
-                  law[LAW_POLICEBEHAVIOR]==-2)creaturearray[CREATURE_EDUCATOR]+=2;
+               if(law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE&&
+                  law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)creaturearray[CREATURE_EDUCATOR]+=2;
                else creaturearray[CREATURE_PRISONGUARD]+=2;
             }
 
@@ -1106,22 +1140,22 @@ void prepareencounter(short type,char sec)
             creaturearray[CREATURE_CORPORATE_MANAGER]+=1;
             creaturearray[CREATURE_WORKER_JANITOR]+=10;
             creaturearray[CREATURE_WORKER_SECRETARY]+=10;
-            if(law[LAW_LABOR]==-2)
+            if(law[LAW_LABOR] == Alignment::ARCH_CONSERVATIVE)
             {
                creaturearray[CREATURE_WORKER_FACTORY_NONUNION]+=20;
                creaturearray[CREATURE_WORKER_FACTORY_CHILD]+=140;
             }
-            else if(law[LAW_LABOR]==-1)
+            else if(law[LAW_LABOR] == Alignment::CONSERVATIVE)
             {
                creaturearray[CREATURE_WORKER_FACTORY_NONUNION]+=160;
                creaturearray[CREATURE_WORKER_FACTORY_CHILD]+=1;
             }
-            else if(law[LAW_LABOR]==0)
+            else if(law[LAW_LABOR] == Alignment::MODERATE)
             {
                creaturearray[CREATURE_WORKER_FACTORY_NONUNION]+=80;
                creaturearray[CREATURE_WORKER_FACTORY_UNION]+=80;
             }
-            else if(law[LAW_LABOR]==1)
+            else if(law[LAW_LABOR] == Alignment::LIBERAL)
             {
                creaturearray[CREATURE_WORKER_FACTORY_NONUNION]=50;
                creaturearray[CREATURE_WORKER_FACTORY_UNION]=110;
@@ -1300,13 +1334,13 @@ char addsiegeencounter(char type)
                   makecreature(encounter[e],CREATURE_HICK);
                   break;
                case SITE_GOVERNMENT_POLICESTATION:
-                  if(law[LAW_DEATHPENALTY]==-2&&
-                     law[LAW_POLICEBEHAVIOR]==-2)makecreature(encounter[e],CREATURE_DEATHSQUAD);
+                  if(law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE&&
+                     law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)makecreature(encounter[e],CREATURE_DEATHSQUAD);
                   else makecreature(encounter[e],CREATURE_SWAT);
                   break;
                case SITE_BUSINESS_CRACKHOUSE:
                   makecreature(encounter[e],CREATURE_GANGMEMBER);
-                  encounter[e].align=ALIGN_CONSERVATIVE;
+                  encounter[e].align=Alignment::CONSERVATIVE;
                   break;
                default:
                   if(location[cursite]->renting==RENTING_CCS)
@@ -1317,8 +1351,8 @@ char addsiegeencounter(char type)
                         makecreature(encounter[e],CREATURE_CCS_SNIPER);
                      else makecreature(encounter[e],CREATURE_CCS_VIGILANTE);
                   }
-                  else if(law[LAW_DEATHPENALTY]==-2&&
-                     law[LAW_POLICEBEHAVIOR]==-2)makecreature(encounter[e],CREATURE_DEATHSQUAD);
+                  else if(law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE&&
+                     law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)makecreature(encounter[e],CREATURE_DEATHSQUAD);
                   else makecreature(encounter[e],CREATURE_SWAT);
                   break;
                }

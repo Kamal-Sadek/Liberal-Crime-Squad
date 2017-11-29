@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -61,7 +62,29 @@
 #include <externs.h>
 #include "daily/siege.h"
 #include "monthly/monthly.h"
+#include "politics/alignment.h"
 #include "politics/politics.h"
+
+/**
+ * Determines the overall alignment from tallies.
+ */
+static Alignment
+determine_leaning(int tally[6])
+{
+  Alignment alignment = Alignment::MODERATE;
+  if (tally[to_index(Alignment::STALINIST)] + MIN(tally[to_index(Alignment::ARCH_CONSERVATIVE)], tally[to_index(Alignment::ELITE_LIBERAL)]) >= HOUSEMAJORITY)
+    alignment = Alignment::STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
+  else if (tally[to_index(Alignment::ARCH_CONSERVATIVE)] >= HOUSEMAJORITY)
+    alignment = Alignment::ARCH_CONSERVATIVE; // Arch-Conservatives have a majority
+  else if (tally[to_index(Alignment::ELITE_LIBERAL)] >= HOUSEMAJORITY)
+    alignment = Alignment::ELITE_LIBERAL; // Elite Liberals have a majority
+  else if (tally[to_index(Alignment::ARCH_CONSERVATIVE)] + tally[to_index(Alignment::CONSERVATIVE)] >= HOUSEMAJORITY)
+    alignment = Alignment::CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
+  else if (tally[to_index(Alignment::LIBERAL)] + tally[to_index(Alignment::ELITE_LIBERAL)] >= HOUSEMAJORITY)
+    alignment = Alignment::LIBERAL; // Liberals plus Elite Liberals have a majority
+  return alignment;
+}
+
 
 bool show_disbanding_screen(int& oldforcemonth)
 {
@@ -81,72 +104,59 @@ bool show_disbanding_screen(int& oldforcemonth)
    mvaddstr(0,0,getmonth(month)+" ");
    addstr(year);
 
-   signed char align=exec[EXEC_PRESIDENT];
+   Alignment align = exec[EXEC_PRESIDENT];
    set_alignment_color(align,true);
    mvaddstr(1,0,"President: ");
    addstr(execname[EXEC_PRESIDENT]);addstr(", ");
-   addstr(getalign(align));
+   addstr(as_printable(align));
    if(execterm==1)addstr(", 1st Term");
    else addstr(", 2nd Term");
 
    int housemake[6]={0,0,0,0,0,0};
-   for(int h=0;h<HOUSENUM;h++) housemake[house[h]+2]++;
-   if(housemake[5]+MIN(housemake[0],housemake[4])>=HOUSEMAJORITY) align=ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
-   else if(housemake[0]>=HOUSEMAJORITY) align=ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
-   else if(housemake[4]>=HOUSEMAJORITY) align=ALIGN_ELITELIBERAL; // Elite Liberals have a majority
-   else if(housemake[0]+housemake[1]>=HOUSEMAJORITY) align=ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
-   else if(housemake[3]+housemake[4]>=HOUSEMAJORITY) align=ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
-   else align=ALIGN_MODERATE; // nobody has a majority
-   set_alignment_color(align,true);
-   mvaddstr(2,0,"House: ");
-   if(stalinmode) addstr(std::to_string(housemake[5])+"Sta, ");
-   addstr(std::to_string(housemake[4])+"Lib+, ");
-   addstr(std::to_string(housemake[3])+"Lib, ");
-   addstr(std::to_string(housemake[2])+"Mod, ");
-   addstr(std::to_string(housemake[1])+"Cons, ");
-   addstr(std::to_string(housemake[0])+"Cons+");
+   for (int h=0;h<HOUSENUM;h++)
+     housemake[to_index(house[h])]++;
+   align = determine_leaning(housemake);
+   set_alignment_color(align, true);
+   mvaddstr(2, 0, "House: ");
+   if (stalinmode) addstr(std::to_string(housemake[to_index(Alignment::STALINIST)])+"Sta, ");
+   addstr(std::to_string(housemake[to_index(Alignment::ELITE_LIBERAL)])+"Lib+, ");
+   addstr(std::to_string(housemake[to_index(Alignment::LIBERAL)])+"Lib, ");
+   addstr(std::to_string(housemake[to_index(Alignment::MODERATE)])+"Mod, ");
+   addstr(std::to_string(housemake[to_index(Alignment::CONSERVATIVE)])+"Cons, ");
+   addstr(std::to_string(housemake[to_index(Alignment::ARCH_CONSERVATIVE)])+"Cons+");
 
    int senatemake[6]={0,0,0,0,0,0};
-   for(int s=0;s<SENATENUM;s++) senatemake[senate[s]+2]++;
-   senatemake[exec[EXEC_VP]+2]++; // Vice President is tie-breaking vote in the Senate
-   if(senatemake[5]+MIN(senatemake[0],senatemake[4])>=SENATEMAJORITY) align=ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
-   else if(senatemake[0]>=SENATEMAJORITY) align=ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
-   else if(senatemake[4]>=SENATEMAJORITY) align=ALIGN_ELITELIBERAL; // Elite Liberals have a majority
-   else if(senatemake[0]+senatemake[1]>=SENATEMAJORITY) align=ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
-   else if(senatemake[3]+senatemake[4]>=SENATEMAJORITY) align=ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
-   else align=ALIGN_MODERATE; // nobody has a majority
-   set_alignment_color(align,true);
-   senatemake[exec[EXEC_VP]+2]--; // Vice President isn't actually a Senator though
-   mvaddstr(3,0,"Senate: ");
-   if(stalinmode) addstr(std::to_string(senatemake[5])+"Sta, ");
-   addstr(std::to_string(senatemake[4])+"Lib+, ");
-   addstr(std::to_string(senatemake[3])+"Lib, ");
-   addstr(std::to_string(senatemake[2])+"Mod, ");
-   addstr(std::to_string(senatemake[1])+"Cons, ");
-   addstr(std::to_string(senatemake[0])+"Cons+");
+   for (int s=0;s<SENATENUM;s++)
+     senatemake[to_index(senate[s])]++;
+   senatemake[to_index(exec[EXEC_VP])]++; // Vice President is tie-breaking vote in the Senate
+   align = determine_leaning(senatemake);
+   set_alignment_color(align, true);
+   senatemake[to_index(exec[EXEC_VP])]--; // Vice President isn't actually a Senator though
+   mvaddstr(3, 0, "Senate: ");
+   if (stalinmode) addstr(std::to_string(senatemake[to_index(Alignment::STALINIST)])+"Sta, ");
+   addstr(std::to_string(senatemake[to_index(Alignment::ELITE_LIBERAL)])+"Lib+, ");
+   addstr(std::to_string(senatemake[to_index(Alignment::LIBERAL)])+"Lib, ");
+   addstr(std::to_string(senatemake[to_index(Alignment::MODERATE)])+"Mod, ");
+   addstr(std::to_string(senatemake[to_index(Alignment::CONSERVATIVE)])+"Cons, ");
+   addstr(std::to_string(senatemake[to_index(Alignment::ARCH_CONSERVATIVE)])+"Cons+");
 
    int courtmake[6]={0,0,0,0,0,0};
-   for(int s=0;s<COURTNUM;s++) courtmake[court[s]+2]++;
-   if(courtmake[5]+MIN(courtmake[0],courtmake[4])>=COURTMAJORITY) align=ALIGN_STALINIST; // Stalinists have a majority (perhaps with help from extremists on both sides)
-   else if(courtmake[0]>=COURTMAJORITY) align=ALIGN_ARCHCONSERVATIVE; // Arch-Conservatives have a majority
-   else if(courtmake[4]>=COURTMAJORITY) align=ALIGN_ELITELIBERAL; // Elite Liberals have a majority
-   else if(courtmake[0]+courtmake[1]>=COURTMAJORITY) align=ALIGN_CONSERVATIVE; // Conservatives plus Arch-Conservatives have a majority
-   else if(courtmake[3]+courtmake[4]>=COURTMAJORITY) align=ALIGN_LIBERAL; // Liberals plus Elite Liberals have a majority
-   else align=ALIGN_MODERATE; // nobody has a majority
-   set_alignment_color(align,true);
-   mvaddstr(4,0,"Supreme Court: ");
-   if(stalinmode) addstr(std::to_string(courtmake[5])+"Sta, ");
-   addstr(std::to_string(courtmake[4])+"Lib+, ");
-   addstr(std::to_string(courtmake[3])+"Lib, ");
-   addstr(std::to_string(courtmake[2])+"Mod, ");
-   addstr(std::to_string(courtmake[1])+"Cons, ");
-   addstr(std::to_string(courtmake[0])+"Cons+");
+   for (int s=0;s<COURTNUM;s++)
+     courtmake[to_index(court[s])]++;
+   align = determine_leaning(courtmake);
+   set_alignment_color(align, true);
+   mvaddstr(4, 0, "Supreme Court: ");
+   if (stalinmode) addstr(std::to_string(courtmake[to_index(Alignment::STALINIST)])+"Sta, ");
+   addstr(std::to_string(courtmake[to_index(Alignment::ELITE_LIBERAL)])+"Lib+, ");
+   addstr(std::to_string(courtmake[to_index(Alignment::LIBERAL)])+"Lib, ");
+   addstr(std::to_string(courtmake[to_index(Alignment::MODERATE)])+"Mod, ");
+   addstr(std::to_string(courtmake[to_index(Alignment::CONSERVATIVE)])+"Cons, ");
+   addstr(std::to_string(courtmake[to_index(Alignment::ARCH_CONSERVATIVE)])+"Cons+");
 
-   for(int l=0;l<LAWNUM;l++)
+   for(int l=0; l<LAWNUM; l++)
    {
-      align=law[l];
-      set_alignment_color(align,true);
-      mvaddstr(6+l/3,l%3*30,getlaw(l));
+      set_alignment_color(law[l], true);
+      mvaddstr(6+l/3, l%3*30, getlaw(l));
    }
 
    if(stalinmode)
@@ -155,11 +165,11 @@ bool show_disbanding_screen(int& oldforcemonth)
       for(int v=0;v<VIEWNUM-3;v++)
          stalin+=stalinview(v,false)?attitude[v]:100-attitude[v];
       stalin=78-(stalin*77)/((VIEWNUM-3)*100); // very accurate Stalinist mood positioning!
-      if(stalin>=64) align=ALIGN_ELITELIBERAL;
-      else if(stalin>=48) align=ALIGN_LIBERAL;
-      else if(stalin>=32) align=ALIGN_MODERATE;
-      else if(stalin>=16) align=ALIGN_CONSERVATIVE;
-      else align=ALIGN_ARCHCONSERVATIVE;
+      if(stalin>=64) align=Alignment::ELITE_LIBERAL;
+      else if(stalin>=48) align=Alignment::LIBERAL;
+      else if(stalin>=32) align=Alignment::MODERATE;
+      else if(stalin>=16) align=Alignment::CONSERVATIVE;
+      else align=Alignment::ARCH_CONSERVATIVE;
       set_alignment_color(align,true);
       mvaddstr(17,33,"Public Mood");
       set_color(COLOR_RED,COLOR_BLACK,1);
@@ -183,11 +193,11 @@ bool show_disbanding_screen(int& oldforcemonth)
    int mood=0; // the mood position from 1 to 78 (left=left-wing, right=right-wing)
    for(int v=0;v<VIEWNUM-3;v++) mood+=attitude[v];
    mood=78-(mood*77)/((VIEWNUM-3)*100); // very accurate mood positioning!
-   if(mood>=64) align=ALIGN_ARCHCONSERVATIVE;
-   else if(mood>=48) align=ALIGN_CONSERVATIVE;
-   else if(mood>=32) align=ALIGN_MODERATE;
-   else if(mood>=16) align=ALIGN_LIBERAL;
-   else align=ALIGN_ELITELIBERAL;
+   if (mood>=64) align = Alignment::ARCH_CONSERVATIVE;
+   else if (mood>=48) align = Alignment::CONSERVATIVE;
+   else if (mood>=32) align = Alignment::MODERATE;
+   else if (mood>=16) align = Alignment::LIBERAL;
+   else align = Alignment::ELITE_LIBERAL;
    set_alignment_color(align,true);
    mvaddstr(stalinmode?21:20,33,"Public Mood");
    set_color(COLOR_GREEN,COLOR_BLACK,1);
@@ -239,7 +249,7 @@ void mode_base()
          for(int p=0;p<len(pool);p++)
          {
             if(pool[p]->alive&&
-               pool[p]->align==1&&
+               pool[p]->align == Alignment::LIBERAL &&
                pool[p]->dating==0&&
                pool[p]->hiding==0&&
                !(pool[p]->flag & CREATUREFLAG_SLEEPER))
@@ -316,7 +326,7 @@ void mode_base()
       for(int i=0;i<len(location);i++) num_present[i]=0;
       for(int p=0;p<len(pool);p++)
       {  // Dead people, non-liberals, and vacationers don't count
-         if(!pool[p]->alive||pool[p]->align!=1||pool[p]->location==-1) continue;
+         if (!pool[p]->alive || pool[p]->align != Alignment::LIBERAL || pool[p]->location == -1) continue;
          num_present[pool[p]->location]++;
       }
 
@@ -587,30 +597,33 @@ void mode_base()
          if(selectedsiege!=-1)
          {
             location[selectedsiege]->haveflag=0;
-            if(law[LAW_FLAGBURNING]<1)
+            if (law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE)
                criminalizepool(LAWFLAG_BURNFLAG,-1,selectedsiege);
          }
          if(activesquad)
          {
             location[activesquad->squad[0]->base]->haveflag=0;
-            if(law[LAW_FLAGBURNING]<1)
+            if (law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE)
                criminalizepool(LAWFLAG_BURNFLAG,-1,activesquad->squad[0]->base);
          }
          if(sieged)
          {  //PUBLICITY IF BURN FLAG DURING SIEGE ESPECIALLY IF IT IS REALLY ILLEGAL
             change_public_opinion(VIEW_LIBERALCRIMESQUAD,1);
             change_public_opinion(VIEW_FREESPEECH,1,1,30);
-            if(law[LAW_FLAGBURNING]<=0)
+            if (law[LAW_FLAGBURNING] == Alignment::CONSERVATIVE
+             || law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE
+             || law[LAW_FLAGBURNING] == Alignment::MODERATE)
             {
                change_public_opinion(VIEW_LIBERALCRIMESQUAD,1);
                change_public_opinion(VIEW_FREESPEECH,1,1,50);
             }
-            if(law[LAW_FLAGBURNING]<=-1)
+            if (law[LAW_FLAGBURNING] == Alignment::CONSERVATIVE
+             || law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE)
             {
                change_public_opinion(VIEW_LIBERALCRIMESQUAD,5);
                change_public_opinion(VIEW_FREESPEECH,2,1,70);
             }
-            if(law[LAW_FLAGBURNING]==-2)
+            if (law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE)
             {
                change_public_opinion(VIEW_LIBERALCRIMESQUAD,15);
                change_public_opinion(VIEW_FREESPEECH,5,1,90);

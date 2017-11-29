@@ -111,12 +111,12 @@ void savegame(const string& filename)
       fwrite(&party_status,sizeof(short),1,h);
 
       fwrite(attitude,sizeof(short),VIEWNUM,h);
-      fwrite(law,sizeof(short),LAWNUM,h);
-      fwrite(house,sizeof(short),HOUSENUM,h);
-      fwrite(senate,sizeof(short),SENATENUM,h);
-      fwrite(court,sizeof(short),COURTNUM,h);
+      fwrite(law,sizeof(Alignment),LAWNUM,h);
+      fwrite(house,sizeof(Alignment),HOUSENUM,h);
+      fwrite(senate,sizeof(Alignment),SENATENUM,h);
+      fwrite(court,sizeof(Alignment),COURTNUM,h);
       fwrite(courtname,sizeof(char)*POLITICIAN_NAMELEN,9,h);
-      fwrite(exec,sizeof(char),EXECNUM,h);
+      fwrite(exec,sizeof(Alignment),EXECNUM,h);
       fwrite(execname,sizeof(char)*POLITICIAN_NAMELEN,EXECNUM,h);
       fwrite(oldPresidentName,sizeof(char),POLITICIAN_NAMELEN,h);
 
@@ -194,7 +194,7 @@ void savegame(const string& filename)
          fwrite(creatureStr.c_str(),creatureSize,1,h);
          //fwrite(pool[pl],sizeof(Creature),1,h);
          //write extra interrogation data if applicable
-         if(pool[pl]->align==-1 && pool[pl]->alive)
+         if (pool[pl]->align == Alignment::CONSERVATIVE && pool[pl]->alive)
          {
             interrogation* &intr = pool[pl]->activity.intr();
             fwrite(intr->techniques,sizeof(bool[6]),1,h);
@@ -435,12 +435,12 @@ char load(const string& filename)
          fread(&party_status,sizeof(short),1,h);
 
          fread(attitude,sizeof(short),VIEWNUM,h);
-         fread(law,sizeof(short),LAWNUM,h);
-         fread(house,sizeof(short),HOUSENUM,h);
-         fread(senate,sizeof(short),SENATENUM,h);
-         fread(court,sizeof(short),COURTNUM,h);
+         fread(law,sizeof(Alignment),LAWNUM,h);
+         fread(house,sizeof(Alignment),HOUSENUM,h);
+         fread(senate,sizeof(Alignment),SENATENUM,h);
+         fread(court,sizeof(Alignment),COURTNUM,h);
          fread(courtname,sizeof(char)*POLITICIAN_NAMELEN,COURTNUM,h);
-         fread(exec,sizeof(char),EXECNUM,h);
+         fread(exec,sizeof(Alignment),EXECNUM,h);
          fread(execname,sizeof(char)*POLITICIAN_NAMELEN,EXECNUM,h);
          fread(oldPresidentName,sizeof(char),POLITICIAN_NAMELEN,h);
 
@@ -549,7 +549,7 @@ char load(const string& filename)
             //pool[pl]=new Creature;
             //fread(pool[pl],sizeof(Creature),1,h);
             //read extra interrogation data if applicable
-            if(pool[pl]->align==-1 && pool[pl]->alive)
+            if (pool[pl]->align == Alignment::CONSERVATIVE && pool[pl]->alive)
             {
                interrogation* &intr = pool[pl]->activity.intr();
                intr = new interrogation;

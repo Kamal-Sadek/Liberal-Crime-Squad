@@ -1,25 +1,69 @@
+/**
+ * Implementation of the Creature Type class.
+ */
+/*
+ * Copyright 2013 Carlos Gustavos  <blomkvist >
+ * Copyright 2014 Rich McGrew (yetisyny)
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 #include <externs.h>
 #include "politics/politics.h"
 
-// Assign a value to an Interval from a string or log error.
-void assign_interval(Interval& i, const std::string& value,
-                     const std::string& owner, const std::string& element)
+
+namespace
 {
-   if (!i.set_interval(value))
-      xmllog.log("Invalid interval for " + element + " in " + owner + ": " + value);
+
+// Assign a value to an Interval from a string or log error.
+void assign_interval(Interval& i, std::string const& value,
+                     std::string const& owner, std::string const& element)
+{
+  try
+  {
+    i = Interval::from_string(value);
+  }
+  catch (std::exception& ex)
+  {
+    xmllog.log("Invalid interval for " + element + " in " + owner + ": " + value + "(" + ex.what() + ")");
+  }
 }
+
+} // anonymous namespace
 
 int CreatureType::number_of_creaturetypes = 0;
 
-CreatureType::WeaponsAndClips::WeaponsAndClips(std::string weapon, int weapons, std::string clip, int clips)
- : weapontype(weapon), number_weapons(weapons),
-   cliptype(clip), number_clips(clips)
+
+CreatureType::WeaponsAndClips::
+WeaponsAndClips(std::string const& weapon, int weapons, std::string const& clip, int clips)
+: weapontype(weapon)
+, number_weapons(weapons)
+, cliptype(clip)
+, number_clips(clips)
 {
 }
 
-CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner)
- : number_weapons(1),
-   cliptype("APPROPRIATE"), number_clips(4)
+
+CreatureType::WeaponsAndClips::
+WeaponsAndClips(CMarkup& xml, const string& owner)
+: number_weapons(1)
+, cliptype("APPROPRIATE")
+, number_clips(4)
 { // The main position of the CMarkup object is expected not to be changed here.
    weapontype = xml.GetData();
 
@@ -56,11 +100,11 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner
          if (cliptype == "APPROPRIATE")
          {
             cliptype = "NONE";
-            for(int i=0;i<len(attacks);i++)
+            for (auto const& attack: attacks)
             {
-               if(attacks[i]->uses_ammo)
+               if (attack->uses_ammo)
                {
-                  cliptype=attacks[i]->ammotype;
+                  cliptype = attack->ammotype;
                   break;
                }
             }
@@ -69,8 +113,10 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner
          else if (getcliptype(cliptype) != -1) //Must be a clip type too.
          {
             int i;
-            for(i=0;i<len(attacks)&&cliptype!=attacks[i]->ammotype;i++);
-            if(i==len(attacks))
+            for (i=0; i<len(attacks) && cliptype != attacks[i]->ammotype; i++)
+              ;
+
+            if (i==len(attacks))
             {
                xmllog.log("In " + owner + ", " + cliptype +
                           "can not be used by " + weapontype + ".");
@@ -87,15 +133,12 @@ CreatureType::WeaponsAndClips::WeaponsAndClips(CMarkup& xml, const string& owner
    }
 }
 
-CreatureType::CreatureType(const std::string& xmlstring)
- : age_(18,57), alignment_public_mood_(true),
-   attribute_points_(40),
-   gender_liberal_(GENDER_RANDOM), gender_conservative_(GENDER_RANDOM),
-   infiltration_(0), juice_(0), money_(20,40)
-{
-   for(int i=0;i<ATTNUM;i++)
-      attributes_[i].set_interval(1,10);
 
+CreatureType::
+CreatureType(std::string const& xmlstring)
+: attributes_(ATTNUM, Interval(1, 10))
+, gender_liberal_(GENDER_RANDOM)
+{
    id_=number_of_creaturetypes++;
 
    CMarkup xml;
@@ -118,46 +161,31 @@ CreatureType::CreatureType(const std::string& xmlstring)
 
       if (element == "alignment")
       {
-         std::string alignment = xml.GetData();
-         if (alignment == "PUBLIC MOOD")
-            alignment_public_mood_ = true;
-         else if (alignment == "LIBERAL")
-         {
-            alignment_ = ALIGN_LIBERAL;
-            alignment_public_mood_ = false;
-         }
-         else if (alignment == "MODERATE")
-         {
-            alignment_ = ALIGN_MODERATE;
-            alignment_public_mood_ = false;
-         }
-         else if (alignment == "CONSERVATIVE")
-         {
-            alignment_ = ALIGN_CONSERVATIVE;
-            alignment_public_mood_ = false;
-         }
-         else
-            xmllog.log("Invalid alignment for " + idname_ + ": " + alignment);
+        std::string alignment = xml.GetData();
+        if (!from_string(alignment, alignment_))
+        {
+         xmllog.log("Invalid alignment for " + idname_ + ": " + alignment);
+        }
       }
       else if (element == "age")
       {
          std::string age = xml.GetData();
          if (age == "DOGYEARS")
-            age_.set_interval(2,6);
+            age_ = {2, 6};
          else if (age == "CHILD")
-            age_.set_interval(7,10);
+            age_ = {7, 10};
          else if (age == "TEENAGER")
-            age_.set_interval(14,17);
+            age_ = {14, 17};
          else if (age == "YOUNGADULT")
-            age_.set_interval(18,35);
+            age_ = {18,35};
          else if (age == "MATURE")
-            age_.set_interval(20,59);
+            age_ = {20, 59};
          else if (age == "GRADUATE")
-            age_.set_interval(26,59);
+            age_ = {26, 59};
          else if (age == "MIDDLEAGED")
-            age_.set_interval(35,59);
+            age_ = {35, 59};
          else if (age == "SENIOR")
-            age_.set_interval(65,94);
+            age_ = {65, 94};
          else
             assign_interval(age_, age, idname_, element);
       }
@@ -180,7 +208,7 @@ CreatureType::CreatureType(const std::string& xmlstring)
       {
          int gender = gender_string_to_enum(xml.GetData());
          if (gender != -1 && gender != GENDER_WHITEMALEPATRIARCH)
-            gender_liberal_ = gender_conservative_ = gender;
+            gender_liberal_ = gender;
          else
             xmllog.log("Invalid gender for " + idname_ + ": " + xml.GetData());
       }
@@ -233,10 +261,11 @@ CreatureType::CreatureType(const std::string& xmlstring)
       armortypes_.push_back("ARMOR_NONE");
 }
 
-void CreatureType::make_creature(Creature& cr) const
+void CreatureType::
+make_creature(Creature& cr) const
 {
    cr.type_idname=idname_;
-   cr.align=get_alignment();
+   cr.align = get_alignment();
    cr.age=age_.roll();
    cr.juice=juice_.roll();
    cr.gender_liberal=cr.gender_conservative=roll_gender();
@@ -248,20 +277,24 @@ void CreatureType::make_creature(Creature& cr) const
    give_weapon(cr);
 }
 
-int CreatureType::get_alignment() const
+
+Alignment
+CreatureType::get_alignment() const
 {
-   if(alignment_public_mood_)
+   if (this->alignment_ == Alignment::PUBLIC_MOOD)
    {
-      int mood=publicmood(-1);
-      int a=ALIGN_CONSERVATIVE;
-      if(LCSrandom(100)<mood) a++;
-      if(LCSrandom(100)<mood) a++;
+      Alignment a = Alignment::CONSERVATIVE;
+      int mood = publicmood(-1);
+      if (LCSrandom(100) < mood) a = Alignment::MODERATE;
+      if (LCSrandom(100) < mood) a = Alignment::LIBERAL;
       return a;
    }
-   else return alignment_;
+   return this->alignment_;
 }
 
-int CreatureType::roll_gender() const
+
+int CreatureType::
+roll_gender() const
 {
    int gender = LCSrandom(2)+1; // Male or female.
    switch(gender_liberal_)
@@ -270,57 +303,65 @@ int CreatureType::roll_gender() const
    case GENDER_MALE:    return GENDER_MALE;
    case GENDER_FEMALE:  return GENDER_FEMALE;
    case GENDER_MALE_BIAS:
-      if(law[LAW_WOMEN]==-2||
-        (law[LAW_WOMEN]==-1&&LCSrandom(25))||
-        (law[LAW_WOMEN]== 0&&LCSrandom(10))||
-        (law[LAW_WOMEN]== 1&&LCSrandom( 4)))
+      if(law[LAW_WOMEN] == Alignment::ARCH_CONSERVATIVE||
+        (law[LAW_WOMEN] == Alignment::CONSERVATIVE&&LCSrandom(25))||
+        (law[LAW_WOMEN] == Alignment::MODERATE&&LCSrandom(10))||
+        (law[LAW_WOMEN] == Alignment::LIBERAL&&LCSrandom( 4)))
          return GENDER_MALE;
    case GENDER_FEMALE_BIAS:
-      if(law[LAW_WOMEN]==-2||
-        (law[LAW_WOMEN]==-1&&LCSrandom(25))||
-        (law[LAW_WOMEN]== 0&&LCSrandom(10))||
-        (law[LAW_WOMEN]== 1&&LCSrandom( 4)))
+      if(law[LAW_WOMEN] == Alignment::ARCH_CONSERVATIVE||
+        (law[LAW_WOMEN] == Alignment::CONSERVATIVE&&LCSrandom(25))||
+        (law[LAW_WOMEN] == Alignment::MODERATE&&LCSrandom(10))||
+        (law[LAW_WOMEN] == Alignment::LIBERAL&&LCSrandom( 4)))
          return GENDER_FEMALE;
    }
    return gender;
 }
 
-float CreatureType::roll_infiltration() const
+
+float CreatureType::
+roll_infiltration() const
 {
    return infiltration_.roll()/100.0f;
 }
 
-std::string CreatureType::get_encounter_name() const
+
+std::string CreatureType::
+get_encounter_name() const
 {
    if(len(encounter_name_))
       return encounter_name_;
    else return get_type_name();
 }
 
-std::string CreatureType::get_type_name() const
+
+std::string CreatureType::
+get_type_name() const
 {
    switch(type_) // Hardcoded special cases.
    {
    case CREATURE_WORKER_SERVANT:
-      if(law[LAW_LABOR]==-2&&law[LAW_CORPORATE]==-2) return "Slave";
+      if(law[LAW_LABOR] == Alignment::ARCH_CONSERVATIVE&&law[LAW_CORPORATE] == Alignment::ARCH_CONSERVATIVE) return "Slave";
       break;
    case CREATURE_WORKER_JANITOR:
-      if(law[LAW_LABOR]==2) return "Custodian";
+      if (law[LAW_LABOR] == Alignment::ELITE_LIBERAL) return "Custodian";
       break;
    case CREATURE_WORKER_SWEATSHOP:
-      if(law[LAW_LABOR]==2&&law[LAW_IMMIGRATION]==2) return "Migrant Worker";
+      if(law[LAW_LABOR] == Alignment::ELITE_LIBERAL&&law[LAW_IMMIGRATION] == Alignment::ELITE_LIBERAL) return "Migrant Worker";
 	   break;
    case CREATURE_CARSALESMAN:
-      if(law[LAW_WOMEN]==-2) return "Car Salesman";
+      if(law[LAW_WOMEN] == Alignment::ARCH_CONSERVATIVE) return "Car Salesman";
       break;
    case CREATURE_FIREFIGHTER:
-      if(law[LAW_FREESPEECH]==-2) return "Fireman";
+      if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) return "Fireman";
       break;
    }
    return type_name_;
 }
 
-void CreatureType::give_weapon(Creature& cr) const
+
+void CreatureType::
+give_weapon(Creature& cr) const
 {
    const WeaponsAndClips& wc = pickrandom(weapons_and_clips_);
 
@@ -340,15 +381,17 @@ void CreatureType::give_weapon(Creature& cr) const
    }
 }
 
-void CreatureType::give_weapon_civilian(Creature& cr) const
+
+void CreatureType::
+give_weapon_civilian(Creature& cr) const
 {
-   if (law[LAW_GUNCONTROL] == -1 && !LCSrandom(30))
+   if (law[LAW_GUNCONTROL] == Alignment::CONSERVATIVE && !LCSrandom(30))
    {
       cr.give_weapon(*weapontype[getweapontype("WEAPON_REVOLVER_38")], NULL);
       cr.take_clips(*cliptype[getcliptype("CLIP_38")], 4);
       cr.reload(false);
    }
-   else if (law[LAW_GUNCONTROL] == -2)
+   else if (law[LAW_GUNCONTROL] == Alignment::ARCH_CONSERVATIVE)
    {
       if (!LCSrandom(10))
       {
@@ -365,7 +408,8 @@ void CreatureType::give_weapon_civilian(Creature& cr) const
    }
 }
 
-void CreatureType::give_armor(Creature& cr) const
+void CreatureType::
+give_armor(Creature& cr) const
 {
    const std::string str = pickrandom(armortypes_);
    if (str != "ARMOR_NONE")

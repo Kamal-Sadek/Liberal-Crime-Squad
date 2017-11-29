@@ -1,4 +1,8 @@
 /*
+ * Copyright 2008, 2009 Jonathan Stickles  <jonathansfox@users.sourceforge.net>
+ * Copyright 2014 Rich McGrew (yetisyny)
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
  * This file is part of Liberal Crime Squad.
  *
  * Liberal Crime Squad is free software; you can redistribute it and/or
@@ -20,19 +24,21 @@
 #define LAW_H_INCLUDED
 
 #include "common.h"
+#include "politics/alignment.h"
+
 
 class law
 {
 private:
    std::string lawtext[5];      // Describes the law for each alignment
    std::string defeat_lawtext;  // Describes the law when the game is lost
+   Alignment   alignment;
 
-   signed char alignment;
 public:
    law();        // Default constructor
 
    void addlawtext(bool gameover=false); // Adds the lawtext to the screen
-   void changealignment(signed char align);
+   void changealignment(Alignment align);
 
    void setlawtext(signed char align,std::string text);
 };

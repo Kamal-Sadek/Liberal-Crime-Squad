@@ -71,3 +71,23 @@ just copy those two files into the `src` directory and build them there than to
 enrobe the entire soure distribution in out build system.  It is provided here
 for provenance.
 
+catch2
+------
+
+This is the most excellent Catch2 BDD unit testing franework for C++ from Phil
+Nash.  It started as an import of release 2.0.1.
+
+To update to a new release, should it prove necessary, download the new tarball,
+then cd into the catch2 source directory, unpack it, copy out the relevant
+header files. and check the whole mess in.
+```
+ cd lib/catch2
+ tar --extract --strip-components=1 --gzip --file ~/Downloads/Catch2-2.0.2.tar.gz 
+ cd ../..
+ cp -v lib/catch2/single_include/catch.hpp tests/include
+ cp -v lib/catch2/include/reporters/catch_reporter_tap.hpp tests/include
+ git add -A
+ git commit -m "Update Catch2 to 2.0.2"
+ git tag import-catch2-2.0.2
+```
+

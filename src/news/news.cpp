@@ -32,6 +32,7 @@
 
 #include <externs.h>
 #include "news/news.h"
+#include "politics/alignment.h"
 #pragma GCC diagnostic ignored "-Wunused-result"
 
 
@@ -437,7 +438,7 @@ displaystory(newsstoryst &ns, bool liberalguardian, int header)
                   crime[ns.crime[c]]++;
                if(crime[CRIME_KILLEDSOMEBODY]>1)
                {
-                  if(crime[CRIME_KILLEDSOMEBODY]==2)
+                  if (crime[CRIME_KILLEDSOMEBODY] == 2)
                      strcat(story,"Two");
                   else
                      strcat(story,"Several");
@@ -592,7 +593,7 @@ displaystory(newsstoryst &ns, bool liberalguardian, int header)
 
                if(crime[CRIME_SHUTDOWNREACTOR])
                {
-                  if(law[LAW_NUCLEARPOWER]==2)
+                  if(law[LAW_NUCLEARPOWER] == Alignment::ELITE_LIBERAL)
                   {
                      if(!liberalguardian)
                      {
@@ -1094,8 +1095,8 @@ displaystory(newsstoryst &ns, bool liberalguardian, int header)
                   if(ns.crime[1]>1)strcat(story,"The bodies had no faces or ");
                   else strcat(story,"The body had no face or ");
                   strcat(story,"fingerprints.  Like, it was all smooth.  ");
-                  if(law[LAW_FREESPEECH]==-2)strcat(story,"[Craziest] thing I've ever seen");
-                  else if(law[LAW_FREESPEECH]==2)strcat(story,"Damnedest thing I've ever seen");
+                  if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"[Craziest] thing I've ever seen");
+                  else if(law[LAW_FREESPEECH] == Alignment::ELITE_LIBERAL)strcat(story,"Damnedest thing I've ever seen");
                   else strcat(story,"D*mnd*st thing I've ever seen");
                }
                else
@@ -1553,10 +1554,10 @@ void handle_public_opinion_impact(const newsstoryst &ns)
    impact++;
 
    // Account for squad responsible, rampages, and Liberal Guardian bias
-   int impact_direction = ALIGN_LIBERAL;
+   Alignment impact_direction = Alignment::LIBERAL;
    if(ns.type==NEWSSTORY_CCS_SITE || ns.type==NEWSSTORY_CCS_KILLED_SITE)
    {
-      impact_direction = ALIGN_CONSERVATIVE;
+      impact_direction = Alignment::CONSERVATIVE;
       if(ns.positive)
          change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD,impact,0);
       else
@@ -1565,14 +1566,14 @@ void handle_public_opinion_impact(const newsstoryst &ns)
    else
    {
       change_public_opinion(VIEW_LIBERALCRIMESQUAD,2+impact);
-      impact_direction = ALIGN_LIBERAL;
+      impact_direction = Alignment::LIBERAL;
       if(ns.positive)
          change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,impact);
       else
          change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,-impact);
    }
-   impact *= impact_direction;
-   int squad_responsible = impact_direction;
+   impact *= (to_index(impact_direction) - 2);
+   int squad_responsible = (to_index(impact_direction) - 2);
    if(!ns.positive) impact /= 4;
 
    // Impact gun control issue
@@ -1981,21 +1982,39 @@ newsstoryst* new_major_event()
       // News stories that don't apply when the law is extreme -- covering
       // nuclear power when it's banned, police corruption when it doesn't
       // exist, out of control pollution when it's under control, etc.
-      if(ns->positive) {
-         if(ns->view==VIEW_WOMEN&&law[LAW_ABORTION]==-2)continue; // Abortion banned
-         if(ns->view==VIEW_DEATHPENALTY&&law[LAW_DEATHPENALTY]==2)continue; // Death penalty banned
-         if(ns->view==VIEW_NUCLEARPOWER&&law[LAW_NUCLEARPOWER]==2)continue; // Nuclear power banned
-         if(ns->view==VIEW_ANIMALRESEARCH&&law[LAW_ANIMALRESEARCH]==2)continue; // Animal research banned
-         if(ns->view==VIEW_POLICEBEHAVIOR&&law[LAW_POLICEBEHAVIOR]==2)continue; // Police corruption eliminated
-         if(ns->view==VIEW_INTELLIGENCE&&law[LAW_PRIVACY]==2)continue; // Privacy rights respected
-         if(ns->view==VIEW_SWEATSHOPS&&law[LAW_LABOR]==2)continue; // Sweatshops nonexistant
-         if(ns->view==VIEW_POLLUTION&&law[LAW_POLLUTION]>=1)continue; // Pollution under control
-         if(ns->view==VIEW_CORPORATECULTURE&&law[LAW_CORPORATE]==2)continue; // Regulation controls corporate corruption
-         if(ns->view==VIEW_CEOSALARY&&law[LAW_CORPORATE]==2)continue; // CEOs aren't rich
+      if (ns->positive) {
+         if (ns->view==VIEW_WOMEN&&law[LAW_ABORTION] == Alignment::ARCH_CONSERVATIVE)
+           continue; // Abortion banned
+         if (ns->view==VIEW_DEATHPENALTY&&law[LAW_DEATHPENALTY] == Alignment::ELITE_LIBERAL)
+           continue; // Death penalty banned
+         if (ns->view==VIEW_NUCLEARPOWER&&law[LAW_NUCLEARPOWER] == Alignment::ELITE_LIBERAL)
+           continue; // Nuclear power banned
+         if (ns->view==VIEW_ANIMALRESEARCH&&law[LAW_ANIMALRESEARCH] == Alignment::ELITE_LIBERAL)
+           continue; // Animal research banned
+         if (ns->view==VIEW_POLICEBEHAVIOR&&law[LAW_POLICEBEHAVIOR] == Alignment::ELITE_LIBERAL)
+           continue; // Police corruption eliminated
+         if (ns->view==VIEW_INTELLIGENCE&&law[LAW_PRIVACY] == Alignment::ELITE_LIBERAL)
+           continue; // Privacy rights respected
+         if (ns->view==VIEW_SWEATSHOPS&&law[LAW_LABOR] == Alignment::ELITE_LIBERAL)
+           continue; // Sweatshops nonexistant
+         if (ns->view==VIEW_POLLUTION
+          && (law[LAW_POLLUTION] == Alignment::LIBERAL
+           || law[LAW_POLLUTION] == Alignment::ELITE_LIBERAL))
+           continue; // Pollution under control
+         if (ns->view==VIEW_CORPORATECULTURE&&law[LAW_CORPORATE] == Alignment::ELITE_LIBERAL)
+           continue; // Regulation controls corporate corruption
+         if (ns->view==VIEW_CEOSALARY&&law[LAW_CORPORATE] == Alignment::ELITE_LIBERAL)
+           continue; // CEOs aren't rich
       } else {
-         if(ns->view==VIEW_WOMEN&&law[LAW_ABORTION]<2)continue; // Partial birth abortion banned
-         if(ns->view==VIEW_AMRADIO&&law[LAW_FREESPEECH]==-2)continue; // AM Radio is censored to oblivion
-         if(ns->view==VIEW_ANIMALRESEARCH&&law[LAW_ANIMALRESEARCH]==2)continue; // Animal research banned
+         if (ns->view==VIEW_WOMEN
+           && (law[LAW_ABORTION] == Alignment::ARCH_CONSERVATIVE
+            || law[LAW_ABORTION] == Alignment::CONSERVATIVE
+            || law[LAW_ABORTION] == Alignment::MODERATE))
+           continue; // Partial birth abortion banned
+         if (ns->view==VIEW_AMRADIO&&law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
+           continue; // AM Radio is censored to oblivion
+         if (ns->view==VIEW_ANIMALRESEARCH&&law[LAW_ANIMALRESEARCH] == Alignment::ELITE_LIBERAL)
+           continue; // Animal research banned
       }
 
       break;
@@ -2055,9 +2074,9 @@ newsstoryst* ccs_exposure_story()
    int arrestsleft = 8;
    for(int i=0; i<SENATENUM; i++)
    {
-      if((senate[i]==-2 || senate[i]==-1)&&!LCSrandom(4))
+      if ((senate[i] == Alignment::ARCH_CONSERVATIVE || senate[i] == Alignment::CONSERVATIVE) && !LCSrandom(4))
       {
-         senate[i]=ALIGN_ELITELIBERAL;
+         senate[i]=Alignment::ELITE_LIBERAL;
          arrestsleft--;
          if(arrestsleft<=0) break;
       }
@@ -2065,19 +2084,17 @@ newsstoryst* ccs_exposure_story()
    arrestsleft = 17;
    for(int i=0; i<HOUSENUM; i++)
    {
-      if((house[i]==-2 || house[i]==-1)&&!LCSrandom(4))
+      if ((house[i] == Alignment::ARCH_CONSERVATIVE || house[i] == Alignment::CONSERVATIVE) && !LCSrandom(4))
       {
-         house[i]=ALIGN_ELITELIBERAL;
+         house[i]=Alignment::ELITE_LIBERAL;
          arrestsleft--;
          if(arrestsleft<=0) break;
       }
    }
    // change police regulation issue to be more liberal
-   law[LAW_POLICEBEHAVIOR] += 2;
-   if(law[LAW_POLICEBEHAVIOR] > ALIGN_ELITELIBERAL)
-      law[LAW_POLICEBEHAVIOR] = ALIGN_ELITELIBERAL;
-   change_public_opinion(VIEW_POLICEBEHAVIOR,50);
-   change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD,50);
+   law[LAW_POLICEBEHAVIOR] = shift_left(law[LAW_POLICEBEHAVIOR], 2);
+   change_public_opinion(VIEW_POLICEBEHAVIOR, 50);
+   change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD, 50);
 
    return ns;
 }

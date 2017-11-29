@@ -49,15 +49,15 @@ penalize(Creature &g, bool lenient)
    char olddeathpenalty=g.deathpenalty;
    g.sentence=0,g.deathpenalty=0;
 
-   if(!lenient&&((g.crimes_suspected[LAWFLAG_MURDER])||(g.crimes_suspected[LAWFLAG_TREASON])||
-      ((g.crimes_suspected[LAWFLAG_BURNFLAG])&&law[LAW_FLAGBURNING]==-2)||
-      law[LAW_DEATHPENALTY]==-2))
+   if (!lenient&&((g.crimes_suspected[LAWFLAG_MURDER])||(g.crimes_suspected[LAWFLAG_TREASON])
+    || ((g.crimes_suspected[LAWFLAG_BURNFLAG]) && law[LAW_FLAGBURNING]==Alignment::ARCH_CONSERVATIVE)
+    || law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE))
    {
-      if(law[LAW_DEATHPENALTY]==-2) g.deathpenalty=1;
-      if(law[LAW_DEATHPENALTY]==-1) g.deathpenalty=LCSrandom(3);
-      if(law[LAW_DEATHPENALTY]==0) g.deathpenalty=LCSrandom(2);
-      if(law[LAW_DEATHPENALTY]==1) g.deathpenalty=!LCSrandom(5);
-      if(law[LAW_DEATHPENALTY]==2) g.deathpenalty=0;
+      if (law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE) g.deathpenalty=1;
+      if (law[LAW_DEATHPENALTY] == Alignment::CONSERVATIVE)      g.deathpenalty=LCSrandom(3);
+      if (law[LAW_DEATHPENALTY] == Alignment::MODERATE)          g.deathpenalty=LCSrandom(2);
+      if (law[LAW_DEATHPENALTY] == Alignment::LIBERAL)           g.deathpenalty=!LCSrandom(5);
+      if (law[LAW_DEATHPENALTY] == Alignment::ELITE_LIBERAL)     g.deathpenalty=0;
    }
 
    for(int l=0;l<LAWFLAGNUM;l++) if(g.crimes_suspected[l]>10) g.crimes_suspected[l]=10;
@@ -85,9 +85,12 @@ penalize(Creature &g, bool lenient)
          g.sentence+=(12+LCSrandom(100))*g.crimes_suspected[LAWFLAG_RACKETEERING];
 
          // How illegal is marijuana?
-         if(law[LAW_DRUGS]==-2) g.sentence+=(3+LCSrandom(360))*g.crimes_suspected[LAWFLAG_BROWNIES]; //insanely illegal
-         else if(law[LAW_DRUGS]==-1) g.sentence+=(3+LCSrandom(120))*g.crimes_suspected[LAWFLAG_BROWNIES]; //very illegal
-         else if(law[LAW_DRUGS]==0) g.sentence+=(3+LCSrandom(12))*g.crimes_suspected[LAWFLAG_BROWNIES]; //moderately illegal
+         if (law[LAW_DRUGS] == Alignment::ARCH_CONSERVATIVE)
+           g.sentence+=(3+LCSrandom(360))*g.crimes_suspected[LAWFLAG_BROWNIES]; //insanely illegal
+         else if (law[LAW_DRUGS] == Alignment::CONSERVATIVE)
+           g.sentence+=(3+LCSrandom(120))*g.crimes_suspected[LAWFLAG_BROWNIES]; //very illegal
+         else if (law[LAW_DRUGS] == Alignment::MODERATE)
+           g.sentence+=(3+LCSrandom(12))*g.crimes_suspected[LAWFLAG_BROWNIES]; //moderately illegal
          // else not illegal
 
          g.sentence+=1*g.crimes_suspected[LAWFLAG_BREAKING];
@@ -105,13 +108,15 @@ penalize(Creature &g, bool lenient)
          g.sentence+=(12+LCSrandom(1))*g.crimes_suspected[LAWFLAG_ARMEDASSAULT];
          g.sentence+=(3+LCSrandom(1))*g.crimes_suspected[LAWFLAG_ASSAULT];
       }
-      if(law[LAW_FLAGBURNING]==-2)
+      if (law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE)
       {
          if(!LCSrandom(2)) g.sentence+=(120+LCSrandom(241))*g.crimes_suspected[LAWFLAG_BURNFLAG];
          else if(g.crimes_suspected[LAWFLAG_BURNFLAG])g.sentence=-1*g.crimes_suspected[LAWFLAG_BURNFLAG];
       }
-      else if(law[LAW_FLAGBURNING]==-1) g.sentence+=36*g.crimes_suspected[LAWFLAG_BURNFLAG];
-      else if(law[LAW_FLAGBURNING]==0) g.sentence+=1*g.crimes_suspected[LAWFLAG_BURNFLAG];
+      else if (law[LAW_FLAGBURNING] == Alignment::CONSERVATIVE)
+        g.sentence+=36*g.crimes_suspected[LAWFLAG_BURNFLAG];
+      else if (law[LAW_FLAGBURNING] == Alignment::MODERATE)
+        g.sentence+=1*g.crimes_suspected[LAWFLAG_BURNFLAG];
 
       if((LCSrandom(4)-g.crimes_suspected[LAWFLAG_MURDER])>0)
       {
@@ -340,7 +345,7 @@ reeducation(Creature &g)
          addstr(" silently grows Wiser...", gamelog);
          g.adjust_attribute(ATTRIBUTE_WISDOM,+1);
       }
-      else if(g.align==ALIGN_LIBERAL && g.flag & CREATUREFLAG_LOVESLAVE && LCSrandom(4))
+      else if (g.align==Alignment::LIBERAL && g.flag & CREATUREFLAG_LOVESLAVE && LCSrandom(4))
       {
          addstr(g.name, gamelog);
          addstr(" only stays loyal to the LCS for ", gamelog);
@@ -797,18 +802,21 @@ trial(Creature &g)
          addstr("arson", gamelog);
          breaker[LAWFLAG_ARSON]=0;
       }
-      else if(breaker[LAWFLAG_BURNFLAG] && law[LAW_FLAGBURNING] <= 0)
+      else if (breaker[LAWFLAG_BURNFLAG]
+           && (law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE
+            || law[LAW_FLAGBURNING] == Alignment::CONSERVATIVE
+            || law[LAW_FLAGBURNING] == Alignment::MODERATE))
       {
          if(g.crimes_suspected[LAWFLAG_BURNFLAG]>1)
          {
             addstr(g.crimes_suspected[LAWFLAG_BURNFLAG]);
             addstr(" counts of ", gamelog);
          }
-         if(law[LAW_FLAGBURNING]==-2)
+         if (law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE)
             addstr("Flag Murder", gamelog);
-         else if(law[LAW_FLAGBURNING]==-1)
+         else if (law[LAW_FLAGBURNING] == Alignment::CONSERVATIVE)
             addstr("felony flag burning", gamelog);
-         else if(law[LAW_FLAGBURNING]==0)
+         else if (law[LAW_FLAGBURNING] == Alignment::LIBERAL)
             addstr("flag burning", gamelog);
          breaker[LAWFLAG_BURNFLAG]=0;
       }
@@ -946,9 +954,18 @@ trial(Creature &g)
          {
             addstr(g.crimes_suspected[LAWFLAG_HIREILLEGAL], gamelog);
             addstr(" counts of ", gamelog);
-            addstr((law[LAW_IMMIGRATION]<1?"hiring illegal aliens":"hiring undocumented workers"), gamelog);
+            if (law[LAW_IMMIGRATION] == Alignment::ARCH_CONSERVATIVE
+             || law[LAW_IMMIGRATION] == Alignment::CONSERVATIVE)
+              addstr("hiring illegal aliens", gamelog);
+            else
+              addstr("hiring undocumented workers", gamelog);
          }
-         else addstr((law[LAW_IMMIGRATION]<1?"hiring an illegal alien":"hiring an undocumented worker"), gamelog);
+         else
+            if (law[LAW_IMMIGRATION] == Alignment::ARCH_CONSERVATIVE
+             || law[LAW_IMMIGRATION] == Alignment::CONSERVATIVE)
+             addstr("hiring an illegal alien", gamelog);
+            else
+             addstr("hiring an undocumented worker", gamelog);
          breaker[LAWFLAG_HIREILLEGAL]=0;
          x=2;
       }
@@ -1623,12 +1640,12 @@ prison(Creature &g)
    // People not on death row or about to be released can have a scene in prison
    if(!g.deathpenalty && g.sentence!=1)
    {
-      if(law[LAW_PRISONS]==2)
+      if (law[LAW_PRISONS] == Alignment::ELITE_LIBERAL)
       {
          //Liberal therapy.
          if(!LCSrandom(5)) reeducation(g);
       }
-      else if(law[LAW_PRISONS]==-2)
+      else if (law[LAW_PRISONS] == Alignment::ARCH_CONSERVATIVE)
       {
          //Labor camp.
          if(!LCSrandom(5)) laborcamp(g);
@@ -1643,7 +1660,7 @@ prison(Creature &g)
    if(g.sentence>0)
    {
       //COMMUTE DEATH IN RIGHT CLIMATE
-      if(g.deathpenalty&&law[LAW_DEATHPENALTY]==2)
+      if (g.deathpenalty&&law[LAW_DEATHPENALTY] == Alignment::ELITE_LIBERAL)
       {
          erase();
          set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1679,9 +1696,10 @@ prison(Creature &g)
             gamelog.record(" "); //Log this for formatting purposes.
             move(10,1);
             addstr("by ", gamelog);
-            if(law[LAW_DEATHPENALTY]==-2)
+            if (law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE)
                addstr(pickrandom(cruel_and_unusual_execution_methods), gamelog);
-            else if(law[LAW_DEATHPENALTY]==-1||law[LAW_DEATHPENALTY]==0)
+            else if (law[LAW_DEATHPENALTY] == Alignment::CONSERVATIVE
+                  || law[LAW_DEATHPENALTY] == Alignment::MODERATE)
                addstr(pickrandom(standard_execution_methods), gamelog);
             else
                addstr(supposedly_painless_execution_method, gamelog);

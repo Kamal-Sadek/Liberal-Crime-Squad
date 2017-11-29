@@ -88,7 +88,6 @@ const int lowestloadscoreversion=31203;
 #include "compat.h"
 #include "cursesmovie.h"
 #include "cursesgraphics.h"
-#include "politics/alignment.h"
 
 #define TAB 9
 #define ENTER 10
@@ -393,28 +392,6 @@ public:
       for(int i=0;i<INCOMETYPENUM;i++) dailyIncome[i]=0;
       for(int e=0;e<EXPENSETYPENUM;e++) dailyExpense[e]=0;
    }
-};
-
-class Interval
-{
-public:
-   int min,max;
-   Interval() : min(0),max(0) { }
-   Interval(int value) : min(value),max(value) { }
-   Interval(int low, int high) : min(low),max(high) { }
-   void set_interval(int low, int high) { min=low,max=high; }
-   // Sets the interval according to a string that is either a number or two
-   // number separated by a dash. Returns false and does not change the
-   // interval if the given string is not a valid interval.
-   bool set_interval(const string& interval); // implemented in misc.cpp
-   int roll() const { return LCSrandom(max-min+1)+min; }
-private:
-   // Checks if a string is a number. Assumes non-numeric characters other
-   // than dashes have already been checked for.
-   bool valid(const string& v)
-   { return len(v) &&                       // Blank string is invalid.
-           (len(v)!=1||v[0]!='-') &&        // Just a dash is invalid.
-            v.find('-', 1)==string::npos; } // A dash after the first char is invalid.
 };
 
 #include "items/itemtype.h"
@@ -953,7 +930,7 @@ void end_game(int err=EXIT_SUCCESS);
 // Sets the text color to the thematic color for the given alignment
 // extended_range forces colors to be set on a 5 point scale instead
 // of just basic liberal-moderate-conservative
-void set_alignment_color(signed char alignment,bool extended_range=false);
+void set_alignment_color(Alignment alignment, bool extended_range=false);
 /* Sets the text color per activity type */
 void set_activity_color(long activity_type);
 /* location and squad header */
@@ -1137,7 +1114,6 @@ std::string cityname(); /* random city name */
 void enter_name(int y,int x,char *name,int len,const char *defname=NULL);
 std::string getlawflag(int type);
 std::string getmonth(int month,bool shortname=false);
-std::string getalign(signed char alignment,bool capitalize=false);
 
 /*
  translateid.cpp
@@ -1228,6 +1204,7 @@ void makecreature(Creature &cr,short type);
 void generate_name(char *str, char gender = GENDER_NEUTRAL);
 /* get a first and last name for the same person */
 void generate_name(char *first, char *last, char gender = GENDER_NEUTRAL);
+std::string generate_name(char gender = GENDER_NEUTRAL);
 /* get a first, middle, and last name for the same person */
 void generate_long_name(char *first, char *middle, char *last, char gender = GENDER_NEUTRAL);
 /* gets a random first name */
@@ -1264,7 +1241,6 @@ void plate(char *str);
 const char* statename(int state=-1);
 /* endgame - converts an integer into a roman numeral for amendments */
 void romannumeral(int amendnum);
-/* code for bool Interval::set_interval(const string& interval); is also in misc.cpp */
 
 
 /*

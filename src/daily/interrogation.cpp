@@ -533,7 +533,7 @@ void tendhostage(Creature *cr,char &clearformess)
                else
                {
                   addstr(doctor->name, gamelog);
-                  if(law[LAW_FREESPEECH]==-2)
+                  if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
                      addstr(" has a panic attack and [makes a stinky].", gamelog);
                   else
                   {
@@ -1553,12 +1553,13 @@ void tendhostage(Creature *cr,char &clearformess)
       }
    }
 
-   if(cr->align==1||!cr->alive) for(int p=0;p<len(pool);p++)
-   {
-      if(!pool[p]->alive) continue;
-      if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING&&pool[p]->activity.arg==cr->id)
-         pool[p]->activity.type=ACTIVITY_NONE;
-   }
+   if (cr->align==Alignment::LIBERAL || !cr->alive)
+     for(int p=0;p<len(pool);p++)
+     {
+        if(!pool[p]->alive) continue;
+        if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING&&pool[p]->activity.arg==cr->id)
+           pool[p]->activity.type=ACTIVITY_NONE;
+     }
 
    gamelog.nextMessage();
 

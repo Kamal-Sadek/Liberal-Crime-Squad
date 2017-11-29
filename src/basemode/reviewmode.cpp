@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -79,7 +80,7 @@ void review()
       for(int p=0;p<len(pool);p++)
       {
          if(pool[p]->is_active_liberal()) n[0]++; // Active Liberals
-         if(pool[p]->align!=ALIGN_LIBERAL && pool[p]->alive) n[1]++; // Hostages
+         if(pool[p]->align!=Alignment::LIBERAL && pool[p]->alive) n[1]++; // Hostages
          if(pool[p]->clinic && pool[p]->alive) n[2]++; // Hospital
          if(pool[p]->is_imprisoned()) n[3]++; // Justice System
          if(pool[p]->is_lcs_sleeper()) n[4]++; // Sleepers
@@ -242,7 +243,7 @@ void review_mode(short mode)
             temppool.push_back(pool[p]);
          break;
       case REVIEWMODE_HOSTAGES:
-         if(pool[p]->align!=ALIGN_LIBERAL && pool[p]->alive)
+         if(pool[p]->align!=Alignment::LIBERAL && pool[p]->alive)
             temppool.push_back(pool[p]);
          break;
       case REVIEWMODE_CLINIC:
@@ -449,9 +450,11 @@ void review_mode(short mode)
             }
          case REVIEWMODE_SLEEPERS:
             {
-               if(temppool[p]->align==-1)set_color(COLOR_RED,COLOR_BLACK,1);
-               else if(temppool[p]->align==0)set_color(COLOR_WHITE,COLOR_BLACK,1);
-               else set_color(COLOR_GREEN,COLOR_BLACK,1);
+               if (temppool[p]->align == Alignment::CONSERVATIVE)
+                 set_color(COLOR_RED, COLOR_BLACK, 1);
+               else if(temppool[p]->align == Alignment::MODERATE)
+                 set_color(COLOR_WHITE, COLOR_BLACK, 1);
+               else set_color(COLOR_GREEN, COLOR_BLACK, 1);
                addstr(temppool[p]->get_type_name());
                break;
             }
@@ -511,9 +514,9 @@ void review_mode(short mode)
                erase();
 
                move(0,0);
-               if(temppool[p]->align!=1)
+               if(temppool[p]->align != Alignment::LIBERAL)
                {
-                  set_color(COLOR_RED,COLOR_BLACK,1);
+                  set_color(COLOR_RED, COLOR_BLACK, 1);
                   addstr("Profile of an Automaton");
                }
                else
@@ -540,7 +543,8 @@ void review_mode(short mode)
 
                move(23,0);
 
-               if(temppool[p]->align!=1) addstr("Press N to change this Automaton's Code Name");
+               if (temppool[p]->align != Alignment::LIBERAL)
+                 addstr("Press N to change this Automaton's Code Name");
                else addstr("N - Change Code Name      G - Fix Gender Label");
                if(len(temppool)>1) addstr("    LEFT/RIGHT - View Others");
                move(24,0);
@@ -579,7 +583,7 @@ void review_mode(short mode)
 
                   enter_name(24,0,temppool[p]->name,CREATURE_NAMELEN,temppool[p]->propername);
                }
-               else if(c=='g' && temppool[p]->align==1)
+               else if (c=='g' && temppool[p]->align == Alignment::LIBERAL)
                {
                   temppool[p]->gender_liberal++;
                   if(temppool[p]->gender_liberal > 2)
@@ -935,9 +939,11 @@ void assemblesquad(squadst *cursquad)
             }
          }
 
-         if(temppool[p]->align==-1) set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(temppool[p]->align==0) set_color(COLOR_WHITE,COLOR_BLACK,1);
-         else set_color(COLOR_GREEN,COLOR_BLACK,1);
+         if (temppool[p]->align == Alignment::CONSERVATIVE)
+           set_color(COLOR_RED, COLOR_BLACK, 1);
+         else if (temppool[p]->align == Alignment::MODERATE)
+           set_color(COLOR_WHITE, COLOR_BLACK, 1);
+         else set_color(COLOR_GREEN, COLOR_BLACK, 1);
          move(y,50);
          addstr(temppool[p]->get_type_name());
          y++;
@@ -949,7 +955,7 @@ void assemblesquad(squadst *cursquad)
       move(23,0);
       addpagestr();
       addstr(" T to sort people.");
-		move(23,50);
+      move(23,50);
       addstr("V - View a Liberal");
       move(24,0);
       if(partysize>0) addstr("Enter - The squad is ready.");
@@ -1080,7 +1086,7 @@ void assemblesquad(squadst *cursquad)
          for(int p=0;p<6;p++)
             if(cursquad->squad[p])
             {  // It is good if either there is at least one Liberal, or if the squad is completely empty
-               if(cursquad->squad[p]->align==1)
+               if(cursquad->squad[p]->align == Alignment::LIBERAL)
                {  good=true; break; } // We found a Liberal, it's good
                else good=false; // We found a non-Liberal, this is bad unless we can find a Liberal too
             }
@@ -1347,7 +1353,7 @@ void promoteliberals()
    vector<Creature *> temppool;
    vector<int> level;
    for(int p=0;p<len(pool);p++)
-      if(pool[p]->alive&&pool[p]->align==1)
+      if (pool[p]->alive && pool[p]->align == Alignment::LIBERAL)
          temppool.push_back(pool[p]);
 
    if(!len(temppool)) return;

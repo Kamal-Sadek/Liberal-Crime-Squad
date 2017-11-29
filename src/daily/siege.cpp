@@ -162,8 +162,8 @@ statebrokenlaws(int loc)
    //BURN FLAG
    else if(breakercount[LAWFLAG_BURNFLAG])
    {
-      if(law[LAW_FLAGBURNING]==-2)addstr("You are wanted for Flag Murder", gamelog);
-      else if(law[LAW_FLAGBURNING]==-1)addstr("You are wanted for felony flag burning", gamelog);
+      if(law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE)addstr("You are wanted for Flag Murder", gamelog);
+      else if(law[LAW_FLAGBURNING] == Alignment::CONSERVATIVE)addstr("You are wanted for felony flag burning", gamelog);
       else addstr("You are wanted for flag burning", gamelog);
    }
    //SPEECH
@@ -207,7 +207,7 @@ statebrokenlaws(int loc)
       addstr("You are wanted for prostitution", gamelog);
    //HIRE ILLEGAL
    else if(breakercount[LAWFLAG_HIREILLEGAL])
-      addstr((law[LAW_IMMIGRATION]<1?"You are wanted for hiring an illegal alien":"You are wanted for hiring an undocumented worker"), gamelog);
+      addstr((to_right_of(law[LAW_IMMIGRATION], Alignment::LIBERAL)?"You are wanted for hiring an illegal alien":"You are wanted for hiring an undocumented worker"), gamelog);
    //GUN USE
    /*else if(breakercount[LAWFLAG_GUNUSE])
       addstr("You are wanted for firing an illegal weapon", gamelog);
@@ -292,7 +292,7 @@ statebrokenlaws(Creature const& cr)
       addstr("ARSON");
    //BURN FLAG
    else if(breakercount[LAWFLAG_BURNFLAG])
-      addstr(law[LAW_FLAGBURNING]==-2?"FLAG MURDER":"FLAG BURNING");
+      addstr(law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE?"FLAG MURDER":"FLAG BURNING");
    //SPEECH
    else if(breakercount[LAWFLAG_SPEECH])
       addstr("HARMFUL SPEECH");
@@ -334,7 +334,7 @@ statebrokenlaws(Creature const& cr)
       addstr("PROSTITUTION");
    //HIRE ILLEGAL
    else if(breakercount[LAWFLAG_HIREILLEGAL])
-      addstr(law[LAW_IMMIGRATION]<1?"HIRING ILLEGAL ALIENS":"HIRING UNDOCUMENTED WORKERS");
+      addstr(to_right_of(law[LAW_IMMIGRATION], Alignment::LIBERAL)?"HIRING ILLEGAL ALIENS":"HIRING UNDOCUMENTED WORKERS");
    //GUN USE
    /*else if(breakercount[LAWFLAG_GUNUSE])
       addstr("FIRING ILLEGAL WEAPONS");
@@ -380,12 +380,17 @@ void siegecheck(bool canseethings)
   // Cleanse record on things that aren't illegal right now
   for(int p=0;p<len(pool);p++)
   {
-    if(law[LAW_FLAGBURNING]>0)pool[p]->crimes_suspected[LAWFLAG_BURNFLAG]=0;
-    if(law[LAW_DRUGS]>0)pool[p]->crimes_suspected[LAWFLAG_BROWNIES]=0;
-    if(law[LAW_IMMIGRATION]==2)pool[p]->flag &= ~CREATUREFLAG_ILLEGALALIEN;
-    if(law[LAW_FREESPEECH]>-2)pool[p]->crimes_suspected[LAWFLAG_SPEECH]=0;
+    if (to_left_of(law[LAW_FLAGBURNING], Alignment::MODERATE))
+       pool[p]->crimes_suspected[LAWFLAG_BURNFLAG] = 0;
+    if (to_left_of(law[LAW_DRUGS], Alignment::MODERATE))
+      pool[p]->crimes_suspected[LAWFLAG_BROWNIES]=0;
+    if (to_left_of(law[LAW_IMMIGRATION], Alignment::MODERATE))
+      pool[p]->flag &= ~CREATUREFLAG_ILLEGALALIEN;
+    if (to_left_of(law[LAW_FREESPEECH], Alignment::ARCH_CONSERVATIVE))
+      pool[p]->crimes_suspected[LAWFLAG_SPEECH]=0;
   }
-  if(law[LAW_FREESPEECH]>-2)offended_firemen=0;
+  if (to_left_of(law[LAW_FREESPEECH], Alignment::ARCH_CONSERVATIVE))
+    offended_firemen = 0;
 
    //FIRST, THE COPS
    int numpres;
@@ -399,7 +404,7 @@ void siegecheck(bool canseethings)
       if(location[l]->renting==RENTING_NOCONTROL)continue;
       numpres=0;
 
-      if(location[l]->siege.timeuntillocated==-2)
+      if(location[l]->siege.timeuntillocated == -2)
       {
          //IF JUST SIEGED, BUY SOME TIME
          location[l]->siege.timeuntillocated=-1;
@@ -409,7 +414,7 @@ void siegecheck(bool canseethings)
          //HUNTING
          if(location[l]->siege.timeuntillocated>0)
          {
-            if(location[l]->front_business==-1||LCSrandom(2))
+            if(location[l]->front_business == -1 || LCSrandom(2))
             {
                location[l]->siege.timeuntillocated--;
                // Hunt faster if location is extremely hot
@@ -439,12 +444,13 @@ void siegecheck(bool canseethings)
                crimes += 5;
                continue;
             }
-            if(pool[p]->flag & CREATUREFLAG_KIDNAPPED && pool[p]->align!=1)
+            if (pool[p]->flag & CREATUREFLAG_KIDNAPPED && pool[p]->align != Alignment::LIBERAL)
             {
                crimes += 5*pool[p]->joindays; // Kidnapped persons increase heat
                continue;
             }
-            if(pool[p]->align!=1)continue; // Non-liberals don't count other than that
+            if (pool[p]->align != Alignment::LIBERAL)
+              continue; // Non-liberals don't count other than that
             numpres++;
 
             // Accumulate heat from liberals who have it, but let them bleed it off in the process
@@ -625,7 +631,7 @@ void siegecheck(bool canseethings)
                      delete_and_remove(pool,p);
                      continue;
                   }
-                  if(pool[p]->align!=1)
+                  if (pool[p]->align != Alignment::LIBERAL)
                   {
                      move(y,1);y++;
                      addstr(pool[p]->name, gamelog);
@@ -651,7 +657,11 @@ void siegecheck(bool canseethings)
 
          //OTHER OFFENDABLE ENTITIES
             //CORPS
-         if(location[l]->heat&&location[l]->siege.timeuntilcorps==-1&&!location[l]->siege.siege&&offended_corps&&!LCSrandom(600)&&numpres>0)
+         if (location[l]->heat&&location[l]->siege.timeuntilcorps == -1
+             && !location[l]->siege.siege
+             && offended_corps
+             && !LCSrandom(600)
+             && numpres>0)
          {
             location[l]->siege.timeuntilcorps=LCSrandom(3)+1;
             // *JDS* CEO sleepers may give a warning before corp raids
@@ -987,7 +997,7 @@ void siegecheck(bool canseethings)
             offended_cablenews=0;
          }
          //Firemen
-         if(law[LAW_FREESPEECH]==-2 && location[l]->siege.timeuntilfiremen==-1 && !location[l]->siege.siege &&
+         if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE && location[l]->siege.timeuntilfiremen==-1 && !location[l]->siege.siege &&
             offended_firemen && numpres>0 && location[l]->compound_walls & COMPOUND_PRINTINGPRESS && !LCSrandom(90))
          {
             location[l]->siege.timeuntilfiremen=LCSrandom(3)+1;
@@ -1016,7 +1026,7 @@ void siegecheck(bool canseethings)
             }
 
          } else if(location[l]->siege.timeuntilfiremen>0) location[l]->siege.timeuntilfiremen--;
-         else if(law[LAW_FREESPEECH]==-2 && location[l]->siege.timeuntilfiremen==0 && !location[l]->siege.siege&&numpres>0)
+         else if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE && location[l]->siege.timeuntilfiremen==0 && !location[l]->siege.siege&&numpres>0)
          {
             music.play(MUSIC_SIEGE);
             location[l]->siege.timeuntilfiremen=-1;
@@ -1064,7 +1074,7 @@ void siegecheck(bool canseethings)
             location[l]->siege.cameras_off=0;
             offended_firemen=0;
          }
-         else if(law[LAW_FREESPEECH]==-2 && location[l]->siege.timeuntilfiremen==0)
+         else if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE && location[l]->siege.timeuntilfiremen==0)
          {
             location[l]->siege.timeuntilfiremen=-1;
             erase();
@@ -1095,7 +1105,7 @@ void siegecheck(bool canseethings)
                   delete_and_remove(pool,p);
                   continue;
                }
-               if(pool[p]->align!=1)
+               if (pool[p]->align != Alignment::LIBERAL)
                {
                   move(y++,1);
                   addstr(pool[p]->name, gamelog);
@@ -1128,7 +1138,7 @@ void siegecheck(bool canseethings)
             }
             gamelog.newline();
          }
-         else if (law[LAW_FREESPEECH]<=-1 && location[l]->siege.timeuntilfiremen==0)
+         else if (to_right_of(law[LAW_FREESPEECH], Alignment::MODERATE) && location[l]->siege.timeuntilfiremen==0)
             location[l]->siege.timeuntilfiremen=-1,offended_firemen=0;
       }
    }
@@ -1149,7 +1159,7 @@ void siegeturn(bool clearformess)
    for(int p=0;p<len(pool);p++)
    {
       if(!pool[p]->alive)continue; // Dead people don't count
-      if(pool[p]->align!=1)continue; // Non-liberals don't count
+      if(pool[p]->align!=Alignment::LIBERAL)continue; // Non-liberals don't count
       if(pool[p]->location==-1)continue; // Vacationers don't count
       liberalcount[pool[p]->location]++;
    }
@@ -1190,7 +1200,7 @@ void siegeturn(bool clearformess)
                   delete_and_remove(pool,p);
                   continue;
                }
-               if(pool[p]->align!=1)
+               if(pool[p]->align!=Alignment::LIBERAL)
                {
                   move(y++,1);
                   addstr(pool[p]->name);
@@ -1321,7 +1331,7 @@ void siegeturn(bool clearformess)
                         addstr("!", gamelog);
                         gamelog.newline();
 
-                        if(pool[targ]->align==1) stat_dead++,liberalcount[l]--;
+                        if(pool[targ]->align == Alignment::LIBERAL) stat_dead++,liberalcount[l]--;
 
                         removesquadinfo(*pool[targ]);
 
@@ -1470,7 +1480,7 @@ void siegeturn(bool clearformess)
                               addstr(" was killed in the bombing!", gamelog);
                               gamelog.newline();
 
-                              if(pool[targ]->align==1) stat_dead++,liberalcount[l]--;
+                              if(pool[targ]->align == Alignment::LIBERAL) stat_dead++,liberalcount[l]--;
 
                               removesquadinfo(*pool[targ]);
 
@@ -1591,7 +1601,7 @@ void siegeturn(bool clearformess)
                   int best=0;
                   for(int p=0,bestvalue=-1000;p<len(pool);p++)
                   {
-                     if(!pool[p]->alive||pool[p]->align!=1||pool[p]->location!=l) continue;
+                     if (!pool[p]->alive || pool[p]->align != Alignment::LIBERAL || pool[p]->location != l) continue;
 
                      int sum=pool[p]->get_attribute(ATTRIBUTE_INTELLIGENCE, true)
                             +pool[p]->get_attribute(ATTRIBUTE_HEART, true)
@@ -1631,8 +1641,10 @@ void siegeturn(bool clearformess)
                      switch(LCSrandom(11))
                      {
                         case 0: addstr("Flaming", gamelog); break;
-                        case 1: if(law[LAW_FREESPEECH]==-2) addstr("Dumb", gamelog);
-                                else addstr("Retarded", gamelog); break;
+                        case 1: if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
+                                  addstr("Dumb", gamelog);
+                                else
+                                  addstr("Retarded", gamelog); break;
                         case 2: addstr("Insane", gamelog); break;
                         case 3: addstr("Crazy", gamelog); break;
                         case 4: addstr("Loopy", gamelog); break;
@@ -1756,7 +1768,7 @@ void giveup()
 
          if(pool[p]->flag&CREATUREFLAG_ILLEGALALIEN) icount++;
 
-         if(pool[p]->flag&CREATUREFLAG_MISSING&&pool[p]->align==-1)
+         if(pool[p]->flag&CREATUREFLAG_MISSING&&pool[p]->align == Alignment::CONSERVATIVE)
          {
             kcount++;
             strcpy(kname,pool[p]->propername);
@@ -1779,7 +1791,7 @@ void giveup()
       {
          if(pool[p]->location!=loc||!pool[p]->alive) continue;
 
-         if(iscriminal(*pool[p])&&!(pool[p]->flag&CREATUREFLAG_MISSING&&pool[p]->align==-1))
+         if(iscriminal(*pool[p])&&!(pool[p]->flag&CREATUREFLAG_MISSING&&pool[p]->align == Alignment::CONSERVATIVE))
          {
             pcount++;
             strcpy(pname,pool[p]->propername);
@@ -1918,7 +1930,7 @@ void giveup()
       {
          if(pool[p]->location!=loc) continue;
 
-         if(pool[p]->alive&&pool[p]->align==1) stat_dead++;
+         if(pool[p]->alive&&pool[p]->align == Alignment::LIBERAL) stat_dead++;
 
          killnumber++;
          removesquadinfo(*pool[p]);
@@ -1983,7 +1995,7 @@ int numbereating(int loc)
 {
    int eaters=0;
    for(int p=0;p<len(pool);p++) //Must be here, alive, Liberal, and not a sleeper, to count as an eater
-      if(pool[p]->location==loc&&pool[p]->alive&&pool[p]->align==1&&!(pool[p]->flag&CREATUREFLAG_SLEEPER)) eaters++;
+      if(pool[p]->location==loc&&pool[p]->alive&&pool[p]->align == Alignment::LIBERAL&&!(pool[p]->flag&CREATUREFLAG_SLEEPER)) eaters++;
    return eaters;
 }
 
@@ -2030,7 +2042,7 @@ char sally_forth_aux(int loc)
    {
       // Count heroes
       int partysize=0,partyalive=0;
-      for(p=0;p<len(pool);p++) if(pool[p]->align==1&&pool[p]->location==cursite&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
+      for(p=0;p<len(pool);p++) if(pool[p]->align == Alignment::LIBERAL&&pool[p]->location==cursite&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
       {
          partysize++;
          if(pool[p]->alive) partyalive++;
@@ -2059,8 +2071,10 @@ char sally_forth_aux(int loc)
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(9,40);
          addstr("O - Change the squad's Liberal order");
-         if(partysize>0&&(party_status==-1||partysize>1))set_color(COLOR_WHITE,COLOR_BLACK,0);
-         else set_color(COLOR_BLACK,COLOR_BLACK,1);
+         if (partysize > 0 && (party_status == -1 || partysize > 1))
+           set_color(COLOR_WHITE,COLOR_BLACK,0);
+         else
+           set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(10,40);
          addstr("# - Check the status of a squad Liberal");
          if(party_status!=-1)set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -2146,7 +2160,7 @@ char sally_forth_aux(int loc)
 
          // Check for victory
          partysize=0,partyalive=0;
-         for(p=0;p<len(pool);p++) if(pool[p]->align==1&&pool[p]->location==cursite&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
+         for(p=0;p<len(pool);p++) if(pool[p]->align == Alignment::LIBERAL&&pool[p]->location==cursite&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
          {
             partysize++;
             if(pool[p]->alive) partyalive++;
@@ -2223,7 +2237,7 @@ void sally_forth()
    int loc=-1;
    if(selectedsiege!=-1)loc=selectedsiege;
    if(activesquad!=NULL)loc=activesquad->squad[0]->location;
-   if(loc==-1)return;
+   if(loc == -1)return;
 
    set_color(COLOR_RED,COLOR_BLACK,1);
    move(23,11);
@@ -2266,7 +2280,7 @@ void sally_forth()
       strcat(squad.back()->name," Defense");
       int i=0;
       for(int p=0;p<len(pool);p++)
-         if(pool[p]->location==selectedsiege&&pool[p]->alive&&pool[p]->align==1)
+         if(pool[p]->location==selectedsiege&&pool[p]->alive&&pool[p]->align == Alignment::LIBERAL)
          {
             squad.back()->squad[i]=pool[p];
             pool[p]->squadid=squad.back()->id;
@@ -2343,7 +2357,7 @@ void escape_engage()
    int loc=-1;
    if(selectedsiege!=-1) loc=selectedsiege;
    if(activesquad!=NULL) loc=activesquad->squad[0]->location;
-   if(loc==-1) return;
+   if(loc == -1) return;
 
    if(location[loc]->compound_walls&COMPOUND_CAMERAS)
    {
@@ -2396,7 +2410,7 @@ void escape_engage()
       strcpy(squad.back()->name,location[selectedsiege]->getname(true));
       strcat(squad.back()->name," Defense");
       int i=0;
-      for(int p=0;p<len(pool);p++) if(pool[p]->location==selectedsiege&&pool[p]->alive&&pool[p]->align==1)
+      for(int p=0;p<len(pool);p++) if(pool[p]->location==selectedsiege&&pool[p]->alive&&pool[p]->align == Alignment::LIBERAL)
       {
          squad.back()->squad[i]=pool[p];
          pool[p]->squadid=squad.back()->id;
@@ -2488,7 +2502,7 @@ void escapesiege(char won)
          //BASE EVERYONE LEFT AT HOMELESS SHELTER
          removesquadinfo(*pool[p]);
          pool[p]->hiding=LCSrandom(3)+2;
-         if(pool[p]->align==1) // not a hostage
+         if(pool[p]->align == Alignment::LIBERAL) // not a hostage
             pool[p]->location=-1;
          else // hostages don't go into hiding, just shove em into the homeless shelter
             pool[p]->location=homes;

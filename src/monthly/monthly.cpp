@@ -72,69 +72,69 @@
 
 /* rename various buildings according to the new laws */
 static void
-updateworld_laws(short *law,short *oldlaw)
+updateworld_laws(Alignment* law, Alignment* oldlaw)
 {  // NOTE: make sure to keep code here matching code in initlocation() in locations.cpp for when names are changed
-   if(((law[   LAW_POLICEBEHAVIOR]==-2&&law[   LAW_DEATHPENALTY]==-2)||
-       (oldlaw[LAW_POLICEBEHAVIOR]==-2&&oldlaw[LAW_DEATHPENALTY]==-2))&&
+   if(((law[   LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE&&law[   LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE)||
+       (oldlaw[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE&&oldlaw[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE))&&
        (law[LAW_POLICEBEHAVIOR]   !=    oldlaw[LAW_POLICEBEHAVIOR]||
         law[LAW_DEATHPENALTY  ]   !=    oldlaw[LAW_DEATHPENALTY  ]))
       for(int l=0;l<len(location);l++)
          if(location[l]->type==SITE_GOVERNMENT_POLICESTATION) // Police Station or Death Squad HQ?
             initlocation(*location[l]);
 
-   if((law[LAW_DEATHPENALTY]==-2||oldlaw[LAW_DEATHPENALTY]==-2)&&
+   if((law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE||oldlaw[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE)&&
        law[LAW_DEATHPENALTY]  !=  oldlaw[LAW_DEATHPENALTY])
       for(int l=0;l<len(location);l++)
          if(location[l]->type==SITE_GOVERNMENT_COURTHOUSE) // Courthouse or judge hall?
             initlocation(*location[l]);
 
-   if((law[LAW_FREESPEECH]==-2||oldlaw[LAW_FREESPEECH]==-2)&&
+   if((law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE||oldlaw[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)&&
        law[LAW_FREESPEECH]  !=  oldlaw[LAW_FREESPEECH])
       for(int l=0;l<len(location);l++)
          if(location[l]->type==SITE_GOVERNMENT_FIRESTATION) // Fire station or Fireman HQ?
             initlocation(*location[l]);
 
-   if((law[LAW_PRISONS]==-2||oldlaw[LAW_PRISONS]==-2)&&
+   if((law[LAW_PRISONS] == Alignment::ARCH_CONSERVATIVE||oldlaw[LAW_PRISONS] == Alignment::ARCH_CONSERVATIVE)&&
        law[LAW_PRISONS]  !=  oldlaw[LAW_PRISONS])
       for(int l=0;l<len(location);l++)
          if(location[l]->type==SITE_GOVERNMENT_PRISON) // Prison or re-ed camp?
             initlocation(*location[l]);
 
-   if((law[LAW_NUCLEARPOWER]==2||oldlaw[LAW_NUCLEARPOWER]==2)&&
+   if((law[LAW_NUCLEARPOWER] == Alignment::ELITE_LIBERAL||oldlaw[LAW_NUCLEARPOWER] == Alignment::ELITE_LIBERAL)&&
        law[LAW_NUCLEARPOWER] !=  oldlaw[LAW_NUCLEARPOWER])
       for(int l=0;l<len(location);l++)
          if(location[l]->type==SITE_INDUSTRY_NUCLEAR) // Nuclear Power Plant, or Nuclear Waste Center?
             initlocation(*location[l]);
 
-   if(((law[   LAW_PRIVACY]==-2&&law[   LAW_POLICEBEHAVIOR]==-2)||
-       (oldlaw[LAW_PRIVACY]==-2&&oldlaw[LAW_POLICEBEHAVIOR]==-2))&&
+   if(((law[   LAW_PRIVACY] == Alignment::ARCH_CONSERVATIVE&&law[   LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)||
+       (oldlaw[LAW_PRIVACY] == Alignment::ARCH_CONSERVATIVE&&oldlaw[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE))&&
        (law[LAW_PRIVACY       ]!=oldlaw[LAW_PRIVACY       ]||
         law[LAW_POLICEBEHAVIOR]!=oldlaw[LAW_POLICEBEHAVIOR]))
       for(int l=0;l<len(location);l++)
          if(location[l]->type==SITE_GOVERNMENT_INTELLIGENCEHQ) // Intelligence HQ or ministry of love?
             initlocation(*location[l]);
 
-   if((law[LAW_MILITARY]==-2||oldlaw[LAW_MILITARY]==-2)&&
+   if((law[LAW_MILITARY] == Alignment::ARCH_CONSERVATIVE||oldlaw[LAW_MILITARY] == Alignment::ARCH_CONSERVATIVE)&&
        law[LAW_MILITARY]  !=  oldlaw[LAW_MILITARY])
       for(int l=0;l<len(location);l++)
          if(location[l]->type==SITE_GOVERNMENT_ARMYBASE) // Army Base or Ministry of Peace?
             initlocation(*location[l]);
 
-   if((law[LAW_GUNCONTROL]==2||oldlaw[LAW_GUNCONTROL]==2)&&
+   if((law[LAW_GUNCONTROL] == Alignment::ELITE_LIBERAL||oldlaw[LAW_GUNCONTROL] == Alignment::ELITE_LIBERAL)&&
        law[LAW_GUNCONTROL] !=  oldlaw[LAW_GUNCONTROL])
       for(int l=0;l<len(location);l++)
          if(location[l]->type==SITE_BUSINESS_PAWNSHOP) // Do they mention guns in the title?
             initlocation(*location[l]);
 
-   if(((law[   LAW_CORPORATE]==-2&&law[   LAW_TAX]==-2)||
-       (oldlaw[LAW_CORPORATE]==-2&&oldlaw[LAW_TAX]==-2))&&
+   if(((law[   LAW_CORPORATE] == Alignment::ARCH_CONSERVATIVE&&law[   LAW_TAX] == Alignment::ARCH_CONSERVATIVE)||
+       (oldlaw[LAW_CORPORATE] == Alignment::ARCH_CONSERVATIVE&&oldlaw[LAW_TAX] == Alignment::ARCH_CONSERVATIVE))&&
        (law[LAW_CORPORATE]   !=    oldlaw[LAW_CORPORATE]||
         law[LAW_TAX      ]   !=    oldlaw[LAW_TAX      ]))
       for(int l=0;l<len(location);l++)
          if(location[l]->type==SITE_CORPORATE_HOUSE) // CEO house or CEO Castle?
             initlocation(*location[l]);
 
-   if((law[LAW_DRUGS]==2||oldlaw[LAW_DRUGS]==2)&&
+   if((law[LAW_DRUGS] == Alignment::ELITE_LIBERAL||oldlaw[LAW_DRUGS] == Alignment::ELITE_LIBERAL)&&
        law[LAW_DRUGS] !=  oldlaw[LAW_DRUGS])
       for(int l=0;l<len(location);l++)
          if(location[l]->type==SITE_BUSINESS_CRACKHOUSE  // Crack House, or Recreational Drugs Center?
@@ -147,7 +147,7 @@ updateworld_laws(short *law,short *oldlaw)
 void
 passmonth(char& clearformess, bool canseethings)
 {
-   short oldlaw[LAWNUM];
+   Alignment oldlaw[LAWNUM];
    memmove(oldlaw,law,sizeof(short)*LAWNUM);
    int l, v, p;
 
@@ -468,7 +468,7 @@ passmonth(char& clearformess, bool canseethings)
    }
 
    //UPDATE THE WORLD IN CASE THE LAWS HAVE CHANGED
-   updateworld_laws(law,oldlaw);
+   updateworld_laws(law, oldlaw);
 
    //THE SYSTEM!
    for(p=len(pool)-1;p>=0;p--)
@@ -499,13 +499,13 @@ passmonth(char& clearformess, bool canseethings)
             delete_and_remove(pool,p);
             continue;
          }
-         else if(pool[p]->flag & CREATUREFLAG_ILLEGALALIEN && law[LAW_IMMIGRATION]!=2)
+         else if (pool[p]->flag & CREATUREFLAG_ILLEGALALIEN && law[LAW_IMMIGRATION] != Alignment::ELITE_LIBERAL)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
             move(8,1);
             addstr(pool[p]->name, gamelog);
             addstr(" has been shipped out to the INS to face ", gamelog);
-            if(law[LAW_IMMIGRATION]==-2 && law[LAW_DEATHPENALTY]==-2)
+            if (law[LAW_IMMIGRATION]==Alignment::ARCH_CONSERVATIVE && law[LAW_DEATHPENALTY]==Alignment::ARCH_CONSERVATIVE)
                addstr("execution.", gamelog);
             else addstr("deportation.", gamelog);
             gamelog.newline();
@@ -520,10 +520,10 @@ passmonth(char& clearformess, bool canseethings)
          {
             //TRY TO GET RACKETEERING CHARGE
             int copstrength=100;
-            if(law[LAW_POLICEBEHAVIOR]==-2) copstrength=200;
-            if(law[LAW_POLICEBEHAVIOR]==-1) copstrength=150;
-            if(law[LAW_POLICEBEHAVIOR]==1) copstrength=75;
-            if(law[LAW_POLICEBEHAVIOR]==2) copstrength=50;
+            if (law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE) copstrength=200;
+            if (law[LAW_POLICEBEHAVIOR] == Alignment::CONSERVATIVE) copstrength=150;
+            if (law[LAW_POLICEBEHAVIOR] == Alignment::LIBERAL) copstrength=75;
+            if (law[LAW_POLICEBEHAVIOR] == Alignment::ELITE_LIBERAL) copstrength=50;
 
             copstrength=(copstrength*pool[p]->heat)/4;
             if(copstrength>200)copstrength=200;

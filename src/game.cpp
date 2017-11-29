@@ -85,7 +85,6 @@ char artdir[MAX_PATH_SIZE];
 vector<configSiteMap *> sitemaps; // stores site map info read in from config file
 
 bool multipleCityMode;
-unsigned long seed[RNG_SIZE];
 
 vector<ClipType *> cliptype;
 vector<WeaponType *> weapontype;
@@ -161,14 +160,14 @@ short attitude[VIEWNUM];
 short public_interest[VIEWNUM];
 short background_liberal_influence[VIEWNUM];
 
-short law[LAWNUM];
+Alignment law[LAWNUM];
 
-short house[HOUSENUM];
-short senate[SENATENUM];
-short court[COURTNUM];
+Alignment house[HOUSENUM];
+Alignment senate[SENATENUM];
+Alignment court[COURTNUM];
 char courtname[COURTNUM][POLITICIAN_NAMELEN];
 
-signed char exec[EXECNUM];
+Alignment exec[EXECNUM];
 short execterm=1;
 char execname[EXECNUM][POLITICIAN_NAMELEN];
 short presparty=CONSERVATIVE_PARTY;
@@ -359,28 +358,28 @@ int main(int argc, char* argv[])
       attitude[v]=100;
 #endif
 
-   law[LAW_ABORTION]=1;
-   law[LAW_ANIMALRESEARCH]=-1;
-   law[LAW_POLICEBEHAVIOR]=-1;
-   law[LAW_PRIVACY]=-1;
-   law[LAW_DEATHPENALTY]=-1;
-   law[LAW_NUCLEARPOWER]=-1;
-   law[LAW_POLLUTION]=-1;
-   law[LAW_LABOR]=0;
-   law[LAW_GAY]=1;
-   law[LAW_CORPORATE]=0;
-   law[LAW_FREESPEECH]=0;
-   law[LAW_FLAGBURNING]=1;
-   law[LAW_GUNCONTROL]=-1;
-   law[LAW_TAX]=0;
-   law[LAW_WOMEN]=1;
-   law[LAW_CIVILRIGHTS]=1;
-   law[LAW_DRUGS]=-1;
-   law[LAW_IMMIGRATION]=0;
-   law[LAW_ELECTIONS]=0;
-   law[LAW_MILITARY]=-1;
-   law[LAW_PRISONS]=0;
-   law[LAW_TORTURE]=-1;
+   law[LAW_ABORTION] = Alignment::LIBERAL;
+   law[LAW_ANIMALRESEARCH] = Alignment::CONSERVATIVE;
+   law[LAW_POLICEBEHAVIOR] = Alignment::CONSERVATIVE;
+   law[LAW_PRIVACY] = Alignment::CONSERVATIVE;
+   law[LAW_DEATHPENALTY] = Alignment::CONSERVATIVE;
+   law[LAW_NUCLEARPOWER] = Alignment::CONSERVATIVE;
+   law[LAW_POLLUTION] = Alignment::CONSERVATIVE;
+   law[LAW_LABOR] = Alignment::MODERATE;
+   law[LAW_GAY] = Alignment::LIBERAL;
+   law[LAW_CORPORATE] = Alignment::MODERATE;
+   law[LAW_FREESPEECH] = Alignment::MODERATE;
+   law[LAW_FLAGBURNING] = Alignment::LIBERAL;
+   law[LAW_GUNCONTROL] = Alignment::CONSERVATIVE;
+   law[LAW_TAX] = Alignment::MODERATE;
+   law[LAW_WOMEN] = Alignment::LIBERAL;
+   law[LAW_CIVILRIGHTS] = Alignment::LIBERAL;
+   law[LAW_DRUGS] = Alignment::CONSERVATIVE;
+   law[LAW_IMMIGRATION] = Alignment::MODERATE;
+   law[LAW_ELECTIONS] = Alignment::MODERATE;
+   law[LAW_MILITARY] = Alignment::CONSERVATIVE;
+   law[LAW_PRISONS] = Alignment::MODERATE;
+   law[LAW_TORTURE] = Alignment::CONSERVATIVE;
 
 #ifdef SHITLAWS
    for(int l=0;l<LAWNUM;l++) law[l]=-2;
@@ -390,41 +389,43 @@ int main(int argc, char* argv[])
    for(int l=0;l<LAWNUM;l++) law[l]=2;
 #endif
 
-   for(int s=0;s<SENATENUM;s++)
+   for(int s=0; s<SENATENUM; s++)
    {
-      if(s<25) senate[s]=-2;
-      else if(s<60) senate[s]=-1;
-      else if(s<80) senate[s]=0;
-      else if(s<95) senate[s]=1;
-      else senate[s]=2;
+      if      (s<25) senate[s] = Alignment::ARCH_CONSERVATIVE;
+      else if (s<60) senate[s] = Alignment::CONSERVATIVE;
+      else if (s<80) senate[s] = Alignment::MODERATE;
+      else if (s<95) senate[s] = Alignment::LIBERAL;
+      else           senate[s] = Alignment::ELITE_LIBERAL;
    }
 
-   for(int h=0;h<HOUSENUM;h++)
+   for(int h=0; h<HOUSENUM; h++)
    {
-      if(h<50) house[h]=-2;
-      else if(h<250) house[h]=-1;
-      else if(h<350) house[h]=0;
-      else if(h<400) house[h]=1;
-      else house[h]=2;
+      if      (h<50)  house[h] = Alignment::ARCH_CONSERVATIVE;
+      else if (h<250) house[h] = Alignment::CONSERVATIVE;
+      else if (h<350) house[h] = Alignment::MODERATE;
+      else if (h<400) house[h] = Alignment::LIBERAL;
+      else            house[h] = Alignment::ELITE_LIBERAL;
    }
 
-   for(int c=0;c<COURTNUM;c++)
+   for(int c=0; c<COURTNUM; c++)
    {
-      if(c<3) court[c]=-2;
-      else if(c<5) court[c]=-1;
-      else if(c<5) court[c]=0;
-      else if(c<8) court[c]=1;
-      else court[c]=2;
+      if      (c<3) court[c] = Alignment::ARCH_CONSERVATIVE;
+      else if (c<5) court[c] = Alignment::CONSERVATIVE;
+      else if (c<5) court[c] = Alignment::MODERATE;
+      else if (c<8) court[c] = Alignment::LIBERAL;
+      else          court[c] = Alignment::ELITE_LIBERAL;
       do
       {
-         if(court[c]==-2) generate_name(courtname[c],GENDER_WHITEMALEPATRIARCH);
-         else generate_name(courtname[c]);
+         if (to_right_of(court[c], Alignment::MODERATE))
+             generate_name(courtname[c],GENDER_WHITEMALEPATRIARCH);
+         else
+         generate_name(courtname[c]);
       } while(len(courtname[c])>20);
    }
 
    for(int e=0;e<EXECNUM;e++)
    {
-      exec[e]=-2;
+      exec[e] = Alignment::ARCH_CONSERVATIVE;
       generate_name(execname[e],GENDER_WHITEMALEPATRIARCH);
    }
 
