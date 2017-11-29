@@ -63,7 +63,7 @@ to_right_of(Alignment lhs, Alignment rhs);
  * Choose an alignment from a manifest list of choices.
  */
 Alignment
-choose(std::initializer_list<Alignment> choices);
+choose(AlignmentChoices choices);
 
 /**
  * Return a more liberal alignment.
