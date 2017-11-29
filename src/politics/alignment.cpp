@@ -172,7 +172,7 @@ to_index(Alignment alignment)
     case Alignment::LIBERAL: return 3;
     case Alignment::ELITE_LIBERAL: return 4;
     case Alignment::STALINIST: return 5;
-    default: -1;
+    default: return -1;
   }
 }
 
