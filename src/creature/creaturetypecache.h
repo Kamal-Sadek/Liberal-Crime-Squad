@@ -36,19 +36,27 @@
 class CreatureTypeCache
 {
 public:
+  using size_type = std::size_t;
+
+public:
   ~CreatureTypeCache();
 
-  /**
-   * Create a creature type cache from a string containing XML.
-   */
+  /** Create a creature type cache from a string containing XML. */
   void
   load_from_xml_string(std::string const& xml);
 
+  /** Get a creature type by internal identifier. */
   CreatureType*
   get_by_type(short type);
 
+  /** Get a creature type by idname. */
   CreatureType*
   get_by_idname(std::string const& idname);
+
+  /** Get the number of creature type definitions in the cache. */
+  size_type
+  size() const
+  { return creature_type_bag.size(); }
 
 private:
   using CreatureTypeOwningPtr = std::unique_ptr<CreatureType>;

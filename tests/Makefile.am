@@ -24,6 +24,7 @@ test_lcs_SOURCES = \
   test-lcs.cpp \
   common/test-interval.cpp \
   creature/test-creaturetype.cpp \
+  creature/test-creaturetypecache.cpp \
   politics/test-alignment.cpp
 
 test_lcs_CPPFLAGS = \
