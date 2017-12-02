@@ -114,16 +114,18 @@ WeaponsAndClips(std::string const& weapon_type, Interval weapon_count,
 
 CreatureType::
 CreatureType(std::string const& xml)
-: id_(next_id_++)
+: id_{next_id_++}
+, idname_{"UNKNOWN" + std::to_string(id_)}
+, type_name_{"UNDEFINED"}
 , attributes_(ATTNUM, Interval(1, 10))
-, gender_liberal_(GENDER_RANDOM)
+, gender_liberal_{GENDER_RANDOM}
 , skills_(SKILLNUM, Interval(0))
 {
   tinyxml2::XMLDocument doc;
   tinyxml2::XMLError err = doc.Parse(xml.c_str());
   if (err != tinyxml2::XML_SUCCESS)
   {
-    std::cerr << "error parsing creature.\n";
+    xmllog.log("error parsing CreatureType XML");
     return;
   }
 
@@ -133,12 +135,7 @@ CreatureType(std::string const& xml)
     if ((element != nullptr) && (element->Name() == "creaturetype"s))
     {
       auto attr_idname = element->Attribute("idname");
-      if (attr_idname == nullptr)
-      {
-        this->idname_ = "UNKNOWN"s + std::to_string(id_);
-        xmllog.log("Creature type " + std::to_string(id_)+" lacks idname.");
-      }
-      else
+      if (attr_idname != nullptr)
       {
         this->idname_ = attr_idname;
       }
@@ -277,12 +274,6 @@ CreatureType(std::string const& xml)
     }
   }
 
-  if (!len(this->type_name_))
-  {
-    this->type_name_ = "UNDEFINED";
-    xmllog.log("type_name not defined for " + this->idname_ + ".");
-  }
-
   // If no weapon type has been given then use WEAPON_NONE.
   if (!len(this->weapons_and_clips_))
     this->weapons_and_clips_.emplace_back("WEAPON_NONE", 1, "NONE", 0);
@@ -295,22 +286,13 @@ CreatureType(std::string const& xml)
 void CreatureType::
 make_creature(Creature& cr) const
 {
-   cr.type_idname=idname_;
-   cr.align = get_alignment();
-   cr.age=age_.roll();
-   cr.juice=juice_.roll();
-   cr.gender_liberal=cr.gender_conservative=roll_gender();
-   cr.infiltration=roll_infiltration();
-   cr.money=money_.roll();
-   strcpy(cr.name,get_encounter_name());
-   for(int i=0;i<SKILLNUM;i++) cr.set_skill(i,skills_[i].roll());
-   give_armor(cr);
-   give_weapon(cr);
+   for (int i=0; i<SKILLNUM; i++)
+     cr.set_skill(i, skills_[i].roll());
 }
 
 
 Alignment
-CreatureType::get_alignment() const
+CreatureType::roll_alignment() const
 {
    if (this->alignment_ == Alignment::PUBLIC_MOOD)
    {

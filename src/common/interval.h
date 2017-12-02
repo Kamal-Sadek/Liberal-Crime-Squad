@@ -24,6 +24,7 @@
 #ifndef LCS_COMMON_INTERVAL_H
 #define LCS_COMMON_INTERVAL_H
 
+#include <iosfwd>
 #include <string>
 
 
@@ -35,9 +36,20 @@
 class Interval
 {
 public:
-  Interval();
-  Interval(int value);
-  Interval(int low, int high);
+  constexpr
+  Interval()
+  : min(0), max(0)
+  { }
+
+  constexpr
+  Interval(int value)
+  : min(value), max(value)
+  { }
+
+  constexpr
+  Interval(int min, int max)
+  : min(min), max(max)
+  { }
 
   /**
    * Generates a random number unformly distributed on the range
@@ -59,10 +71,26 @@ public:
   static Interval
   from_string(std::string const& interval_string);
 
+  /** Get a string-marshallable representation of the Interval. */
+  std::string
+  to_string() const;
+
 public:
   int min;
   int max;
 };
 
+
+inline bool
+operator==(Interval const& lhs, Interval const& rhs)
+{ return lhs.min == rhs.min && lhs.max == rhs.max; }
+
+inline bool
+operator!=(Interval const& lhs, Interval const& rhs)
+{ return lhs.min != rhs.min || lhs.max != rhs.max; }
+
+inline std::ostream&
+operator<<(std::ostream& ostr, Interval const& rhs)
+{ return ostr << rhs.to_string(); }
 
 #endif /* LCS_COMMON_INTERVAL_H */

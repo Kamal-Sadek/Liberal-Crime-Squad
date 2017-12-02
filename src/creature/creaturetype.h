@@ -42,7 +42,7 @@ class CreatureType
   using Id = std::size_t;
 
   public:
-    // Creates a creature type from xml.
+    /** Construct a creature type from an XML string. */
     explicit CreatureType(std::string const& xmlstring);
 
     friend void makecreature(Creature &cr, short type);
@@ -52,28 +52,44 @@ class CreatureType
     void
     make_creature(Creature& cr) const;
 
+    /** Get the ID tag of this creature type. */
     std::string const&
     get_idname() const
     { return idname_; }
     
+    /** Get the internal ID of this creature type. */
     Id
     get_id() const
     { return id_; }
     
+    /** Get the internal type enum of this creature type. */
     short
     get_type() const
     { return type_; }
 
+    /** Get the age range rule. */
+    Interval
+    age_range() const
+    { return this->age_; }
+
+    int
+    roll_age() const
+    { return this->age_.roll(); }
+
+    /** Get the alignment rules for this creature type. */
     Alignment
     alignment() const
     { return this->alignment_; }
 
+    /** Roll an alignment based on the alignment rules for this creature type.  */
     Alignment
-    get_alignment() const;
+    roll_alignment() const;
 
+    /** Roll a gender based on the gender selection rules for this creature type. */
     int
     roll_gender() const;
 
+    /** Roll a number of allocatable attribute points. */
     int
     roll_available_attribute_points() const
     { return attribute_points_.roll(); }
@@ -100,6 +116,26 @@ class CreatureType
     void
     give_armor(Creature& cr) const;
 
+    /** Get the initial juice rule. */
+    Interval
+    juice() const
+    { return this->juice_; }
+
+    /** Roll starting juice based on the rules for this creature type. */
+    int
+    roll_juice() const
+    { return this->juice_.roll(); }
+
+    /** Get the initial money rule. */
+    Interval
+    money() const
+    { return this->money_; }
+
+    /** Roll starting money based on the rules for this creature type. */
+    int
+    roll_money() const
+    { return this->money_.roll(); }
+
   private:
     struct WeaponsAndClips
     {
@@ -119,11 +155,11 @@ class CreatureType
     Id                           id_;
     std::string                  idname_;
     short                        type_; // This is a CreatureTypes enum value.
+    std::string                  type_name_;
     WeaponAndClipSelections      weapons_and_clips_;
     ArmorTypeSelections          armortypes_;
-    std::string                  type_name_;
     std::string                  encounter_name_;
-    Interval                     age_{18, 37};
+    Interval                     age_{18, 57};
     Alignment                    alignment_{Alignment::PUBLIC_MOOD};
     Interval                     attribute_points_{40};
     AttributeRanges              attributes_;

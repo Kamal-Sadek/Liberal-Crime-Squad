@@ -24,6 +24,7 @@
 #include "common/interval.h"
 
 #include "includes.h"
+#include <sstream>
 #include <stdexcept>
 
 
@@ -44,27 +45,6 @@ valid(std::string const& v)
 }
 
 } // anonymous namespace
-
-
-Interval::
-Interval()
-: min(0)
-, max(0)
-{ }
-
-
-Interval::
-Interval(int value)
-: min(value)
-, max(value)
-{ }
-
-
-Interval::
-Interval(int low, int high)
-: min(low)
-, max(high)
-{ }
 
 
 Interval Interval::
@@ -95,6 +75,18 @@ from_string(std::string const& interval_string)
     throw std::invalid_argument("min  > max");
 
   return Interval(tmin, tmax);
+}
+
+
+std::string Interval::
+to_string() const
+{
+  std::ostringstream ostr;
+  if (this->min == this->max)
+    ostr << this->min;
+  else
+    ostr << this->min << "-" << this->max;
+  return ostr.str();
 }
 
 

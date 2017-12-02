@@ -100,3 +100,13 @@ SCENARIO("from_string() construction")
     }
   }
 }
+
+SCENARIO("Interval comparison operators")
+{
+  Interval lhs{15,35};
+  Interval rhs_match{15, 35};
+  Interval rhs_nomatch{-15, 35};
+
+  REQUIRE(lhs == rhs_match);
+  REQUIRE(lhs != rhs_nomatch);
+}

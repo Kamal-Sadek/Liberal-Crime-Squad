@@ -47,7 +47,18 @@ void makecreature(Creature& cr, short type)
    verifyworklocation(cr);
 
    const CreatureType* crtype = creature_type_cache.get_by_type(type);
+   cr.type_idname    = crtype->get_idname();
+   cr.align          = crtype->roll_alignment();
+   cr.age            = crtype->roll_age();
+   cr.gender_liberal = cr.gender_conservative = crtype->roll_gender();
+   cr.juice          = crtype->roll_juice();
+   cr.infiltration   = crtype->roll_infiltration();
+   cr.money          = crtype->roll_money();
+   strcpy(cr.name, crtype->get_encounter_name());
+   crtype->give_armor(cr);
+   crtype->give_weapon(cr);
    crtype->make_creature(cr);
+
    int available_attribute_points = crtype->roll_available_attribute_points();
    int attcap[ATTNUM];
    for (int i=0; i<ATTNUM; i++)
