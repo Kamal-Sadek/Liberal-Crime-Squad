@@ -1144,10 +1144,6 @@ int getarmortype(const string &idname);
 int getloottype(int id);
 /* transforms a loot type name into the index of that loot type in the global vector */
 int getloottype(const string &idname);
-/* transforms a CreatureTypes value into a pointer to that creature type */
-const CreatureType* getcreaturetype(short crtype);
-/* transforms a creature type name into a pointer to that creature type */
-const CreatureType* getcreaturetype(const std::string& crtype);
 
 /*
  equipment.cpp

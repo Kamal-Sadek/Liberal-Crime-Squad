@@ -66,6 +66,7 @@
 
 #include <includes.h>
 #include <ctime>
+#include "creature/creaturetypecache.h"
 #include "news/news.h"
 
 
@@ -90,12 +91,17 @@ vector<ClipType *> cliptype;
 vector<WeaponType *> weapontype;
 vector<ArmorType *> armortype;
 vector<LootType *> loottype;
-vector<CreatureType *> creaturetype;
 vector<AugmentType *> augmenttype;
 vector<VehicleType *> vehicletype;
+CreatureTypeCache creature_type_cache; // @TODO move me into pandora's box
 
 template<class Type>
-bool populate_from_xml(vector<Type*>& types,string file,Log& log);
+  bool
+  populate_from_xml(vector<Type*>& types,string file,Log& log);
+
+void
+populate_from_xml2(CreatureTypeCache& ctc, string const& file, Log& log);
+
 bool populate_masks_from_xml(vector<ArmorType*>& masks,string file,Log& log);
 
 long curcreatureid=0;
@@ -440,9 +446,10 @@ int main(int argc, char* argv[])
    xml_loaded_ok&=populate_from_xml(armortype,"armors.xml",xmllog);
    xml_loaded_ok&=populate_masks_from_xml(armortype,"masks.xml",xmllog);
    xml_loaded_ok&=populate_from_xml(loottype,"loot.xml",xmllog);
-   xml_loaded_ok&=populate_from_xml(creaturetype,"creatures.xml",xmllog);
    xml_loaded_ok&=populate_from_xml(augmenttype,"augmentations.xml",xmllog);
    if(!xml_loaded_ok) end_game(EXIT_FAILURE);
+
+   populate_from_xml2(creature_type_cache, "creatures.xml", xmllog);
 
    //addstr("Attempting to load saved game... ");
    //getkey();
@@ -473,7 +480,6 @@ void end_game(int err)
    delete_and_clear(cliptype);
    delete_and_clear(armortype);
    delete_and_clear(loottype);
-   delete_and_clear(creaturetype);
    delete_and_clear(augmenttype);
    delete_and_clear(vehicletype);
    delete_and_clear(vehicle);
@@ -489,31 +495,52 @@ void end_game(int err)
    exit(err);
 }
 
+
 template<class Type>
-bool populate_from_xml(vector<Type*>& types,string file,Log& log)
+  bool
+  populate_from_xml(vector<Type*>& types, string file, Log& log)
+  {
+     CMarkup xml;
+     if(!xml.Load(string(artdir)+file))
+     { // File is missing or not valid XML.
+        addstr("Failed to load "+file+"!",log);
+
+        getkey();
+
+        // Will cause abort here or else if file is missing all unrecognized types
+        // loaded from a saved game will be deleted. Also, you probably don't want
+        // to play with a whole category of things missing anyway. If the file
+        // does not have valid xml, then behaviour is kind of undefined so it's
+        // best to abort then too.
+        return false;
+     }
+
+     xml.FindElem();
+     xml.IntoElem();
+     while(xml.FindElem()) types.push_back(new Type(xml.GetSubDoc()));
+     return true;
+  }
+
+
+void
+populate_from_xml2(CreatureTypeCache& ctc, string const& file, Log& log)
 {
-   CMarkup xml;
-   if(!xml.Load(string(artdir)+file))
-   { // File is missing or not valid XML.
-      addstr("Failed to load "+file+"!",log);
+  std::ifstream istr(std::string(artdir) + file);
+  if (!istr)
+  {
+    addstr("Failed to load "+file+"!",log);
+    getkey();
+    return;
+  }
+  std::string xml((std::istreambuf_iterator<char>(istr)),
+                   std::istreambuf_iterator<char>());
 
-      getkey();
-
-      // Will cause abort here or else if file is missing all unrecognized types
-      // loaded from a saved game will be deleted. Also, you probably don't want
-      // to play with a whole category of things missing anyway. If the file
-      // does not have valid xml, then behaviour is kind of undefined so it's
-      // best to abort then too.
-      return false;
-   }
-
-   xml.FindElem();
-   xml.IntoElem();
-   while(xml.FindElem()) types.push_back(new Type(xml.GetSubDoc()));
-   return true;
+  ctc.load_from_xml_string(xml);
 }
 
-bool populate_masks_from_xml(vector<ArmorType*>& masks,string file,Log& log)
+
+bool
+populate_masks_from_xml(vector<ArmorType*>& masks, string file, Log& log)
 {
    CMarkup xml;
    if(!xml.Load(string(artdir)+file))

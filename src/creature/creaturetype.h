@@ -29,8 +29,14 @@
 #include "common/interval.h"
 #include "politics/alignment.h"
 
+
+/**
+ * A template for creating creatures.
+ */
 class CreatureType
 {
+  using Id = std::size_t;
+
   public:
     // Creates a creature type from xml.
     explicit CreatureType(std::string const& xmlstring);
@@ -46,7 +52,7 @@ class CreatureType
     get_idname() const
     { return idname_; }
     
-    long
+    Id
     get_id() const
     { return id_; }
     
@@ -59,6 +65,10 @@ class CreatureType
 
     int
     roll_gender() const;
+
+    int
+    roll_available_attribute_points() const
+    { return attribute_points_.roll(); }
     
     float
     roll_infiltration() const;
@@ -82,37 +92,40 @@ class CreatureType
     void
     give_armor(Creature& cr) const;
 
-    static int number_of_creaturetypes;
-
   private:
     struct WeaponsAndClips
     {
-      WeaponsAndClips(std::string const& weapon, int weapons, std::string const& clip, int clips);
-      WeaponsAndClips(CMarkup& xml, string const& owner);
+      WeaponsAndClips(std::string const& weapon, Interval weapons, std::string const& clip, Interval clips);
 
       std::string  weapontype;
       Interval     number_weapons;
       std::string  cliptype;
       Interval     number_clips;
     };
+    using WeaponAndClipSelections = std::vector<WeaponsAndClips>;
+    using ArmorTypeSelections     = std::vector<std::string>;
+    using AttributeRanges         = std::vector<Interval>;
+    using SkillRanges             = std::vector<Interval>;
 
   private:
+    Id                           id_;
     std::string                  idname_;
-    long                         id_;
     short                        type_; // This is a CreatureTypes enum value.
-    std::vector<WeaponsAndClips> weapons_and_clips_;
-    std::vector<std::string>     armortypes_;
+    WeaponAndClipSelections      weapons_and_clips_;
+    ArmorTypeSelections          armortypes_;
     std::string                  type_name_;
     std::string                  encounter_name_;
     Interval                     age_{18, 37};
     Alignment                    alignment_;
     Interval                     attribute_points_{40};
-    std::vector<Interval>        attributes_;
+    AttributeRanges              attributes_;
     int                          gender_liberal_;
     Interval                     infiltration_{0};
     Interval                     juice_{0};
     Interval                     money_{20, 40};
-    Interval                     skills_[SKILLNUM];
+    SkillRanges                  skills_;
+
+    static Id next_id_;
 };
 
 #endif //CREATURE_TYPE_H

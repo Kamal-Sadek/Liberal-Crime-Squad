@@ -1,4 +1,7 @@
 #include <externs.h>
+#include "creature/creaturetypecache.h"
+
+extern CreatureTypeCache creature_type_cache;
 
 /* Age macros for characters */
 #define AGE_DOGYEARS    2+LCSrandom(5)   /* for the animals */
@@ -28,7 +31,7 @@
    }
 
 /* rolls up a creature's stats and equipment */
-void makecreature(Creature &cr,short type)
+void makecreature(Creature& cr, short type)
 {
    cr.drop_weapons_and_clips(NULL); // Get rid of any old equipment from old encounters.
    cr.strip(NULL);                  //
@@ -42,14 +45,14 @@ void makecreature(Creature &cr,short type)
    cr.worklocation=cursite;
    verifyworklocation(cr);
 
-   const CreatureType* crtype=getcreaturetype(type);
+   const CreatureType* crtype = creature_type_cache.get_by_type(type);
    crtype->make_creature(cr);
-   int attnum=crtype->attribute_points_.roll();
+   int available_attribute_points = crtype->roll_available_attribute_points();
    int attcap[ATTNUM];
-   for(int i=0;i<ATTNUM;i++)
+   for (int i=0; i<ATTNUM; i++)
    {
-      cr.set_attribute(i,crtype->attributes_[i].min);
-      attcap[i]=crtype->attributes_[i].max;
+      cr.set_attribute(i, crtype->attributes_[i].min);
+      attcap[i] = crtype->attributes_[i].max;
    }
 
    switch(type)
@@ -525,11 +528,11 @@ void makecreature(Creature &cr,short type)
       case CREATURE_THIEF:
          switch(LCSrandom(5))
          {
-            case 0:strcpy(cr.name,getcreaturetype(CREATURE_SOCIALITE)->get_encounter_name());break;
-            case 1:strcpy(cr.name,getcreaturetype(CREATURE_CLERK)->get_encounter_name());break;
-            case 2:strcpy(cr.name,getcreaturetype(CREATURE_OFFICEWORKER)->get_encounter_name());break;
-            case 3:strcpy(cr.name,getcreaturetype(CREATURE_CRITIC_ART)->get_encounter_name());break;
-            case 4:strcpy(cr.name,getcreaturetype(CREATURE_CRITIC_MUSIC)->get_encounter_name());break;
+            case 0:strcpy(cr.name, creature_type_cache.get_by_type(CREATURE_SOCIALITE)->get_encounter_name()); break;
+            case 1:strcpy(cr.name, creature_type_cache.get_by_type(CREATURE_CLERK)->get_encounter_name()); break;
+            case 2:strcpy(cr.name, creature_type_cache.get_by_type(CREATURE_OFFICEWORKER)->get_encounter_name()); break;
+            case 3:strcpy(cr.name, creature_type_cache.get_by_type(CREATURE_CRITIC_ART)->get_encounter_name()); break;
+            case 4:strcpy(cr.name, creature_type_cache.get_by_type(CREATURE_CRITIC_MUSIC)->get_encounter_name()); break;
          }
 
          if(!LCSrandom(10))cr.crimes_suspected[(LCSrandom(2)?LAWFLAG_BREAKING:LAWFLAG_THEFT)]++;
@@ -610,23 +613,28 @@ void makecreature(Creature &cr,short type)
    }
 
    vector<int> possible;
-   for(int a=0;a<ATTNUM;a++)
+   for(int a=0; a<ATTNUM; a++)
    {
-      attnum-=min(4,cr.get_attribute(a,false));
+      available_attribute_points -= min(4, cr.get_attribute(a, false));
       possible.push_back(a);
    }
-   while(attnum>0&&len(possible))
+   while (available_attribute_points > 0 && len(possible))
    {
-      int i=LCSrandom(len(possible));
-      int a=possible[i];
-      if(a==ATTRIBUTE_WISDOM&&cr.align==Alignment::LIBERAL&&LCSrandom(4)) a=ATTRIBUTE_HEART;
-      if(a==ATTRIBUTE_HEART&&cr.align==Alignment::CONSERVATIVE&&LCSrandom(4)) a=ATTRIBUTE_WISDOM;
-      if(cr.get_attribute(a,false)<attcap[a])
+      int i = LCSrandom(len(possible));
+      int a = possible[i];
+      if (a == ATTRIBUTE_WISDOM && cr.align == Alignment::LIBERAL && LCSrandom(4))
+        a = ATTRIBUTE_HEART;
+      if (a == ATTRIBUTE_HEART && cr.align == Alignment::CONSERVATIVE && LCSrandom(4))
+        a = ATTRIBUTE_WISDOM;
+      if (cr.get_attribute(a, false) < attcap[a])
       {
-         cr.adjust_attribute(a,+1);
-         attnum--;
+         cr.adjust_attribute(a, +1);
+         available_attribute_points--;
       }
-      else possible.erase(possible.begin()+i);
+      else
+      {
+        possible.erase(possible.begin()+i);
+      }
    }
    if(cr.align==Alignment::LIBERAL) cr.infiltration=0.15f+(LCSrandom(10)-5)*0.01f;
    else if(cr.align==Alignment::MODERATE) cr.infiltration=0.25f+(LCSrandom(10)-5)*0.01f;

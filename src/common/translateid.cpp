@@ -118,16 +118,3 @@ int getloottype(const string &idname)
    return -1;
 }
 
-/* transforms a CreatureTypes value into a pointer to that creature type */
-const CreatureType* getcreaturetype(short crtype)
-{
-   for(int i=0;i<len(creaturetype);i++) if(crtype==creaturetype[i]->get_type()) return creaturetype[i];
-   return NULL;
-}
-
-/* transforms a creature type name into a pointer to that creature type  */
-const CreatureType* getcreaturetype(const std::string& crtype)
-{
-   for(int i=0;i<len(creaturetype);i++) if(crtype==creaturetype[i]->get_idname()) return creaturetype[i];
-   return NULL;
-}

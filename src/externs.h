@@ -157,7 +157,6 @@ extern vector<ClipType *> cliptype;
 extern vector<WeaponType *> weapontype;
 extern vector<ArmorType *> armortype;
 extern vector<LootType *> loottype;
-extern vector<CreatureType *> creaturetype;
 extern vector<AugmentType *> augmenttype;
 
 extern vector<VehicleType *> vehicletype;
