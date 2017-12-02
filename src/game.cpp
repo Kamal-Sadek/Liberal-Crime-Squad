@@ -64,199 +64,42 @@
 //somebody claims saving works only 3/4 of the time (no confirmation)
 //somebody claims squads don't move (sounds like older version bug, they haven't told me version)
 
-#include <includes.h>
+#include <externs.h>
 #include <ctime>
 #include "creature/creaturetypecache.h"
 #include "news/news.h"
 
 
-Log gamelog; //The gamelog.
-Log xmllog; // Log for xml errors or bad values.
-
-CursesMoviest movie;
-unsigned char bigletters[27][5][7][4];
-unsigned char newstops[6][80][5][4];
-unsigned char newspic[20][78][18][4];
-
-MusicClass music;
-
-char homedir[MAX_PATH_SIZE];
-char artdir[MAX_PATH_SIZE];
-
-vector<configSiteMap *> sitemaps; // stores site map info read in from config file
-
-bool multipleCityMode;
-
-vector<ClipType *> cliptype;
-vector<WeaponType *> weapontype;
-vector<ArmorType *> armortype;
-vector<LootType *> loottype;
-vector<AugmentType *> augmenttype;
-vector<VehicleType *> vehicletype;
-CreatureTypeCache creature_type_cache; // @TODO move me into pandora's box
-
 template<class Type>
   bool
   populate_from_xml(vector<Type*>& types,string file,Log& log);
 
+extern CreatureTypeCache creature_type_cache; // @TODO remove me
+
 void
 populate_from_xml2(CreatureTypeCache& ctc, string const& file, Log& log);
 
-bool populate_masks_from_xml(vector<ArmorType*>& masks,string file,Log& log);
+bool
+populate_masks_from_xml(vector<ArmorType*>& masks,string file,Log& log);
 
-long curcreatureid=0;
-vector<Item *> groundloot;
-vector<Location *> location;
-
-vector<Vehicle *> vehicle;
-char showcarprefs=1;
-
-int oldMapMode=0; // -1 if we're using the old map generation functions.
-
-siteblockst levelmap[MAPX][MAPY][MAPZ];
-
-chaseseqst chaseseq;
-
-char slogan[SLOGAN_LEN];
-
-vector<Creature *> pool;
-
-vector<squadst *> squad;
-squadst *activesquad=NULL;
-long cursquadid=0;
-
-char disbanding=0;
-int disbandtime=0;
-char cantseereason;
-
-short activesortingchoice[SORTINGCHOICENUM];
-
-Creature encounter[ENCMAX];
-
-short mode=GAMEMODE_TITLE;
-
-short offended_corps=0;
-short offended_cia=0;
-short offended_amradio=0;
-short offended_cablenews=0;
-short offended_firemen=0;
-int police_heat=0;
-unsigned long attorneyseed[RNG_SIZE];
-int selectedsiege=-1;
-char lcityname[CITY_NAMELEN];
-char newscherrybusted=0;
-
-int month=1;
-
-#ifdef THEFUTURE
-int year=2100;
-#else
-int year=2009;
-#endif
-int amendnum=28;
-
-bool termlimits=false;
-bool deagle=false;
-bool m249=false;
-
-UniqueCreatures uniqueCreatures;
-
-short attitude[VIEWNUM];
-
-short public_interest[VIEWNUM];
-short background_liberal_influence[VIEWNUM];
-
-Alignment law[LAWNUM];
-
-Alignment house[HOUSENUM];
-Alignment senate[SENATENUM];
-Alignment court[COURTNUM];
-char courtname[COURTNUM][POLITICIAN_NAMELEN];
-
-Alignment exec[EXECNUM];
-short execterm=1;
-char execname[EXECNUM][POLITICIAN_NAMELEN];
-short presparty=CONSERVATIVE_PARTY;
-char oldPresidentName[POLITICIAN_NAMELEN];
-
-int stat_recruits=0;
-int stat_kidnappings=0;
-int stat_dead=0;
-int stat_kills=0;
-int stat_buys=0;
-int stat_burns=0;
-
-int ustat_recruits=0;
-int ustat_kidnappings=0;
-int ustat_dead=0;
-int ustat_kills=0;
-int ustat_funds=0;
-int ustat_spent=0;
-int ustat_buys=0;
-int ustat_burns=0;
-
-int locx;
-int locy;
-int locz;
-
-short sitetype;
-short sitealienate;
-short sitealarm;
-short sitealarmtimer;
-short postalarmtimer;
-short siteonfire;
-int sitecrime;
-short cursite;
-bool mapshowing=false;
-
-bool encounterwarnings=false;
-
-char foughtthisround=0;
-
-short interface_pgup='[';
-short interface_pgdn=']';
+void
+end_game();
 
 bool autosave;
-string savefile_name;
-
-int day=1;
-
-class Ledger ledger;
-
-short party_status=-1;
-
-short wincondition=WINCONDITION_ELITE;
-short fieldskillrate=FIELDSKILLRATE_FAST;
-
-bool notermlimit;           //These determine if ELAs can take place --kviiri
-bool nocourtpurge;
-bool stalinmode;
-
-char endgamestate=ENDGAME_NONE;
-char ccsexposure=CCSEXPOSURE_NONE;
-char ccs_kills=0;
-int ccs_siege_kills=0;
-int ccs_boss_kills=0;
-
-vector<datest *> date;
-vector<recruitst *> recruit;
-
-vector<newsstoryst *> newsstory;
-newsstoryst *sitestory=NULL;
-
-#define SCORENUM 5
-highscorest score[SCORENUM];
-int yourscore=-1;
 
 #ifdef _WIN32
 bool fixcleartype=false;
 #endif
 
-int main(int argc, char* argv[])
+int
+main(int argc, char* argv[])
 {
    init_console(); // do this FIRST
    //start curses
    initscr();
+
+   // register cleanup
+   atexit(end_game);
 
    gamelog.initialize(GAMELOG_FILEPATH, OVERWRITE_GAMELOG, NEWLINEMODE_GAMELOG); //Initialize the gamelog (and also initialize artdir and homedir)
 
@@ -435,7 +278,6 @@ int main(int argc, char* argv[])
       generate_name(execname[e],GENDER_WHITEMALEPATRIARCH);
    }
 
-   initOtherRNG(attorneyseed);
    strcpy(lcityname,cityname());
 
    xmllog.initialize("xmllog",true,1);
@@ -447,7 +289,7 @@ int main(int argc, char* argv[])
    xml_loaded_ok&=populate_masks_from_xml(armortype,"masks.xml",xmllog);
    xml_loaded_ok&=populate_from_xml(loottype,"loot.xml",xmllog);
    xml_loaded_ok&=populate_from_xml(augmenttype,"augmentations.xml",xmllog);
-   if(!xml_loaded_ok) end_game(EXIT_FAILURE);
+   if(!xml_loaded_ok) exit(EXIT_FAILURE);
 
    populate_from_xml2(creature_type_cache, "creatures.xml", xmllog);
 
@@ -458,17 +300,14 @@ int main(int argc, char* argv[])
    //getkey();
 
    clear();
-
    mode_title();
-
-   //deinitialize curses
-   end_game();
 
    return EXIT_SUCCESS;
 }
 
 /* Free memory and exit the game */
-void end_game(int err)
+void
+end_game()
 {
    #ifdef _WIN32
    end_cleartype_fix(); // won't do anything unless fixcleartype is true
@@ -492,7 +331,6 @@ void end_game(int err)
    music.quit(); // shut down music
 
    endwin();
-   exit(err);
 }
 
 

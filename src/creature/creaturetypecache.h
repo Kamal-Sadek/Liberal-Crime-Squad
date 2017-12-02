@@ -24,12 +24,10 @@
 #ifndef LCS_CREATURETYPECACHE_H
 #define LCS_CREATURETYPECACHE_H
 
+#include "creature/creaturetype.h"
 #include <memory>
 #include <string>
 #include <vector>
-
-
-class CreatureType;
 
 
 /**
@@ -38,6 +36,8 @@ class CreatureType;
 class CreatureTypeCache
 {
 public:
+  ~CreatureTypeCache();
+
   /**
    * Create a creature type cache from a string containing XML.
    */

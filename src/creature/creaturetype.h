@@ -25,9 +25,13 @@
 #ifndef CREATURE_TYPE_H
 #define CREATURE_TYPE_H
 
-#include "includes.h"
 #include "common/interval.h"
 #include "politics/alignment.h"
+#include <string>
+#include <vector>
+
+
+class Creature;
 
 
 /**
@@ -59,6 +63,10 @@ class CreatureType
     short
     get_type() const
     { return type_; }
+
+    Alignment
+    alignment() const
+    { return this->alignment_; }
 
     Alignment
     get_alignment() const;
@@ -116,7 +124,7 @@ class CreatureType
     std::string                  type_name_;
     std::string                  encounter_name_;
     Interval                     age_{18, 37};
-    Alignment                    alignment_;
+    Alignment                    alignment_{Alignment::PUBLIC_MOOD};
     Interval                     attribute_points_{40};
     AttributeRanges              attributes_;
     int                          gender_liberal_;

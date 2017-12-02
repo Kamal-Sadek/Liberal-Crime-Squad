@@ -30,6 +30,8 @@
 #include "politics/amendments.h"
 #include <externs.h>
 #include "politics/politics.h"
+#include <stdlib.h>
+
 
 /*
     TODO: I'm not sure if anything in here should be logged. Perhaps only the notification
@@ -695,7 +697,7 @@ reaganify(bool canseethings)
       }
       reset(savefile_name);
       viewhighscores(MUSIC_REAGANIFIED);
-      end_game();
+      exit(0);
    }
    else
    {
@@ -909,7 +911,7 @@ stalinize(bool canseethings)
       }
       reset(savefile_name);
       viewhighscores(MUSIC_STALINIZED);
-      end_game();
+      exit(0);
    }
    else
    {

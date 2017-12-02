@@ -27,6 +27,11 @@
 #include "tinyxml2.h"
 
 
+CreatureTypeCache::
+~CreatureTypeCache()
+{ }
+
+
 void CreatureTypeCache::
 load_from_xml_string(std::string const& xml)
 {
@@ -40,7 +45,7 @@ load_from_xml_string(std::string const& xml)
   for (auto node = doc.FirstChild(); node; node = node->NextSibling())
   {
     auto element = node->ToElement();
-    if ((element != nullptr) && (element->Name() == "creatures"s))
+    if ((element != nullptr) && (element->Name() == std::string("creatures")))
     {
       for (auto def = element->FirstChildElement(); def; def = def->NextSiblingElement())
       {

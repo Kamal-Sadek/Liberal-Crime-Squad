@@ -27,6 +27,8 @@ repository.
 #include <externs.h>
 #include "tinydir.h"
 
+char homedir[MAX_PATH_SIZE];
+
 const char* arttest="newspic.cpc";
 bool initialized=false;
 const char *art_search_paths[]=

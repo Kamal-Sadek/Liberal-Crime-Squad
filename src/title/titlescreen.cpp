@@ -59,6 +59,8 @@
 // it out for yourself.
 
 #include <externs.h>
+#include <stdlib.h>
+
 
 char str[100];
 
@@ -597,7 +599,7 @@ void mode_title()
       else strcpy(str,"Press M to turn on some Music. Press H to view your Liberal High Score.");
       move(22,39-((len(str)-1)>>1));
       addstr(str);
-      if(c==ESC||c=='x') end_game();
+      if(c==ESC||c=='x') exit(0);
 
       c=getkey();
    } while(c=='m'||c=='h'||c=='x'||c==ESC);
@@ -691,7 +693,7 @@ void mode_title()
 
          }
          else if(c=='v') to_delete = !to_delete;
-         if(c==ESC||c=='x') end_game();
+         if(c==ESC||c=='x') exit(0);
       }
 
       load(savefile_name);

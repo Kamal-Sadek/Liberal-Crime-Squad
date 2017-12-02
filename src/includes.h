@@ -406,7 +406,6 @@ public:
 #include "items/loot.h"
 #include "items/money.h"
 #include "creature/creature.h"
-#include "creature/creaturetype.h"
 #include "creature/augmentation.h"
 #include "creature/augmenttype.h"
 #include "vehicle/vehicletype.h"
@@ -890,10 +889,6 @@ enum ActiveSortingChoices
    Declarations for every function grouped by folder and file.
    Created by jonathansfox.
 */
-
-/* end the game and clean up */
-void end_game(int err=EXIT_SUCCESS);
-
 
 /*******************************************************************************
 *

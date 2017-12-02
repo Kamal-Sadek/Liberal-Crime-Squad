@@ -23,6 +23,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+#include "creature/creaturetype.h"
+
 #include <externs.h>
 #include "politics/politics.h"
 #include "tinyxml2.h"

@@ -26,6 +26,7 @@
 
 #include <externs.h>
 #include "creature/creaturetypecache.h"
+#include "creature/creaturetype.h"
 #include "politics/politics.h"
 
 

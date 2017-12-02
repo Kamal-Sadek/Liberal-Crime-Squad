@@ -23,6 +23,7 @@ check_PROGRAMS = test-lcs
 test_lcs_SOURCES = \
   test-lcs.cpp \
   common/test-interval.cpp \
+  creature/test-creaturetype.cpp \
   politics/test-alignment.cpp
 
 test_lcs_CPPFLAGS = \

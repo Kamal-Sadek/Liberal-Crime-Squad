@@ -1,5 +1,6 @@
 #include <externs.h>
 #include "creature/creaturetypecache.h"
+#include "creature/creaturetype.h"
 
 extern CreatureTypeCache creature_type_cache;
 
