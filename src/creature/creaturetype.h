@@ -26,6 +26,7 @@
 #define CREATURE_TYPE_H
 
 #include "common/interval.h"
+#include <memory>
 #include "politics/alignment.h"
 #include <string>
 #include <vector>
@@ -36,14 +37,25 @@ class Creature;
 
 /**
  * A template for creating creatures.
+ *
+ * This class has separate construction and initialization so that it's possible
+ * to:
+ *  (1) Initialize from multiple textual formats, such as XML, JSON, or simple
+ *      text files of some description.
+ *  (2) Merge second and third definitions, so that a game mod could adjust some
+ *      creature type parameters and leave others as vanilla.
  */
 class CreatureType
 {
   using Id = std::size_t;
 
   public:
-    /** Construct a creature type from an XML string. */
-    explicit CreatureType(std::string const& xmlstring);
+    /** Construct a default-initialized CreatureType. */
+    CreatureType();
+
+    /** Initialize a CreatureType from an XML string. */
+    void
+    initialize_from_xml(std::string const& xml);
 
     friend void makecreature(Creature &cr, short type);
 

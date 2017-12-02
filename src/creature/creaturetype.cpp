@@ -113,13 +113,18 @@ WeaponsAndClips(std::string const& weapon_type, Interval weapon_count,
 
 
 CreatureType::
-CreatureType(std::string const& xml)
+CreatureType()
 : id_{next_id_++}
 , idname_{"UNKNOWN" + std::to_string(id_)}
 , type_name_{"UNDEFINED"}
 , attributes_(ATTNUM, Interval(1, 10))
 , gender_liberal_{GENDER_RANDOM}
 , skills_(SKILLNUM, Interval(0))
+{ }
+
+
+void CreatureType::
+initialize_from_xml(std::string const& xml)
 {
   tinyxml2::XMLDocument doc;
   tinyxml2::XMLError err = doc.Parse(xml.c_str());
