@@ -51,7 +51,7 @@ load_from_xml_string(std::string const& xml)
       {
         tinyxml2::XMLPrinter printer;
         def->Accept( &printer );
-        auto ct = std::make_unique<CreatureType>();
+        auto ct = CreatureTypeOwningPtr(new CreatureType);
         ct->initialize_from_xml(printer.CStr());
         this->creature_type_bag.push_back(std::move(ct));
       }

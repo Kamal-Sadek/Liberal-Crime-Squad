@@ -33,6 +33,8 @@
 namespace
 {
 
+const std::string XML_CREATURE_TYPE_ELEMENT{"creaturetype"};
+
 // Assign a value to an Interval from a string or log error.
 static void
 assign_interval(Interval& i, std::string const& value,
@@ -137,7 +139,7 @@ initialize_from_xml(std::string const& xml)
   for (auto node = doc.FirstChild(); node; node = node->NextSibling())
   {
     auto element = node->ToElement();
-    if ((element != nullptr) && (element->Name() == "creaturetype"s))
+    if ((element != nullptr) && (element->Name() == XML_CREATURE_TYPE_ELEMENT))
     {
       auto attr_idname = element->Attribute("idname");
       if (attr_idname != nullptr)
