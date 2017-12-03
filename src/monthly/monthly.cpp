@@ -68,6 +68,7 @@
 #include "monthly/justice.h"
 #include "monthly/sleepers.h"
 #include "politics/politics.h"
+#include <stdlib.h>
 
 
 /* rename various buildings according to the new laws */
@@ -428,7 +429,7 @@ passmonth(char& clearformess, bool canseethings)
       savehighscore(END_WON);
       reset(savefile_name);
       viewhighscores();
-      end_game();
+      exit(0);
    }
 
    //CONTROL LONG DISBANDS
@@ -464,7 +465,7 @@ passmonth(char& clearformess, bool canseethings)
       savehighscore(END_DISBANDLOSS);
       reset(savefile_name);
       viewhighscores();
-      end_game();
+      exit(0);
    }
 
    //UPDATE THE WORLD IN CASE THE LAWS HAVE CHANGED

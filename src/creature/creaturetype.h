@@ -25,15 +25,37 @@
 #ifndef CREATURE_TYPE_H
 #define CREATURE_TYPE_H
 
-#include "includes.h"
 #include "common/interval.h"
+#include <memory>
 #include "politics/alignment.h"
+#include <string>
+#include <vector>
 
+
+class Creature;
+
+
+/**
+ * A template for creating creatures.
+ *
+ * This class has separate construction and initialization so that it's possible
+ * to:
+ *  (1) Initialize from multiple textual formats, such as XML, JSON, or simple
+ *      text files of some description.
+ *  (2) Merge second and third definitions, so that a game mod could adjust some
+ *      creature type parameters and leave others as vanilla.
+ */
 class CreatureType
 {
+  using Id = std::size_t;
+
   public:
-    // Creates a creature type from xml.
-    explicit CreatureType(std::string const& xmlstring);
+    /** Construct a default-initialized CreatureType. */
+    CreatureType();
+
+    /** Initialize a CreatureType from an XML string. */
+    void
+    initialize_from_xml(std::string const& xml);
 
     friend void makecreature(Creature &cr, short type);
 
@@ -42,23 +64,47 @@ class CreatureType
     void
     make_creature(Creature& cr) const;
 
+    /** Get the ID tag of this creature type. */
     std::string const&
     get_idname() const
     { return idname_; }
     
-    long
+    /** Get the internal ID of this creature type. */
+    Id
     get_id() const
     { return id_; }
     
+    /** Get the internal type enum of this creature type. */
     short
     get_type() const
     { return type_; }
 
-    Alignment
-    get_alignment() const;
+    /** Get the age range rule. */
+    Interval
+    age_range() const
+    { return this->age_; }
 
     int
+    roll_age() const
+    { return this->age_.roll(); }
+
+    /** Get the alignment rules for this creature type. */
+    Alignment
+    alignment() const
+    { return this->alignment_; }
+
+    /** Roll an alignment based on the alignment rules for this creature type.  */
+    Alignment
+    roll_alignment() const;
+
+    /** Roll a gender based on the gender selection rules for this creature type. */
+    int
     roll_gender() const;
+
+    /** Roll a number of allocatable attribute points. */
+    int
+    roll_available_attribute_points() const
+    { return attribute_points_.roll(); }
     
     float
     roll_infiltration() const;
@@ -82,37 +128,60 @@ class CreatureType
     void
     give_armor(Creature& cr) const;
 
-    static int number_of_creaturetypes;
+    /** Get the initial juice rule. */
+    Interval
+    juice() const
+    { return this->juice_; }
+
+    /** Roll starting juice based on the rules for this creature type. */
+    int
+    roll_juice() const
+    { return this->juice_.roll(); }
+
+    /** Get the initial money rule. */
+    Interval
+    money() const
+    { return this->money_; }
+
+    /** Roll starting money based on the rules for this creature type. */
+    int
+    roll_money() const
+    { return this->money_.roll(); }
 
   private:
     struct WeaponsAndClips
     {
-      WeaponsAndClips(std::string const& weapon, int weapons, std::string const& clip, int clips);
-      WeaponsAndClips(CMarkup& xml, string const& owner);
+      WeaponsAndClips(std::string const& weapon, Interval weapons, std::string const& clip, Interval clips);
 
       std::string  weapontype;
       Interval     number_weapons;
       std::string  cliptype;
       Interval     number_clips;
     };
+    using WeaponAndClipSelections = std::vector<WeaponsAndClips>;
+    using ArmorTypeSelections     = std::vector<std::string>;
+    using AttributeRanges         = std::vector<Interval>;
+    using SkillRanges             = std::vector<Interval>;
 
   private:
+    Id                           id_;
     std::string                  idname_;
-    long                         id_;
     short                        type_; // This is a CreatureTypes enum value.
-    std::vector<WeaponsAndClips> weapons_and_clips_;
-    std::vector<std::string>     armortypes_;
     std::string                  type_name_;
+    WeaponAndClipSelections      weapons_and_clips_;
+    ArmorTypeSelections          armortypes_;
     std::string                  encounter_name_;
-    Interval                     age_{18, 37};
-    Alignment                    alignment_;
+    Interval                     age_{18, 57};
+    Alignment                    alignment_{Alignment::PUBLIC_MOOD};
     Interval                     attribute_points_{40};
-    std::vector<Interval>        attributes_;
+    AttributeRanges              attributes_;
     int                          gender_liberal_;
     Interval                     infiltration_{0};
     Interval                     juice_{0};
     Interval                     money_{20, 40};
-    Interval                     skills_[SKILLNUM];
+    SkillRanges                  skills_;
+
+    static Id next_id_;
 };
 
 #endif //CREATURE_TYPE_H

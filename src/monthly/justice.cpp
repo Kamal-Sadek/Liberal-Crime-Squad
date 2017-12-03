@@ -1105,11 +1105,7 @@ trial(Creature &g)
    addstr("How will you conduct the defense?");
 
    char attorneyname[200];
-   unsigned long oldseed[RNG_SIZE];
-   copyRNG(oldseed,seed);
-   copyRNG(seed,attorneyseed);
    generate_name(attorneyname);
-   copyRNG(seed,oldseed);
 
    y+=4;
    move(y++,1);

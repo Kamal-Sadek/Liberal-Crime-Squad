@@ -28,6 +28,8 @@
 #include <algorithm>
 #include <externs.h>
 #include "politics/politics.h"
+#include <stdlib.h>
+
 
 /* common - test for possible game over */
 char endcheck(char cause)
@@ -66,7 +68,7 @@ char endcheck(char cause)
       // You just lost the game!
       reset(savefile_name);
       viewhighscores();
-      end_game();
+      exit(0);
       return true;
    }
 

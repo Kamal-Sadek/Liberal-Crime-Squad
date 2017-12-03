@@ -25,6 +25,8 @@
  */
 
 #include <externs.h>
+#include "creature/creaturetypecache.h"
+#include "creature/creaturetype.h"
 #include "politics/politics.h"
 
 
@@ -1742,6 +1744,7 @@ get_weapon_string(int subtype) const
 std::string Creature::
 get_type_name() const
 {
-  return getcreaturetype(type_idname)->get_type_name();
+  extern CreatureTypeCache creature_type_cache;
+  return creature_type_cache.get_by_idname(type_idname)->get_type_name();
 }
 

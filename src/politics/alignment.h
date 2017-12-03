@@ -24,6 +24,7 @@
 #define ALIGNMENT_H_INCLUDED
 
 #include <initializer_list>
+#include <iosfwd>
 #include <string>
 
 
@@ -124,5 +125,10 @@ from_string(std::string const& text, Alignment& alignment);
  */
 std::string
 to_string(Alignment alignment);
+
+
+inline std::ostream&
+operator<<(std::ostream& ostr, Alignment rhs)
+{ return ostr << to_string(rhs); }
 
 #endif //ALIGNMENT_H_INCLUDED
