@@ -33,11 +33,13 @@ libcrimesquad_la_SOURCES = \
  common/interval.h             common/interval.cpp \
  common/misc.cpp common/help.cpp creature/augmentation.h creature/creature.h\
  configfile.h                  configfile.cpp \
+ creature/attributes.h \
  creature/creature.cpp title/titlescreen.cpp\
  creature/creaturenames.cpp \
  creature/creaturetypecache.h  creature/creaturetypecache.cpp \
  creature/creaturetype.h creature/creaturetype.cpp common/stringconversion.cpp \
  creature/creaturetypes.cpp \
+ creature/skill.h              creature/skill.cpp \
  cursesgraphics.cpp lcsio.h cursesmovie.h compat.h cursesgraphics.h includes.h\
  daily/date.h                  daily/date.cpp \
  daily/interrogation.cpp\

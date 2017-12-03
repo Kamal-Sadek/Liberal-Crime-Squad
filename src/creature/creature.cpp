@@ -27,124 +27,82 @@
 #include <externs.h>
 #include "creature/creaturetypecache.h"
 #include "creature/creaturetype.h"
+#include "creature/skill.h"
 #include "politics/politics.h"
 
 
-Skill::Skill(const std::string& inputXml)
+namespace
 {
-   CMarkup xml;
-   xml.SetDoc(inputXml);
-   xml.FindElem();
-   xml.IntoElem();
 
-   while(xml.FindElem())
+/**
+ * Roll against a skill.
+ *
+ * This die rolling system (and the associated difficulty ratings) is adapted
+ * from EABA, which uses a system of rolling a number of six-sided dice equal to
+ * the ability score divided by three. The top three dice are used, the rest
+ * discarded. Finally, any additional points that didn't divide evenly into
+ * creating a die contribute to odd-shaped dice that don't exist in the real
+ * world. This system gives diminishing returns for high skill levels.  EABA
+ * actually just adds the remainder to the die total, but there are some
+ * statistical problems with that system.
+ *
+ * It is not possible to roll above an 18 using this system.
+ *
+ * It is possible to roll below a 3, if you don't have at
+ * least 9 skill.
+ */
+int roll_check(int skill)
+{
+   int dice    = skill/3;
+   int total   = 0;
+   int roll[3] = {0,0,0};
+
+   for(int i=0;i<dice+1;i++)
    {
-      std::string tag = xml.GetTagName();
+      int newroll = 0;
 
-      if (tag == "associated_attribute")
-         associated_attribute = atoi(xml.GetData());
-      else if (tag == "skill")
-         skill = atoi(xml.GetData());
-      else if (tag == "value")
-         value = min(atoi(xml.GetData()),MAXATTRIBUTE);
+      // Roll d6 for every three skill
+      if(i<dice)
+         newroll = LCSrandom(6)+1;
+      // Partial dice for the remainder -- d3 for +1, d5 for +2
+      else if(skill%3)
+         newroll = LCSrandom((skill%3)*2+1)+1;
+
+      // Keep the top three dice
+      if(i<3)
+         roll[i]=newroll;
+      else
+         for(int j=0;j<3;j++)
+            if(newroll>roll[j])
+            {
+               int temp=roll[j];
+               roll[j]=newroll;
+               newroll=temp;
+            }
    }
+
+   for(int i=0;i<3;i++)
+      total += roll[i];
+
+   return total;
 }
 
-string Skill::showXml() const
+Weapon&
+weapon_none()
 {
-   CMarkup xml;
-   xml.AddElem("skill");
-   xml.IntoElem();
-   xml.AddElem("associated_attribute", associated_attribute);
-   xml.AddElem("skill", skill);
-   xml.AddElem("value", min(value,MAXATTRIBUTE));
-
-   return xml.GetDoc();
+   static Weapon unarmed(*weapontype[getweapontype("WEAPON_NONE")]);
+   return unarmed;
 }
 
-CreatureAttribute Skill::get_associated_attribute(int skill_type)
+Armor&
+armor_none()
 {
-   // Initialize associated attribute
-   switch(skill_type)
-   {
-   case SKILL_CLUB:
-   case SKILL_AXE:
-   case SKILL_HEAVYWEAPONS:
-      return ATTRIBUTE_STRENGTH;
-   case SKILL_HANDTOHAND:
-   case SKILL_KNIFE:
-   case SKILL_SWORD:
-   case SKILL_PISTOL:
-   case SKILL_RIFLE:
-   case SKILL_SMG:
-   case SKILL_SHOTGUN:
-   case SKILL_DRIVING:
-   case SKILL_STEALTH:
-   case SKILL_THROWING:
-   case SKILL_DODGE:
-      return ATTRIBUTE_AGILITY;
-   case SKILL_DISGUISE:
-   case SKILL_SEDUCTION:
-   case SKILL_PERSUASION:
-      return ATTRIBUTE_CHARISMA;
-   case SKILL_ART:
-   case SKILL_MUSIC:
-      return ATTRIBUTE_HEART;
-   case SKILL_RELIGION:
-   case SKILL_BUSINESS:
-   case SKILL_WRITING:
-   case SKILL_PSYCHOLOGY:
-   case SKILL_SECURITY:
-   case SKILL_TAILORING:
-   case SKILL_TEACHING:
-   case SKILL_FIRSTAID:
-   case SKILL_SCIENCE:
-   case SKILL_LAW:
-   case SKILL_COMPUTERS:
-   case SKILL_STREETSENSE:
-   default:
-      return ATTRIBUTE_INTELLIGENCE;
-   }
+   static Armor naked(*armortype[getarmortype("ARMOR_NONE")]);
+   return naked;
 }
 
-std::string Skill::get_name(int skill_type)
-{
-   switch(skill_type)
-   {
-   case SKILL_HANDTOHAND:     return "Martial Arts";
-   case SKILL_KNIFE:          return "Knife";
-   case SKILL_SWORD:          return "Sword";
-   case SKILL_THROWING:       return "Throwing";
-   case SKILL_CLUB:           return "Club";
-   case SKILL_AXE:            return "Axe";
-   case SKILL_PISTOL:         return "Pistol";
-   case SKILL_RIFLE:          return "Rifle";
-   case SKILL_HEAVYWEAPONS:   return "Heavy Weapons";
-   case SKILL_SHOTGUN:        return "Shotgun";
-   case SKILL_SMG:            return "SMG";
-   case SKILL_PERSUASION:     return "Persuasion";
-   case SKILL_PSYCHOLOGY:     return "Psychology";
-   case SKILL_SECURITY:       return "Security";
-   case SKILL_DISGUISE:       return "Disguise";
-   case SKILL_COMPUTERS:      return "Computers";
-   case SKILL_LAW:            return "Law";
-   case SKILL_TAILORING:      return "Tailoring";
-   case SKILL_DRIVING:        return "Driving";
-   case SKILL_WRITING:        return "Writing";
-   case SKILL_MUSIC:          return "Music";
-   case SKILL_ART:            return "Art";
-   case SKILL_RELIGION:       return "Religion";
-   case SKILL_SCIENCE:        return "Science";
-   case SKILL_BUSINESS:       return "Business";
-   case SKILL_STEALTH:        return "Stealth";
-   case SKILL_TEACHING:       return "Teaching";
-   case SKILL_STREETSENSE:    return "Street Sense";
-   case SKILL_SEDUCTION:      return "Seduction";
-   case SKILL_FIRSTAID:       return "First Aid";
-   case SKILL_DODGE:          return "Dodge";
-   }
-   return "Error Skill Name";
-}
+} // anonymous namepsace
+
 
 Attribute::Attribute(const std::string& inputXml)
 {
@@ -219,9 +177,9 @@ void Creature::copy(const Creature& org)
    for(int i=0;i<LAWFLAGNUM;i++)
       crimes_suspected[i]=org.crimes_suspected[i];
    if(org.weapon) weapon=new Weapon(*org.weapon);
-   else weapon=NULL;
+   else weapon=nullptr;
    if(org.armor) armor=new Armor(*org.armor);
-   else armor=NULL;
+   else armor=nullptr;
    for(int i=0;i<len(org.extra_throwing_weapons);i++)
       extra_throwing_weapons.push_back(new Weapon(*org.extra_throwing_weapons[i]));
    for(int i=0;i<len(org.clips);i++)
@@ -274,7 +232,7 @@ void Creature::copy(const Creature& org)
    pref_is_driver=org.pref_is_driver;
    flag=org.flag;
    dontname=org.dontname;
-   prisoner=NULL; //Not copying prisoner.
+   prisoner=nullptr; //Not copying prisoner.
 }
 
 Creature::~Creature()
@@ -417,14 +375,14 @@ void Creature::creatureinit()
    trainingsubject=-1;
    specialattack=-1;
    animalgloss=ANIMALGLOSS_NONE;
-   prisoner=NULL;
+   prisoner=nullptr;
    alive=true;
    blood=100;
    stunned=0;
    for(int w=0;w<BODYPARTNUM;w++)wound[w]=0;
-   weapon=NULL;
+   weapon=nullptr;
    has_thrown_weapon = false;
-   armor=NULL;//new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]); //Causes crash for global uniqueCreature -XML
+   armor=nullptr;//new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]); //Causes crash for global uniqueCreature -XML
    for(int a=0;a<ATTNUM;a++)
    {
       attributes[a].set_type(a);
@@ -480,7 +438,9 @@ void Creature::creatureinit()
 }
 
 Creature::Creature(const std::string& inputXml)
- : weapon(NULL), armor(NULL), prisoner(NULL)
+: weapon(nullptr)
+, armor(nullptr)
+, prisoner(nullptr)
 {
    CMarkup xml;
    xml.SetDoc(inputXml);
@@ -502,7 +462,7 @@ Creature::Creature(const std::string& inputXml)
       {
          Weapon w(xml.GetSubDoc());
          if (getweapontype(w.get_itemtypename()) != -1) //Check weapon is a valid type.
-            give_weapon(w,NULL);
+            give_weapon(w,nullptr);
       }
       else if (tag == "armor")
       {
@@ -878,57 +838,6 @@ int Creature::get_attribute(int attribute, bool usejuice) const
    return ret;
 }
 
-int Creature::roll_check(int skill)
-{
-   // This die rolling system (and the associated difficulty
-   // ratings) is adapted from EABA, which uses a system of
-   // rolling a number of six-sided dice equal to the ability
-   // score divided by three. The top three dice are used,
-   // the rest discarded. Finally, any additional points that
-   // didn't divide evenly into creating a die contribute to
-   // odd-shaped dice that don't exist in the real world. This
-   // system gives diminishing returns for high skill levels.
-   // EABA actually just adds the remainder to the die total,
-   // but there are some statistical problems with that system.
-
-   // It is not possible to roll above an 18 using this system.
-
-   // It is possible to roll below a 3, if you don't have at
-   // least 9 skill.
-
-   int dice    = skill/3;
-   int total   = 0;
-   int roll[3] = {0,0,0};
-
-   for(int i=0;i<dice+1;i++)
-   {
-      int newroll = 0;
-
-      // Roll d6 for every three skill
-      if(i<dice)
-         newroll = LCSrandom(6)+1;
-      // Partial dice for the remainder -- d3 for +1, d5 for +2
-      else if(skill%3)
-         newroll = LCSrandom((skill%3)*2+1)+1;
-
-      // Keep the top three dice
-      if(i<3)
-         roll[i]=newroll;
-      else
-         for(int j=0;j<3;j++)
-            if(newroll>roll[j])
-            {
-               int temp=roll[j];
-               roll[j]=newroll;
-               newroll=temp;
-            }
-   }
-
-   for(int i=0;i<3;i++)
-      total += roll[i];
-
-   return total;
-}
 
 int Creature::attribute_roll(int attribute) const
 {
@@ -1009,7 +918,7 @@ int Creature::skill_roll(int skill) const
    switch(pseudoskill)
    {
       case PSEUDOSKILL_ESCAPEDRIVE:
-         if (v != NULL)
+         if (v != nullptr)
          {
             skill_value = v->modifieddriveskill(skill_value+adjusted_attribute_value); // combine values and modify by vehicle stats
             adjusted_attribute_value = 0;
@@ -1020,7 +929,7 @@ int Creature::skill_roll(int skill) const
          }
          break;
       case PSEUDOSKILL_DODGEDRIVE:
-         if (v != NULL)
+         if (v != nullptr)
          {
             skill_value = v->modifieddodgeskill(skill_value+adjusted_attribute_value); // combine values and modify by vehicle stats
             adjusted_attribute_value = 0;
@@ -1089,7 +998,7 @@ int Creature::skill_roll(int skill) const
          if(get_armor().is_damaged()) { return_value>>=1; }
 
          // Carrying corpses or having hostages is very bad for disguise
-         if(prisoner!=NULL) { return_value>>=2; break; }
+         if(prisoner!=nullptr) { return_value>>=2; break; }
       }
    }
    #ifdef SHOWMECHANICS
@@ -1134,7 +1043,7 @@ bool Creature::skill_check(int skill, int difficulty) const
 
 void Creature::stop_hauling_me()
 {
-   for(int p=0;p<len(pool);p++) if(pool[p]->prisoner==this) pool[p]->prisoner=NULL;
+   for(int p=0;p<len(pool);p++) if(pool[p]->prisoner==this) pool[p]->prisoner=nullptr;
 }
 
 void Creature::train(int trainedskill, int experience, int upto)
@@ -1442,12 +1351,17 @@ const char* Creature::hisher(bool capitalize) const
    case GENDER_MALE: return capitalize?"His":"his";
    case GENDER_FEMALE: return capitalize?"Her":"her";
    default: return capitalize?"Xyr":"xyr"; // Elite Liberal gender-neutral pronoun... it is pronounced "zur" rhyming with "her"
-   // see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html (great reference on this)
-   // or http://en.wiktionary.org/wiki/xyr or http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary (wiki references)
-   // or http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it being used in text)
+   // see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html
+   // (great reference on this) or http://en.wiktionary.org/wiki/xyr or
+   // http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary
+   // (wiki references) or
+   // http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it
+   // being used in text)
 
-   // the possessive pronoun is based on this pronominal adjective in all standard third-person pronouns (so "xyrs" is correct):
-   // his -> his, her -> hers, their -> theirs, and likewise xyr -> xyrs... just add "s" at the end if it doesn't already have an "s" at the end
+   // the possessive pronoun is based on this pronominal adjective in all
+   // standard third-person pronouns (so "xyrs" is correct): his -> his, her ->
+   // hers, their -> theirs, and likewise xyr -> xyrs... just add "s" at the end
+   // if it doesn't already have an "s" at the end
    }
 }
 const char* Creature::himher(bool capitalize) const
@@ -1457,29 +1371,35 @@ const char* Creature::himher(bool capitalize) const
    case GENDER_MALE: return capitalize?"Him":"him";
    case GENDER_FEMALE: return capitalize?"Her":"her";
    default: return capitalize?"Xem":"xem"; // Elite Liberal gender-neutral pronoun... it is pronounced "zem" rhyming with "them"
-   // see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html (great reference on this)
-   // or http://en.wiktionary.org/wiki/xem or http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary (wiki references)
-   // or http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it being used in text)
+   // see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html
+   // (great reference on this) or http://en.wiktionary.org/wiki/xem or
+   // http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary
+   // (wiki references) or
+   // http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it
+   // being used in text)
 
-   // the reflexive pronoun is based on this object pronoun in all standard third-person pronouns (so "xemself" is correct):
-   // him -> himself, her -> herself, them -> themselves, it -> itself, one -> oneself, and likewise xem -> xemself... just add "self" unless plural in which case add "selves"
+   // the reflexive pronoun is based on this object pronoun in all standard
+   // third-person pronouns (so "xemself" is correct): him -> himself, her ->
+   // herself, them -> themselves, it -> itself, one -> oneself, and likewise
+   // xem -> xemself... just add "self" unless plural in which case add "selves"
 
-   // some people mistakenly use xyrself instead of xemself but this is wrong as it doesn't follow the pattern used by ALL standard third-person pronouns,
-   // instead following the first-and-second-person pronoun pattern (my -> myself, your -> yourself/yourselves, our -> ourselves, thy -> thyself, and likewise xyr -> xyrself)
-   }
-}
+   // some people mistakenly use xyrself instead of xemself but this is wrong as
+   // it doesn't follow the pattern used by ALL standard third-person pronouns,
+   // instead following the first-and-second-person pronoun pattern (my ->
+   // myself, your -> yourself/yourselves, our -> ourselves, thy -> thyself, and
+   // likewise xyr -> xyrself)
+   } }
 
-Weapon& Creature::weapon_none()
-{
-   static Weapon unarmed(*weapontype[getweapontype("WEAPON_NONE")]);
-   return unarmed;
-}
 
-Armor& Creature::armor_none()
-{
-   static Armor naked(*armortype[getarmortype("ARMOR_NONE")]);
-   return naked;
-}
+Weapon& Creature::
+get_weapon() const
+{ return is_armed() ? *weapon : weapon_none(); }
+
+
+Armor& Creature::
+get_armor() const
+{ return is_naked() ? armor_none() : *armor; }
+
 
 bool Creature::will_do_ranged_attack(bool force_ranged,bool force_melee) const
 {
@@ -1642,7 +1562,7 @@ void Creature::drop_weapons_and_clips(vector<Item*>* lootpile)
    {
       if(lootpile) lootpile->push_back(weapon);
       else delete weapon;
-      weapon=NULL;
+      weapon=nullptr;
    }
    while(len(extra_throwing_weapons))
    {
@@ -1666,7 +1586,7 @@ void Creature::drop_weapon(vector<Item*>* lootpile)
    {
       if(lootpile) lootpile->push_back(weapon);
       else delete weapon;
-      weapon=NULL;
+      weapon=nullptr;
    }
 }
 
@@ -1702,7 +1622,7 @@ void Creature::strip(vector<Item*>* lootpile)
         delete armor;
       else
         lootpile->push_back(armor);
-      armor=NULL;
+      armor=nullptr;
    }
 }
 
