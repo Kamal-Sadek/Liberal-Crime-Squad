@@ -1,6 +1,8 @@
 Liberal Crime Squad
 ===================
 
+[![Build Status](https://travis-ci.org/bregma/Liberal-Crime-Squad.svg?branch=master)](https://travis-ci.org/bregma/Liberal-Crime-Squad)
+
 On Febuary 4, 1974, the Symbionese Liberation Army, an American self-styled
 urban gurrilla warfare group kidnapped 19-year-old media heiress Patricia Hearst
 as she and her 26-year-old boyfriend, Steven Weed, sat relaxing in their
