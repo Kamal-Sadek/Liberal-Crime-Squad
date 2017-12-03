@@ -29,6 +29,14 @@
 
 
 Skill::
+Skill()
+: value{0}
+, associated_attribute{-1}
+, skill{-1}
+{ }
+
+
+Skill::
 Skill(const std::string& inputXml)
 {
    CMarkup xml;
@@ -45,7 +53,10 @@ Skill(const std::string& inputXml)
       else if (tag == "skill")
          skill = std::stoi(xml.GetData());
       else if (tag == "value")
-         value = std::min(std::stoi(xml.GetData()), MAX_SKILL_LEVEL);
+      {
+        int v = std::stoi(xml.GetData());
+        value = std::max(std::min(v, MAX_SKILL_LEVEL), 0);
+      }
    }
 }
 

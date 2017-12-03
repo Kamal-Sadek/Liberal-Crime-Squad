@@ -90,7 +90,8 @@ constexpr int MAX_SKILL_LEVEL = 99;
 class Skill
 {
 public:
-  Skill() { }
+  Skill();
+
   Skill(const std::string& inputXml);
 
   std::string
