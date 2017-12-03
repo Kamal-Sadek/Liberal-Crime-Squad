@@ -1,3 +1,4 @@
+#include <iostream>
 /**
  * Implementation of the creature Skill class.
  */
@@ -24,8 +25,16 @@
 #include "creature/skill.h"
 
 #include <algorithm>
-#include <cmarkup/Markup.h>
 #include <stdlib.h>
+#include "tinyxml2.h"
+
+using std::to_string;
+
+
+namespace
+{
+  const std::string XML_SKILL_ELEMENT_TAG{"skill"};
+} // anonymous namespace
 
 
 Skill::
@@ -37,41 +46,48 @@ Skill()
 
 
 Skill::
-Skill(const std::string& inputXml)
+Skill(const std::string& xml)
 {
-   CMarkup xml;
-   xml.SetDoc(inputXml);
-   xml.FindElem();
-   xml.IntoElem();
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLError err = doc.Parse(xml.c_str());
+  if (err != tinyxml2::XML_SUCCESS)
+  {
+    doc.PrintError();
+    return;
+  }
 
-   while(xml.FindElem())
-   {
-      std::string tag = xml.GetTagName();
-
+  auto e = doc.FirstChildElement();
+  if ((e != nullptr) && (e->Name() == XML_SKILL_ELEMENT_TAG))
+  {
+    for (auto element = e->FirstChildElement(); element; element = element->NextSiblingElement())
+    {
+      std::string tag = element->Name();
       if (tag == "associated_attribute")
-         associated_attribute = std::stoi(xml.GetData());
+      {
+         associated_attribute = std::stoi(element->GetText());
+      }
       else if (tag == "skill")
-         skill = std::stoi(xml.GetData());
+      {
+        skill = std::stoi(element->GetText());
+      }
       else if (tag == "value")
       {
-        int v = std::stoi(xml.GetData());
-        value = std::max(std::min(v, MAX_SKILL_LEVEL), 0);
+        std::string v = element->GetText();
+        value = std::max(std::min(std::stoi(v), MAX_SKILL_LEVEL), 0);
       }
-   }
+    }
+  }
 }
 
 
 std::string Skill::
 showXml() const
 {
-   CMarkup xml;
-   xml.AddElem("skill");
-   xml.IntoElem();
-   xml.AddElem("associated_attribute", associated_attribute);
-   xml.AddElem("skill", skill);
-   xml.AddElem("value", std::min(value, MAX_SKILL_LEVEL));
-
-   return xml.GetDoc();
+  return std::string{"<" + XML_SKILL_ELEMENT_TAG + ">"
+                      "<associated_attribute>" + to_string(associated_attribute) + "</associated_attribute>"
+                      "<skill>" + to_string(skill) + "</skill>"
+                      "<value>" + to_string(std::min(value, MAX_SKILL_LEVEL)) + "</value>"
+                     "</" + XML_SKILL_ELEMENT_TAG + ">"};
 }
 
 

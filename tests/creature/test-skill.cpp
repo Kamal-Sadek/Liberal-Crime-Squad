@@ -48,7 +48,7 @@ SCENARIO("deserialization")
   {
     int expected_value = 10;
     std::string xml{"<skill>\n"
-                    "  <associated_attribue>3</associated_attribute>\n"
+                    "  <associated_attribute>3</associated_attribute>\n"
                     "  <skill>1</skill>\n"
                     "  <value>" + to_string(expected_value) + "</value>\n"
                     "</skill>"};
@@ -65,7 +65,7 @@ SCENARIO("deserialization")
   GIVEN("a valid XML string of a serialized Skill with value larger than max")
   {
     std::string xml{"<skill>\n"
-                    "  <associated_attribue>1</associated_attribute>\n"
+                    "  <associated_attribute>1</associated_attribute>\n"
                     "  <skill>2</skill>\n"
                     "  <value>1023</value>\n"
                     "</skill>"};
@@ -82,7 +82,7 @@ SCENARIO("deserialization")
   GIVEN("a valid XML string of a serialized Skill with large negative value")
   {
     std::string xml{"<skill>\n"
-                    "  <associated_attribue>1</associated_attribute>\n"
+                    "  <associated_attribute>1</associated_attribute>\n"
                     "  <skill>4</skill>\n"
                     "  <value>-777</value>\n"
                     "</skill>"};
@@ -99,7 +99,7 @@ SCENARIO("deserialization")
   GIVEN("a valid XML string of a serialized Skill with an invalid value")
   {
     std::string xml{"<skill>\n"
-                    "  <associated_attribue>1</associated_attribute>\n"
+                    "  <associated_attribute>1</associated_attribute>\n"
                     "  <skill>3</skill>\n"
                     "  <value>Fred</value>\n"
                     "</skill>"};
@@ -115,7 +115,7 @@ SCENARIO("deserialization")
   GIVEN("an ill-formed XML string")
   {
     std::string xml{"<skill>\n"
-                    "  <associated_attribue>1\n"
+                    "  <associated_attribute>1\n"
                     "  <skill>3</skill>\n"
                     "</skill>"};
     WHEN("a Skill is created from it")
