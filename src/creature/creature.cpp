@@ -104,50 +104,6 @@ armor_none()
 } // anonymous namepsace
 
 
-Attribute::Attribute(const std::string& inputXml)
-{
-   CMarkup xml;
-   xml.SetDoc(inputXml);
-   xml.FindElem();
-   xml.IntoElem();
-
-   while(xml.FindElem())
-   {
-      std::string tag = xml.GetTagName();
-
-      if (tag == "attribute")
-         attribute = atoi(xml.GetData());
-      else if (tag == "value")
-         value = min(atoi(xml.GetData()),MAXATTRIBUTE);
-   }
-}
-
-string Attribute::showXml() const
-{
-   CMarkup xml;
-   xml.AddElem("attribute");
-   xml.IntoElem();
-   xml.AddElem("attribute", attribute);
-   xml.AddElem("value", min(value,MAXATTRIBUTE));
-
-   return xml.GetDoc();
-}
-
-std::string Attribute::get_name(int attribute_type)
-{
-   switch(attribute_type)
-   {
-   case ATTRIBUTE_STRENGTH:      return "STR";
-   case ATTRIBUTE_AGILITY:       return "AGI";
-   case ATTRIBUTE_WISDOM:        return "WIS";
-   case ATTRIBUTE_INTELLIGENCE:  return "INT";
-   case ATTRIBUTE_HEART:         return "HRT";
-   case ATTRIBUTE_HEALTH:        return "HLTH";
-   case ATTRIBUTE_CHARISMA:      return "CHA";
-   }
-   return "Error Attribute Name";
-}
-
 Creature& Creature::operator=(const Creature& rhs)
 {
    if (this != &rhs)

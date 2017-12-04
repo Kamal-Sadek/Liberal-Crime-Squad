@@ -7,6 +7,7 @@
 #include "augmentation.h"
 #include "common.h"
 #include <deque>
+#include "creature/attributes.h"
 #include "creature/skill.h"
 #include "politics/alignment.h"
 
@@ -212,19 +213,6 @@ enum SpecialWounds
 #define WOUND_NASTYOFF BIT7
 #define WOUND_CLEANOFF BIT8
 
-
-class Attribute
-{
-private:
-   int attribute;
-public:
-   Attribute() { }
-   Attribute(const std::string& inputXml);
-   string showXml() const;
-   int value;
-   void set_type(int attribute_type) { attribute=attribute_type; }
-   static std::string get_name(int attribute_type);
-};
 
 class Creature
 {
