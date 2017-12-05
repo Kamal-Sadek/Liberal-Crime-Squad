@@ -39,32 +39,32 @@ enum CreatureAttribute
 };
 
 constexpr std::size_t ATTNUM = 7;
-constexpr int         MIN_ATTR_LEVEL = 0;
-constexpr int         MAX_ATTR_LEVEL = 99;
+constexpr int         ATTR_DEFAULT_LEVEL =  0;
+constexpr int         ATTR_MIN_LEVEL     =  0;
+constexpr int         ATTR_MAX_LEVEL     = 99;
 
 
 class Attribute
 {
 public:
-   Attribute()
-   { }
+  Attribute();
 
-   Attribute(std::string const& inputXml);
+  Attribute(std::string const& inputXml);
 
-   std::string
-   showXml() const;
+  std::string
+  showXml() const;
 
-   void
-   set_type(int attribute_type)
-   { attribute = attribute_type; }
+  void
+  set_type(int attribute_type)
+  { attribute = attribute_type; }
 
-   static std::string get_name(int attribute_type);
+  static std::string get_name(int attribute_type);
 
 public:
-   int value;
+  int value;
 
 private:
-   int attribute;
+  int attribute;
 };
 
 #endif /* LCS_CREATURE_ATTRIBUTES_H_H */

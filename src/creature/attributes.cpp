@@ -28,7 +28,15 @@
 
 
 Attribute::
+Attribute()
+: value(ATTR_DEFAULT_LEVEL)
+, attribute(-1)
+{ }
+
+
+Attribute::
 Attribute(std::string const& inputXml)
+: Attribute()
 {
    CMarkup xml;
    xml.SetDoc(inputXml);
@@ -42,7 +50,7 @@ Attribute(std::string const& inputXml)
       if (tag == "attribute")
          attribute = std::stoi(xml.GetData());
       else if (tag == "value")
-         value = std::min(std::stoi(xml.GetData()), MAX_ATTR_LEVEL);
+         value = std::max(std::min(std::stoi(xml.GetData()), ATTR_MAX_LEVEL), ATTR_MIN_LEVEL);
    }
 }
 
@@ -54,7 +62,7 @@ showXml() const
    xml.AddElem("attribute");
    xml.IntoElem();
    xml.AddElem("attribute", attribute);
-   xml.AddElem("value", std::min(value, MAX_ATTR_LEVEL));
+   xml.AddElem("value", std::min(value, ATTR_MAX_LEVEL));
 
    return xml.GetDoc();
 }
