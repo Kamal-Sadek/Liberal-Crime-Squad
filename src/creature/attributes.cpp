@@ -24,7 +24,17 @@
 #include "creature/attributes.h"
 
 #include <algorithm>
-#include "cmarkup/Markup.h"
+#include "tinyxml2.h"
+
+using std::to_string;
+using std::string;
+
+
+namespace
+{
+  const string ATTR_XML_ATTRIBUTE_TAG{"attribute"};
+  const string ATTR_XML_VALUE_TAG{"value"};
+} // anonymous namespace
 
 
 Attribute::
@@ -35,40 +45,50 @@ Attribute()
 
 
 Attribute::
-Attribute(std::string const& inputXml)
+Attribute(string const& xml)
 : Attribute()
 {
-   CMarkup xml;
-   xml.SetDoc(inputXml);
-   xml.FindElem();
-   xml.IntoElem();
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLError err = doc.Parse(xml.c_str());
+  if (err != tinyxml2::XML_SUCCESS)
+  {
+    doc.PrintError();
+    return;
+  }
 
-   while(xml.FindElem())
-   {
-      std::string tag = xml.GetTagName();
-
-      if (tag == "attribute")
-         attribute = std::stoi(xml.GetData());
-      else if (tag == "value")
-         value = std::max(std::min(std::stoi(xml.GetData()), ATTR_MAX_LEVEL), ATTR_MIN_LEVEL);
-   }
+  auto e = doc.FirstChildElement();
+  if ((e != nullptr) && (e->Name() == ATTR_XML_ATTRIBUTE_TAG))
+  {
+    for (auto element = e->FirstChildElement(); element; element = element->NextSiblingElement())
+    {
+      string tag = element->Name();
+      if (tag == ATTR_XML_ATTRIBUTE_TAG)
+      {
+        this->attribute = std::stoi(element->GetText());
+      }
+      else if (tag == ATTR_XML_VALUE_TAG)
+      {
+        string v = element->GetText();
+        this->value = std::max(std::min(std::stoi(v), ATTR_MAX_LEVEL), ATTR_MIN_LEVEL);
+      }
+    }
+  }
 }
 
 
-std::string Attribute::
+string Attribute::
 showXml() const
 {
-   CMarkup xml;
-   xml.AddElem("attribute");
-   xml.IntoElem();
-   xml.AddElem("attribute", attribute);
-   xml.AddElem("value", std::min(value, ATTR_MAX_LEVEL));
-
-   return xml.GetDoc();
+   return string{
+     "<" + ATTR_XML_ATTRIBUTE_TAG + ">"
+       "<" + ATTR_XML_ATTRIBUTE_TAG + ">" + to_string(this->attribute) + "</" + ATTR_XML_ATTRIBUTE_TAG +">"
+       "<" + ATTR_XML_VALUE_TAG + ">" + to_string(this->value) + "</" + ATTR_XML_VALUE_TAG +">"
+     "</" + ATTR_XML_ATTRIBUTE_TAG +">"
+   };
 }
 
 
-std::string Attribute::
+string Attribute::
 get_name(int attribute_type)
 {
    switch(attribute_type)
