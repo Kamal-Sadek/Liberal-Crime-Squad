@@ -659,6 +659,9 @@ bool sort_none(const Creature* first, const Creature* second) //This will sort s
    return false;
 }
 
+bool sort_name(const Creature* first,const Creature* second)
+{ return strcmp(first->name, second->name) < 0; }
+
 bool sort_locationandname(const Creature* first, const Creature* second)
 {
    return first->location<second->location

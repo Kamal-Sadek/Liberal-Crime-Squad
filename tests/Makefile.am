@@ -27,6 +27,7 @@ test_lcs_SOURCES = \
   creature/test-creaturetype.cpp \
   creature/test-creaturetypecache.cpp \
   creature/test-skill.cpp \
+  creature/test-uniquecreatures.cpp \
   politics/test-alignment.cpp
 
 test_lcs_CPPFLAGS = \

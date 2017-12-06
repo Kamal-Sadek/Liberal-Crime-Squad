@@ -42,12 +42,58 @@ int find_site_index_in_city(int site_type, int city)
    return -1;
 }
 
-int find_site_index_in_same_city(int site_type, int site_index)
+int
+find_site_index_in_same_city(int site_type, int site_index)
 {
    int city=-1;
-   if(site_index>=0) city=location[site_index]->city;
-   return find_site_index_in_city(site_type,city);
+   if (site_index >= 0)
+     city = location[site_index]->city;
+   return find_site_index_in_city(site_type, city);
 }
+
+int
+find_site_index_in_same_city(int site_type, Creature const& cr)
+{ return find_site_index_in_same_city(site_type, cr.location); }
+
+int
+find_police_station(int site_index)
+{ return find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, site_index); }
+
+int
+find_police_station(const Creature& cr)
+{ return find_police_station(cr.location); }
+
+int
+find_clinic(int site_index)
+{ return find_site_index_in_same_city(SITE_HOSPITAL_CLINIC, site_index); }
+
+int
+find_clinic(const Creature& cr)
+{ return find_clinic(cr.location); }
+
+int
+find_homeless_shelter(int site_index)
+{ return find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, site_index); }
+
+int
+find_homeless_shelter(const Creature& cr)
+{ return find_homeless_shelter(cr.location); }
+
+int
+find_courthouse(int site_index)
+{ return find_site_index_in_same_city(SITE_GOVERNMENT_COURTHOUSE, site_index); }
+
+int
+find_courthouse(const Creature& cr)
+{ return find_courthouse(cr.location); }
+
+int
+find_hospital(int site_index)
+{ return find_site_index_in_same_city(SITE_HOSPITAL_UNIVERSITY, site_index); }
+
+int
+find_hospital(const Creature& cr) 
+{ return find_hospital(cr.location); }
 
 void make_classic_world(bool hasmaps)
 {

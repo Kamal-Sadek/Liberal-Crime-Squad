@@ -8,6 +8,7 @@
 #include "common.h"
 #include <deque>
 #include "creature/attributes.h"
+#include "creature/gender.h"
 #include "creature/skill.h"
 #include "politics/alignment.h"
 
@@ -27,35 +28,6 @@
 
 // MAXATTRIBUTE is maximum value for both attributes & skills, set to 99 to limit it to 2 digits on screen
 #define MAXATTRIBUTE 99
-
-enum CreatureGender
-{
-   GENDER_NEUTRAL,
-   GENDER_MALE,
-   GENDER_FEMALE,
-
-   // Used to get some more specific names.
-   GENDER_WHITEMALEPATRIARCH,
-
-   // Used in creature creation.
-   GENDER_MALE_BIAS,
-   GENDER_FEMALE_BIAS,
-   GENDER_RANDOM
-};
-
-enum CheckDifficulty
-{
-   DIFFICULTY_AUTOMATIC    = 1,
-   DIFFICULTY_VERYEASY     = 3,
-   DIFFICULTY_EASY         = 5,
-   DIFFICULTY_AVERAGE      = 7,
-   DIFFICULTY_CHALLENGING  = 9,
-   DIFFICULTY_HARD         = 11,
-   DIFFICULTY_FORMIDABLE   = 13,
-   DIFFICULTY_HEROIC       = 15,
-   DIFFICULTY_SUPERHEROIC  = 17,
-   DIFFICULTY_IMPOSSIBLE   = 19
-};
 
 enum CreatureTypes
 {

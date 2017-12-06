@@ -3,6 +3,10 @@
 
 #include "includes.h"
 
+
+class Augmentation;
+
+
 class AugmentType {
    public:
       explicit AugmentType(const std::string& xmlstring);
