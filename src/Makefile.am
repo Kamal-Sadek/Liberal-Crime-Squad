@@ -81,10 +81,11 @@ crimesquad_CPPFLAGS = \
   -I$(top_srcdir)/lib/pdcurses
 
 libcrimesquad_la_CPPFLAGS = $(crimesquad_CPPFLAGS)
-
 libcrimesquad_la_LIBADD = ${top_builddir}/lib/pdcurses/libpdcurses.la
-if BUILD_WIN32
-libcrimesquad_la_LDFLAGS = -static -static-libgcc -static-libstdc++
-endif
 
 crimesquad_LDADD = libcrimesquad.la
+crimesquad_LDFLAGS = -static -static-libgcc -static-libstdc++
+if BUILD_WIN32
+crimesquad_LDFLAGS += -mwindows
+endif
+
