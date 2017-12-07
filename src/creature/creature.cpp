@@ -29,6 +29,7 @@
 #include "creature/creaturetype.h"
 #include "creature/skill.h"
 #include "politics/politics.h"
+#include "tinyxml2.h"
 
 
 namespace
@@ -1198,84 +1199,130 @@ void Creature::die()
    }
 }
 
-void UniqueCreatures::newCEO()
+
+UniqueCreatures::
+UniqueCreatures()
+: CEO_ID(-1)
+, Pres_ID(-1)
 {
-   makecreature(CEO_,CREATURE_CORPORATE_CEO);
-   CEO_ID=CEO_.id,CEO_state=UNIQUECREATURE_ALIVE;
 }
 
-void UniqueCreatures::newPresident()
+
+void UniqueCreatures::
+newCEO()
 {
-   makecreature(Pres_, CREATURE_POLITICIAN);
-   Pres_ID=Pres_.id,Pres_state=UNIQUECREATURE_ALIVE,Pres_.dontname=true;
+   makecreature(CEO_, CREATURE_CORPORATE_CEO);
+   CEO_ID = CEO_.id;
+   CEO_state = UNIQUECREATURE_ALIVE;
+}
+
+
+void UniqueCreatures::
+newPresident()
+{
+  makecreature(Pres_, CREATURE_POLITICIAN);
+  Pres_ID = Pres_.id;
+  Pres_state = UNIQUECREATURE_ALIVE;
+  Pres_.dontname = true;
+
    //Turn into President (not just random pol)
-   std::string pres_name=execname[EXEC_PRESIDENT];
-   strcpy(Pres_.name,"President "+pres_name.substr(pres_name.find(' ')+1));
-   strcpy(Pres_.propername,execname[EXEC_PRESIDENT]);
+   std::string pres_name = execname[EXEC_PRESIDENT];
+   strcpy(Pres_.name, "President "+pres_name.substr(pres_name.find(' ')+1));
+   strcpy(Pres_.propername, execname[EXEC_PRESIDENT]);
    switch(exec[EXEC_PRESIDENT])
    { // we don't do anything for Alignment::ARCH_CONSERVATIVE or Alignment::CONSERVATIVE so having them here is unnecessary
    case Alignment::MODERATE:
       Pres_.align=Alignment::MODERATE;
-      Pres_.set_attribute(ATTRIBUTE_WISDOM,Pres_.get_attribute(ATTRIBUTE_WISDOM,false)/2);
-      Pres_.set_attribute(ATTRIBUTE_HEART,Pres_.get_attribute(ATTRIBUTE_WISDOM,false));
+      Pres_.set_attribute(ATTRIBUTE_WISDOM, Pres_.get_attribute(ATTRIBUTE_WISDOM,false)/2);
+      Pres_.set_attribute(ATTRIBUTE_HEART, Pres_.get_attribute(ATTRIBUTE_WISDOM,false));
       break;
    case Alignment::LIBERAL:
    case Alignment::ELITE_LIBERAL:
       Pres_.align=Alignment::LIBERAL;
-      Pres_.set_attribute(ATTRIBUTE_HEART,Pres_.get_attribute(ATTRIBUTE_WISDOM,false));
-      Pres_.set_attribute(ATTRIBUTE_WISDOM,1);
+      Pres_.set_attribute(ATTRIBUTE_HEART, Pres_.get_attribute(ATTRIBUTE_WISDOM,false));
+      Pres_.set_attribute(ATTRIBUTE_WISDOM, 1);
       break;
    }
 }
 
-UniqueCreatures::UniqueCreatures(const std::string& inputXml)
+static const std::string UNIQUE_CREATURE_XML_TAG{"uniquecreatures"};
+
+UniqueCreatures::
+UniqueCreatures(const std::string& xml)
 {
-   CMarkup xml;
-   xml.SetDoc(inputXml);
-   xml.FindElem();
-   xml.IntoElem();
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLError err = doc.Parse(xml.c_str());
+  if (err != tinyxml2::XML_SUCCESS)
+  {
+    doc.PrintError();
+    return;
+  }
 
-   while(xml.FindElem())
-   {
-      std::string tag = xml.GetTagName();
-
+  auto e = doc.FirstChildElement();
+  if ((e != nullptr) && (e->Name() == UNIQUE_CREATURE_XML_TAG))
+  {
+    for (auto element = e->FirstChildElement(); element; element = element->NextSiblingElement())
+    {
+      string tag = element->Name();
       if (tag == "CEO" || tag == "Pres")
       {
-         xml.IntoElem();
-         xml.FindElem();
-         if(tag == "CEO")
-            CEO_ = Creature(xml.GetSubDoc());
-         else
-            Pres_ = Creature(xml.GetSubDoc());
-         xml.OutOfElem();
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        if (tag == "CEO")
+          CEO_ = Creature(printer.CStr());
+        else
+          Pres_ = Creature(printer.CStr());
       }
       else if (tag == "CEO_ID")
-         CEO_ID = atoi(xml.GetData());
+      {
+         CEO_ID = std::stoi(element->GetText());
+      }
       else if (tag == "CEO_state")
-         CEO_state = atoi(xml.GetData());
+      {
+         int val = std::stoi(element->GetText());
+         if (val != UNIQUECREATURE_ALIVE
+          && val != UNIQUECREATURE_DEAD
+          && val != UNIQUECREATURE_LIBERAL)
+         {
+           throw std::invalid_argument(tag);
+         }
+         CEO_state = val;
+      }
       else if (tag == "Pres_ID")
-         Pres_ID = atoi(xml.GetData());
+      {
+         Pres_ID = std::stoi(element->GetText());
+      }
       else if (tag == "Pres_state")
-         Pres_state = atoi(xml.GetData());
-
-   }
+      {
+         int val = std::stoi(element->GetText());
+         if (val != UNIQUECREATURE_ALIVE
+          && val != UNIQUECREATURE_DEAD
+          && val != UNIQUECREATURE_LIBERAL)
+         {
+           throw std::invalid_argument(tag);
+         }
+         Pres_state = val;
+      }
+    }
+  }
 }
 
-string UniqueCreatures::showXml() const
+
+string UniqueCreatures::
+showXml() const
 {
-   CMarkup xml;
-   xml.AddElem("uniquecreatures");
-   xml.IntoElem();
-   xml.AddElem("CEO_ID", CEO_ID);
-   xml.AddElem("CEO_state", CEO_state);
-   xml.AddElem("CEO");
-   xml.AddChildSubDoc(CEO_.showXml());
-   xml.AddElem("Pres_ID", CEO_ID);
-   xml.AddElem("Pres_state", CEO_state);
-   xml.AddElem("Pres");
-   xml.AddChildSubDoc(Pres_.showXml());
-   return xml.GetDoc();
+  return std::string{
+    "<" + UNIQUE_CREATURE_XML_TAG + ">"
+      "<CEO_ID>" + std::to_string(this->CEO_ID) +"</CEO_ID>"
+      "<CEO_state>" + std::to_string(this->CEO_state) + "</CEO_state>"
+      "<CEO" + this->CEO_.showXml() + "</CEO>"
+      "<Pres_ID>" + std::to_string(this->Pres_ID) +"</Pres_ID>"
+      "<Pres_state>" + std::to_string(this->Pres_state) + "</Pres_state>"
+      "<Pres" + this->Pres_.showXml() + "</Pres>"
+    "</" + UNIQUE_CREATURE_XML_TAG + ">"
+  };
 }
+
 
 const char* Creature::heshe(bool capitalize) const
 {  // subject pronoun (nominative case)

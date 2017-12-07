@@ -43,10 +43,10 @@ SCENARIO("UniqueCreatures deserialization")
   GIVEN("a valid XML string of a serialized UniqueCreatures")
   {
     int expected_value = 10;
-    std::string xml{"<uniqueCreatures>\n"
+    std::string xml{"<uniquecreatures>\n"
                     "  <CEO_state>1</CEO_state>\n"
                     "  <Pres_state>1</Pres_state>\n"
-                    "</uniqueCreatures>"};
+                    "</uniquecreatures>"};
     WHEN("a UniqueCreatures is created from it")
     {
       UniqueCreatures uniqueCreatures(xml);
@@ -60,9 +60,9 @@ SCENARIO("UniqueCreatures deserialization")
 
   GIVEN("a valid XML string of a serialized UniqueCreatures with an invalid value")
   {
-    std::string xml{"<uniqueCreatures>\n"
+    std::string xml{"<uniquecreatures>\n"
                     "  <CEO_state>233</CEO_state>\n"
-                    "</uniqueCreatures>"};
+                    "</uniquecreatures>"};
     WHEN("a UniqueCreatures is created from it")
     {
       THEN("an exception is thrown.")
@@ -74,9 +74,9 @@ SCENARIO("UniqueCreatures deserialization")
 
   GIVEN("an ill-formed XML string")
   {
-    std::string xml{"<uniqueCreatures>\n"
+    std::string xml{"<uniquecreatures>\n"
                     "  <CEO_state>\n"
-                    "</uniqueCreatures>"};
+                    "</uniquecreatures>"};
     WHEN("a UniqueCreatures is created from it")
     {
       UniqueCreatures uniqueCreatures(xml);
