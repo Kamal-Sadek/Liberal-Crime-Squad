@@ -4,7 +4,11 @@
 AC_PREREQ(2.65)
 
 #The following line has the program name, the program version, and the bug report address.
-AC_INIT([crimesquad], [4.10.0],[kamaljalals@gmail.com])
+AC_INIT([Liberal Crime Squad],
+        [5.0.1-smw1],
+        [stephen.webb@bregmasoft.ca],
+        [lcs],
+        [https://github.com/bregma/Liberal-Crime-Squad/wiki])
 AC_CONFIG_HEADER([config.h])
 AC_CONFIG_AUX_DIR([config.aux])
 AC_CONFIG_MACRO_DIRS([config.m4])
