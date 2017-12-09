@@ -29,6 +29,7 @@
 #include "creature/creaturetype.h"
 #include "creature/skill.h"
 #include "politics/politics.h"
+#include <sstream>
 #include "tinyxml2.h"
 
 
@@ -394,268 +395,302 @@ void Creature::creatureinit()
    strcpy(propername,"Scruffy");
 }
 
-Creature::Creature(const std::string& inputXml)
+static const std::string CREATURE_XML_CREATURE_ELEMENT{"creature"};
+
+Creature::Creature(const std::string& xml)
 : weapon(nullptr)
 , armor(nullptr)
 , prisoner(nullptr)
 {
-   CMarkup xml;
-   xml.SetDoc(inputXml);
-   xml.FindElem();
-   xml.IntoElem();
+  int attributesi=0,skillsi=0,skill_experiencei=0,woundi=0,speciali=0,crimesi=0,augi=0;
 
-   int attributesi=0,skillsi=0,skill_experiencei=0,woundi=0,speciali=0,crimesi=0,augi=0;
-   while(xml.FindElem())
-   {
-      std::string tag = xml.GetTagName();
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLError err = doc.Parse(xml.c_str());
+  if (err != tinyxml2::XML_SUCCESS)
+  {
+    doc.PrintError();
+    return;
+  }
 
+  auto e = doc.FirstChildElement();
+  if (e == nullptr)
+  {
+  }
+  else
+  {
+  }
+  if ((e != nullptr) && (e->Name() == CREATURE_XML_CREATURE_ELEMENT))
+  {
+    for (auto element = e->FirstChildElement(); element; element = element->NextSiblingElement())
+    {
+      string tag = element->Name();
       if (tag == "attribute" && attributesi < ATTNUM)
-         attributes[attributesi++] = Attribute(xml.GetSubDoc());
+      {
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        attributes[attributesi++] = Attribute(printer.CStr());
+      }
       else if (tag == "skill" && skillsi < SKILLNUM)
-         skills[skillsi++] = Skill(xml.GetSubDoc());
+      {
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        skills[skillsi++] = Skill(printer.CStr());
+      }
       else if (tag == "skill_experience" && skill_experiencei < SKILLNUM)
-         skill_experience[skill_experiencei++] = atoi(xml.GetData());
+      {
+        skill_experience[skill_experiencei++] = std::stoi(element->GetText());
+      }
       else if (tag == "weapon")
       {
-         Weapon w(xml.GetSubDoc());
-         if (getweapontype(w.get_itemtypename()) != -1) //Check weapon is a valid type.
-            give_weapon(w,nullptr);
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        Weapon w(printer.CStr());
+        if (getweapontype(w.get_itemtypename()) != -1) //Check weapon is a valid type.
+          give_weapon(w, nullptr);
       }
       else if (tag == "armor")
       {
-         armor = new Armor(xml.GetSubDoc());
-         if (getarmortype(armor->get_itemtypename()) == -1) //Check armor is a valid type.
-            delete_and_nullify(armor);
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        armor = new Armor(printer.CStr());
+        if (getarmortype(armor->get_itemtypename()) == -1) //Check armor is a valid type.
+          delete_and_nullify(armor);
       }
       else if (tag =="augmentation")
-         augmentations[augi++] = Augmentation(xml.GetSubDoc());
+      {
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        augmentations[augi++] = Augmentation(printer.CStr());
+      }
       else if (tag == "name")
-         strcpy(name,xml.GetData());
+         strcpy(name, element->GetText());
       else if (tag == "propername")
-         strcpy(propername,xml.GetData());
+      {
+         strcpy(propername, element->GetText());
+      }
       else if (tag == "gender_conservative")
-         gender_conservative = atoi(xml.GetData());
+         gender_conservative = std::stoi(element->GetText());
       else if (tag == "gender_liberal")
-         gender_liberal = atoi(xml.GetData());
+         gender_liberal = std::stoi(element->GetText());
       else if (tag == "squadid")
-         squadid = atoi(xml.GetData());
+         squadid = std::stoi(element->GetText());
       else if (tag == "age")
-         age = atoi(xml.GetData());
+         age = std::stoi(element->GetText());
       else if (tag == "birthday_month")
-         birthday_month = atoi(xml.GetData());
+         birthday_month = std::stoi(element->GetText());
       else if (tag == "birthday_day")
-         birthday_day = atoi(xml.GetData());
+         birthday_day = std::stoi(element->GetText());
       else if (tag == "exists")
-         exists = atoi(xml.GetData());
+         exists = std::stoi(element->GetText());
       else if (tag == "align")
-         from_string(xml.GetData(), align);
+         from_string(element->GetText(), align);
       else if (tag == "alive")
-         alive = atoi(xml.GetData());
+         alive = std::stoi(element->GetText());
       else if (tag == "type")
-         type = atoi(xml.GetData());
+         type = std::stoi(element->GetText());
       else if (tag == "type_idname")
-         type_idname = xml.GetData();
+         type_idname = element->GetText();
       else if (tag == "infiltration")
-         infiltration = atof(xml.GetData());
+         infiltration = std::stof(element->GetText());
       else if (tag == "animalgloss")
-         animalgloss = atoi(xml.GetData());
+         animalgloss = std::stoi(element->GetText());
       else if (tag == "specialattack")
-         specialattack = atoi(xml.GetData());
+         specialattack = std::stoi(element->GetText());
       else if (tag == "clinic")
-         clinic = atoi(xml.GetData());
+         clinic = std::stoi(element->GetText());
       else if (tag == "dating")
-         dating = atoi(xml.GetData());
+         dating = std::stoi(element->GetText());
       else if (tag == "hiding")
-         hiding = atoi(xml.GetData());
+         hiding = std::stoi(element->GetText());
       else if (tag == "trainingtime")
-         trainingtime = atoi(xml.GetData());
+         trainingtime = std::stoi(element->GetText());
       else if (tag == "trainingsubject")
-         trainingsubject = atoi(xml.GetData());
+         trainingsubject = std::stoi(element->GetText());
       else if (tag == "prisoner")
       {
-         xml.IntoElem();
-         prisoner = new Creature(xml.GetSubDoc());
-         xml.OutOfElem();
+        auto e = element->FirstChildElement();
+        tinyxml2::XMLPrinter printer;
+        e->Accept(&printer);
+        prisoner = new Creature(printer.CStr());
       }
-      else if (tag == "sentence")
-         sentence = atoi(xml.GetData());
+     else if (tag == "sentence")
+         sentence = std::stoi(element->GetText());
       else if (tag == "confessions")
-         confessions = atoi(xml.GetData());
+         confessions = std::stoi(element->GetText());
       else if (tag == "deathpenalty")
-         deathpenalty = atoi(xml.GetData());
+         deathpenalty = std::stoi(element->GetText());
       else if (tag == "joindays")
-         joindays = atoi(xml.GetData());
+         joindays = std::stoi(element->GetText());
       else if (tag == "deathdays")
-         deathdays = atoi(xml.GetData());
+         deathdays = std::stoi(element->GetText());
       else if (tag == "id")
-         id = atoi(xml.GetData());
+         id = std::stoi(element->GetText());
       else if (tag == "hireid")
-         hireid = atoi(xml.GetData());
+         hireid = std::stoi(element->GetText());
       else if (tag == "meetings")
-         meetings = atoi(xml.GetData());
+         meetings = std::stoi(element->GetText());
       else if (tag == "forceinc")
-         forceinc = atoi(xml.GetData());
+         forceinc = std::stoi(element->GetText());
       else if (tag == "stunned")
-         stunned = atoi(xml.GetData());
+         stunned = std::stoi(element->GetText());
       else if (tag == "clip")
       {
-         Clip* c = new Clip(xml.GetSubDoc());
-         if (getcliptype(c->get_itemtypename()) != -1)
-            clips.push_back(c);
-         else
-            delete c;
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        Clip* c = new Clip(printer.CStr());
+        if (getcliptype(c->get_itemtypename()) != -1)
+          clips.push_back(c);
+        else
+          delete c;
       }
       else if (tag == "has_thrown_weapon")
-         has_thrown_weapon = atoi(xml.GetData());
+         has_thrown_weapon = std::stoi(element->GetText());
       else if (tag == "money")
-         money = atoi(xml.GetData());
+         money = std::stoi(element->GetText());
       else if (tag == "juice")
-         juice = atoi(xml.GetData());
+         juice = std::stoi(element->GetText());
       else if (tag == "income")
-         income = atoi(xml.GetData());
+         income = std::stoi(element->GetText());
       else if (tag == "wound" && woundi < BODYPARTNUM)
-         wound[woundi++] = atoi(xml.GetData());
+         wound[woundi++] = std::stoi(element->GetText());
       else if (tag == "blood")
-         blood = atoi(xml.GetData());
+         blood = std::stoi(element->GetText());
       else if (tag == "special" && speciali < SPECIALWOUNDNUM)
-         special[speciali++] = atoi(xml.GetData());
+         special[speciali++] = std::stoi(element->GetText());
       else if (tag == "crimes_suspected" && crimesi < LAWFLAGNUM)
-         crimes_suspected[crimesi++] = atoi(xml.GetData());
+         crimes_suspected[crimesi++] = std::stoi(element->GetText());
       else if (tag == "heat")
-         heat = atoi(xml.GetData());
+         heat = std::stoi(element->GetText());
       else if (tag == "location")
-         location = atoi(xml.GetData());
+         location = std::stoi(element->GetText());
       else if (tag == "worklocation")
-         worklocation = atoi(xml.GetData());
+         worklocation = std::stoi(element->GetText());
       else if (tag == "cantbluff")
-         cantbluff = atoi(xml.GetData());
+         cantbluff = std::stoi(element->GetText());
       else if (tag == "base")
-         base = atoi(xml.GetData());
+         base = std::stoi(element->GetText());
       else if (tag == "activity")
       {
-         xml.IntoElem();
-         while(xml.FindElem())
-         {
-            tag = xml.GetTagName();
-            if (tag == "type")
-               activity.type = atoi(xml.GetData());
-            else if (tag == "arg")
-               activity.arg = atoi(xml.GetData());
-            else if (tag == "arg2")
-               activity.arg2 = atoi(xml.GetData());
-         }
-         xml.OutOfElem();
+        for (auto e = element->FirstChildElement(); e; e = e->NextSiblingElement())
+        {
+          std::string ename = e->Name();
+          if (ename == "type")
+            activity.type = std::stoi(e->GetText());
+          else if (ename == "arg")
+            activity.arg = std::stoi(e->GetText());
+          else if (ename == "arg2")
+            activity.arg2 = std::stoi(e->GetText());
+        }
       }
       else if (tag == "carid")
-         carid = atoi(xml.GetData());
+         carid = std::stoi(element->GetText());
       else if (tag == "is_driver")
-         is_driver = atoi(xml.GetData());
+         is_driver = std::stoi(element->GetText());
       else if (tag == "pref_carid")
-         pref_carid = atoi(xml.GetData());
+         pref_carid = std::stoi(element->GetText());
       else if (tag == "pref_is_driver")
-         pref_is_driver = atoi(xml.GetData());
+         pref_is_driver = std::stoi(element->GetText());
       else if (tag == "flag")
-         flag = atoi(xml.GetData());
+         flag = std::stoi(element->GetText());
       else if (tag == "dontname")
-         dontname = atoi(xml.GetData());
-   }
+         dontname = std::stoi(element->GetText());
+    }
+  }
 }
 
-string Creature::showXml() const
+string
+Creature::showXml() const
 {
-   CMarkup xml;
-   xml.AddElem("creature");
-   xml.IntoElem();
+  std::ostringstream ostr;
+  ostr << "<creature>";
 
-   for(int i=0;i<ATTNUM;i++)
-      xml.AddSubDoc(attributes[i].showXml());
-   for(int i=0;i<SKILLNUM;i++)
-      xml.AddSubDoc(skills[i].showXml());
-   for(int i=0;i<SKILLNUM;i++)
-      xml.AddElem("skill_experience", skill_experience[i]); //Bad, relies on their order in the xml file. -XML 
-   if(weapon) xml.AddSubDoc(weapon->showXml());
-   if(armor) xml.AddSubDoc(armor->showXml());
-   for(const auto &aug:augmentations)
-      xml.AddSubDoc(aug.showXml());
+   for (int i=0; i<ATTNUM; i++)
+     ostr << attributes[i].showXml();
+   for (int i=0; i<SKILLNUM; i++)
+     ostr << skills[i].showXml();
+   for (int i=0; i<SKILLNUM; i++)
+     ostr << "<skill_experience>" << skill_experience[i] << "</skill_experience>"; //Bad, relies on their order in the xml file.
+   if (weapon)
+     ostr << weapon->showXml();
+   if (armor)
+     ostr << armor->showXml();
+   for (const auto &aug:augmentations)
+      ostr << aug.showXml();
 
-   xml.AddElem("name", name);
-   xml.AddElem("propername", propername);
-   xml.AddElem("gender_conservative", gender_conservative);
-   xml.AddElem("gender_liberal", gender_liberal);
-   xml.AddElem("squadid", squadid);
-   xml.AddElem("age", age);
-   xml.AddElem("birthday_month", birthday_month);
-   xml.AddElem("birthday_day", birthday_day);
-   xml.AddElem("exists", exists);
-   xml.AddElem("align", to_string(align));
-   xml.AddElem("alive", alive);
-   xml.AddElem("type", type);
-   xml.AddElem("type_idname", type_idname);
+  ostr << "<name>" << name << "</name>";
+  ostr << "<propername>" << propername << "</propername>";
+  ostr << "<gender_conservative>" <<  (int)gender_conservative << "</gender_conservative>";
+  ostr << "<gender_liberal>" <<  (int)gender_liberal << "</gender_liberal>";
+  ostr << "<squadid>" <<  squadid << "</squadid>";
+  ostr << "<age>" <<  age << "</age>";
+  ostr << "<birthday_month>" <<  birthday_month << "</birthday_month>";
+  ostr << "<birthday_day>" <<  birthday_day << "</birthday_day>";
+  ostr << "<exists>" <<  exists << "</exists>";
+  ostr << "<align>" <<  to_string(align) << "</align>";
+  ostr << "<alive>" <<  alive << "</alive>";
+  ostr << "<type>" <<  type << "</type>";
+  ostr << "<type_idname>" <<  type_idname << "</type_idname>";
 
-   char buf[256];
-   snprintf (buf, 255, "%f", infiltration);
-   xml.AddElem("infiltration", buf);
+  char buf[256];
+  snprintf(buf, 255, "%f", infiltration);
+  ostr << "<infiltration>" <<  buf << "</infiltration>";
 
-   xml.AddElem("animalgloss", animalgloss);
-   xml.AddElem("specialattack", specialattack);
-   xml.AddElem("clinic", clinic);
-   xml.AddElem("dating", dating);
-   xml.AddElem("hiding", hiding);
-   xml.AddElem("trainingtime", trainingtime);
-   xml.AddElem("trainingsubject", trainingsubject);
-   if(prisoner) //Should never be true when saving.
-   {
-      xml.AddElem("prisoner");
-      xml.IntoElem();
-      xml.AddSubDoc(prisoner->showXml());
-      xml.OutOfElem();
-   }
-   xml.AddElem("sentence", sentence);
-   xml.AddElem("confessions", confessions);
-   xml.AddElem("deathpenalty", deathpenalty);
-   xml.AddElem("joindays", joindays);
-   xml.AddElem("deathdays", deathdays);
-   xml.AddElem("id", id);
-   xml.AddElem("hireid", hireid);
-   xml.AddElem("meetings", meetings);
-   xml.AddElem("forceinc", forceinc);
-   xml.AddElem("stunned", stunned);
-   for(int i=0;i<len(extra_throwing_weapons);i++)
-      xml.AddSubDoc(extra_throwing_weapons[i]->showXml());
-   for(int i=0;i<len(clips);i++)
-      xml.AddSubDoc(clips[i]->showXml());
-   xml.AddElem("has_thrown_weapon", has_thrown_weapon);
-   xml.AddElem("money", money);
-   xml.AddElem("juice", juice);
-   xml.AddElem("income", income);
-   for(int i=0;i<BODYPARTNUM;i++) //Bad, relies on their order in the xml file. -XML
-      xml.AddElem("wound",wound[i]);
-   xml.AddElem("blood", blood);
-   for(int i=0;i<SPECIALWOUNDNUM;i++) //Bad, relies on their order in the xml file. -XML
-      xml.AddElem("special",special[i]);
-   for(int i=0;i<LAWFLAGNUM;i++) //Bad, relies on their order in the xml file. -XML
-      xml.AddElem("crimes_suspected",crimes_suspected[i]);
-   xml.AddElem("heat", heat);
-   xml.AddElem("location", location);
-   xml.AddElem("worklocation", worklocation);
-   xml.AddElem("cantbluff", cantbluff);
-   xml.AddElem("base", base);
+  ostr << "<animalgloss>" <<  animalgloss << "</animalgloss>";
+  ostr << "<specialattack>" <<  specialattack << "</specialattack>";
+  ostr << "<clinic>" <<  clinic << "</clinic>";
+  ostr << "<dating>" <<  dating << "</dating>";
+  ostr << "<hiding>" <<  hiding << "</hiding>";
+  ostr << "<trainingtime>" <<  trainingtime << "</trainingtime>";
+  ostr << "<trainingsubject>" <<  trainingsubject << "</trainingsubject>";
+  if (prisoner) //Should never be true when saving.
+  {
+     ostr << "<prisoner>" << prisoner->showXml() << "</prisoner>";
+  }
+  ostr << "<sentence>" <<  sentence << "</sentence>";
+  ostr << "<confessions>" <<  confessions << "</confessions>";
+  ostr << "<deathpenalty>" <<  deathpenalty << "</deathpenalty>";
+  ostr << "<joindays>" <<  joindays << "</joindays>";
+  ostr << "<deathdays>" <<  deathdays << "</deathdays>";
+  ostr << "<id>" <<  id << "</id>";
+  ostr << "<hireid>" <<  hireid << "</hireid>";
+  ostr << "<meetings>" <<  meetings << "</meetings>";
+  ostr << "<forceinc>" <<  forceinc << "</forceinc>";
+  ostr << "<stunned>" <<  stunned << "</stunned>";
+  for (int i=0; i<len(extra_throwing_weapons); i++)
+    ostr << extra_throwing_weapons[i]->showXml();
+  for (int i=0; i<len(clips); i++)
+    ostr << clips[i]->showXml();
+  ostr << "<has_thrown_weapon>" <<  has_thrown_weapon << "</has_thrown_weapon>";
+  ostr << "<money>" <<  money << "</money>";
+  ostr << "<juice>" <<  juice << "</juice>";
+  ostr << "<income>" <<  income << "</income>";
+  for (int i=0; i<BODYPARTNUM; i++) //Bad, relies on their order in the xml file. -XML
+    ostr << "<wound>" << (int)wound[i] << "</wound>";
+  ostr << "<blood>" <<  blood << "</blood>";
+  for (int i=0; i<SPECIALWOUNDNUM; i++) //Bad, relies on their order in the xml file. -XML
+    ostr << "<special>" << (int)special[i] << "</special>";
+  for (int i=0; i<LAWFLAGNUM; i++) //Bad, relies on their order in the xml file. -XML
+    ostr << "<crimes_suspected>" << crimes_suspected[i] << "</crimes_suspected>";
+  ostr << "<heat>" <<  heat << "</heat>";
+  ostr << "<location>" <<  location << "</location>";
+  ostr << "<worklocation>" <<  worklocation << "</worklocation>";
+  ostr << "<cantbluff>" <<  (int)cantbluff << "</cantbluff>";
+  ostr << "<base>" <<  base << "</base>";
 
-   xml.AddElem("activity");
-   xml.IntoElem();
-   xml.AddElem("type",activity.type);
-   xml.AddElem("arg",activity.arg);
-   xml.AddElem("arg2",activity.arg2);
-   xml.OutOfElem();
+  ostr << "<activity>";
+  ostr << "<type>" << activity.type << "</type>";
+  ostr << "<arg>" << activity.arg << "</arg>";
+  ostr << "<arg2>" << activity.arg2 << "</arg2>";
+  ostr << "</activity>";
 
-   xml.AddElem("carid", carid);
-   xml.AddElem("is_driver", is_driver);
-   xml.AddElem("pref_carid", pref_carid);
-   xml.AddElem("pref_is_driver", pref_is_driver);
-   xml.AddElem("flag", flag);
-   xml.AddElem("dontname", dontname);
-
-   return xml.GetDoc();
+  ostr << "<carid>" <<  carid << "</carid>";
+  ostr << "<is_driver>" <<  (int)is_driver << "</is_driver>";
+  ostr << "<pref_carid>" <<  pref_carid << "</pref_carid>";
+  ostr << "<pref_is_driver>" <<  (int)pref_is_driver << "</pref_is_driver>";
+  ostr << "<flag>" <<  flag << "</flag>";
+  ostr << "<dontname>" <<  dontname << "</dontname>";
+  ostr << "</creature>";
+  return ostr.str();
 }
 
 int Creature::get_attribute(int attribute, bool usejuice) const
@@ -1315,10 +1350,10 @@ showXml() const
     "<" + UNIQUE_CREATURE_XML_TAG + ">"
       "<CEO_ID>" + std::to_string(this->CEO_ID) +"</CEO_ID>"
       "<CEO_state>" + std::to_string(this->CEO_state) + "</CEO_state>"
-      "<CEO" + this->CEO_.showXml() + "</CEO>"
+      "<CEO>" + this->CEO_.showXml() + "</CEO>"
       "<Pres_ID>" + std::to_string(this->Pres_ID) +"</Pres_ID>"
       "<Pres_state>" + std::to_string(this->Pres_state) + "</Pres_state>"
-      "<Pres" + this->Pres_.showXml() + "</Pres>"
+      "<Pres>" + this->Pres_.showXml() + "</Pres>"
     "</" + UNIQUE_CREATURE_XML_TAG + ">"
   };
 }

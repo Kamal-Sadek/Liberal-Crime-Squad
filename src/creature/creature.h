@@ -293,7 +293,7 @@ public:
    short type;
    std::string type_idname;
    float infiltration;
-   char animalgloss;
+   short animalgloss;
    short specialattack;
    short clinic;
    short dating;
@@ -302,14 +302,14 @@ public:
    short trainingsubject;
    Creature* prisoner;
    short sentence;
-   char confessions;
-   char deathpenalty;
+   short confessions;
+   short deathpenalty;
    int joindays;
    int deathdays;
    int id;
    int hireid;
    int meetings;
-   char forceinc;
+   short forceinc;
    deque<Weapon*> extra_throwing_weapons;
    deque<Clip*> clips;
    bool has_thrown_weapon;
