@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
  *
@@ -23,7 +24,15 @@
  * This file was created by Chris Johnson (grundee@users.sourceforge.net)
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
-#include <externs.h>
+#include <cerrno>
+#include <cstring>
+#include "externs.h"
+#include <fstream>
+#include <iterator>
+#include <sstream>
+#include <string>
+#include "tinyxml2.h"
+
 
 /* active squad visits the hospital */
 void hospital(int loc)
@@ -83,26 +92,50 @@ void hospital(int loc)
 }
 
 /* active squad visits the arms dealer */
-void armsdealer(int loc)
+void
+armsdealer(int loc)
 {
-   music.play(MUSIC_SHOPPING);
-   locatesquad(activesquad,loc);
-   CMarkup xml; // -XML
-   xml.Load(string(artdir) + "armsdealer.xml");
-   Shop armsdealer(xml.GetDoc());
-   armsdealer.enter(*activesquad);
+  music.play(MUSIC_SHOPPING);
+  locatesquad(activesquad,loc);
+
+  std::string filename{artdir + std::string("armsdealer.xml")};
+  std::ifstream istr(filename);
+  if (!istr)
+  {
+    std::ostringstream ostr;
+    ostr << "error " << errno << " opening '" << filename << "': " << std::strerror(errno);
+    addstr(ostr.str(), xmllog);
+    getkey();
+    return;
+  }
+  std::string xml((std::istreambuf_iterator<char>(istr)),
+                   std::istreambuf_iterator<char>());
+  Shop armsdealer(xml);
+
+  armsdealer.enter(*activesquad);
 }
 
 
 /* active squad visits the pawn shop */
-void pawnshop(int loc)
+void
+pawnshop(int loc)
 {
-   music.play(MUSIC_SHOPPING);
-   locatesquad(activesquad,loc);
-   CMarkup xml; // -XML
-   xml.Load(string(artdir) + "pawnshop.xml");
-   Shop pawnshop(xml.GetDoc());
-   pawnshop.enter(*activesquad);
+  music.play(MUSIC_SHOPPING);
+  locatesquad(activesquad,loc);
+  std::string filename{artdir + std::string("pawnshop.xml")};
+  std::ifstream istr(filename);
+  if (!istr)
+  {
+    std::ostringstream ostr;
+    ostr << "error " << errno << " opening '" << filename << "': " << std::strerror(errno);
+    addstr(ostr.str(), xmllog);
+    getkey();
+    return;
+  }
+  std::string xml((std::istreambuf_iterator<char>(istr)),
+                   std::istreambuf_iterator<char>());
+  Shop pawnshop(xml);
+  pawnshop.enter(*activesquad);
 }
 
 
@@ -277,27 +310,49 @@ void dealership(int loc)
 
 
 /* active squad visits the department store */
-void deptstore(int loc)
+void
+deptstore(int loc)
 {
-   music.play(MUSIC_SHOPPING);
-   locatesquad(activesquad,loc);
-   CMarkup xml; // -XML
-   xml.Load(string(artdir) + "deptstore.xml");
-   Shop deptstore(xml.GetDoc());
-   deptstore.enter(*activesquad);
+  music.play(MUSIC_SHOPPING);
+  locatesquad(activesquad,loc);
+  std::string filename{artdir + std::string("deptstore.xml")};
+  std::ifstream istr(filename);
+  if (!istr)
+  {
+    std::ostringstream ostr;
+    ostr << "error " << errno << " opening '" << filename << "': " << std::strerror(errno);
+    addstr(ostr.str(), xmllog);
+    getkey();
+    return;
+  }
+  std::string xml((std::istreambuf_iterator<char>(istr)),
+                   std::istreambuf_iterator<char>());
+  Shop deptstore(xml);
+  deptstore.enter(*activesquad);
 }
 
 
 
 /* active squad visits the oubliette */
-void halloweenstore(int loc)
+void
+halloweenstore(int loc)
 {
-   music.play(MUSIC_SHOPPING);
-   locatesquad(activesquad,loc);
-   CMarkup xml;
-   xml.Load(string(artdir) + "oubliette.xml");
-   Shop oubliette(xml.GetDoc());
-   oubliette.enter(*activesquad);
+  music.play(MUSIC_SHOPPING);
+  locatesquad(activesquad,loc);
+  std::string filename{artdir + std::string("oubliette.xml")};
+  std::ifstream istr(filename);
+  if (!istr)
+  {
+    std::ostringstream ostr;
+    ostr << "error " << errno << " opening '" << filename << "': " << std::strerror(errno);
+    addstr(ostr.str(), xmllog);
+    getkey();
+    return;
+  }
+  std::string xml((std::istreambuf_iterator<char>(istr)),
+                   std::istreambuf_iterator<char>());
+  Shop oubliette(xml);
+  oubliette.enter(*activesquad);
 }
 
 
