@@ -64,15 +64,19 @@
 //somebody claims saving works only 3/4 of the time (no confirmation)
 //somebody claims squads don't move (sounds like older version bug, they haven't told me version)
 
-#include <externs.h>
+#include <cerrno>
+#include <cstring>
 #include <ctime>
+#include <externs.h>
 #include "creature/creaturetypecache.h"
 #include "news/news.h"
+#include <sstream>
+#include "tinyxml2.h"
 
 
 template<class Type>
   bool
-  populate_from_xml(vector<Type*>& types,string file,Log& log);
+  populate_from_xml(vector<Type*>& types, std::string const& file, Log& log);
 
 extern CreatureTypeCache creature_type_cache; // @TODO remove me
 
@@ -80,7 +84,7 @@ void
 populate_from_xml2(CreatureTypeCache& ctc, string const& file, Log& log);
 
 bool
-populate_masks_from_xml(vector<ArmorType*>& masks,string file,Log& log);
+populate_masks_from_xml(vector<ArmorType*>& masks, std::string const& file, Log& log);
 
 void
 end_game();
@@ -336,26 +340,45 @@ end_game()
 
 template<class Type>
   bool
-  populate_from_xml(vector<Type*>& types, string file, Log& log)
+  populate_from_xml(vector<Type*>& types, std::string const& file, Log& log)
   {
-     CMarkup xml;
-     if(!xml.Load(string(artdir)+file))
-     { // File is missing or not valid XML.
-        addstr("Failed to load "+file+"!",log);
+    std::string filename{artdir + file};
+    std::ifstream istr(filename);
+    if (!istr)
+    {
+      std::ostringstream ostr;
+      ostr << "error " << errno << " opening '" << filename << "': " << std::strerror(errno);
+      addstr(ostr.str(), log);
+      getkey();
+      return false;
+    }
+    std::string xml((std::istreambuf_iterator<char>(istr)),
+                     std::istreambuf_iterator<char>());
 
-        getkey();
+    tinyxml2::XMLDocument doc;
+    tinyxml2::XMLError err = doc.Parse(xml.c_str());
+    if (err != tinyxml2::XML_SUCCESS)
+    {
+      std::ostringstream ostr;
+      ostr << "error " << doc.ErrorID() << " parsing '" << filename << "'"
+           << " at line " << doc.GetErrorLineNum() << ": "
+           << doc.GetErrorStr1() << " / " << doc.GetErrorStr2();
+      addstr(ostr.str(), log);
+      getkey();
+      return false;
+    }
 
-        // Will cause abort here or else if file is missing all unrecognized types
-        // loaded from a saved game will be deleted. Also, you probably don't want
-        // to play with a whole category of things missing anyway. If the file
-        // does not have valid xml, then behaviour is kind of undefined so it's
-        // best to abort then too.
-        return false;
-     }
+    auto toplevel = doc.FirstChildElement();
+    if (toplevel)
+    {
+      for (auto element = toplevel->FirstChildElement(); element; element = element->NextSiblingElement())
+      {
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        types.push_back(new Type(printer.CStr()));
+      }
+    }
 
-     xml.FindElem();
-     xml.IntoElem();
-     while(xml.FindElem()) types.push_back(new Type(xml.GetSubDoc()));
      return true;
   }
 
@@ -363,10 +386,13 @@ template<class Type>
 void
 populate_from_xml2(CreatureTypeCache& ctc, string const& file, Log& log)
 {
-  std::ifstream istr(std::string(artdir) + file);
+  std::string filename{artdir + file};
+  std::ifstream istr(filename);
   if (!istr)
   {
-    addstr("Failed to load "+file+"!",log);
+    std::ostringstream ostr;
+    ostr << "error " << errno << " opening '" << filename << "': " << std::strerror(errno);
+    addstr(ostr.str(), log);
     getkey();
     return;
   }
@@ -377,41 +403,71 @@ populate_from_xml2(CreatureTypeCache& ctc, string const& file, Log& log)
 }
 
 
+/** @TODO move this into a Masks submodule. */
 bool
-populate_masks_from_xml(vector<ArmorType*>& masks, string file, Log& log)
+populate_masks_from_xml(vector<ArmorType*>& masks, std::string const& file, Log& log)
 {
-   CMarkup xml;
-   if(!xml.Load(string(artdir)+file))
-   { //File is missing or not valid XML.
-      addstr("Failed to load "+file+"!",log);
+  std::string filename{artdir + file};
+  std::ifstream istr(filename);
+  if (!istr)
+  {
+    std::ostringstream ostr;
+    ostr << "error " << errno << " opening '" << filename << "': " << std::strerror(errno);
+    addstr(ostr.str(), log);
+    getkey();
+    return false;
+  }
+  std::string xml((std::istreambuf_iterator<char>(istr)),
+                   std::istreambuf_iterator<char>());
 
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLError err = doc.Parse(xml.c_str());
+  if (err != tinyxml2::XML_SUCCESS)
+  {
+    std::ostringstream ostr;
+    ostr << "error " << doc.ErrorID() << " parsing '" << filename << "'"
+         << " at line " << doc.GetErrorLineNum() << ": "
+         << doc.GetErrorStr1() << " / " << doc.GetErrorStr2();
+    addstr(ostr.str(), log);
+    getkey();
+    return false;
+  }
+
+  auto toplevel = doc.FirstChildElement();
+  if ((toplevel != nullptr) && (toplevel->Name() == std::string("masks")))
+  {
+    int defaultindex = -1;
+    for (auto element = toplevel->FirstChildElement(); element; element = element->NextSiblingElement())
+    {
+      std::string tag = element->Name();
+
+      if (tag == "default")
+      {
+        defaultindex = getarmortype(element->GetText());
+        break;
+      }
+    }
+    if (defaultindex == -1)
+    {
+      std::ostringstream ostr;
+      ostr << "error: missing <default> element in '" << filename << "'";
+      addstr(ostr.str(), log);
       getkey();
+      return false;
+    }
 
-      return false; //Abort.
-   }
+    for (auto element = toplevel->FirstChildElement(); element; element = element->NextSiblingElement())
+    {
+      std::string tag = element->Name();
 
-   xml.FindElem();
-   xml.IntoElem();
-   int defaultindex;
-   if(xml.FindElem("default")) defaultindex=getarmortype(xml.GetData());
-   else
-   {
-      addstr("Default missing for masks!",log);
+      if (tag == "masktyoe")
+      {
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        armortype.push_back(new ArmorType(*armortype[defaultindex], printer.CStr()));
+      }
+    }
+  }
 
-      getkey();
-
-      return false; //Abort.
-   }
-   if(defaultindex==-1)
-   {
-      addstr("Default for masks is not a known armor type!",log);
-
-      getkey();
-
-      return false; //Abort.
-   }
-
-   xml.ResetMainPos();
-   while(xml.FindElem("masktype")) armortype.push_back(new ArmorType(*armortype[defaultindex],xml.GetSubDoc()));
-   return true;
+  return true;
 }
