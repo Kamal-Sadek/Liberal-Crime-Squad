@@ -1,30 +1,77 @@
+/**
+ * Interface for the Clip class.
+ */
+/*
+ * Copyright 2010 Carlos Gustavos  <blomkvist>
+ * Copyright 2014 Rich McGrew (yetisyny)
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 #ifndef CLIP_H
 #define CLIP_H
 
-#include "includes.h"
+#include "items/item.h"
+#include <string>
 
-class Clip : public Item
+
+class ClipType;
+
+class Clip
+: public Item
 {
-   public:
-      explicit Clip(const ClipType& seed, int number = 1);
-      virtual Clip* clone() const { return new Clip(*this); }
-      explicit Clip(const std::string& inputXml);
-      string showXml() const;
+public:
+  Clip(const ClipType& type, int number = 1);
 
-      bool is_clip() const { return true; }
+  Clip(std::string const& inputXml);
 
-      virtual Clip* split(int number);
-      virtual bool merge(Item& i);
-      virtual bool sort_compare_special(Item* other) const;
+  virtual Clip*
+  clone() const
+  { return new Clip(*this); }
+  
+  bool
+  is_clip() const
+  { return true; }
 
-      virtual string equip_title() const;
-      virtual const string& get_name() const;
-      virtual long get_fencevalue() const;
+  virtual Clip*
+  split(int number);
+  
+  virtual bool
+  merge(Item& i);
+  
+  virtual bool
+  sort_compare_special(Item* other) const;
 
-      int get_ammoamount() const;
+  virtual std::string
+  equip_title() const;
+  
+  virtual std::string const&
+  get_name() const;
+  
+  virtual long
+  get_fencevalue() const;
 
-   private:
+  int
+  get_ammoamount() const;
 
+private:
+  std::string
+  item_class() const override;
 };
 
 #endif //CLIP_H

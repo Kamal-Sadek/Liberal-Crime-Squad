@@ -1677,6 +1677,12 @@ get_weapon_skill() const
   return get_skill(wsk);
 }
 
+
+bool Creature::
+weapon_is_concealed() const
+{ return is_armed() && get_armor().conceals_weapon(*weapon); }
+
+
 string Creature::
 get_weapon_string(int subtype) const
 {
@@ -1697,6 +1703,10 @@ get_weapon_string(int subtype) const
    else r = "None";
    return r;
 }
+
+std::string Creature::
+get_armor_string(bool fullname) const
+{ return get_armor().equip_title(fullname); }
 
 
 std::string Creature::

@@ -1,4 +1,41 @@
+/**
+ * Implementation of the Weapon class.
+ */
+/*
+ * Copyright 2010 Carlos Gustavos  <blomkvist>
+ * Copyright 2014 Rich McGrew (yetisyny)
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
+#include "items/item.h"
 #include <externs.h>
+#include <sstream>
+#include "tinyxml2.h"
+
+
+namespace
+{
+  const std::string ITEM_XML_TYPENAME_ELEMENT{"itemtypename"};
+  const std::string ITEM_XML_TYPEID_ELEMENT{"itemtypeid"};
+  const std::string ITEM_XML_NUMBER_ELEMENT{"number"};
+} // anonymous namespace
+
 
 Item::Item(const ItemType& seed, int number) : number_(number)
 {
@@ -6,27 +43,56 @@ Item::Item(const ItemType& seed, int number) : number_(number)
    itemtypeid_=seed.get_id();
 }
 
-Item::Item(const std::string& inputXml)
+Item::Item(const std::string& xml)
 {
-   CMarkup xml;
-   xml.SetDoc(inputXml);
-   xml.FindElem();
-   xml.IntoElem();
-   while(xml.FindElem())
-   {
-      std::string tag=xml.GetTagName();
-      if(tag=="itemtypename") itemtypename_=xml.GetData();
-      else if(tag=="itemtypeid") itemtypeid_=atoi(xml.GetData());
-      else if(tag=="number") number_=atoi(xml.GetData());
-   }
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLError err = doc.Parse(xml.c_str());
+  if (err != tinyxml2::XML_SUCCESS)
+  {
+    std::ostringstream ostr;
+    ostr << "error " << doc.ErrorID() << " parsing item XML"
+         << " at line " << doc.GetErrorLineNum() << ": "
+         << doc.GetErrorStr1() << " / " << doc.GetErrorStr2();
+    addstr(ostr.str(), xmllog);
+    getkey();
+    return;
+  }
+
+  auto toplevel = doc.FirstChildElement();
+  if (toplevel != nullptr)
+  {
+    for (auto element = toplevel->FirstChildElement(); element; element = element->NextSiblingElement())
+    {
+      std::string tag = element->Name();
+      if (tag == ITEM_XML_TYPENAME_ELEMENT)
+         this->itemtypename_ = element->GetText();
+      else if (tag == ITEM_XML_TYPEID_ELEMENT)
+         this->itemtypeid_ = std::stoi(element->GetText());
+      else if (tag == ITEM_XML_NUMBER_ELEMENT)
+         this->number_ = std::stoi(element->GetText());
+    }
+  }
 }
 
-void Item::addBaseValues(CMarkup& xml) const
+
+std::string Item::
+showXml() const
 {
-   xml.AddElem("itemtypename",itemtypename_);
-   xml.AddElem("itemtypeid",itemtypeid_);
-   xml.AddElem("number",std::to_string(number_));
+  return std::string{
+    "<" + this->item_class() + ">"
+       "<" + ITEM_XML_TYPENAME_ELEMENT + ">" + itemtypename_ + "</" + ITEM_XML_TYPENAME_ELEMENT + ">"
+       "<" + ITEM_XML_TYPEID_ELEMENT + ">" + std::to_string(itemtypeid_) + "</" + ITEM_XML_TYPEID_ELEMENT + ">"
+       "<" + ITEM_XML_NUMBER_ELEMENT + ">" + std::to_string(number_) + "</" + ITEM_XML_NUMBER_ELEMENT + ">"
+       + this->xml_details() +
+    "</" + this->item_class() + ">"
+  };
 }
+
+
+std::string Item::
+xml_details() const
+{ return ""; }
+
 
 /*Item* Item::split(int number)
 {

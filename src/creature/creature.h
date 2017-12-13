@@ -186,6 +186,9 @@ enum SpecialWounds
 #define WOUND_CLEANOFF BIT8
 
 
+class Armor;
+
+
 class Creature
 {
 public:
@@ -249,9 +252,9 @@ public:
    void give_armor(Armor& a, vector<Item*>* lootpile);
    void give_armor(const ArmorType& at, vector<Item*>* lootpile);
    void strip(vector<Item*>* lootpile);
-   bool weapon_is_concealed() const { return is_armed()&&get_armor().conceals_weapon(*weapon); }
+   bool weapon_is_concealed() const;
    string get_weapon_string(int subtype) const;
-   string get_armor_string(bool fullname) const { return get_armor().equip_title(fullname); }
+   string get_armor_string(bool fullname) const;
 
    void stop_hauling_me();
 
