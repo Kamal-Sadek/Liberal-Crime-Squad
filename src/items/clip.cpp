@@ -1,30 +1,49 @@
+/**
+ * Implementation of the Clip class.
+ */
+/*
+ * Copyright 2010 Carlos Gustavos  <blomkvist>
+ * Copyright 2014 Rich McGrew (yetisyny)
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
+#include "items/clip.h"
 #include <externs.h>
 
-Clip::Clip(const ClipType& seed, int number) : Item(seed,number)
+Clip::
+Clip(ClipType const& type, int number)
+: Item(type, number)
 { }
 
-Clip::Clip(const std::string& inputXml) : Item(inputXml)
-{
-   /*CMarkup xml;
-   xml.SetDoc(inputXml);
-   xml.FindElem();
-   xml.IntoElem();
-   while(xml.FindElem())
-   {
-      std::string tag=xml.GetTagName();
-   }*/
-}
+Clip::
+Clip(std::string const& inputXml)
+: Item(inputXml)
+{ }
 
-string Clip::showXml() const
-{
-   CMarkup xml;
-   xml.AddElem("clip");
-   xml.IntoElem();
-   addBaseValues(xml);
-   return xml.GetDoc();
-}
 
-Clip* Clip::split(int number)
+std::string Clip::
+item_class() const
+{ return "class"; }
+
+
+Clip* Clip::
+split(int number)
 {
    if(number>number_) number=number_;
    Clip* newi=this->clone();
@@ -33,7 +52,9 @@ Clip* Clip::split(int number)
    return newi;
 }
 
-bool Clip::merge(Item& i)
+
+bool Clip::
+merge(Item& i)
 {
    if(i.is_clip() && this->is_same_type(i))
    {
@@ -44,7 +65,9 @@ bool Clip::merge(Item& i)
    return false;
 }
 
-bool Clip::sort_compare_special(Item* other) const
+
+bool Clip::
+sort_compare_special(Item* other) const
 {
    if(other)
    {

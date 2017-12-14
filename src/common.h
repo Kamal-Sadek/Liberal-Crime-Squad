@@ -158,8 +158,6 @@
    #endif
 #endif
 
-#include "cmarkup/Markup.h" //For XML.
-
 #ifdef _WIN32
 #ifdef __STRICT_ANSI__ /* mbctype.h doesn't work in strict ansi mode so this hack makes it work */
 #define STRICT_ANSI_TEMP_OFF
@@ -176,6 +174,8 @@
 #include "sdl/SDL.h"
 #include "sdl/SDL_mixer.h"
 #endif // DONT_INCLUDE_SDL
+
+#include <string.h>
 
 #ifndef WIN32_PRE_DOTNET
 using namespace std;

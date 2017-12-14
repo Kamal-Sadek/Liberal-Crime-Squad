@@ -24,20 +24,21 @@ crimesquad_SOURCES = \
 libcrimesquad_la_SOURCES = \
  basemode/baseactions.cpp basemode/activate.cpp basemode/reviewmode.cpp\
  basemode/liberalagenda.cpp\
- cmarkup/Markup.cpp cmarkup/Markup.h \
  combat/fight.cpp combat/haulkidnap.cpp daily/activities.cpp daily/daily.cpp\
  common.h creature/augmenttype.h\
  common/commondisplay.cpp common/commonactions.cpp\
  common/consolesupport.cpp common/getnames.cpp common/translateid.cpp\
  common/equipment.cpp creature/augmentation.cpp \
  common/interval.h             common/interval.cpp \
- common/misc.cpp common/help.cpp creature/augmentation.h creature/creature.h\
+ common/misc.cpp common/help.cpp creature/augmentation.h \
+ common/stringconversion.cpp \
  configfile.h                  configfile.cpp \
- creature/creature.cpp title/titlescreen.cpp\
- creature/creaturenames.cpp \
+ creature/attributes.h         creature/attributes.cpp \
+ creature/creature.h           creature/creature.cpp \
+ creature/creaturenames.cpp    creature/creaturetypes.cpp \
  creature/creaturetypecache.h  creature/creaturetypecache.cpp \
- creature/creaturetype.h creature/creaturetype.cpp common/stringconversion.cpp \
- creature/creaturetypes.cpp \
+ creature/creaturetype.h       creature/creaturetype.cpp \
+ creature/skill.h              creature/skill.cpp \
  cursesgraphics.cpp lcsio.h cursesmovie.h compat.h cursesgraphics.h includes.h\
  daily/date.h                  daily/date.cpp \
  daily/interrogation.cpp\
@@ -69,6 +70,7 @@ libcrimesquad_la_SOURCES = \
  sitemode/sitemode.cpp sitemode/talk.cpp sitemode/miscactions.cpp\
  tinyxml2.h                    tinyxml2.cpp \
  title/highscore.cpp title/newgame.cpp title/saveload.cpp basemode/basemode.cpp\
+ title/titlescreen.cpp\
  title/initfile.cpp locations/world.cpp locations/locations.h \
  vehicle/vehicle.h             vehicle/vehicle.cpp \
  vehicle/vehicletype.cpp vehicle/vehicletype.h items/weapontype.h\

@@ -25,7 +25,9 @@
  */
 
 #include <externs.h>
+#include <sstream>    // @TODO only for create_item(), which needs to be moved
 #include <sys/stat.h>
+#include "tinyxml2.h" // @TODO only for create_item(), which need to be moved
 #pragma GCC diagnostic ignored "-Wunused-result"
 
 // TODO: It would be really cool to be able to "export" characters.
@@ -336,26 +338,48 @@ void savegame(const string& filename)
 }
 
 
-/* Used by load() to create items of the correct class. */
-Item* create_item(const std::string& inputXml)
+/**
+ * Factory function to load an item of a specific class.
+ *
+ * Used by load() to create items of the correct class.
+ *
+ * @TODO move this into the items module.
+ */
+static Item*
+create_item(std::string const& xml)
 {
-   Item* it = NULL;
-   CMarkup xml;
-   xml.SetDoc(inputXml);
-   xml.FindElem();
-   string itemclass = xml.GetTagName();
-   if (itemclass == "clip")
-      it = new Clip(inputXml);
-   else if (itemclass == "weapon")
-      it = new Weapon(inputXml);
-   else if (itemclass == "armor")
-      it = new Armor(inputXml);
-   else if (itemclass == "loot")
-      it = new Loot(inputXml);
-   else if (itemclass == "money")
-      it = new Money(inputXml);
+  Item* it = nullptr;
 
-   return it;
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLError err = doc.Parse(xml.c_str());
+  if (err != tinyxml2::XML_SUCCESS)
+  {
+    std::ostringstream ostr;
+    ostr << "error " << doc.ErrorID() << " parsing item XML"
+         << " at line " << doc.GetErrorLineNum() << ": "
+         << doc.GetErrorStr1() << " / " << doc.GetErrorStr2();
+    addstr(ostr.str(), xmllog);
+    getkey();
+    return it;
+  }
+
+  auto toplevel = doc.FirstChildElement();
+  if (toplevel != nullptr)
+  {
+    std::string itemclass = toplevel->Name();
+    if (itemclass == "clip")
+      it = new Clip(xml);
+    else if (itemclass == "weapon")
+      it = new Weapon(xml);
+    else if (itemclass == "armor")
+      it = new Armor(xml);
+    else if (itemclass == "loot")
+      it = new Loot(xml);
+    else if (itemclass == "money")
+      it = new Money(xml);
+  }
+
+  return it;
 }
 
 /* loads the game from save.dat */

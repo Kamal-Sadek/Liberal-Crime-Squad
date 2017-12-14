@@ -1,8 +1,7 @@
 /**
- * Interface for the augmentations submodule.
+ * Interface for the creature Attributes submodule.
  */
 /*
- * Copyright 2015,2016 Kamal-Sadek  <kamaljalals@gmail.com>
  * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
@@ -22,38 +21,51 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-#ifndef AUGMENTATION_H
-#define AUGMENTATION_H
+#ifndef LCS_CREATURE_ATTRIBUTES_H_H
+#define LCS_CREATURE_ATTRIBUTES_H_H
 
 #include <string>
 
 
-enum Augmentations
+enum CreatureAttribute
 {
-   AUGMENTATION_HEAD,
-   AUGMENTATION_BODY,
-   AUGMENTATION_ARMS,
-   AUGMENTATION_LEGS,
-   AUGMENTATION_SKIN,
-   AUGMENTATIONNUM
+   ATTRIBUTE_STRENGTH,
+   ATTRIBUTE_INTELLIGENCE,
+   ATTRIBUTE_WISDOM,
+   ATTRIBUTE_AGILITY,
+   ATTRIBUTE_HEALTH,
+   ATTRIBUTE_CHARISMA,
+   ATTRIBUTE_HEART
 };
 
+constexpr std::size_t ATTNUM = 7;
+constexpr int         ATTR_DEFAULT_LEVEL =  0;
+constexpr int         ATTR_MIN_LEVEL     =  0;
+constexpr int         ATTR_MAX_LEVEL     = 99;
 
-class Augmentation
+
+class Attribute
 {
 public:
-    Augmentation() { }
-    Augmentation(std::string const& inputXml);
-    std::string showXml() const;
+  Attribute();
 
-    std::string name{""};
-    short type{-1};
-    int attribute{-1};
-    int effect{-1};
-    int value{-1};
+  Attribute(std::string const& inputXml);
 
-    static std::string get_name(int augmentation_type);
-    static int get_associated_attribute(int augmentation_type);
+  std::string
+  showXml() const;
+
+  void
+  set_type(int attribute_type)
+  { attribute = attribute_type; }
+
+  static std::string get_name(int attribute_type);
+
+public:
+  int value;
+
+private:
+  int attribute;
 };
 
-#endif
+#endif /* LCS_CREATURE_ATTRIBUTES_H_H */
+

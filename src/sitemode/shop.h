@@ -1,3 +1,28 @@
+/**
+ * Interface for the Shop class.
+ */
+/*
+ * Copyright 2010 Carlos Gustavos  <blomkvist >
+ * Copyright 2014 Rich McGrew (yetisyny)
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 #ifndef SHOP_H
 #define SHOP_H
 
@@ -53,7 +78,10 @@ class ShopOption
 class Shop : public ShopOption
 {
    public:
-      Shop(MCD_STR xmlstring);
+      Shop(std::string const& xmlstring,
+           bool fullscreen=false,
+           bool only_sell_legal=true,
+           bool increase_prices_with_illegality=false);
       ~Shop();
 
       //This function is used to start the shop interface.
@@ -64,9 +92,7 @@ class Shop : public ShopOption
       virtual bool is_available() const;
 
    private:
-      Shop(MCD_STR xmlstring, bool fullscreen, bool only_sell_legal,
-           bool increase_prices_with_illegality);
-      void init(const MCD_STR &xmlstring);
+      void init(std::string const& xmlstring);
 
       void browse_fullscreen(squadst& customers, int& buyer) const;
       void browse_halfscreen(squadst& customers, int& buyer) const;
@@ -86,7 +112,7 @@ class Shop : public ShopOption
       class ShopItem : public ShopOption
       {
          public:
-            ShopItem(MCD_STR xmlstring, bool only_sell_legal,
+            ShopItem(std::string const& xmlstring, bool only_sell_legal,
                      bool increase_price_with_illegality);
 
             virtual bool display() const;
@@ -114,7 +140,7 @@ class Shop : public ShopOption
             int price_;
             int adjusted_price() const;
             int sleeperprice_;
-			bool only_sell_legal_;
+            bool only_sell_legal_;
             bool increase_price_with_illegality_;
             bool description_defined_;
             const std::string& get_description() const;

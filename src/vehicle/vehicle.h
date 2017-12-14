@@ -1,7 +1,35 @@
+/**
+ * Interface for the base WeaponType class.
+ */
+/*
+ * Copyright 2010 Carlos Gustavos  (blomkvist)
+ * Copyright 2010 Ari Rahikkala  (arirahikkala)
+ * Copyright 2014 Rich McGrew  (yetisyny)
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 #ifndef VEHICLE_H
 #define VEHICLE_H
 
-#include "includes.h"
+#include <string>
+#include <vector>
+
 
 enum carparts
 {
@@ -33,19 +61,20 @@ enum CarUpgrades
    CARUPGRADESNUM
 };
 
-// These 2 declarations are for stuff that isn't in vehicle.cpp or the Vehicle class.
+// These declarations are for stuff that isn't in vehicle.cpp or the Vehicle class.
 // They're just needed by this header and implemented elsewhere.
-extern vector<VehicleType *> vehicletype;
-int getvehicletype(const string &idname);
+class VehicleType;
+extern std::vector<VehicleType*> vehicletype;
+int getvehicletype(std::string const& idname);
 
 class Vehicle
 {
 private:
-   void init(const VehicleType& seed, const string& color, int myear);
+   void init(const VehicleType& seed, const std::string& color, int myear);
 
-   string vtypeidname_;
+   std::string vtypeidname_;
    long vtypeid_; //If the xml-file is changed vtypeid_ may not be correct after loading a saved game. So it's not actually used now. -XML
-   string color_;
+   std::string color_;
    //bool displaycolor_;
    short heat_;
    long location_;
@@ -59,45 +88,45 @@ private:
    //int steal_extraheat_;
 
 public:
-   explicit Vehicle(const VehicleType& seed) { init(seed,pickrandom(seed.color()),seed.makeyear()); }
-   Vehicle(const VehicleType& seed, const string& color, int myear){ init(seed,color,myear); }
+   explicit Vehicle(const VehicleType& seed);
+   Vehicle(const VehicleType& vehicle_type, const std::string& color, int myear){ init(vehicle_type,color,myear); }
    ~Vehicle() { stop_riding_me(); stop_preferring_me(); }
 
-   string showXml() const;
+   std::string showXml() const;
    Vehicle(const std::string& inputXml);
 
    void stop_riding_me() const;
    void stop_preferring_me() const; //GETS RID OF CAR PREFERENCES FROM pool LIBERALS.
 
-   string fullname(bool halffull=false) const;
+   std::string fullname(bool halffull=false) const;
 
    short get_heat() const { return heat_; }
    void add_heat(short heat) { heat_ += heat; }
    long get_location() const { return location_; }
    void set_location(long new_location) { location_ = new_location; }
 
-   const string& vtypeidname() const { return vtypeidname_; }
+   std::string const& vtypeidname() const { return vtypeidname_; }
    long vtypeid() const { return vtypeid_; }
-   const string& color() const { return color_; }
-   bool displayscolor() const { return vehicletype[getvehicletype(vtypeidname_)]->displayscolor(); }
+   std::string const& color() const { return color_; }
+   bool displayscolor() const;
    int myear() const { return myear_; }
    long id() const { return id_; }
    int modifieddriveskill(int skillLevel);
    int modifieddodgeskill(int skillLevel);
-   int attackbonus(bool isDriver) const { return vehicletype[getvehicletype(vtypeidname_)]->attackbonus(isDriver); }
-   int gethitlocation(int bodypart) { return vehicletype[getvehicletype(vtypeidname_)]->gethitlocation(bodypart); }
-   string getpartname(int hitlocation) { return vehicletype[getvehicletype(vtypeidname_)]->getpartname(hitlocation); }
-   int armorbonus(int hitlocation) const { return vehicletype[getvehicletype(vtypeidname_)]->armorbonus(hitlocation); }
-   const string& longname() const { return vehicletype[getvehicletype(vtypeidname_)]->longname(); }
-   const string& shortname() const { return vehicletype[getvehicletype(vtypeidname_)]->shortname(); }
-   int steal_difficultytofind() const { return vehicletype[getvehicletype(vtypeidname_)]->steal_difficultytofind(); }
-   int steal_juice() const { return vehicletype[getvehicletype(vtypeidname_)]->steal_juice(); }
-   int steal_extraheat() const { return vehicletype[getvehicletype(vtypeidname_)]->steal_extraheat(); }
-   int sensealarmchance() const { return vehicletype[getvehicletype(vtypeidname_)]->sensealarmchance(); }
-   int touchalarmchance() const { return vehicletype[getvehicletype(vtypeidname_)]->touchalarmchance(); }
-   bool availableatshop() const { return vehicletype[getvehicletype(vtypeidname_)]->availableatshop(); }
-   int price() const { return vehicletype[getvehicletype(vtypeidname_)]->price(); }
-   int sleeperprice() const { return vehicletype[getvehicletype(vtypeidname_)]->sleeperprice(); }
+   int attackbonus(bool isDriver) const;
+   int gethitlocation(int bodypart);
+   std::string getpartname(int hitlocation);
+   int armorbonus(int hitlocation) const;
+   std::string const& longname() const;
+   std::string const& shortname() const;
+   int steal_difficultytofind() const;
+   int steal_juice() const;
+   int steal_extraheat() const;
+   int sensealarmchance() const;
+   int touchalarmchance() const;
+   bool availableatshop() const;
+   int price() const;
+   int sleeperprice() const;
 
    static long curcarid;
 };

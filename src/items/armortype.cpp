@@ -1,7 +1,44 @@
-#include <externs.h>
+/**
+ * Implementation of the ArmorType class.
+ */
+/*
+ * Copyright 2010 Carlos Gustavos  <blomkvist>
+ * Copyright 2014 Rich McGrew (yetisyny)
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
+#include "items/armortype.h"
 
-ArmorType::ArmorType(MCD_STR xmlstring)
- : ItemType(xmlstring),
+#include "externs.h"
+#include <sstream>
+#include "tinyxml2.h"
+
+
+namespace
+{
+  const std::string ARMORTYPE_XML_ARMORTYPE_ELEMENT{"armortype"};
+} // anonymous namespace
+
+
+ArmorType::
+ArmorType(std::string const& xmlstring)
+: ItemType(xmlstring),
    make_difficulty_(0), make_price_(0), deathsquad_legality_(false),
    can_get_bloody_(true), can_get_damaged_(true),
    stealth_value_(0), armor_body_(0), armor_head_(0), armor_limbs_(0), fireprotection_(false),
@@ -15,8 +52,10 @@ ArmorType::ArmorType(MCD_STR xmlstring)
    init(xmlstring);
 }
 
-ArmorType::ArmorType(const ArmorType& base, MCD_STR xmlstring)
- : ItemType(base, xmlstring),
+
+ArmorType::
+ArmorType(const ArmorType& base, std::string const& xmlstring)
+: ItemType(base, xmlstring),
    make_difficulty_(base.make_difficulty_), make_price_(base.make_price_), deathsquad_legality_(base.deathsquad_legality_),
    can_get_bloody_(base.can_get_bloody_), can_get_damaged_(base.can_get_damaged_),
    stealth_value_(base.stealth_value_), armor_body_(base.armor_body_), armor_head_(base.armor_head_), armor_limbs_(base.armor_limbs_), fireprotection_(base.fireprotection_),
@@ -31,213 +70,221 @@ ArmorType::ArmorType(const ArmorType& base, MCD_STR xmlstring)
    init(xmlstring);
 }
 
-void ArmorType::init(const MCD_STR& xmlstring)
+
+void ArmorType::
+init(std::string const& xml)
 {
-   CMarkup xml;
-   xml.SetDoc(xmlstring);
-   xml.FindElem();
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLError err = doc.Parse(xml.c_str());
+  if (err != tinyxml2::XML_SUCCESS)
+  {
+    std::ostringstream ostr;
+    ostr << "error " << doc.ErrorID() << " parsing ArmorType XML"
+         << " at line " << doc.GetErrorLineNum() << ": "
+         << doc.GetErrorStr1() << " / " << doc.GetErrorStr2();
+    addstr(ostr.str(), xmllog);
+    getkey();
+    return;
+  }
 
-   xml.IntoElem();
-
-   while(xml.FindElem()) //Loop over all the elements inside the armortype element.
-   {
-      std::string element = xml.GetTagName();
-
-      if (element == "make_difficulty")
-         make_difficulty_ = atoi(xml.GetData());
-      else if (element == "make_price")
-         make_price_ = atoi(xml.GetData());
-      else if (element == "deathsquad_legality")
+  auto toplevel = doc.FirstChildElement();
+  if (toplevel != nullptr && toplevel->Name() == ARMORTYPE_XML_ARMORTYPE_ELEMENT)
+  {
+    for (auto element = toplevel->FirstChildElement(); element; element = element->NextSiblingElement())
+    {
+      std::string tag = element->Name();
+      if (tag == "make_difficulty")
       {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            deathsquad_legality_ = true;
-         else if (b == 0)
-            deathsquad_legality_ = false;
-         /*else
-            errorlog << "Invalid boolean value for armor type " << idname()
-                      << "::deathsquad_legality: " << xml.GetData() << std::endl;*/
+        char const* val = element->GetText();
+        if (val)
+          this->make_difficulty_ = std::stoi(val);
       }
-      else if (element == "can_get_bloody")
+      else if (tag == "make_price")
       {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            can_get_bloody_ = true;
-         else if (b == 0)
-            can_get_bloody_ = false;
+        char const* val = element->GetText();
+        if (val)
+          this->make_price_ = std::stoi(val);
       }
-      else if (element == "can_get_damaged")
+      else if (tag == "deathsquad_legality")
       {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            can_get_damaged_ = true;
-         else if (b == 0)
-            can_get_damaged_ = false;
+        char const* val = element->GetText();
+        if (val)
+          this->deathsquad_legality_ = (stringtobool(val)==1);
       }
-      else if (element == "armor")
+      else if (tag == "can_get_bloody")
       {
-         xml.IntoElem();
-
-         while(xml.FindElem())
-         {
-            element = xml.GetTagName();
-
-            if (element == "body")
-               armor_body_ = atoi(xml.GetData());
-            else if (element == "head")
-               armor_head_ = atoi(xml.GetData());
-            else if (element == "limbs")
-               armor_limbs_ = atoi(xml.GetData());
-            else if (element == "fireprotection")
-            {
-               int b = stringtobool(xml.GetData());
-               if (b == 1)
-                  fireprotection_ = true;
-               else if (b == 0)
-                  fireprotection_ = false;
-               /*else
-                  errorlog << "Invalid boolean value for armor type " << idname()
-                            << "::armor::fireprotection: " << xml.GetData() << std::endl;*/
-            }
-            /*else
-               errorlog << "Unknown element for armor type " << idname()
-                         << "::armor: " << element << endl;*/
-         }
-         xml.OutOfElem();
+        char const* val = element->GetText();
+        if (val)
+          this->can_get_bloody_ = (stringtobool(val)==1);
       }
-      else if (element == "body_covering")
+      else if (tag == "can_get_damaged")
       {
-         xml.IntoElem();
-
-         while(xml.FindElem())
-         {
-            element = xml.GetTagName();
-
-            if (element == "body")
-            {
-               int b = stringtobool(xml.GetData());
-               if (b == 1)
-                  cover_body_ = true;
-               else if (b == 0)
-                  cover_body_ = false;
-               /*else
-                  errorlog << "Invalid boolean value for armor type " << idname()
-                            << "::body_covering::body: " << xml.GetData() << std::endl;*/
-            }
-            else if (element == "head")
-            {
-               int b = stringtobool(xml.GetData());
-               if (b == 1)
-                  cover_head_ = true;
-               else if (b == 0)
-                  cover_head_ = false;
-               /*else
-                  errorlog << "Invalid boolean value for armor type " << idname()
-                            << "::body_covering::head: " << xml.GetData() << std::endl;*/
-            }
-            else if (element == "arms")
-            {
-               int b = stringtobool(xml.GetData());
-               if (b == 1)
-                  cover_arms_ = true;
-               else if (b == 0)
-                  cover_arms_ = false;
-               /*else
-                  errorlog << "Invalid boolean value for armor type " << idname()
-                            << "::body_covering::arms: " << xml.GetData() << std::endl;*/
-            }
-            else if (element == "legs")
-            {
-               int b = stringtobool(xml.GetData());
-               if (b == 1)
-                  cover_legs_ = true;
-               else if (b == 0)
-                  cover_legs_ = false;
-               /*else
-                  errorlog << "Invalid boolean value for armor type " << idname()
-                            << "::body_covering::legs: " << xml.GetData() << std::endl;*/
-            }
-            else if (element == "conceals_face")
-            {
-               int b = stringtobool(xml.GetData());
-               if (b == 1)
-                  conceal_face_ = true;
-               else if (b == 0)
-                  conceal_face_ = false;
-               /*else
-                  errorlog << "Invalid boolean value for armor type " << idname()
-                            << "::body_covering::conceal_face: " << xml.GetData() << std::endl;*/
-            }
-            /*else
-               errorlog << "Unknown element for armor type " << idname()
-                         << "::armor: " << element << endl;*/
-         }
-         xml.OutOfElem();
+        char const* val = element->GetText();
+        if (val)
+          this->can_get_damaged_ = (stringtobool(val)==1);
       }
-      else if (element == "shortname")
+      else if (tag == "armor")
       {
-         shortname_ = xml.GetData();
-         shortname_defined_ = true;
-         if (len(shortname_) > 14)
-            shortname_.resize(14);
+        for (auto e = element->FirstChildElement(); e; e = e->NextSiblingElement())
+        {
+          std::string tag = e->Name();
+          if (tag == "body")
+          {
+            char const* val = e->GetText();
+            if (val)
+              this->armor_body_ = std::stoi(val);
+          }
+          else if (tag == "head")
+          {
+            char const* val = e->GetText();
+            if (val)
+              this->armor_head_ = std::stoi(val);
+          }
+          else if (tag == "limbs")
+          {
+            char const* val = e->GetText();
+            if (val)
+              this->armor_limbs_ = std::stoi(val);
+          }
+          else if (tag == "fireprotection")
+          {
+            char const* val = e->GetText();
+            if (val)
+              this->fireprotection_ = (stringtobool(val)==1);
+          }
+        }
       }
-      else if (element == "interrogation")
+      else if (tag == "body_covering")
       {
-         xml.IntoElem();
-
-         while(xml.FindElem())
-         {
-            if (element == "basepower")
-               interrogation_basepower_ = atoi(xml.GetData());
-            else if (element == "assaultbonus")
-               interrogation_assaultbonus_ = atoi(xml.GetData());
-            else if (element == "drugbonus")
-               interrogation_drugbonus_ = atoi(xml.GetData());
-            /*else
-             errorlog << "Unknown element for armor type " << idname()
-                         << "::interrogation: " << element << endl;*/
-         }
-
-         xml.OutOfElem();
+        for (auto e = element->FirstChildElement(); e; e = e->NextSiblingElement())
+        {
+          std::string tag = e->Name();
+          if (tag == "body")
+          {
+            char const* val = e->GetText();
+            if (val)
+              this->cover_body_ = (stringtobool(val)==1);
+          }
+          else if (tag == "head")
+          {
+            char const* val = e->GetText();
+            if (val)
+              this->cover_head_ = (stringtobool(val)==1);
+          }
+          else if (tag == "arms")
+          {
+            char const* val = e->GetText();
+            if (val)
+              this->cover_arms_ = (stringtobool(val)==1);
+          }
+          else if (tag == "legs")
+          {
+            char const* val = e->GetText();
+            if (val)
+              this->cover_legs_ = (stringtobool(val)==1);
+          }
+          else if (tag == "conceals_face")
+          {
+            char const* val = e->GetText();
+            if (val)
+              this->conceal_face_ = (stringtobool(val)==1);
+          }
+        }
       }
-      else if (element == "professionalism")
-         professionalism_ = atoi(xml.GetData());
-      else if (element == "conceal_weapon_size")
-         conceal_weaponsize_ = atoi(xml.GetData());
-      else if (element == "stealth_value")
-         stealth_value_ = atoi(xml.GetData());
-      else if (element == "mask")
+      else if (tag == "shortname")
       {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            mask_ = true;
-         else if (b == 0)
-            mask_ = false;
+        char const* val = element->GetText();
+        if (val)
+        {
+          this->shortname_ = val;
+          if (this->shortname_.length() > 14)
+            this->shortname_.resize(14);
+          this->shortname_defined_ = true;
+        }
       }
-      else if (element == "surprise")
+      else if (tag == "interrogation")
       {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            surprise_mask_ = true;
-         else if (b == 0)
-            surprise_mask_ = false;
+        for (auto e = element->FirstChildElement(); e; e = e->NextSiblingElement())
+        {
+          std::string tag = e->Name();
+          if (tag == "basepower")
+          {
+            char const* val = e->GetText();
+            if (val)
+              this->interrogation_basepower_ = std::stoi(val);
+          }
+          else if (tag == "assaultbonus")
+          {
+            char const* val = e->GetText();
+            if (val)
+              this->interrogation_assaultbonus_ = std::stoi(val);
+          }
+          else if (tag == "drugbonus")
+          {
+            char const* val = e->GetText();
+            if (val)
+              this->interrogation_drugbonus_ = std::stoi(val);
+          }
+        }
       }
-      else if (element == "description")
-         description_ = xml.GetData();
-      else if (element == "qualitylevels")
-         quality_levels_ = max(1,atoi(xml.GetData()));
+      else if (tag == "professionalism")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->professionalism_ = std::stoi(val);
+      }
+      else if (tag == "conceal_weapon_size")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->conceal_weaponsize_ = std::stoi(val);
+      }
+      else if (tag == "stealth_value")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->stealth_value_ = std::stoi(val);
+      }
+      else if (tag == "mask")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->mask_ = (stringtobool(val)==1);
+      }
+      else if (tag == "surprise")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->surprise_mask_ = (stringtobool(val)==1);
+      }
+      else if (tag == "description")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->description_ = val;
+      }
+      else if (tag == "qualitylevels")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->quality_levels_ = std::max(1, std::stoi(val));
+      }
+      else if (tag == "durability")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->durability_ = std::max(0, std::stoi(val));
+      }
+    }
+  }
 
-      else if (element == "durability")
-         durability_ = max(0,atoi(xml.GetData()));
-      /*else
-         errorlog << "Unknown element for armor type " << idname() << ": " << element << endl;*/
-   }
-
-   if (!shortname_defined_ && len(name()) <= 14)
-      shortname_ = name();
+  if (!shortname_defined_ && len(name()) <= 14)
+    shortname_ = name();
 }
 
-int ArmorType::get_armor(int bodypart) const
+
+int ArmorType::
+get_armor(int bodypart) const
 {
    if(covers(bodypart))
    {
@@ -262,7 +309,9 @@ int ArmorType::get_armor(int bodypart) const
    return 0;
 }
 
-bool ArmorType::covers(int bodypart) const
+
+bool ArmorType::
+covers(int bodypart) const
 {
    switch(bodypart)
    {
@@ -277,7 +326,9 @@ bool ArmorType::covers(int bodypart) const
    return false;
 }
 
-const string& ArmorType::get_shortname() const
+
+string const& ArmorType::
+get_shortname() const
 {
    if (shortname_future_defined_ && year >= 2100)
       return shortname_future_;
@@ -291,10 +342,15 @@ const string& ArmorType::get_shortname() const
       return "UNDEF";*/
 }
 
-bool ArmorType::conceals_weaponsize(int weaponsize) const
-{
-   return (conceal_weaponsize_ >= weaponsize);
-}
+
+bool ArmorType::
+conceals_weapon(const WeaponType& weapon) const
+{ return conceals_weaponsize(weapon.get_size()); }
+
+
+bool ArmorType::
+conceals_weaponsize(int weaponsize) const
+{ return (conceal_weaponsize_ >= weaponsize); }
 
 /*const string& get_appropriate_weapon(int index) const
 {

@@ -925,6 +925,7 @@ enum ActiveSortingChoices
 // Sets the text color to the thematic color for the given alignment
 // extended_range forces colors to be set on a 5 point scale instead
 // of just basic liberal-moderate-conservative
+#include "politics/alignment.h" // @todo remove me
 void set_alignment_color(Alignment alignment, bool extended_range=false);
 /* Sets the text color per activity type */
 void set_activity_color(long activity_type);
@@ -1050,7 +1051,7 @@ void sleeperize_prompt(Creature &converted,Creature &recruiter,int y);
 void sortliberals(std::vector<Creature *>& liberals,short sortingchoice,bool dosortnone=false);
 /* common - Functions used when sorting vectors of creatures. */
 bool sort_none(const Creature* first,const Creature* second);
-inline bool sort_name(const Creature* first,const Creature* second) { return strcmp(first->name,second->name)<0; }
+bool sort_name(const Creature* first,const Creature* second);
 bool sort_locationandname(const Creature* first,const Creature* second);
 bool sort_squadorname(const Creature* first,const Creature* second);
 /* common - Prompt to decide how to sort liberals.*/
@@ -1187,6 +1188,7 @@ int severtype_string_to_enum(const std::string& severtype);
 /*
  creature.cpp
 */
+#include "creature/gender.h" // @TODO remove me
 // Add an age estimate to a person's name
 void add_age(Creature& person);
 /* rolls up a creature's stats and equipment */
@@ -1404,8 +1406,6 @@ void knowmap(int locx,int locy,int locz);
 void prepareencounter(short type,char sec);
 /* generates a new siege encounter */
 char addsiegeencounter(char type);
-/* rolls up a random creature type according to the passed weighting array */
-int getrandomcreaturetype(int cr[CREATURENUM]);
 
 /*
  sitedisplay.cpp
@@ -1477,6 +1477,20 @@ void special_oval_office();
 */
 /* bluff, date, issues */
 char talk(Creature &a,int t);
+
+enum CheckDifficulty
+{
+   DIFFICULTY_AUTOMATIC    = 1,
+   DIFFICULTY_VERYEASY     = 3,
+   DIFFICULTY_EASY         = 5,
+   DIFFICULTY_AVERAGE      = 7,
+   DIFFICULTY_CHALLENGING  = 9,
+   DIFFICULTY_HARD         = 11,
+   DIFFICULTY_FORMIDABLE   = 13,
+   DIFFICULTY_HEROIC       = 15,
+   DIFFICULTY_SUPERHEROIC  = 17,
+   DIFFICULTY_IMPOSSIBLE   = 19
+};
 
 /*
  stealth.cpp

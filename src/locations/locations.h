@@ -283,6 +283,8 @@ public:
 *
 *******************************************************************************/
 
+class Creature;
+
 /*
  world.cpp
 */
@@ -291,17 +293,17 @@ Location* find_site_in_city(int site_type, int city);
 int find_site_index_in_city(int site_type, int city);
 /* find local versions of these locations */
 int find_site_index_in_same_city(int site_type, int site_index);
-inline int find_site_index_in_same_city(int site_type, const Creature& cr) { return find_site_index_in_same_city(site_type,cr.location); }
-inline int find_police_station(int site_index) { return find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION,site_index); }
-inline int find_police_station(const Creature& cr) { return find_police_station(cr.location); }
-inline int find_clinic(int site_index) { return find_site_index_in_same_city(SITE_HOSPITAL_CLINIC,site_index); }
-inline int find_clinic(const Creature& cr) { return find_clinic(cr.location); }
-inline int find_homeless_shelter(int site_index) { return find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER,site_index); }
-inline int find_homeless_shelter(const Creature& cr) { return find_homeless_shelter(cr.location); }
-inline int find_courthouse(int site_index) { return find_site_index_in_same_city(SITE_GOVERNMENT_COURTHOUSE,site_index); }
-inline int find_courthouse(const Creature& cr) { return find_courthouse(cr.location); }
-inline int find_hospital(int site_index) { return find_site_index_in_same_city(SITE_HOSPITAL_UNIVERSITY,site_index); }
-inline int find_hospital(const Creature& cr) { return find_hospital(cr.location); }
+int find_site_index_in_same_city(int site_type, const Creature& cr);
+int find_police_station(int site_index);
+int find_police_station(const Creature& cr);
+int find_clinic(int site_index);
+int find_clinic(const Creature& cr);
+int find_homeless_shelter(int site_index);
+int find_homeless_shelter(const Creature& cr);
+int find_courthouse(int site_index);
+int find_courthouse(const Creature& cr);
+int find_hospital(int site_index);
+int find_hospital(const Creature& cr);
 /* sets up the list of locations */
 void make_world(bool hasmaps);
 

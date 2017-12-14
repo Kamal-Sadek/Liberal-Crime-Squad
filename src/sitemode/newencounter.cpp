@@ -27,6 +27,24 @@
 
 #include <externs.h>
 
+
+/* rolls up a random creature type according to the passed weighting array */
+static int
+getrandomcreaturetype(int cr[CREATURENUM])
+{
+   int sum=0;
+   for(int c=0;c<CREATURENUM;c++)sum+=cr[c];
+
+   if(sum>0)
+   {
+      int roll=LCSrandom(sum);
+      int sel=0;
+      while(roll>=0){roll-=cr[sel];sel++;}
+      return sel-1;
+   }
+   else return -1;
+}
+
 /* generates a new random encounter */
 void prepareencounter(short type,char sec)
 {
@@ -1390,21 +1408,4 @@ char addsiegeencounter(char type)
    return 1;
 }
 
-
-
-/* rolls up a random creature type according to the passed weighting array */
-int getrandomcreaturetype(int cr[CREATURENUM])
-{
-   int sum=0;
-   for(int c=0;c<CREATURENUM;c++)sum+=cr[c];
-
-   if(sum>0)
-   {
-      int roll=LCSrandom(sum);
-      int sel=0;
-      while(roll>=0){roll-=cr[sel];sel++;}
-      return sel-1;
-   }
-   else return -1;
-}
 

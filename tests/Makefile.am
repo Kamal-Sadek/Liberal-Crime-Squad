@@ -23,9 +23,13 @@ check_PROGRAMS = test-lcs
 test_lcs_SOURCES = \
   test-lcs.cpp \
   common/test-interval.cpp \
+  creature/test-attributes.cpp \
   creature/test-creaturetype.cpp \
   creature/test-creaturetypecache.cpp \
-  politics/test-alignment.cpp
+  creature/test-skill.cpp \
+  creature/test-uniquecreatures.cpp \
+  politics/test-alignment.cpp \
+  vehicle/test-vehicletype.cpp
 
 test_lcs_CPPFLAGS = \
   -I$(top_srcdir) \

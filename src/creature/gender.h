@@ -1,8 +1,7 @@
 /**
- * Interface for the augmentations submodule.
+ * Interface of the creature Gender submodule.
  */
 /*
- * Copyright 2015,2016 Kamal-Sadek  <kamaljalals@gmail.com>
  * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
  *
  * This file is part of Liberal Crime Squad.
@@ -22,38 +21,24 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-#ifndef AUGMENTATION_H
-#define AUGMENTATION_H
-
-#include <string>
+#ifndef LCS_CREATURE_GENDER_H
+#define LCS_CREATURE_GENDER_H 1
 
 
-enum Augmentations
+enum CreatureGender
 {
-   AUGMENTATION_HEAD,
-   AUGMENTATION_BODY,
-   AUGMENTATION_ARMS,
-   AUGMENTATION_LEGS,
-   AUGMENTATION_SKIN,
-   AUGMENTATIONNUM
+   GENDER_NEUTRAL,
+   GENDER_MALE,
+   GENDER_FEMALE,
+
+   // Used to get some more specific names.
+   GENDER_WHITEMALEPATRIARCH,
+
+   // Used in creature creation.
+   GENDER_MALE_BIAS,
+   GENDER_FEMALE_BIAS,
+   GENDER_RANDOM
 };
 
 
-class Augmentation
-{
-public:
-    Augmentation() { }
-    Augmentation(std::string const& inputXml);
-    std::string showXml() const;
-
-    std::string name{""};
-    short type{-1};
-    int attribute{-1};
-    int effect{-1};
-    int value{-1};
-
-    static std::string get_name(int augmentation_type);
-    static int get_associated_attribute(int augmentation_type);
-};
-
-#endif
+#endif /* LCS_CREATURE_GENDER_H */
