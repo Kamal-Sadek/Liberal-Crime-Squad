@@ -402,14 +402,12 @@ public:
 #include "items/weapon.h"
 #include "items/armor.h"
 #include "items/loot.h"
-//#include "items/money.h"
 #include "creature/creature.h"
 #include "creature/augmentation.h"
 #include "creature/augmenttype.h"
 #include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 #include "locations/locations.h"
-#include "configfile.h"
 #include "sitemode/sitemap.h"
 
 enum CarChaseObstacles

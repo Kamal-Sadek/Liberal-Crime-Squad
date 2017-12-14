@@ -1,7 +1,10 @@
 #ifndef SITEMAP_H_INCLUDED
 #define SITEMAP_H_INCLUDED
 
-#include "includes.h"
+#include "configfile.h"
+#include <string>
+#include <vector>
+
 
 #define SITEMAP_ADDTYPE_OR     1
 #define SITEMAP_ADDTYPE_ANDNOT 2
