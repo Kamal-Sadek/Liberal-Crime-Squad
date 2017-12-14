@@ -24,7 +24,7 @@ crimesquad_SOURCES = \
 libcrimesquad_la_SOURCES = \
  basemode/baseactions.cpp basemode/activate.cpp basemode/reviewmode.cpp\
  basemode/liberalagenda.cpp\
- combat/fight.cpp combat/haulkidnap.cpp daily/activities.cpp daily/daily.cpp\
+ combat/fight.cpp combat/haulkidnap.cpp \
  common.h creature/augmenttype.h\
  common/commondisplay.cpp common/commonactions.cpp\
  common/consolesupport.cpp common/getnames.cpp common/translateid.cpp\
@@ -40,6 +40,8 @@ libcrimesquad_la_SOURCES = \
  creature/creaturetype.h       creature/creaturetype.cpp \
  creature/skill.h              creature/skill.cpp \
  cursesgraphics.cpp lcsio.h cursesmovie.h compat.h cursesgraphics.h includes.h\
+ daily/activities.h            daily/activities.cpp \
+ daily/daily.cpp \
  daily/date.h                  daily/date.cpp \
  daily/interrogation.cpp\
  daily/recruit.h               daily/recruit.cpp \

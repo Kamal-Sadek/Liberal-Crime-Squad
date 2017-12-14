@@ -57,8 +57,9 @@
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
+#include "daily/activities.h"
 
-#include <externs.h>
+#include "externs.h"
 #include "politics/politics.h"
 
 void doActivitySolicitDonations(vector<Creature *> &solicit, char &clearformess);
