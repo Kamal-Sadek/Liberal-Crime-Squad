@@ -460,8 +460,6 @@ struct squadst
 #define ENCMAX 18
 // ENCMAX _HAS_ to be 26 or less, or else there aren't enough letters
 
-#include "sitemode/shop.h"
-
 enum GameModes
 {
    GAMEMODE_TITLE,

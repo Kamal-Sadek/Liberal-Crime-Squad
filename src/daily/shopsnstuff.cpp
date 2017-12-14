@@ -29,6 +29,7 @@
 #include "externs.h"
 #include <fstream>
 #include <iterator>
+#include "sitemode/shop.h"
 #include <sstream>
 #include <string>
 #include "tinyxml2.h"
