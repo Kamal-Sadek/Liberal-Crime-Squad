@@ -375,8 +375,8 @@ private:
    int Pres_ID;
 
 public:
-   int CEO_state;
-   int Pres_state;
+   int CEO_state{UNIQUECREATURE_ALIVE};
+   int Pres_state{UNIQUECREATURE_ALIVE};
    UniqueCreatures();
    explicit UniqueCreatures(const std::string& inputXml);
    string showXml() const;

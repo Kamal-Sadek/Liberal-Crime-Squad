@@ -1260,24 +1260,24 @@ newPresident()
   Pres_state = UNIQUECREATURE_ALIVE;
   Pres_.dontname = true;
 
-   //Turn into President (not just random pol)
-   std::string pres_name = execname[EXEC_PRESIDENT];
-   strcpy(Pres_.name, "President "+pres_name.substr(pres_name.find(' ')+1));
-   strcpy(Pres_.propername, execname[EXEC_PRESIDENT]);
-   switch(exec[EXEC_PRESIDENT])
-   { // we don't do anything for Alignment::ARCH_CONSERVATIVE or Alignment::CONSERVATIVE so having them here is unnecessary
-   case Alignment::MODERATE:
-      Pres_.align=Alignment::MODERATE;
-      Pres_.set_attribute(ATTRIBUTE_WISDOM, Pres_.get_attribute(ATTRIBUTE_WISDOM,false)/2);
-      Pres_.set_attribute(ATTRIBUTE_HEART, Pres_.get_attribute(ATTRIBUTE_WISDOM,false));
-      break;
-   case Alignment::LIBERAL:
-   case Alignment::ELITE_LIBERAL:
-      Pres_.align=Alignment::LIBERAL;
-      Pres_.set_attribute(ATTRIBUTE_HEART, Pres_.get_attribute(ATTRIBUTE_WISDOM,false));
-      Pres_.set_attribute(ATTRIBUTE_WISDOM, 1);
-      break;
-   }
+  //Turn into President (not just random pol)
+  std::string pres_name = execname[EXEC_PRESIDENT];
+  strcpy(Pres_.name, "President "+pres_name.substr(pres_name.find(' ')+1));
+  strcpy(Pres_.propername, execname[EXEC_PRESIDENT]);
+  switch(exec[EXEC_PRESIDENT])
+  { // we don't do anything for Alignment::ARCH_CONSERVATIVE or Alignment::CONSERVATIVE so having them here is unnecessary
+  case Alignment::MODERATE:
+    Pres_.align=Alignment::MODERATE;
+    Pres_.set_attribute(ATTRIBUTE_WISDOM, Pres_.get_attribute(ATTRIBUTE_WISDOM,false)/2);
+    Pres_.set_attribute(ATTRIBUTE_HEART, Pres_.get_attribute(ATTRIBUTE_WISDOM,false));
+    break;
+  case Alignment::LIBERAL:
+  case Alignment::ELITE_LIBERAL:
+    Pres_.align=Alignment::LIBERAL;
+    Pres_.set_attribute(ATTRIBUTE_HEART, Pres_.get_attribute(ATTRIBUTE_WISDOM,false));
+    Pres_.set_attribute(ATTRIBUTE_WISDOM, 1);
+    break;
+  }
 }
 
 static const std::string UNIQUE_CREATURE_XML_TAG{"uniquecreatures"};

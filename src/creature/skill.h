@@ -109,11 +109,11 @@ public:
   static CreatureAttribute get_associated_attribute(int skill_type);
 
 public:
-  int value;
+  int value{0};
 
 private:
-  int associated_attribute;
-  int skill;
+  int associated_attribute{-1};
+  int skill{-1};
 };
 
 #endif /* LCS_CREATURE_SKILL_H_H */

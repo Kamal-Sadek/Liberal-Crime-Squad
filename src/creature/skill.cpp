@@ -39,9 +39,6 @@ namespace
 
 Skill::
 Skill()
-: value{0}
-, associated_attribute{-1}
-, skill{-1}
 { }
 
 
