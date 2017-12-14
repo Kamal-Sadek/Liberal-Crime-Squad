@@ -7,12 +7,9 @@ to comply with all the licenses.
 The game Liberal Crime Squad itself is licensed under the GNU GPL version 2.0 or later.
 See http://www.gnu.org/licenses/gpl-2.0.html or http://www.gnu.org/copyleft/gpl.html for details.
 
-The PDCurses library is public domain, and therefore GPL-compatible,
-and for the purposes of this project, is relicensed under the GNU GPL version 2.0 or later.
-See http://creativecommons.org/publicdomain/zero/1.0/ for the CC0 public domain license that you can use with it.
+The PDCurses library is public domain, and is GPL-compatible,
 
-The SDL2 and SDL2_mixer libraries are licensed under the zlib license, which is GPL-compatible,
-and for the purposes of this project, are relicensed under the GNU GPL version 2.0 or later.
+The SDL2 and SDL2_mixer libraries are distributed under the zlib license, which is GPL-compatible.
 See https://www.libsdl.org/license.php or http://www.gzip.org/zlib/zlib_license.html for details.
 
 The libogg, libvorbis, and libvorbisfile libraries are licensed under the following GPL-compatible license:
@@ -39,29 +36,6 @@ The libogg, libvorbis, and libvorbisfile libraries are licensed under the follow
       (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
       OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 For the purposes of this project, they are relicensed under the GNU GPL version 2.0 or later.
-
-/src/cmarkup/Markup.cpp and /src/cmarkup/Markup.h are licensed under the following GPL-compatible license,
-which makes them free to use in non-commercial applications such as anything under the GNU GPL:
-      Copyright (C) 2011 First Objective Software, Inc. All rights reserved.
-      Go to www.firstobject.com for the latest CMarkup and EDOM documentation.
-      Use in commercial applications requires written permission.
-      This software is provided “as is”, with no warranty.
-For the purposes of this project, they are relicensed under the GNU GPL version 2.0 or later.
-
-/src/vector.h is licensed under the following license, a BSD-style license that is GPL-compatible:
-      Copyright (c) 1995 by P.J. Plauger.  ALL RIGHTS RESERVED. 
-      Consult your license regarding permissions and restrictions.
-      This file is derived from software bearing the following restrictions:
-      Copyright (c) 1994 Hewlett-Packard Company
-      Permission to use, copy, modify, distribute and sell this
-      software and its documentation for any purpose is hereby
-      granted without fee, provided that the above copyright notice
-      appear in all copies and that both that copyright notice and
-      this permission notice appear in supporting documentation.
-      Hewlett-Packard Company makes no representations about the
-      suitability of this software for any purpose. It is provided
-      “as is” without express or implied warranty.
-For the purposes of this project, it is relicensed under the GNU GPL version 2.0 or later.
 
 Here is licensing information on music that may be bundled with the game:
 

@@ -24,7 +24,6 @@ crimesquad_SOURCES = \
 libcrimesquad_la_SOURCES = \
  basemode/baseactions.cpp basemode/activate.cpp basemode/reviewmode.cpp\
  basemode/liberalagenda.cpp\
- cmarkup/Markup.cpp cmarkup/Markup.h \
  combat/fight.cpp combat/haulkidnap.cpp daily/activities.cpp daily/daily.cpp\
  common.h creature/augmenttype.h\
  common/commondisplay.cpp common/commonactions.cpp\
