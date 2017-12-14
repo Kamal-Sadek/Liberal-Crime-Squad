@@ -23,10 +23,11 @@
  * This file was created by Chris Johnson (grundee@users.sourceforge.net)
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
-#include <externs.h>
 #include "daily/date.h"
 #include "daily/recruit.h"
+#include "daily/shopsnstuff.h"
 #include "daily/siege.h"
+#include "externs.h"
 #include "news/news.h"
 
 

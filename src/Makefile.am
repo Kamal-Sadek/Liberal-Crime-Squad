@@ -43,7 +43,7 @@ libcrimesquad_la_SOURCES = \
  daily/date.h                  daily/date.cpp \
  daily/interrogation.cpp\
  daily/recruit.h               daily/recruit.cpp \
- daily/shopsnstuff.cpp \
+ daily/shopsnstuff.h           daily/shopsnstuff.cpp \
  daily/siege.h                 daily/siege.cpp\
  items/armor.cpp creature/augmenttype.cpp \
  items/armortype.cpp items/armortype.h items/clip.cpp items/clip.h\
