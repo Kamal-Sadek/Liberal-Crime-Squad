@@ -28,7 +28,8 @@ test_lcs_SOURCES = \
   creature/test-creaturetypecache.cpp \
   creature/test-skill.cpp \
   creature/test-uniquecreatures.cpp \
-  politics/test-alignment.cpp
+  politics/test-alignment.cpp \
+  vehicle/test-vehicletype.cpp
 
 test_lcs_CPPFLAGS = \
   -I$(top_srcdir) \

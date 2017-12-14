@@ -10,6 +10,7 @@
 #include "creature/attributes.h"
 #include "creature/gender.h"
 #include "creature/skill.h"
+#include "includes.h"
 #include "politics/alignment.h"
 
 #define CREATUREFLAG_WHEELCHAIR BIT1
@@ -186,7 +187,14 @@ enum SpecialWounds
 #define WOUND_CLEANOFF BIT8
 
 
+class activityst;
 class Armor;
+class ArmorType;
+class Clip;
+class ClipType;
+class Item;
+class Weapon;
+class WeaponType;
 
 
 class Creature
