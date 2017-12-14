@@ -24,10 +24,9 @@
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
 
-#include <externs.h>
-#include <sstream>    // @TODO only for create_item(), which needs to be moved
+#include "externs.h"
+#include "items/money.h"
 #include <sys/stat.h>
-#include "tinyxml2.h" // @TODO only for create_item(), which need to be moved
 #pragma GCC diagnostic ignored "-Wunused-result"
 
 // TODO: It would be really cool to be able to "export" characters.
@@ -338,50 +337,6 @@ void savegame(const string& filename)
 }
 
 
-/**
- * Factory function to load an item of a specific class.
- *
- * Used by load() to create items of the correct class.
- *
- * @TODO move this into the items module.
- */
-static Item*
-create_item(std::string const& xml)
-{
-  Item* it = nullptr;
-
-  tinyxml2::XMLDocument doc;
-  tinyxml2::XMLError err = doc.Parse(xml.c_str());
-  if (err != tinyxml2::XML_SUCCESS)
-  {
-    std::ostringstream ostr;
-    ostr << "error " << doc.ErrorID() << " parsing item XML"
-         << " at line " << doc.GetErrorLineNum() << ": "
-         << doc.GetErrorStr1() << " / " << doc.GetErrorStr2();
-    addstr(ostr.str(), xmllog);
-    getkey();
-    return it;
-  }
-
-  auto toplevel = doc.FirstChildElement();
-  if (toplevel != nullptr)
-  {
-    std::string itemclass = toplevel->Name();
-    if (itemclass == "clip")
-      it = new Clip(xml);
-    else if (itemclass == "weapon")
-      it = new Weapon(xml);
-    else if (itemclass == "armor")
-      it = new Armor(xml);
-    else if (itemclass == "loot")
-      it = new Loot(xml);
-    else if (itemclass == "money")
-      it = new Money(xml);
-  }
-
-  return it;
-}
-
 /* loads the game from save.dat */
 char load(const string& filename)
 {
@@ -485,9 +440,9 @@ char load(const string& filename)
                fread(&vec[0], itemLen, 1, h);
                vec[itemLen] = '\0';
 
-               Item* it = create_item(&vec[0]);
-               if(it!=NULL)
-                  location[l]->loot[l2] = it;
+               Item::OwningPtr it = Item::create_from_xml(&vec[0]);
+               if (it)
+                 location[l]->loot[l2] = it.release(); // @TODO make loot own the item
             }
             //Remove items of unknown type.
             for(int l2=len(location[l]->loot)-1; l2>=0; l2--)
@@ -697,9 +652,9 @@ char load(const string& filename)
                fread(&vec[0], itemLen, 1, h);
                vec[itemLen] = '\0';
 
-               Item* it = create_item(&vec[0]);
-               //if(it!=NULL) //Assume save file is correct? -XML
-                  squad[sq]->loot[l2] = it;
+               Item::OwningPtr it = Item::create_from_xml(&vec[0]);
+               if (it)
+                  squad[sq]->loot[l2] = it.release();
                /*else
                   squad[sq]->loot.erase(loot.begin()+l2--);*/
             }

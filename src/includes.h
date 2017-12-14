@@ -394,17 +394,15 @@ public:
    }
 };
 
-#include "items/itemtype.h"
 #include "items/cliptype.h"
 #include "items/weapontype.h"
 #include "items/armortype.h"
 #include "items/loottype.h"
-#include "items/item.h"
 #include "items/clip.h"
 #include "items/weapon.h"
 #include "items/armor.h"
 #include "items/loot.h"
-#include "items/money.h"
+//#include "items/money.h"
 #include "creature/creature.h"
 #include "creature/augmentation.h"
 #include "creature/augmenttype.h"

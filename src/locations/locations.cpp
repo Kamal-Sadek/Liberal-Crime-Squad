@@ -19,8 +19,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
-#include <externs.h>
+#include "externs.h"
+#include "items/money.h"
 #include "politics/alignment.h"
+
 
 // Finds a location with the corresponding type and returns
 // its index in the location array

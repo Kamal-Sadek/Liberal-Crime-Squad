@@ -26,7 +26,9 @@
 #ifndef ITEM_H
 #define ITEM_H
 
+#include <memory>
 #include <string>
+
 
 class ItemType;
 
@@ -34,17 +36,23 @@ class ItemType;
 class Item
 {
 public:
+  using OwningPtr = std::unique_ptr<Item>;
+
+public:
   Item(): number_(1) { }
   explicit Item(const ItemType& seed, int number = 1);
   // (Sub-?)Constructor to create item from xml.
   explicit Item(std::string const& inputXml);
-  virtual ~Item() { }
+  virtual ~Item() = 0;
 
   // Returns xml describing the item. Used when saving.
   std::string
   showXml() const;
 
-  //
+  /** Factory to create an item from some XML. */
+  static OwningPtr
+  create_from_xml(std::string const& xml);
+
   virtual std::string equip_title() const=0;
 
   // Create copy of item and return pointer.

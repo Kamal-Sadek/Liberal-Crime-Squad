@@ -24,7 +24,13 @@
  * 02110-1301, USA.
  */
 #include "items/item.h"
+
 #include <externs.h>
+#include "items/armor.h"
+#include "items/clip.h"
+#include "items/loot.h"
+#include "items/money.h"
+#include "items/weapon.h"
 #include <sstream>
 #include "tinyxml2.h"
 
@@ -75,6 +81,10 @@ Item::Item(const std::string& xml)
 }
 
 
+Item::~Item()
+{ }
+
+
 std::string Item::
 showXml() const
 {
@@ -86,6 +96,44 @@ showXml() const
        + this->xml_details() +
     "</" + this->item_class() + ">"
   };
+}
+
+
+Item::OwningPtr Item::
+create_from_xml(std::string const& xml)
+{
+  OwningPtr it;
+
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLError err = doc.Parse(xml.c_str());
+  if (err != tinyxml2::XML_SUCCESS)
+  {
+    std::ostringstream ostr;
+    ostr << "error " << doc.ErrorID() << " parsing item XML"
+         << " at line " << doc.GetErrorLineNum() << ": "
+         << doc.GetErrorStr1() << " / " << doc.GetErrorStr2();
+    addstr(ostr.str(), xmllog);
+    getkey();
+    return it;
+  }
+
+  auto toplevel = doc.FirstChildElement();
+  if (toplevel != nullptr)
+  {
+    std::string itemclass = toplevel->Name();
+    if (itemclass == "clip")
+      it.reset(new Clip(xml));
+    else if (itemclass == "weapon")
+      it.reset(new Weapon(xml));
+    else if (itemclass == "armor")
+      it.reset(new Armor(xml));
+    else if (itemclass == "loot")
+      it.reset(new Loot(xml));
+    else if (itemclass == "money")
+      it.reset(new Money(xml));
+  }
+
+  return it;
 }
 
 

@@ -24,7 +24,9 @@
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
 
-#include <externs.h>
+#include "externs.h"
+#include "items/money.h"
+
 
 char heyMisterDog(Creature &a, Creature &tk);
 char heyMisterMonster(Creature &a, Creature &tk);
