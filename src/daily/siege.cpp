@@ -58,6 +58,8 @@
 // it out for yourself.
 
 #include "daily/siege.h"
+
+#include "daily/daily.h"
 #include <externs.h>
 #include "politics/politics.h"
 

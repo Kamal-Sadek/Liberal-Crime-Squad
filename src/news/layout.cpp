@@ -1,4 +1,5 @@
-#include <externs.h>
+#include "daily/daily.h"
+#include "externs.h"
 
 void preparepage(newsstoryst& ns, bool liberalguardian)
 {

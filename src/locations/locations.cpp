@@ -19,6 +19,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+
+#include "daily/daily.h"
 #include "externs.h"
 #include "items/money.h"
 #include "politics/alignment.h"

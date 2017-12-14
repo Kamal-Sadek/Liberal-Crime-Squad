@@ -41,7 +41,7 @@ libcrimesquad_la_SOURCES = \
  creature/skill.h              creature/skill.cpp \
  cursesgraphics.cpp lcsio.h cursesmovie.h compat.h cursesgraphics.h includes.h\
  daily/activities.h            daily/activities.cpp \
- daily/daily.cpp \
+ daily/daily.h                 daily/daily.cpp \
  daily/date.h                  daily/date.cpp \
  daily/interrogation.cpp\
  daily/recruit.h               daily/recruit.cpp \

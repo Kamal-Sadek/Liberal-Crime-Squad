@@ -64,7 +64,8 @@
 
 #include "monthly/monthly.h"
 
-#include <externs.h>
+#include "daily/daily.h" // @TODO: move initlocation() out of daily.h into location.h
+#include "externs.h"
 #include "monthly/justice.h"
 #include "monthly/sleepers.h"
 #include "politics/politics.h"

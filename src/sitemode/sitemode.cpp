@@ -25,8 +25,10 @@
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
 
-#include <externs.h>
+#include "daily/daily.h"
 #include "daily/siege.h"
+#include "externs.h"
+
 
 void fight_subdued()
 {

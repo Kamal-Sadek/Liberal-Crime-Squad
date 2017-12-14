@@ -23,6 +23,8 @@
  * This file was created by Chris Johnson (grundee@users.sourceforge.net)
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
+#include "daily/daily.h"
+
 #include "daily/activities.h"
 #include "daily/date.h"
 #include "daily/recruit.h"
