@@ -59,7 +59,8 @@
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-#include <externs.h>
+#include "externs.h"
+#include "daily/daily.h"
 #include "daily/siege.h"
 #include "monthly/monthly.h"
 #include "politics/alignment.h"

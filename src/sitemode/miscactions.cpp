@@ -24,7 +24,8 @@
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
 
-#include <externs.h>
+#include "daily/daily.h"
+#include "externs.h"
 
 /* unlock attempt */
 char unlock(short type,char &actual)

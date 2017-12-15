@@ -23,8 +23,10 @@
  * This file was created by Chris Johnson (grundee@users.sourceforge.net)
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
+#include "daily/shopsnstuff.h"
+#include "externs.h"
+#include "items/money.h"
 
-#include <externs.h>
 
 char heyMisterDog(Creature &a, Creature &tk);
 char heyMisterMonster(Creature &a, Creature &tk);

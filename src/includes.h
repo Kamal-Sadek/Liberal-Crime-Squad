@@ -394,24 +394,20 @@ public:
    }
 };
 
-#include "items/itemtype.h"
 #include "items/cliptype.h"
 #include "items/weapontype.h"
 #include "items/armortype.h"
 #include "items/loottype.h"
-#include "items/item.h"
 #include "items/clip.h"
 #include "items/weapon.h"
 #include "items/armor.h"
 #include "items/loot.h"
-#include "items/money.h"
 #include "creature/creature.h"
 #include "creature/augmentation.h"
 #include "creature/augmenttype.h"
 #include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 #include "locations/locations.h"
-#include "configfile.h"
 #include "sitemode/sitemap.h"
 
 enum CarChaseObstacles
@@ -463,8 +459,6 @@ struct squadst
 
 #define ENCMAX 18
 // ENCMAX _HAS_ to be 26 or less, or else there aren't enough letters
-
-#include "sitemode/shop.h"
 
 enum GameModes
 {
@@ -1591,69 +1585,5 @@ void freehostage(Creature &cr,char situation);
 void squadgrab_immobile(char dead);
 /* names the new hostage and stashes them in your base */
 void kidnaptransfer(Creature &cr);
-
-/*******************************************************************************
-*
-*              End of Day Events
-*              Folder: "daily"
-*
-*******************************************************************************/
-
-/*
- daily.cpp
-*/
-void advanceday(char &clearformess,char canseethings);
-/* squad members with no chain of command lose contact */
-void dispersalcheck(char &clearformess);
-/* promote a subordinate to maintain chain of command when boss is lost */
-bool promotesubordinates(Creature &cr,char &clearformess);
-/* daily - manages too hot timer and when a site map should be re-seeded and renamed */
-void advancelocations();
-/* daily - returns true if the site type supports high security */
-char securityable(int type);
-/* daily - seeds and names a site (will re-seed and rename if used after start) */
-void initlocation(Location &loc);
-/* daily - returns the number of days in the current month */
-int monthday();
-
-/*
- activities.cpp
-*/
-/* adjust blog power */
-void adjustblogpower(int &power);
-/* hostage tending */
-void tendhostage(Creature *cr,char &clearformess);
-/* armor repair */
-void repairarmor(Creature &cr,char &clearformess);
-/* armor manufacture */
-void makearmor(Creature &cr,char &clearformess);
-/* search for polls */
-void survey(Creature *cr);
-/* misc activation related things */
-void funds_and_trouble(char &clearformess);
-/* steal a car */
-bool stealcar(Creature &cr,char &clearformess);
-bool carselect(Creature &cr,short &cartype);
-/* get a wheelchair */
-void getwheelchair(Creature &cr,char &clearformess);
-void augment(Creature &cr,char &clearformess);
-
-/*
- shopsnstuff.cpp
-*/
-/* active squad visits the hospital */
-void hospital(int loc);
-/* active squad visits the pawn shop */
-void pawnshop(int loc);
-/* active squad visits the car dealership */
-void dealership(int loc);
-/* active squad visits the arms dealer */
-void armsdealer(int loc);
-/* active squad visits the department store */
-void deptstore(int loc);
-/* active squad visits the oubliette */
-void halloweenstore(int loc);
-/* choose buyer */
-void choose_buyer(short &buyer);
 
 #endif // INCLUDES_H_INCLUDED

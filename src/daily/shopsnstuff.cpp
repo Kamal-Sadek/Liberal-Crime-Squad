@@ -24,11 +24,14 @@
  * This file was created by Chris Johnson (grundee@users.sourceforge.net)
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
+#include "daily/shopsnstuff.h"
+
 #include <cerrno>
 #include <cstring>
 #include "externs.h"
 #include <fstream>
 #include <iterator>
+#include "sitemode/shop.h"
 #include <sstream>
 #include <string>
 #include "tinyxml2.h"

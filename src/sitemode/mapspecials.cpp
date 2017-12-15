@@ -24,7 +24,9 @@
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
 
-#include <externs.h>
+#include "externs.h"
+#include "items/money.h"
+
 
 enum bouncer_reject_reason
 {
