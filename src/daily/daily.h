@@ -25,7 +25,6 @@
 #define DAILY_DAILY_H
 
 class Creature;
-class Location;
 
 
 void
@@ -46,10 +45,6 @@ advancelocations();
 /* daily - returns true if the site type supports high security */
 char
 securityable(int type);
-
-/* daily - seeds and names a site (will re-seed and rename if used after start) */
-void
-initlocation(Location& loc);
 
 /* daily - returns the number of days in the current month */
 int monthday();

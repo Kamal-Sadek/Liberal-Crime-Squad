@@ -362,4 +362,8 @@ public:
   unsigned long        mapseed[RNG_SIZE];
 };
 
+/** Seed and name a site (will re-seed and rename if used after start) */
+void
+initlocation(Location& loc);
+
 #endif // LOCATIONS_H_INCLUDED

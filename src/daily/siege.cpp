@@ -61,6 +61,7 @@
 
 #include "daily/daily.h"
 #include "externs.h"
+#include "locations/locations.h"
 #include "locations/world.h"
 #include "politics/politics.h"
 

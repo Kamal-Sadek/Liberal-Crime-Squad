@@ -25,6 +25,7 @@
 #define LCS_LOCATIONS_WORLD_H
 
 class Creature;
+class Location;
 
 
 Location*
