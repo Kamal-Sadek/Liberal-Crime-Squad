@@ -31,6 +31,7 @@
 #include "daily/shopsnstuff.h"
 #include "daily/siege.h"
 #include "externs.h"
+#include "locations/world.h"
 #include "news/news.h"
 
 

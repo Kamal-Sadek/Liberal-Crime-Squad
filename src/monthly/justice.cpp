@@ -28,7 +28,8 @@
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
 #include "monthly/justice.h"
-#include <externs.h>
+#include "externs.h"
+#include "locations/world.h"
 #include "politics/politics.h"
 
 

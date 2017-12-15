@@ -66,14 +66,16 @@ libcrimesquad_la_SOURCES = \
  politics/law.h                politics/law.cpp \
  politics/politics.h           politics/politics.cpp \
  sitemode/advance.cpp sitemode/mapspecials.cpp sitemode/newencounter.cpp\
- sitemode/shop.h sitemode/shop.cpp log/log.h log/log.cpp locations/locations.cpp\
+ sitemode/shop.h sitemode/shop.cpp log/log.h log/log.cpp \
  sitemode/sitedisplay.cpp sitemode/stealth.cpp combat/chase.cpp\
  sitemode/sitemap.h            sitemode/sitemap.cpp \
  sitemode/sitemode.cpp sitemode/talk.cpp sitemode/miscactions.cpp\
  tinyxml2.h                    tinyxml2.cpp \
  title/highscore.cpp title/newgame.cpp title/saveload.cpp basemode/basemode.cpp\
  title/titlescreen.cpp\
- title/initfile.cpp locations/world.cpp locations/locations.h \
+ title/initfile.cpp \
+ locations/worls.h             locations/world.cpp \
+ locations/locations.h         locations/locations.cpp \
  vehicle/vehicle.h             vehicle/vehicle.cpp \
  vehicle/vehicletype.cpp vehicle/vehicletype.h items/weapontype.h\
  externs.h              globals.cpp \

@@ -60,8 +60,10 @@
 #include "daily/siege.h"
 
 #include "daily/daily.h"
-#include <externs.h>
+#include "externs.h"
+#include "locations/world.h"
 #include "politics/politics.h"
+
 
 /* TODO
 make it less likely to be raided based on:

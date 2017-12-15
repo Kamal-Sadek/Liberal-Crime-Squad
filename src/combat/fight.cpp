@@ -27,6 +27,7 @@
 #include "externs.h"
 
 #include "items/money.h"
+#include "locations/world.h"
 
 
 bool goodguyattack = false;

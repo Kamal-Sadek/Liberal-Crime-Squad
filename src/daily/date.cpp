@@ -25,7 +25,9 @@
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
 #include "daily/date.h"
-#include <externs.h>
+#include "externs.h"
+#include "locations/world.h"
+
 
 enum DateResults
 {

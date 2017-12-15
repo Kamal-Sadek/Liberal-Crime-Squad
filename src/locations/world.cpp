@@ -1,4 +1,30 @@
-#include <externs.h>
+/*
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2009, 2013 Jonathan Stickles  <jonathansfox@users.sourceforge.net>
+ * Copyright 2013, 2014 Rich McGrew  (yetisyny)
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca> 
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
+#include "locations/world.h"
+
+#include "externs.h"
+
 
 #define City(X)                  location.push_back(city = new Location(X)); \
                                  city->id = id++;
@@ -27,12 +53,14 @@ Location* find_site_by_id(int id)
    return NULL;
 }
 
+
 Location* find_site_in_city(int site_type, int city)
 {
    int i=find_site_index_in_city(site_type,city);
    if(i!=-1) return location[i];
    else return NULL;
 }
+
 
 int find_site_index_in_city(int site_type, int city)
 {
@@ -41,6 +69,7 @@ int find_site_index_in_city(int site_type, int city)
          return i;
    return -1;
 }
+
 
 int
 find_site_index_in_same_city(int site_type, int site_index)
@@ -51,49 +80,61 @@ find_site_index_in_same_city(int site_type, int site_index)
    return find_site_index_in_city(site_type, city);
 }
 
+
 int
 find_site_index_in_same_city(int site_type, Creature const& cr)
 { return find_site_index_in_same_city(site_type, cr.location); }
+
 
 int
 find_police_station(int site_index)
 { return find_site_index_in_same_city(SITE_GOVERNMENT_POLICESTATION, site_index); }
 
+
 int
 find_police_station(const Creature& cr)
 { return find_police_station(cr.location); }
+
 
 int
 find_clinic(int site_index)
 { return find_site_index_in_same_city(SITE_HOSPITAL_CLINIC, site_index); }
 
+
 int
 find_clinic(const Creature& cr)
 { return find_clinic(cr.location); }
+
 
 int
 find_homeless_shelter(int site_index)
 { return find_site_index_in_same_city(SITE_RESIDENTIAL_SHELTER, site_index); }
 
+
 int
 find_homeless_shelter(const Creature& cr)
 { return find_homeless_shelter(cr.location); }
+
 
 int
 find_courthouse(int site_index)
 { return find_site_index_in_same_city(SITE_GOVERNMENT_COURTHOUSE, site_index); }
 
+
 int
 find_courthouse(const Creature& cr)
 { return find_courthouse(cr.location); }
+
 
 int
 find_hospital(int site_index)
 { return find_site_index_in_same_city(SITE_HOSPITAL_UNIVERSITY, site_index); }
 
+
 int
 find_hospital(const Creature& cr) 
 { return find_hospital(cr.location); }
+
 
 void make_classic_world(bool hasmaps)
 {
@@ -168,6 +209,7 @@ void make_classic_world(bool hasmaps)
    District(SITE_TRAVEL, 1)
       Site(SITE_GOVERNMENT_WHITE_HOUSE)
 }
+
 
 void make_world(bool hasmaps)
 {

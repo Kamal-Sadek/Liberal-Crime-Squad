@@ -26,6 +26,7 @@
 #include "daily/shopsnstuff.h"
 #include "externs.h"
 #include "items/money.h"
+#include "locations/world.h"
 
 
 char heyMisterDog(Creature &a, Creature &tk);

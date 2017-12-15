@@ -24,7 +24,10 @@
  * This file was created by Chris Johnson (grundee@users.sourceforge.net)
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
-#include <externs.h>
+
+#include "externs.h"
+#include "locations/world.h"
+
 
 enum CarChaseStatus
 {

@@ -66,6 +66,7 @@
 
 #include "daily/daily.h" // @TODO: move initlocation() out of daily.h into location.h
 #include "externs.h"
+#include "locations/world.h"
 #include "monthly/justice.h"
 #include "monthly/sleepers.h"
 #include "politics/politics.h"

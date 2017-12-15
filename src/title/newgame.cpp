@@ -25,7 +25,9 @@
  * by copying code from game.cpp into monthly/endgame.cpp.
  */
 
-#include <externs.h>
+#include "externs.h"
+#include "locations/world.h"
+
 
 /* select new game options */
 void setup_newgame()

@@ -20,7 +20,9 @@
  * 02110-1301, USA.
  */
 #include "monthly/sleepers.h"
-#include <externs.h>
+
+#include "externs.h"
+#include "locations/world.h"
 
 
 /*********************************

@@ -30,7 +30,8 @@
 
 //TODO: Add logging for this file? --Addictgamer
 
-#include <externs.h>
+#include "externs.h"
+#include "locations/world.h"
 #include "news/news.h"
 #include "politics/alignment.h"
 #pragma GCC diagnostic ignored "-Wunused-result"

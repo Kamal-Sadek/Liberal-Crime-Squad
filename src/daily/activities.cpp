@@ -60,7 +60,9 @@
 #include "daily/activities.h"
 
 #include "externs.h"
+#include "locations/world.h"
 #include "politics/politics.h"
+
 
 void doActivitySolicitDonations(vector<Creature *> &solicit, char &clearformess);
 void doActivitySellTshirts(vector<Creature *> &tshirts, char &clearformess);

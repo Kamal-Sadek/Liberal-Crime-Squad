@@ -1,3 +1,29 @@
+/**
+ * Interface for the Locations class.
+ */
+/*
+ * Copyright 2009, 2013 Jonathan Stickles  <jonathansfox@users.sourceforge.net>
+ * Copyright 2014 Carlos Gustavos  <blomkvist>
+ * Copyright 2013, 2014 Rich McGrew (yetisyny)
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 #ifndef LOCATIONS_H_INCLUDED
 #define LOCATIONS_H_INCLUDED
 
@@ -5,66 +31,67 @@
 
 enum SiteTypes
 {
-   SITE_CITY_SEATTLE, // first are the cities
-   SITE_CITY_LOS_ANGELES,
-   SITE_CITY_NEW_YORK,
-   SITE_CITY_CHICAGO,
-   SITE_CITY_DETROIT,
-   SITE_CITY_ATLANTA,
-   SITE_CITY_MIAMI,
-   SITE_CITY_WASHINGTON_DC,
+  SITE_CITY_SEATTLE, // first are the cities
+  SITE_CITY_LOS_ANGELES,
+  SITE_CITY_NEW_YORK,
+  SITE_CITY_CHICAGO,
+  SITE_CITY_DETROIT,
+  SITE_CITY_ATLANTA,
+  SITE_CITY_MIAMI,
+  SITE_CITY_WASHINGTON_DC,
 
-   SITE_DOWNTOWN, // then are the districts
-   SITE_COMMERCIAL,
-   SITE_UDISTRICT,
-   SITE_OUTOFTOWN,
-   SITE_INDUSTRIAL,
-   SITE_TRAVEL,
+  SITE_DOWNTOWN, // then are the districts
+  SITE_COMMERCIAL,
+  SITE_UDISTRICT,
+  SITE_OUTOFTOWN,
+  SITE_INDUSTRIAL,
+  SITE_TRAVEL,
 
-   SITE_HOSPITAL_CLINIC, // then come sites which cannot be mapped
-   SITE_HOSPITAL_UNIVERSITY,
-   SITE_BUSINESS_PAWNSHOP,
-   SITE_BUSINESS_DEPTSTORE,
-   SITE_BUSINESS_HALLOWEEN,
-   SITE_BUSINESS_ARMSDEALER,
-   SITE_BUSINESS_CARDEALERSHIP,
+  SITE_HOSPITAL_CLINIC, // then come sites which cannot be mapped
+  SITE_HOSPITAL_UNIVERSITY,
+  SITE_BUSINESS_PAWNSHOP,
+  SITE_BUSINESS_DEPTSTORE,
+  SITE_BUSINESS_HALLOWEEN,
+  SITE_BUSINESS_ARMSDEALER,
+  SITE_BUSINESS_CARDEALERSHIP,
 
-   SITE_RESIDENTIAL_SHELTER, // this has to be in this spot - sites before this cannot be mapped and sites after this can be mapped
+  SITE_RESIDENTIAL_SHELTER, // this has to be in this spot - sites before this cannot be mapped and
+                            // sites after this can be mapped
 
-   SITE_RESIDENTIAL_TENEMENT, // sites starting at this point CAN be mapped
-   SITE_RESIDENTIAL_APARTMENT,
-   SITE_RESIDENTIAL_APARTMENT_UPSCALE,
-   SITE_RESIDENTIAL_BOMBSHELTER,
-   SITE_LABORATORY_COSMETICS,
-   SITE_LABORATORY_GENETIC,
-   SITE_GOVERNMENT_POLICESTATION,
-   SITE_GOVERNMENT_COURTHOUSE,
-   SITE_GOVERNMENT_PRISON,
-   SITE_GOVERNMENT_INTELLIGENCEHQ,
-   SITE_GOVERNMENT_FIRESTATION,
-   SITE_INDUSTRY_SWEATSHOP,
-   SITE_INDUSTRY_POLLUTER,
-   SITE_INDUSTRY_NUCLEAR,
-   SITE_INDUSTRY_WAREHOUSE,
-   SITE_CORPORATE_HEADQUARTERS,
-   SITE_CORPORATE_HOUSE,
-   SITE_MEDIA_AMRADIO,
-   SITE_MEDIA_CABLENEWS,
-   SITE_BUSINESS_CRACKHOUSE,
-   SITE_BUSINESS_JUICEBAR,
-   SITE_BUSINESS_CIGARBAR,
-   SITE_BUSINESS_LATTESTAND,
-   SITE_BUSINESS_VEGANCOOP,
-   SITE_BUSINESS_INTERNETCAFE,
-   SITE_BUSINESS_BARANDGRILL,
-   SITE_OUTDOOR_PUBLICPARK,
-   SITE_OUTDOOR_BUNKER,
-   SITE_GOVERNMENT_ARMYBASE,
-   SITE_BUSINESS_BANK,
-   SITE_GOVERNMENT_LIBERAL_PARTY_HQ,
-   SITE_GOVERNMENT_WHITE_HOUSE,
+  SITE_RESIDENTIAL_TENEMENT, // sites starting at this point CAN be mapped
+  SITE_RESIDENTIAL_APARTMENT,
+  SITE_RESIDENTIAL_APARTMENT_UPSCALE,
+  SITE_RESIDENTIAL_BOMBSHELTER,
+  SITE_LABORATORY_COSMETICS,
+  SITE_LABORATORY_GENETIC,
+  SITE_GOVERNMENT_POLICESTATION,
+  SITE_GOVERNMENT_COURTHOUSE,
+  SITE_GOVERNMENT_PRISON,
+  SITE_GOVERNMENT_INTELLIGENCEHQ,
+  SITE_GOVERNMENT_FIRESTATION,
+  SITE_INDUSTRY_SWEATSHOP,
+  SITE_INDUSTRY_POLLUTER,
+  SITE_INDUSTRY_NUCLEAR,
+  SITE_INDUSTRY_WAREHOUSE,
+  SITE_CORPORATE_HEADQUARTERS,
+  SITE_CORPORATE_HOUSE,
+  SITE_MEDIA_AMRADIO,
+  SITE_MEDIA_CABLENEWS,
+  SITE_BUSINESS_CRACKHOUSE,
+  SITE_BUSINESS_JUICEBAR,
+  SITE_BUSINESS_CIGARBAR,
+  SITE_BUSINESS_LATTESTAND,
+  SITE_BUSINESS_VEGANCOOP,
+  SITE_BUSINESS_INTERNETCAFE,
+  SITE_BUSINESS_BARANDGRILL,
+  SITE_OUTDOOR_PUBLICPARK,
+  SITE_OUTDOOR_BUNKER,
+  SITE_GOVERNMENT_ARMYBASE,
+  SITE_BUSINESS_BANK,
+  SITE_GOVERNMENT_LIBERAL_PARTY_HQ,
+  SITE_GOVERNMENT_WHITE_HOUSE,
 
-   SITENUM // this comes last
+  SITENUM // this comes last
 };
 
 #define SITEBLOCK_EXIT BIT1
@@ -93,50 +120,50 @@ enum SiteTypes
 
 enum SpecialBlocks
 {
-   SPECIAL_NONE=-1,
-   SPECIAL_LAB_COSMETICS_CAGEDANIMALS,
-   SPECIAL_LAB_GENETIC_CAGEDANIMALS,
-   SPECIAL_POLICESTATION_LOCKUP,
-   SPECIAL_COURTHOUSE_LOCKUP,
-   SPECIAL_COURTHOUSE_JURYROOM,
-   SPECIAL_PRISON_CONTROL,
-   SPECIAL_PRISON_CONTROL_LOW,
-   SPECIAL_PRISON_CONTROL_MEDIUM,
-   SPECIAL_PRISON_CONTROL_HIGH,
-   SPECIAL_INTEL_SUPERCOMPUTER,
-   SPECIAL_SWEATSHOP_EQUIPMENT,
-   SPECIAL_POLLUTER_EQUIPMENT,
-   SPECIAL_NUCLEAR_ONOFF,
-   SPECIAL_HOUSE_PHOTOS,
-   SPECIAL_HOUSE_CEO,
-   SPECIAL_CORPORATE_FILES,
-   SPECIAL_RADIO_BROADCASTSTUDIO,
-   SPECIAL_NEWS_BROADCASTSTUDIO,
-   SPECIAL_APARTMENT_LANDLORD,
-   SPECIAL_SIGN_ONE,
-   SPECIAL_RESTAURANT_TABLE,
-   SPECIAL_CAFE_COMPUTER,
-   SPECIAL_PARK_BENCH,
-   SPECIAL_STAIRS_UP,
-   SPECIAL_STAIRS_DOWN,
-   SPECIAL_CLUB_BOUNCER,
-   SPECIAL_CLUB_BOUNCER_SECONDVISIT,
-   SPECIAL_ARMORY,
-   SPECIAL_DISPLAY_CASE,
-   SPECIAL_SIGN_TWO,
-   SPECIAL_SIGN_THREE,
-   SPECIAL_SECURITY_CHECKPOINT,
-   SPECIAL_SECURITY_METALDETECTORS,
-   SPECIAL_SECURITY_SECONDVISIT,
-   SPECIAL_BANK_VAULT,
-   SPECIAL_BANK_TELLER,
-   SPECIAL_BANK_MONEY,
-   SPECIAL_CCS_BOSS,
-   SPECIAL_OVAL_OFFICE_NW,
-   SPECIAL_OVAL_OFFICE_NE,
-   SPECIAL_OVAL_OFFICE_SW,
-   SPECIAL_OVAL_OFFICE_SE,
-   SPECIALNUM
+  SPECIAL_NONE = -1,
+  SPECIAL_LAB_COSMETICS_CAGEDANIMALS,
+  SPECIAL_LAB_GENETIC_CAGEDANIMALS,
+  SPECIAL_POLICESTATION_LOCKUP,
+  SPECIAL_COURTHOUSE_LOCKUP,
+  SPECIAL_COURTHOUSE_JURYROOM,
+  SPECIAL_PRISON_CONTROL,
+  SPECIAL_PRISON_CONTROL_LOW,
+  SPECIAL_PRISON_CONTROL_MEDIUM,
+  SPECIAL_PRISON_CONTROL_HIGH,
+  SPECIAL_INTEL_SUPERCOMPUTER,
+  SPECIAL_SWEATSHOP_EQUIPMENT,
+  SPECIAL_POLLUTER_EQUIPMENT,
+  SPECIAL_NUCLEAR_ONOFF,
+  SPECIAL_HOUSE_PHOTOS,
+  SPECIAL_HOUSE_CEO,
+  SPECIAL_CORPORATE_FILES,
+  SPECIAL_RADIO_BROADCASTSTUDIO,
+  SPECIAL_NEWS_BROADCASTSTUDIO,
+  SPECIAL_APARTMENT_LANDLORD,
+  SPECIAL_SIGN_ONE,
+  SPECIAL_RESTAURANT_TABLE,
+  SPECIAL_CAFE_COMPUTER,
+  SPECIAL_PARK_BENCH,
+  SPECIAL_STAIRS_UP,
+  SPECIAL_STAIRS_DOWN,
+  SPECIAL_CLUB_BOUNCER,
+  SPECIAL_CLUB_BOUNCER_SECONDVISIT,
+  SPECIAL_ARMORY,
+  SPECIAL_DISPLAY_CASE,
+  SPECIAL_SIGN_TWO,
+  SPECIAL_SIGN_THREE,
+  SPECIAL_SECURITY_CHECKPOINT,
+  SPECIAL_SECURITY_METALDETECTORS,
+  SPECIAL_SECURITY_SECONDVISIT,
+  SPECIAL_BANK_VAULT,
+  SPECIAL_BANK_TELLER,
+  SPECIAL_BANK_MONEY,
+  SPECIAL_CCS_BOSS,
+  SPECIAL_OVAL_OFFICE_NW,
+  SPECIAL_OVAL_OFFICE_NE,
+  SPECIAL_OVAL_OFFICE_SW,
+  SPECIAL_OVAL_OFFICE_SE,
+  SPECIALNUM
 };
 
 #define SIEGEFLAG_UNIT BIT1
@@ -146,50 +173,54 @@ enum SpecialBlocks
 
 enum SiegeTypes
 {
-   SIEGE_POLICE,
-   SIEGE_CIA,
-   SIEGE_HICKS,
-   SIEGE_CORPORATE,
-   SIEGE_CCS,
-   SIEGE_FIREMEN,
-   SIEGE_ORG,
-   SIEGENUM
+  SIEGE_POLICE,
+  SIEGE_CIA,
+  SIEGE_HICKS,
+  SIEGE_CORPORATE,
+  SIEGE_CCS,
+  SIEGE_FIREMEN,
+  SIEGE_ORG,
+  SIEGENUM
 };
 
 struct siegest
 {
-   char siege;
-   //Puzz:  Temporary siege thing for organizations
-   int orgID;
-   short siegetype;
-   char underattack;
-   int attacktime;
-   short kills;
-   short tanks;
-   short escalationstate;
-   char lights_off;
-   char cameras_off;
-   short timeuntillocated;
-   short timeuntilcorps;
-   short timeuntilcia;
-   short timeuntilccs;
-   short timeuntilfiremen;
-   siegest() : siege(0),siegetype(-1),underattack(0),escalationstate(0),timeuntillocated(-1),timeuntilcorps(-1),timeuntilcia(-1),timeuntilccs(-1),timeuntilfiremen(-1) { }
+  char siege{0};
+  // Puzz:  Temporary siege thing for organizations
+  int   orgID;
+  short siegetype{-1};
+  char  underattack{0};
+  int   attacktime;
+  short kills;
+  short tanks;
+  short escalationstate{0};
+  char  lights_off;
+  char  cameras_off;
+  short timeuntillocated{-1};
+  short timeuntilcorps{-1};
+  short timeuntilcia{-1};
+  short timeuntilccs{-1};
+  short timeuntilfiremen{-1};
 };
 
 struct siteblockst
 {
-   short special;
-   int flag;
-   char siegeflag;
+  short special;
+  int   flag;
+  char  siegeflag;
 };
 
 struct sitechangest
 {
-   char x,y,z;
-   int flag;
-   sitechangest() { }
-   sitechangest(char x_, char y_, char z_, int flag_) :  x(x_), y(y_), z(z_), flag(flag_) { }
+  sitechangest()
+  {}
+
+  sitechangest(char x_, char y_, char z_, int flag_)
+  : x(x_), y(y_), z(z_), flag(flag_)
+  {}
+
+  char x, y, z;
+  int  flag;
 };
 
 #define MAPX 70
@@ -206,105 +237,129 @@ struct sitechangest
 
 enum RentingTypes
 {
-   RENTING_CCS=-2,
-   RENTING_NOCONTROL=-1,
-   RENTING_PERMANENT=0
-   // positive values of renting are considered monthly rent prices
+  RENTING_CCS = -2,
+  RENTING_NOCONTROL = -1,
+  RENTING_PERMANENT = 0
+  // positive values of renting are considered monthly rent prices
 };
+
 
 #define CITY_NAMELEN 80
 #define LOCATION_NAMELEN 40
 #define LOCATION_SHORTNAMELEN 20
 
+class Item;
+
+
 class Location
 {
 public:
-   char name[LOCATION_NAMELEN];
-   char shortname[LOCATION_SHORTNAMELEN];
-   char type;
-   int city;
-   int area;
-   int parent;
-   int id;
+  Location(char type_, int parent_ = -1);
 
-   vector<Item *> loot;
-   vector<sitechangest> changes;
-   int renting;
-   char newrental;
-   char needcar;
-   int closed;
-   bool hidden;
-   bool mapped;
-   bool upgradable;
-   int highsecurity;
-   siegest siege;
-   int heat;
-   int heat_protection;
-   int compound_walls;
-   int compound_stores;
-   char front_business;
-   char front_name[LOCATION_NAMELEN];
-   char front_shortname[LOCATION_SHORTNAMELEN];
-   bool haveflag;
+  Location() {}
 
-   unsigned long mapseed[RNG_SIZE];
+  ~Location()
+  { delete_and_clear(loot); }
 
-   Location(char type_, int parent_=-1);
-   Location() { }
-   Location* addchild(char type_);
-   ~Location() { delete_and_clear(loot); }
-   void init();
-   void update_heat_protection();
-   bool duplicatelocation();
-   bool can_be_upgraded() { return upgradable; }
-   bool can_be_fortified();
-   bool fortified();
-   bool can_be_trapped();
-   bool trapped() { return compound_walls&COMPOUND_TRAPS; }
-   bool can_install_tanktraps();
-   bool tank_traps();
-   bool can_have_businessfront();
-   bool has_business_front();
-   bool bomb_resistant();
-   bool part_of_justice_system();
-   bool is_lcs_safehouse() { return renting>=0; }
-   bool is_ccs_safehouse() { return renting==RENTING_CCS; }
-   bool is_city() { return type==city; }
-   string getname(signed char shortname_=false, bool include_city=false);
-   void rename(const char* name_, const char* shortname_);
-   string city_description();
-   void getloot(vector<Item *>& loot);
+  void
+  init();
+
+  Location*
+  addchild(char type_);
+
+  void
+  update_heat_protection();
+
+  bool
+  duplicatelocation();
+
+  bool
+  can_be_upgraded()
+  { return upgradable; }
+
+  bool
+  can_be_fortified();
+
+  bool
+  fortified();
+
+  bool
+  can_be_trapped();
+
+  bool
+  trapped()
+  { return compound_walls & COMPOUND_TRAPS; }
+
+  bool
+  can_install_tanktraps();
+
+  bool
+  tank_traps();
+
+  bool
+  can_have_businessfront();
+
+  bool
+  has_business_front();
+
+  bool
+  bomb_resistant();
+
+  bool
+  part_of_justice_system();
+
+  bool
+  is_lcs_safehouse()
+  { return renting >= 0; }
+
+  bool
+  is_ccs_safehouse()
+  { return renting == RENTING_CCS; }
+
+  bool
+  is_city()
+  { return type == city; }
+
+  string
+  getname(signed char shortname_ = false, bool include_city = false);
+
+  void
+  rename(const char* name_, const char* shortname_);
+
+  string
+  city_description();
+
+  void
+  getloot(vector<Item*>& loot);
+
+public:
+  char                 name[LOCATION_NAMELEN];
+  char                 shortname[LOCATION_SHORTNAMELEN];
+  char                 type;
+  int                  city;
+  int                  area;
+  int                  parent;
+  int                  id;
+  vector<Item*>        loot;
+  vector<sitechangest> changes;
+  int                  renting;
+  char                 newrental;
+  char                 needcar;
+  int                  closed;
+  bool                 hidden;
+  bool                 mapped;
+  bool                 upgradable;
+  int                  highsecurity;
+  siegest              siege;
+  int                  heat;
+  int                  heat_protection;
+  int                  compound_walls;
+  int                  compound_stores;
+  char                 front_business;
+  char                 front_name[LOCATION_NAMELEN];
+  char                 front_shortname[LOCATION_SHORTNAMELEN];
+  bool                 haveflag;
+  unsigned long        mapseed[RNG_SIZE];
 };
 
-/*******************************************************************************
-*
-*                        Location Data
-*                        Folder: "locations"
-*
-*******************************************************************************/
-
-class Creature;
-
-/*
- world.cpp
-*/
-Location* find_site_by_id(int id);
-Location* find_site_in_city(int site_type, int city);
-int find_site_index_in_city(int site_type, int city);
-/* find local versions of these locations */
-int find_site_index_in_same_city(int site_type, int site_index);
-int find_site_index_in_same_city(int site_type, const Creature& cr);
-int find_police_station(int site_index);
-int find_police_station(const Creature& cr);
-int find_clinic(int site_index);
-int find_clinic(const Creature& cr);
-int find_homeless_shelter(int site_index);
-int find_homeless_shelter(const Creature& cr);
-int find_courthouse(int site_index);
-int find_courthouse(const Creature& cr);
-int find_hospital(int site_index);
-int find_hospital(const Creature& cr);
-/* sets up the list of locations */
-void make_world(bool hasmaps);
-
-#endif //LOCATIONS_H_INCLUDED
+#endif // LOCATIONS_H_INCLUDED
