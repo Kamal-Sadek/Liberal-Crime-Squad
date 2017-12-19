@@ -1,34 +1,42 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
-*/
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
+#include "daily/daily.h"
 
-#include <externs.h>
+#include "daily/activities.h"
+#include "daily/date.h"
+#include "daily/recruit.h"
+#include "daily/shopsnstuff.h"
+#include "daily/siege.h"
+#include "externs.h"
+#include "locations/locations.h"
+#include "locations/world.h"
+#include "news/news.h"
 
-void advanceday(char &clearformess,char canseethings)
+
+void advanceday(char& clearformess, char canseethings)
 {
    int p;
    showcarprefs=0;
@@ -484,8 +492,9 @@ void advanceday(char &clearformess,char canseethings)
    //HOSTAGES
    if(!disbanding) for(p=len(pool)-1;p>=0;p--)
    {
-      if(!pool[p]->alive) continue;
-      if(pool[p]->align!=1)
+      if (!pool[p]->alive)
+        continue;
+      if (pool[p]->align != Alignment::LIBERAL)
          tendhostage(pool[p],clearformess);
    }
 
@@ -568,7 +577,9 @@ void advanceday(char &clearformess,char canseethings)
          pool[p]->activity.type=ACTIVITY_NONE;
          break;
       case ACTIVITY_NONE:
-         if(pool[p]->align==1&&!pool[p]->is_imprisoned()&&(pool[p]->get_armor().is_bloody()||pool[p]->get_armor().is_damaged()))
+         if (pool[p]->align == Alignment::LIBERAL
+             && !pool[p]->is_imprisoned()
+             && (pool[p]->get_armor().is_bloody() || pool[p]->get_armor().is_damaged()))
             repairarmor(*pool[p],clearformess);
          break;
       }
@@ -759,8 +770,8 @@ void advanceday(char &clearformess,char canseethings)
             pool[p]->blood-=damage;
 
             if(transfer&&pool[p]->location>-1&&
-               pool[p]->alive==1&&
-               pool[p]->align==1&&
+               pool[p]->alive == 1&&
+               pool[p]->align == Alignment::LIBERAL&&
                location[pool[p]->location]->renting!=RENTING_NOCONTROL&&
                location[pool[p]->location]->type!=SITE_HOSPITAL_UNIVERSITY)
             {
@@ -1338,7 +1349,7 @@ bool promotesubordinates(Creature &cr, char &clearformess)
    {
       if(pool[p]->id==cr.id)continue;
       if(pool[p]->id==cr.hireid)bigboss=p;
-      if(pool[p]->hireid==cr.id && pool[p]->alive && pool[p]->align==1)
+      if(pool[p]->hireid==cr.id && pool[p]->alive && pool[p]->align==Alignment::LIBERAL)
       {
          subordinates++;
          //Brainwashed people inelligible for promotion to founder

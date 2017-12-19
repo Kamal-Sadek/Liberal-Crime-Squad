@@ -1,3 +1,28 @@
+/**
+ * Implementation of the Shop class.
+ */
+/*
+ * Copyright 2010 Carlos Gustavos  <blomkvist >
+ * Copyright 2014 Rich McGrew (yetisyny)
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 // Certain special characters won't display correctly unless your text editor is
@@ -31,88 +56,134 @@
 // to figure out for yourself how to open a file in OEM-US PC-8 codepage 437 in
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
+#include "sitemode/shop.h"
 
+#include <algorithm>
 #include <externs.h>
-
 #include <functional>
+#include <sstream>
+#include <string>
+#include "tinyxml2.h"
+
+
+namespace
+{
+  const std::string SHOP_XML_SHOP_ELEMENT{"shop"};
+  const std::string SHOP_SML_DEPARTMENT_ELEMENT{"department"};
+} // anonymous namespace
+
 
 ShopOption::ShopOption() : description_("UNDEFINED"), letter_(0), letter_defined_(false)
 { }
 
-Shop::Shop(MCD_STR xmlstring)
- : allow_selling_(false), only_sell_legal_(true), increase_prices_with_illegality_(false),
-   fullscreen_(false), sell_masks_(false)
-{
-   init(xmlstring);
-}
 
-Shop::Shop(MCD_STR xmlstring, bool fullscreen, bool only_sell_legal,
+Shop::Shop(std::string const& xmlstring, bool fullscreen, bool only_sell_legal,
            bool increase_prices_with_illegality)
- : allow_selling_(false), only_sell_legal_(only_sell_legal),
-   increase_prices_with_illegality_(increase_prices_with_illegality),
-   fullscreen_(fullscreen), sell_masks_(false)
+: allow_selling_(false)
+, only_sell_legal_(only_sell_legal)
+, increase_prices_with_illegality_(increase_prices_with_illegality)
+, fullscreen_(fullscreen)
+, sell_masks_(false)
 {
    init(xmlstring);
 }
 
-void Shop::init(const MCD_STR &xmlstring)
+
+void Shop::
+init(std::string const& xml)
 {
-   CMarkup xml;
-   xml.SetDoc(xmlstring);
-   xml.FindElem();
-   xml.IntoElem();
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLError err = doc.Parse(xml.c_str());
+  if (err != tinyxml2::XML_SUCCESS)
+  {
+    std::ostringstream ostr;
+    ostr << "error " << doc.ErrorID() << " parsing shop XML"
+         << " at line " << doc.GetErrorLineNum() << ": "
+         << doc.GetErrorStr1() << " / " << doc.GetErrorStr2();
+    addstr(ostr.str(), xmllog);
+    getkey();
+    return;
+  }
 
-   while(xml.FindElem())
-   {
-      std::string tag=xml.GetTagName();
+  auto toplevel = doc.FirstChildElement();
+  if ((toplevel != nullptr)
+   && (toplevel->Name() == SHOP_XML_SHOP_ELEMENT || toplevel->Name() == SHOP_SML_DEPARTMENT_ELEMENT))
+  {
+    auto attr_name = toplevel->Attribute("name");
+    if (attr_name)
+    {
+    }
 
-      if(tag=="only_sell_legal_items")
+    for (auto element = toplevel->FirstChildElement(); element; element = element->NextSiblingElement())
+    {
+      std::string tag = element->Name();
+
+      if (tag == "only_sell_legal_items")
       {
-         int b=stringtobool(xml.GetData());
-         if(b==1||b==0) only_sell_legal_=b;
+        int b = stringtobool(element->GetText());
+        if (b==1||b==0)
+            this->only_sell_legal_ = b;
       }
-      else if(tag=="fullscreen")
+      else if (tag == "fullscreen")
       {
-         int b=stringtobool(xml.GetData());
-         if(b==1||b==0) fullscreen_=b;
+         int b = stringtobool(element->GetText());
+         if (b==1||b==0)
+           this->fullscreen_ = b;
       }
-      else if(tag=="allow_selling")
+      else if (tag == "allow_selling")
       {
-         int b=stringtobool(xml.GetData());
-         if(b==1||b==0) allow_selling_=b;
+         int b = stringtobool(element->GetText());
+         if (b==1||b==0)
+           this->allow_selling_ = b;
       }
-      else if(tag=="increase_prices_with_illegality")
+      else if (tag == "increase_prices_with_illegality")
       {
-         int b=stringtobool(xml.GetData());
-         if(b==1||b==0) increase_prices_with_illegality_=b;
+         int b = stringtobool(element->GetText());
+         if (b==1||b==0)
+           this->increase_prices_with_illegality_ = b;
       }
-      else if(tag=="department")
-         options_.push_back(new Shop(xml.GetSubDoc(),fullscreen_,only_sell_legal_,
-                                     increase_prices_with_illegality_));
-      else if(tag=="entry") description_=xml.GetData();
-      else if(tag=="exit") exit_=xml.GetData();
-      else if(tag=="sell_masks")
+      else if (tag == "department")
       {
-         int b=stringtobool(xml.GetData());
-         if(b==1||b==0) sell_masks_=b;
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        this->options_.push_back(new Shop(printer.CStr(),
+                                          this->fullscreen_,
+                                          this->only_sell_legal_,
+                                          this->increase_prices_with_illegality_));
       }
-      else if(tag=="letter")
+      else if (tag == "entry")
+        this->description_ = element->GetText();
+      else if (tag == "exit")
+        this->exit_ = element->GetText();
+      else if (tag == "sell_masks")
       {
-         letter_=xml.GetData()[0];
-         if(97<=letter_&&letter_<= 122) //Check it is a letter.
-            letter_defined_=true;
-         else if(65<=letter_&&letter_<=90)
+         int b = stringtobool(element->GetText());
+         if (b==1||b==0)
+           this->sell_masks_ = b;
+      }
+      else if (tag == "letter")
+      {
+         this->letter_ = element->GetText()[0];
+         if (97<=letter_ && letter_<= 122) //Check it is a letter.
+          this->letter_defined_ = true;
+         else if (65<=letter_ && letter_<=90)
          {
-            letter_+=32;
-            letter_defined_=true;
+            this->letter_+=32;
+            this->letter_defined_=true;
          }
-         else if(letter_=='!') //Allow special character.
-            letter_defined_=true;
+         else if (letter_ == '!') //Allow special character.
+            this->letter_defined_ = true;
       }
-      else if(tag=="item")
-         options_.push_back(new ShopItem(xml.GetSubDoc(), only_sell_legal_,
-                            increase_prices_with_illegality_));
-   }
+      else if (tag == "item")
+      {
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        this->options_.push_back(new ShopItem(printer.CStr(),
+                                              this->only_sell_legal_,
+                                              this->increase_prices_with_illegality_));
+      }
+    }
+  }
 }
 
 Shop::~Shop()
@@ -514,9 +585,9 @@ int Shop::fenceselect(squadst& customers) const
          if (location[customers.squad[0]->base]->loot[l]->get_number() > 1)
          {
             if(selected[l])
-               itemstr += " " + tostring(selected[l]) + "/";
+               itemstr += " " + std::to_string(selected[l]) + "/";
             else itemstr += " x";
-            itemstr += tostring(location[customers.squad[0]->base]->loot[l]->get_number());
+            itemstr += std::to_string(location[customers.squad[0]->base]->loot[l]->get_number());
          }
 
          outstr = static_cast<char>(l-page*18+'A');
@@ -728,58 +799,73 @@ bool Shop::is_available() const
    return r;
 }
 
-Shop::ShopItem::ShopItem(MCD_STR xmlstring, bool only_sell_legal,
-                         bool increase_price_with_illegality)
- : price_(0), only_sell_legal_(only_sell_legal),
-   increase_price_with_illegality_(increase_price_with_illegality),
-   description_defined_(false)
+Shop::ShopItem::
+ShopItem(std::string const& xml, bool only_sell_legal, bool increase_price_with_illegality)
+: price_(0)
+, only_sell_legal_(only_sell_legal)
+, increase_price_with_illegality_(increase_price_with_illegality)
+, description_defined_(false)
 {
-   CMarkup xml;
-   xml.SetDoc(xmlstring);
-   xml.FindElem();
-   xml.IntoElem();
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLError err = doc.Parse(xml.c_str());
+  if (err != tinyxml2::XML_SUCCESS)
+  {
+    std::ostringstream ostr;
+    ostr << "error " << doc.ErrorID() << " parsing shop XML"
+         << " at line " << doc.GetErrorLineNum() << ": "
+         << doc.GetErrorStr1() << " / " << doc.GetErrorStr2();
+    addstr(ostr.str(), xmllog);
+    getkey();
+    return;
+  }
 
-   while(xml.FindElem())
-   {
-      std::string tag = xml.GetTagName();
+  auto toplevel = doc.FirstChildElement();
+  if (toplevel != nullptr)
+  {
+    for (auto element = toplevel->FirstChildElement(); element; element = element->NextSiblingElement())
+    {
+      std::string tag = element->Name();
 
       if (tag == "class")
       {
-         if (xml.GetData() == "WEAPON")
-            itemclass_ = WEAPON;
-         else if (xml.GetData() == "CLIP")
-            itemclass_ = CLIP;
-         else if (xml.GetData() == "ARMOR")
-            itemclass_ = ARMOR;
-         else if (xml.GetData() == "LOOT")
-            itemclass_ = LOOT;
+        std::string item_class = element->GetText();
+        if (item_class == "WEAPON")
+          this->itemclass_ = WEAPON;
+        else if (item_class == "CLIP")
+          this->itemclass_ = CLIP;
+        else if (item_class == "ARMOR")
+          this->itemclass_ = ARMOR;
+        else if (item_class == "LOOT")
+          this->itemclass_ = LOOT;
       }
       else if (tag == "type")
-         itemtypename_ = xml.GetData();
+        this->itemtypename_ = element->GetText();
       else if (tag == "description")
       {
-         description_ = xml.GetData();
-         description_defined_ = true;
+        this->description_ = element->GetText();
+        this->description_defined_ = true;
       }
       else if (tag == "price")
-         price_ = atoi(xml.GetData());
+        this->price_ = std::stoi(element->GetText());
       else if (tag == "sleeperprice")
-	     sleeperprice_ = atoi(xml.GetData());
-	   else if (tag == "letter")
+        this->sleeperprice_ = std::stoi(element->GetText());
+      else if (tag == "letter")
       {
-         letter_ = xml.GetData()[0];
-         if (97 <= letter_ && letter_ <= 122) //Check it is a letter.
-            letter_defined_ = true;
-         else if (65 <= letter_ && letter_ <= 90)
+         this->letter_ = element->GetText()[0];
+         if (97 <= this->letter_ && this->letter_ <= 122) //Check it is a letter.
+            this->letter_defined_ = true;
+         else if (65 <= this->letter_ && this->letter_ <= 90)
          {
-            letter_ += 32;
-            letter_defined_ = true;
+            this->letter_ += 32;
+            this->letter_defined_ = true;
          }
          else if (letter_ == '!') //Allow special character.
-            letter_defined_ = true;
+            this->letter_defined_ = true;
       }
-   }
+    }
+  }
 }
+
 
 void Shop::ShopItem::choose(squadst& customers, int& buyer) const
 {
@@ -821,7 +907,7 @@ const std::string Shop::ShopItem::get_description_halfscreen() const
 {
    std::string r=get_description();
    r.resize(26,' ');
-   r+="($"+tostring(adjusted_price())+")";
+   r+="($"+std::to_string(adjusted_price())+")";
    return r;
 }
 
@@ -829,7 +915,7 @@ const std::string Shop::ShopItem::get_description_fullscreen() const
 {
    std::string r=get_description();
    r.resize(35,' ');
-   r+="$"+tostring(adjusted_price());
+   r+="$"+std::to_string(adjusted_price());
    return r;
 }
 
@@ -882,7 +968,9 @@ int Shop::ShopItem::adjusted_price() const
 {
    int p=price_;
    if(increase_price_with_illegality_&&itemclass_==WEAPON&&valid_item())
-      for(int i=weapontype[getweapontype(itemtypename_)]->get_legality();i<law[LAW_GUNCONTROL];i++)
+      for (int i=weapontype[getweapontype(itemtypename_)]->get_legality();
+           i < to_index(law[LAW_GUNCONTROL])-2;
+           i++)
          p*=2;
    return p;
 }

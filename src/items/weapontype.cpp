@@ -1,441 +1,568 @@
-#include <externs.h>
+/**
+ * Implementation of the WeaponType class.
+ */
+/*
+ * Copyright 2010, 2013 Carlos Gustavos  <blomkvist>
+ * Copyright 2013, 2014 Rich McGrew (yetisyny)
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
+#include "items/weapontype.h"
 
-WeaponType::WeaponType(MCD_STR xmlstring)
- : ItemType(xmlstring), name_sub_1_defined_(false), name_sub_2_defined_(false),
-   name_future_sub_1_defined_(false), name_future_sub_2_defined_(false),
-   shortname_("UNDEF"), shortname_defined_(false), shortname_future_defined_(false),
-   shortname_sub_1_defined_(false), shortname_sub_2_defined_(false),
-   shortname_future_sub_1_defined_(false), shortname_future_sub_2_defined_(false),
-   can_take_hostages_(false), threatening_(false), can_threaten_hostages_(true),
-   protects_against_kidnapping_(true),
-   musical_attack_(false), instrument_(false), legality_(2), bashstrengthmod_(1),
-   suspicious_(true), size_(15), can_graffiti_(false), auto_break_lock_(false)
+#include "externs.h"
+#include <sstream>
+#include "tinyxml2.h"
+
+
+namespace
 {
-   CMarkup xml;
-   xml.SetDoc(xmlstring);
-   xml.FindElem();
-   xml.IntoElem();
+  const std::string WEAPONTYPE_XML_WEAPONTYPE_ELEMENT{"weapontype"};
+  const std::string WEAPONTYPE_XML_ATTACK_ELEMENT{"attack"};
+} // anonymous namespace
 
-   while(xml.FindElem()) //Loop over all the elements inside the weapontype element.
-   {
-      std::string element = xml.GetTagName();
 
-      if (element == "shortname")
-      {
-         shortname_ = xml.GetData();
-         shortname_defined_ = true;
-      }
-      else if (element == "shortname_future")
-      {
-         shortname_future_ = xml.GetData();
-         shortname_future_defined_ = true;
-      }
-      else if (element == "name_sub_1")
-      {
-         name_sub_1_ = xml.GetData();
-         name_sub_1_defined_ = true;
-      }
-      else if (element == "name_sub_2")
-      {
-         name_sub_2_ = xml.GetData();
-         name_sub_2_defined_ = true;
-      }
-      else if (element == "name_future_sub_1")
-      {
-         name_future_sub_1_ = xml.GetData();
-         name_future_sub_1_defined_ = true;
-      }
-      else if (element == "name_future_sub_2")
-      {
-         name_future_sub_2_ = xml.GetData();
-         name_future_sub_2_defined_ = true;
-      }
-      else if (element == "shortname_sub_1")
-      {
-         shortname_sub_1_ = xml.GetData();
-         shortname_sub_1_defined_ = true;
-      }
-      else if (element == "shortname_sub_2")
-      {
-         shortname_sub_2_ = xml.GetData();
-         shortname_sub_2_defined_ = true;
-      }
-      else if (element == "shortname_future_sub_1")
-      {
-         shortname_future_sub_1_ = xml.GetData();
-         shortname_future_sub_1_defined_ = true;
-      }
-      else if (element == "shortname_future_sub_2")
-      {
-         shortname_future_sub_2_ = xml.GetData();
-         shortname_future_sub_2_defined_ = true;
-      }
-      else if (element == "can_take_hostages")
-      {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            can_take_hostages_ = true;
-         else if (b == 0)
-            can_take_hostages_ = false;
-         /*else
-            errorlog << "Invalid boolean value for weapon type " << idname()
-                      << "::can_take_hostages: " << xml.GetData() << endl;*/
-      }
-      else if (element == "threatening")
-      {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            threatening_ = true;
-         else if (b == 0)
-            threatening_ = false;
-         /*else
-            errorlog << "Invalid boolean value for weapon type " << idname()
-                      << "::threatening: " << xml.GetData() << endl;*/
-      }
-      else if (element == "can_threaten_hostages")
-      {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            can_threaten_hostages_ = true;
-         else if (b == 0)
-            can_threaten_hostages_ = false;
-      }
-      else if (element == "protects_against_kidnapping")
-      {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            protects_against_kidnapping_ = true;
-         else if (b == 0)
-            protects_against_kidnapping_ = false;
-      }
-      else if (element == "musical_attack")
-      {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            musical_attack_ = true;
-         else if (b == 0)
-            musical_attack_ = false;
-         /*else
-            errorlog << "Invalid boolean value for weapon type " << idname()
-                      << "::musical_attack: " << xml.GetData() << endl;*/
-      }
-      else if (element == "instrument")
-      {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            instrument_ = true;
-         else if (b == 0)
-            instrument_ = false;
-         /*else
-            errorlog << "Invalid boolean value for weapon type " << idname()
-                      << "::instrument: " << xml.GetData() << endl;*/
-      }
-      else if (element == "graffiti")
-      {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            can_graffiti_ = true;
-         else if (b == 0)
-            can_graffiti_ = false;
-         /*else
-            errorlog << "Invalid boolean value for weapon type " << idname()
-                      << "::graffiti: " << xml.GetData() << endl;*/
-      }
-      else if (element == "legality")
-         legality_ = atoi(xml.GetData());
-      else if (element == "bashstrengthmod")
-         bashstrengthmod_ = atoi(xml.GetData()) / 100.0;
-      else if (element == "auto_break_locks")
-      {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            auto_break_lock_ = true;
-         else if (b == 0)
-            auto_break_lock_ = false;
-         /*else
-            errorlog << "Invalid boolean value for weapon type " << idname()
-                      << "::auto_break_locks: " << xml.GetData() << endl;*/
-      }
-      else if (element == "suspicious")
-      {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            suspicious_ = true;
-         else if (b == 0)
-            suspicious_ = false;
-         /*else
-            errorlog << "Invalid boolean value for weapon type " << idname()
-                      << "::suspicious: " << xml.GetData() << endl;*/
-      }
-      else if (element == "size")
-         size_ = atoi(xml.GetData());
-      else if (element == "attack")
-      {
-         attackst* attack = new attackst(xml.GetSubDoc());
+WeaponType::
+WeaponType(std::string const& xml)
+: ItemType(xml)
+, name_sub_1_defined_(false)
+, name_sub_2_defined_(false)
+, name_future_sub_1_defined_(false)
+, name_future_sub_2_defined_(false)
+, shortname_("UNDEF")
+, shortname_defined_(false)
+, shortname_future_defined_(false)
+, shortname_sub_1_defined_(false)
+, shortname_sub_2_defined_(false)
+, shortname_future_sub_1_defined_(false)
+, shortname_future_sub_2_defined_(false)
+, can_take_hostages_(false)
+, threatening_(false)
+, can_threaten_hostages_(true)
+, protects_against_kidnapping_(true)
+, musical_attack_(false)
+, instrument_(false)
+, legality_(2)
+, bashstrengthmod_(1)
+, suspicious_(true)
+, size_(15)
+, can_graffiti_(false)
+, auto_break_lock_(false)
+{
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLError err = doc.Parse(xml.c_str());
+  if (err != tinyxml2::XML_SUCCESS)
+  {
+    std::ostringstream ostr;
+    ostr << "error " << doc.ErrorID() << " parsing WeaponType XML"
+         << " at line " << doc.GetErrorLineNum() << ": "
+         << doc.GetErrorStr1() << " / " << doc.GetErrorStr2();
+    addstr(ostr.str(), xmllog);
+    getkey();
+    return;
+  }
 
-         int i;
-         for(i=0;i<len(attacks_)&&attack->priority>=attacks_[i]->priority;i++);
-         attacks_.insert(attacks_.begin()+i,attack);
+  auto toplevel = doc.FirstChildElement();
+  if (toplevel != nullptr && toplevel->Name() == WEAPONTYPE_XML_WEAPONTYPE_ELEMENT)
+  {
+    for (auto element = toplevel->FirstChildElement(); element; element = element->NextSiblingElement())
+    {
+      std::string tag = element->Name();
+      if (tag == "shortname")
+      {
+        char const* val = element->GetText();
+        if (val)
+        {
+          this->shortname_ = val;
+          this->shortname_defined_ = true;
+        }
       }
-      /*else
-         errorlog << "Unknown element for weapon type " << idname()
-                   << ": " << element << endl;*/
-   }
-
-   if (!shortname_defined_)
-   {
-      if ((uses_ammo() && len(name()) <= 9)
-          || len(name()) <= 14)
-         shortname_ = name();
-   }
-   else
-   {
-      if (len(shortname_) > 9 && uses_ammo())
-         shortname_.resize(9);
-      else if (len(shortname_) > 14)
-         shortname_.resize(14);
-   }
+      if (tag == "shortname_future")
+      {
+        char const* val = element->GetText();
+        if (val)
+        {
+          this->shortname_future_ = val;
+          this->shortname_future_defined_ = true;
+        }
+      }
+      if (tag == "name_sub_1")
+      {
+        char const* val = element->GetText();
+        if (val)
+        {
+          this->name_sub_1_ = val;
+          this->name_sub_1_defined_ = true;
+        }
+      }
+      if (tag == "name_sub_2")
+      {
+        char const* val = element->GetText();
+        if (val)
+        {
+          this->name_sub_2_ = val;
+          this->name_sub_2_defined_ = true;
+        }
+      }
+      if (tag == "name_future_sub_1")
+      {
+        char const* val = element->GetText();
+        if (val)
+        {
+          this->name_future_sub_1_ = val;
+          this->name_future_sub_1_defined_ = true;
+        }
+      }
+      if (tag == "shortname_sub_1")
+      {
+        char const* val = element->GetText();
+        if (val)
+        {
+          this->shortname_sub_1_ = val;
+          this->shortname_sub_1_defined_ = true;
+        }
+      }
+      if (tag == "shortname_sub_2")
+      {
+        char const* val = element->GetText();
+        if (val)
+        {
+          this->shortname_sub_2_ = val;
+          this->shortname_sub_2_defined_ = true;
+        }
+      }
+      if (tag == "shortname_future_sub_1")
+      {
+        char const* val = element->GetText();
+        if (val)
+        {
+          this->shortname_future_sub_1_ = val;
+          this->shortname_future_sub_1_defined_ = true;
+        }
+      }
+      if (tag == "shortname_future_sub_2")
+      {
+        char const* val = element->GetText();
+        if (val)
+        {
+          this->shortname_future_sub_2_ = val;
+          this->shortname_future_sub_2_defined_ = true;
+        }
+      }
+      else if (tag == "can_take_hostages")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->can_take_hostages_ = (stringtobool(val)==1);
+      }
+      else if (tag == "threatening")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->threatening_ = (stringtobool(val)==1);
+      }
+      else if (tag == "can_threaten_hostages")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->can_threaten_hostages_ = (stringtobool(val)==1);
+      }
+      else if (tag == "protects_against_kidnapping")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->protects_against_kidnapping_ = (stringtobool(val)==1);
+      }
+      else if (tag == "musical_attack")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->musical_attack_ = (stringtobool(val)==1);
+      }
+      else if (tag == "instrument")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->instrument_ = (stringtobool(val)==1);
+      }
+      else if (tag == "graffiti")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->can_graffiti_ = (stringtobool(val)==1);
+      }
+      else if (tag == "legality")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->legality_ = std::stoi(val);
+      }
+      else if (tag == "bashstrengthmod")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->bashstrengthmod_ = std::stoi(val) / 100.0;
+      }
+      else if (tag == "auto_break_locks")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->auto_break_lock_ = (stringtobool(val)==1);
+      }
+      else if (tag == "suspicious")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->suspicious_ = (stringtobool(val)==1);
+      }
+      else if (tag == "size")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->size_ = std::stoi(val);
+      }
+      else if (tag == "attack")
+      {
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        attackst* attack = new attackst(printer.CStr());
+        int i;
+        for (i=0; i<len(this->attacks_) && attack->priority >= this->attacks_[i]->priority; i++)
+          ;
+        this->attacks_.insert(this->attacks_.begin()+i, attack);
+      }
+    }
+  }
+   
+  if (!shortname_defined_)
+  {
+    if ((uses_ammo() && len(name()) <= 9) || len(name()) <= 14)
+      shortname_ = name();
+  }
+  else
+  {
+    if (len(shortname_) > 9 && uses_ammo())
+      shortname_.resize(9);
+    else if (len(shortname_) > 14)
+      shortname_.resize(14);
+  }
 
 }
 
-attackst::attackst(MCD_STR xmlstring)
- : priority(1), ranged(false), thrown(false), ammotype("UNDEF"), uses_ammo(false),
-   attack_description("assaults"), hit_description("striking"),
-   always_describe_hit(false), can_backstab(false), hit_punctuation("."),
-   skill(SKILL_CLUB), accuracy_bonus(0), number_attacks(1),
-   successive_attacks_difficulty(0), strength_min(5), strength_max(10),
-	random_damage(1), fixed_damage(1), bruises(false), tears(false), cuts(false),
-	burns(false), shoots(false), bleeding(false), severtype(0), damages_armor(false),
-	armorpiercing(0), no_damage_reduction_for_limbs_chance(0)
+attackst::
+attackst(std::string const& xml)
+: priority(1)
+, ranged(false)
+, thrown(false)
+, ammotype("UNDEF")
+, uses_ammo(false)
+, attack_description("assaults")
+, hit_description("striking")
+, always_describe_hit(false)
+, can_backstab(false)
+, hit_punctuation(".")
+, skill(SKILL_CLUB)
+, accuracy_bonus(0)
+, number_attacks(1)
+, successive_attacks_difficulty(0)
+, strength_min(5)
+, strength_max(10)
+, random_damage(1)
+, fixed_damage(1)
+, bruises(false)
+, tears(false)
+, cuts(false)
+, burns(false)
+, shoots(false)
+, bleeding(false)
+, severtype(0)
+, damages_armor(false)
+, armorpiercing(0)
+, no_damage_reduction_for_limbs_chance(0)
 {
-   CMarkup xml;
-   xml.SetDoc(xmlstring);
-   xml.FindElem();
-   xml.IntoElem();
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLError err = doc.Parse(xml.c_str());
+  if (err != tinyxml2::XML_SUCCESS)
+  {
+    std::ostringstream ostr;
+    ostr << "error " << doc.ErrorID() << " parsing attackst XML"
+         << " at line " << doc.GetErrorLineNum() << ": "
+         << doc.GetErrorStr1() << " / " << doc.GetErrorStr2();
+    addstr(ostr.str(), xmllog);
+    getkey();
+    return;
+  }
 
-   while(xml.FindElem()) //Loop over all the elements inside the vehicletype element.
-   {
-      std::string element = xml.GetTagName();
-
-      if (element == "priority")
-         priority = atoi(xml.GetData());
-      else if (element == "ranged")
+  auto toplevel = doc.FirstChildElement();
+  if (toplevel != nullptr && toplevel->Name() == WEAPONTYPE_XML_ATTACK_ELEMENT)
+  {
+    for (auto element = toplevel->FirstChildElement(); element; element = element->NextSiblingElement())
+    {
+      std::string tag = element->Name();
+      if (tag == "priority")
       {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            ranged = true;
-         else if (b == 0)
-            ranged = false;
-         /*else
-            errorlog << "Invalid boolean value for attack::ranged " << xml.GetData() << endl;*/
+        char const* val = element->GetText();
+        if (val)
+          this->priority = std::stoi(val);
       }
-      else if (element == "thrown")
+      else if (tag == "ranged")
       {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            thrown = true;
-         else if (b == 0)
-            thrown = false;
-         /*else
-            errorlog << "Invalid boolean value for attack::thrown " << xml.GetData() << endl;*/
+        char const* val = element->GetText();
+        if (val)
+          this->ranged = (stringtobool(val)==1);
       }
-      else if (element == "can_backstab")
+      else if (tag == "thrown")
       {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            can_backstab = true;
-         else if (b == 0)
-            can_backstab = false;
+        char const* val = element->GetText();
+        if (val)
+          this->thrown = (stringtobool(val)==1);
       }
-      else if (element == "ammotype")
+      else if (tag == "can_backstab")
       {
-         ammotype = xml.GetData();
-         uses_ammo = true;
+        char const* val = element->GetText();
+        if (val)
+          this->can_backstab = (stringtobool(val)==1);
       }
-      else if (element == "attack_description")
-         attack_description = xml.GetData();
-      else if (element == "hit_description")
-         hit_description = xml.GetData();
-      else if (element == "always_describe_hit")
+      else if (tag == "ammotype")
       {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            always_describe_hit = true;
-         else if (b == 0)
-            always_describe_hit = false;
-         /*else
-            errorlog << "Invalid boolean value for attack::always_describe_hit: " << xml.GetData() << endl;*/
+        char const* val = element->GetText();
+        if (val)
+        {
+          this->ammotype = val;
+          this->uses_ammo = true;
+        }
       }
-      else if (element == "hit_punctuation")
-         hit_punctuation = xml.GetData();
-      else if (element == "skill")
+      else if (tag == "attack_description")
       {
-         int s = skill_string_to_enum(xml.GetData());
-         if (s != -1)
-            skill = s;
-         /*else
-            errorlog << "Invalid skill name for attack::skill: " << xml.GetData() << endl; */
+        char const* val = element->GetText();
+        if (val)
+          this->attack_description = val;
       }
-      else if (element == "accuracy_bonus")
-         accuracy_bonus = atoi(xml.GetData());
-      else if (element == "number_attacks")
-         number_attacks = atoi(xml.GetData());
-      else if (element == "successive_attacks_difficulty")
-         successive_attacks_difficulty = atoi(xml.GetData());
-      else if (element == "strength_min")
-         strength_min = atoi(xml.GetData());
-      else if (element == "strength_max")
-         strength_max = atoi(xml.GetData());
-      else if (element == "random_damage")
-         random_damage = atoi(xml.GetData());
-      else if (element == "fixed_damage")
-         fixed_damage = atoi(xml.GetData());
-      else if (element == "bruises")
+      else if (tag == "hit_description")
       {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            bruises = true;
-         else if (b == 0)
-            bruises = false;
-         /*else
-            errorlog << "Invalid boolean value for attack::bruises: " << xml.GetData() << endl;*/
+        char const* val = element->GetText();
+        if (val)
+          this->hit_description = val;
       }
-      else if (element == "tears")
+      else if (tag == "always_describe_hit")
       {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            tears = true;
-         else if (b == 0)
-            tears = false;
-         /*else
-            errorlog << "Invalid boolean value for attack::tears: " << xml.GetData() << endl;*/
+        char const* val = element->GetText();
+        if (val)
+          this->always_describe_hit = (stringtobool(val)==1);
       }
-      else if (element == "cuts")
+      else if (tag == "hit_punctuation")
       {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            cuts = true;
-         else if (b == 0)
-            cuts = false;
-         /*else
-            errorlog << "Invalid boolean value for attack::cuts: " << xml.GetData() << endl;*/
+        char const* val = element->GetText();
+        if (val)
+          this->hit_punctuation = val;
       }
-      else if (element == "burns")
+      else if (tag == "skill")
       {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            burns = true;
-         else if (b == 0)
-            burns = false;
-         /*else
-            errorlog << "Invalid boolean value for attack::burns: " << xml.GetData() << endl;*/
+        char const* val = element->GetText();
+        if (val)
+        {
+          int s = skill_string_to_enum(val);
+          if (s != -1)
+            this->skill = s;
+        }
       }
-      else if (element == "shoots")
+      else if (tag == "accuracy_bonus")
       {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            shoots = true;
-         else if (b == 0)
-            shoots = false;
-         /*else
-            errorlog << "Invalid boolean value for attack::shoots: " << xml.GetData() << endl;*/
+        char const* val = element->GetText();
+        if (val)
+          this->accuracy_bonus = std::stoi(val);
       }
-      else if (element == "bleeding")
+      else if (tag == "number_attacks")
       {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            bleeding = true;
-         else if (b == 0)
-            bleeding = false;
-         /*else
-            errorlog << "Invalid boolean value for attack::bleeding: " << xml.GetData() << endl;*/
+        char const* val = element->GetText();
+        if (val)
+          this->number_attacks = std::stoi(val);
       }
-      else if (element == "severtype")
+      else if (tag == "successive_attacks_difficulty")
       {
-         int s = severtype_string_to_enum(xml.GetData());
-         if (s != -1)
-            severtype = s;
-         /*else
-            errorlog << "Invalid severtype for attack::severtype: " << xml.GetData() << endl; */
+        char const* val = element->GetText();
+        if (val)
+          this->successive_attacks_difficulty = std::stoi(val);
       }
-      else if (element == "damages_armor")
+      else if (tag == "strength_min")
       {
-         int b = stringtobool(xml.GetData());
-         if (b == 1)
-            damages_armor = true;
-         else if (b == 0)
-            damages_armor = false;
-         /*else
-            errorlog << "Invalid boolean value for attack::damages_armor: " << xml.GetData() << endl;*/
+        char const* val = element->GetText();
+        if (val)
+          this->strength_min = std::stoi(val);
       }
-      else if (element == "armorpiercing")
-         armorpiercing = atoi(xml.GetData());
-      else if (element == "no_damage_reduction_for_limbs_chance")
-         no_damage_reduction_for_limbs_chance = atoi(xml.GetData());
-      else if (element == "critical")
+      else if (tag == "strength_max")
       {
-         xml.IntoElem();
-
-         while(xml.FindElem())
-         {
-            element = xml.GetTagName();
-
-            if (element == "chance")
-               critical.chance = atoi(xml.GetData());
-            else if (element == "hits_required")
-               critical.hits_required = atoi(xml.GetData());
-            else if (element == "random_damage")
+        char const* val = element->GetText();
+        if (val)
+          this->strength_max = std::stoi(val);
+      }
+      else if (tag == "random_damage")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->random_damage = std::stoi(val);
+      }
+      else if (tag == "fixed_damage")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->fixed_damage = std::stoi(val);
+      }
+      else if (tag == "bruises")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->bruises = (stringtobool(val)==1);
+      }
+      else if (tag == "tears")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->tears = (stringtobool(val)==1);
+      }
+      else if (tag == "cuts")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->cuts = (stringtobool(val)==1);
+      }
+      else if (tag == "burns")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->burns = (stringtobool(val)==1);
+      }
+      else if (tag == "shoots")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->shoots = (stringtobool(val)==1);
+      }
+      else if (tag == "bleeding")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->bleeding = (stringtobool(val)==1);
+      }
+      else if (tag == "severtype")
+      {
+        char const* val = element->GetText();
+        if (val)
+        {
+          int s = severtype_string_to_enum(val);
+          if (s != -1)
+            this->severtype = s;
+        }
+      }
+      else if (tag == "damages_armor")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->damages_armor = (stringtobool(val)==1);
+      }
+      else if (tag == "armorpiercing")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->armorpiercing = std::stoi(val);
+      }
+      else if (tag == "no_damage_reduction_for_limbs_chance")
+      {
+        char const* val = element->GetText();
+        if (val)
+          this->no_damage_reduction_for_limbs_chance = std::stoi(val);
+      }
+      else if (tag == "critical")
+      {
+        for (auto e = element->FirstChildElement(); e; e = e->NextSiblingElement())
+        {
+          std::string tag = e->Name();
+          if (tag == "chance")
+          {
+            char const* val = e->GetText();
+            if (val)
+              this->critical.chance = std::stoi(val);
+          }
+          else if (tag == "hits_required")
+          {
+            char const* val = e->GetText();
+            if (val)
+              this->critical.hits_required = std::stoi(val);
+          }
+          else if (tag == "random_damage")
+          {
+            char const* val = e->GetText();
+            if (val)
             {
-               critical.random_damage = atoi(xml.GetData());
-               critical.random_damage_defined = true;
+              this->critical.random_damage = std::stoi(val);
+              this->critical.random_damage_defined = true;
             }
-            else if (element == "fixed_damage")
+          }
+          else if (tag == "fixed_damage")
+          {
+            char const* val = e->GetText();
+            if (val)
             {
-               critical.fixed_damage = atoi(xml.GetData());
-               critical.fixed_damage_defined = true;
+              this->critical.fixed_damage = std::stoi(val);
+              this->critical.fixed_damage_defined = true;
             }
-            else if (element == "severtype")
+          }
+          else if (tag == "severtype")
+          {
+            char const* val = element->GetText();
+            if (val)
             {
-               int s = severtype_string_to_enum(xml.GetData());
-               if (s != -1)
-               {
-                  critical.severtype = s;
-                  critical.severtype_defined = true;
-               }
-               /*else
-                  errorlog << "Invalid severtype for attack::critical::severtype: " << xml.GetData() << endl; */
+              int s = severtype_string_to_enum(val);
+              if (s != -1)
+              {
+                this->critical.severtype = s;
+                this->critical.severtype_defined = true;
+              }
             }
-            /*else
-               errorlog << "Unknown element for attack::critical: " << element << endl; */
-         }
-
-         xml.OutOfElem();
+          }
+        }
       }
-      else if (element == "fire")
+      else if (tag == "fire")
       {
-         xml.IntoElem();
-
-         while(xml.FindElem())
-         {
-            element = xml.GetTagName();
-
-            if (element == "chance")
-               fire.chance = atoi(xml.GetData());
-            else if (element == "chance_causes_debris")
-               fire.chance_causes_debris = atoi(xml.GetData());
-            /*else
-               errorlog << "Unknown element for attack::fire: " << element << endl; */
-         }
-
-         xml.OutOfElem();
+        for (auto e = element->FirstChildElement(); e; e = e->NextSiblingElement())
+        {
+          std::string tag = e->Name();
+          if (tag == "chance")
+          {
+            char const* val = e->GetText();
+            if (val)
+              this->fire.chance = std::stoi(val);
+          }
+          else if (tag == "chance_causes_debris")
+          {
+            char const* val = e->GetText();
+            if (val)
+              this->fire.chance_causes_debris = std::stoi(val);
+          }
+        }
       }
-      /*else
-         errorlog << "Unknown element for attack: " << element << endl; */
-   }
+    }
+  }
 
-   if (!bruises && !tears && !cuts && !burns && !shoots)
-      bruises = true; //If no type specified, then bruise.
+  if (!bruises && !tears && !cuts && !burns && !shoots)
+    bruises = true; //If no type specified, then bruise.
 }
+
 
 attackst::criticalst::criticalst()
  : chance(0), hits_required(1), random_damage(1), random_damage_defined(false),
@@ -554,5 +681,5 @@ bool WeaponType::is_throwable() const
 
 bool WeaponType::is_legal() const
 {
-   return legality_>=law[LAW_GUNCONTROL];
+   return legality_ >= to_index(law[LAW_GUNCONTROL])-2;
 }

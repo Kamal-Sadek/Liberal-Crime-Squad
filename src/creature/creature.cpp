@@ -1,193 +1,110 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
-*/
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
 
 #include <externs.h>
+#include "creature/creaturetypecache.h"
+#include "creature/creaturetype.h"
+#include "creature/skill.h"
+#include "politics/politics.h"
+#include <sstream>
+#include "tinyxml2.h"
 
 
-Skill::Skill(const std::string& inputXml)
+namespace
 {
-   CMarkup xml;
-   xml.SetDoc(inputXml);
-   xml.FindElem();
-   xml.IntoElem();
 
-   while(xml.FindElem())
+/**
+ * Roll against a skill.
+ *
+ * This die rolling system (and the associated difficulty ratings) is adapted
+ * from EABA, which uses a system of rolling a number of six-sided dice equal to
+ * the ability score divided by three. The top three dice are used, the rest
+ * discarded. Finally, any additional points that didn't divide evenly into
+ * creating a die contribute to odd-shaped dice that don't exist in the real
+ * world. This system gives diminishing returns for high skill levels.  EABA
+ * actually just adds the remainder to the die total, but there are some
+ * statistical problems with that system.
+ *
+ * It is not possible to roll above an 18 using this system.
+ *
+ * It is possible to roll below a 3, if you don't have at
+ * least 9 skill.
+ */
+int roll_check(int skill)
+{
+   int dice    = skill/3;
+   int total   = 0;
+   int roll[3] = {0,0,0};
+
+   for(int i=0;i<dice+1;i++)
    {
-      std::string tag = xml.GetTagName();
+      int newroll = 0;
 
-      if (tag == "associated_attribute")
-         associated_attribute = atoi(xml.GetData());
-      else if (tag == "skill")
-         skill = atoi(xml.GetData());
-      else if (tag == "value")
-         value = min(atoi(xml.GetData()),MAXATTRIBUTE);
+      // Roll d6 for every three skill
+      if(i<dice)
+         newroll = LCSrandom(6)+1;
+      // Partial dice for the remainder -- d3 for +1, d5 for +2
+      else if(skill%3)
+         newroll = LCSrandom((skill%3)*2+1)+1;
+
+      // Keep the top three dice
+      if(i<3)
+         roll[i]=newroll;
+      else
+         for(int j=0;j<3;j++)
+            if(newroll>roll[j])
+            {
+               int temp=roll[j];
+               roll[j]=newroll;
+               newroll=temp;
+            }
    }
+
+   for(int i=0;i<3;i++)
+      total += roll[i];
+
+   return total;
 }
 
-string Skill::showXml() const
+Weapon&
+weapon_none()
 {
-   CMarkup xml;
-   xml.AddElem("skill");
-   xml.IntoElem();
-   xml.AddElem("associated_attribute", associated_attribute);
-   xml.AddElem("skill", skill);
-   xml.AddElem("value", min(value,MAXATTRIBUTE));
-
-   return xml.GetDoc();
+   static Weapon unarmed(*weapontype[getweapontype("WEAPON_NONE")]);
+   return unarmed;
 }
 
-CreatureAttribute Skill::get_associated_attribute(int skill_type)
+Armor&
+armor_none()
 {
-   // Initialize associated attribute
-   switch(skill_type)
-   {
-   case SKILL_CLUB:
-   case SKILL_AXE:
-   case SKILL_HEAVYWEAPONS:
-      return ATTRIBUTE_STRENGTH;
-   case SKILL_HANDTOHAND:
-   case SKILL_KNIFE:
-   case SKILL_SWORD:
-   case SKILL_PISTOL:
-   case SKILL_RIFLE:
-   case SKILL_SMG:
-   case SKILL_SHOTGUN:
-   case SKILL_DRIVING:
-   case SKILL_STEALTH:
-   case SKILL_THROWING:
-   case SKILL_DODGE:
-      return ATTRIBUTE_AGILITY;
-   case SKILL_DISGUISE:
-   case SKILL_SEDUCTION:
-   case SKILL_PERSUASION:
-      return ATTRIBUTE_CHARISMA;
-   case SKILL_ART:
-   case SKILL_MUSIC:
-      return ATTRIBUTE_HEART;
-   case SKILL_RELIGION:
-   case SKILL_BUSINESS:
-   case SKILL_WRITING:
-   case SKILL_PSYCHOLOGY:
-   case SKILL_SECURITY:
-   case SKILL_TAILORING:
-   case SKILL_TEACHING:
-   case SKILL_FIRSTAID:
-   case SKILL_SCIENCE:
-   case SKILL_LAW:
-   case SKILL_COMPUTERS:
-   case SKILL_STREETSENSE:
-   default:
-      return ATTRIBUTE_INTELLIGENCE;
-   }
+   static Armor naked(*armortype[getarmortype("ARMOR_NONE")]);
+   return naked;
 }
 
-std::string Skill::get_name(int skill_type)
-{
-   switch(skill_type)
-   {
-   case SKILL_HANDTOHAND:     return "Martial Arts";
-   case SKILL_KNIFE:          return "Knife";
-   case SKILL_SWORD:          return "Sword";
-   case SKILL_THROWING:       return "Throwing";
-   case SKILL_CLUB:           return "Club";
-   case SKILL_AXE:            return "Axe";
-   case SKILL_PISTOL:         return "Pistol";
-   case SKILL_RIFLE:          return "Rifle";
-   case SKILL_HEAVYWEAPONS:   return "Heavy Weapons";
-   case SKILL_SHOTGUN:        return "Shotgun";
-   case SKILL_SMG:            return "SMG";
-   case SKILL_PERSUASION:     return "Persuasion";
-   case SKILL_PSYCHOLOGY:     return "Psychology";
-   case SKILL_SECURITY:       return "Security";
-   case SKILL_DISGUISE:       return "Disguise";
-   case SKILL_COMPUTERS:      return "Computers";
-   case SKILL_LAW:            return "Law";
-   case SKILL_TAILORING:      return "Tailoring";
-   case SKILL_DRIVING:        return "Driving";
-   case SKILL_WRITING:        return "Writing";
-   case SKILL_MUSIC:          return "Music";
-   case SKILL_ART:            return "Art";
-   case SKILL_RELIGION:       return "Religion";
-   case SKILL_SCIENCE:        return "Science";
-   case SKILL_BUSINESS:       return "Business";
-   case SKILL_STEALTH:        return "Stealth";
-   case SKILL_TEACHING:       return "Teaching";
-   case SKILL_STREETSENSE:    return "Street Sense";
-   case SKILL_SEDUCTION:      return "Seduction";
-   case SKILL_FIRSTAID:       return "First Aid";
-   case SKILL_DODGE:          return "Dodge";
-   }
-   return "Error Skill Name";
-}
+} // anonymous namepsace
 
-Attribute::Attribute(const std::string& inputXml)
-{
-   CMarkup xml;
-   xml.SetDoc(inputXml);
-   xml.FindElem();
-   xml.IntoElem();
-
-   while(xml.FindElem())
-   {
-      std::string tag = xml.GetTagName();
-
-      if (tag == "attribute")
-         attribute = atoi(xml.GetData());
-      else if (tag == "value")
-         value = min(atoi(xml.GetData()),MAXATTRIBUTE);
-   }
-}
-
-string Attribute::showXml() const
-{
-   CMarkup xml;
-   xml.AddElem("attribute");
-   xml.IntoElem();
-   xml.AddElem("attribute", attribute);
-   xml.AddElem("value", min(value,MAXATTRIBUTE));
-
-   return xml.GetDoc();
-}
-
-std::string Attribute::get_name(int attribute_type)
-{
-   switch(attribute_type)
-   {
-   case ATTRIBUTE_STRENGTH:      return "STR";
-   case ATTRIBUTE_AGILITY:       return "AGI";
-   case ATTRIBUTE_WISDOM:        return "WIS";
-   case ATTRIBUTE_INTELLIGENCE:  return "INT";
-   case ATTRIBUTE_HEART:         return "HRT";
-   case ATTRIBUTE_HEALTH:        return "HLTH";
-   case ATTRIBUTE_CHARISMA:      return "CHA";
-   }
-   return "Error Attribute Name";
-}
 
 Creature& Creature::operator=(const Creature& rhs)
 {
@@ -218,9 +135,9 @@ void Creature::copy(const Creature& org)
    for(int i=0;i<LAWFLAGNUM;i++)
       crimes_suspected[i]=org.crimes_suspected[i];
    if(org.weapon) weapon=new Weapon(*org.weapon);
-   else weapon=NULL;
+   else weapon=nullptr;
    if(org.armor) armor=new Armor(*org.armor);
-   else armor=NULL;
+   else armor=nullptr;
    for(int i=0;i<len(org.extra_throwing_weapons);i++)
       extra_throwing_weapons.push_back(new Weapon(*org.extra_throwing_weapons[i]));
    for(int i=0;i<len(org.clips);i++)
@@ -273,7 +190,7 @@ void Creature::copy(const Creature& org)
    pref_is_driver=org.pref_is_driver;
    flag=org.flag;
    dontname=org.dontname;
-   prisoner=NULL; //Not copying prisoner.
+   prisoner=nullptr; //Not copying prisoner.
 }
 
 Creature::~Creature()
@@ -339,7 +256,7 @@ bool Creature::reports_to_police() const
 
 bool Creature::is_lcs_sleeper() const
 {
-   return(alive && align==ALIGN_LIBERAL && clinic==0 &&
+   return(alive && align==Alignment::LIBERAL && clinic==0 &&
       dating==0 && hiding==0 && (flag & CREATUREFLAG_SLEEPER));
 }
 
@@ -352,7 +269,7 @@ bool Creature::is_imprisoned() const
 
 bool Creature::is_active_liberal() const
 {
-   return(alive && align==ALIGN_LIBERAL && clinic==0 && dating==0 &&
+   return(alive && align==Alignment::LIBERAL && clinic==0 && dating==0 &&
       hiding==0 && !(flag & CREATUREFLAG_SLEEPER) &&
       !::location[this->location]->part_of_justice_system());
 }
@@ -416,14 +333,14 @@ void Creature::creatureinit()
    trainingsubject=-1;
    specialattack=-1;
    animalgloss=ANIMALGLOSS_NONE;
-   prisoner=NULL;
+   prisoner=nullptr;
    alive=true;
    blood=100;
    stunned=0;
    for(int w=0;w<BODYPARTNUM;w++)wound[w]=0;
-   weapon=NULL;
+   weapon=nullptr;
    has_thrown_weapon = false;
-   armor=NULL;//new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]); //Causes crash for global uniqueCreature -XML
+   armor=nullptr;//new Armor(*armortype[getarmortype("ARMOR_CLOTHES")]); //Causes crash for global uniqueCreature -XML
    for(int a=0;a<ATTNUM;a++)
    {
       attributes[a].set_type(a);
@@ -469,7 +386,7 @@ void Creature::creatureinit()
    money=0;
    income=0;
    exists=true;
-   align=LCSrandom(3)-1;
+   align = choose({Alignment::CONSERVATIVE, Alignment::MODERATE, Alignment::LIBERAL});
    infiltration=0.0f;
    type=CREATURE_WORKER_JANITOR;
    type_idname="CREATURE_WORKER_JANITOR";
@@ -478,266 +395,302 @@ void Creature::creatureinit()
    strcpy(propername,"Scruffy");
 }
 
-Creature::Creature(const std::string& inputXml)
- : weapon(NULL), armor(NULL), prisoner(NULL)
+static const std::string CREATURE_XML_CREATURE_ELEMENT{"creature"};
+
+Creature::Creature(const std::string& xml)
+: weapon(nullptr)
+, armor(nullptr)
+, prisoner(nullptr)
 {
-   CMarkup xml;
-   xml.SetDoc(inputXml);
-   xml.FindElem();
-   xml.IntoElem();
+  int attributesi=0,skillsi=0,skill_experiencei=0,woundi=0,speciali=0,crimesi=0,augi=0;
 
-   int attributesi=0,skillsi=0,skill_experiencei=0,woundi=0,speciali=0,crimesi=0,augi=0;
-   while(xml.FindElem())
-   {
-      std::string tag = xml.GetTagName();
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLError err = doc.Parse(xml.c_str());
+  if (err != tinyxml2::XML_SUCCESS)
+  {
+    doc.PrintError();
+    return;
+  }
 
+  auto e = doc.FirstChildElement();
+  if (e == nullptr)
+  {
+  }
+  else
+  {
+  }
+  if ((e != nullptr) && (e->Name() == CREATURE_XML_CREATURE_ELEMENT))
+  {
+    for (auto element = e->FirstChildElement(); element; element = element->NextSiblingElement())
+    {
+      string tag = element->Name();
       if (tag == "attribute" && attributesi < ATTNUM)
-         attributes[attributesi++] = Attribute(xml.GetSubDoc());
+      {
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        attributes[attributesi++] = Attribute(printer.CStr());
+      }
       else if (tag == "skill" && skillsi < SKILLNUM)
-         skills[skillsi++] = Skill(xml.GetSubDoc());
+      {
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        skills[skillsi++] = Skill(printer.CStr());
+      }
       else if (tag == "skill_experience" && skill_experiencei < SKILLNUM)
-         skill_experience[skill_experiencei++] = atoi(xml.GetData());
+      {
+        skill_experience[skill_experiencei++] = std::stoi(element->GetText());
+      }
       else if (tag == "weapon")
       {
-         Weapon w(xml.GetSubDoc());
-         if (getweapontype(w.get_itemtypename()) != -1) //Check weapon is a valid type.
-            give_weapon(w,NULL);
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        Weapon w(printer.CStr());
+        if (getweapontype(w.get_itemtypename()) != -1) //Check weapon is a valid type.
+          give_weapon(w, nullptr);
       }
       else if (tag == "armor")
       {
-         armor = new Armor(xml.GetSubDoc());
-         if (getarmortype(armor->get_itemtypename()) == -1) //Check armor is a valid type.
-            delete_and_nullify(armor);
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        armor = new Armor(printer.CStr());
+        if (getarmortype(armor->get_itemtypename()) == -1) //Check armor is a valid type.
+          delete_and_nullify(armor);
       }
       else if (tag =="augmentation")
-         augmentations[augi++] = Augmentation(xml.GetSubDoc());
+      {
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        augmentations[augi++] = Augmentation(printer.CStr());
+      }
       else if (tag == "name")
-         strcpy(name,xml.GetData());
+         strcpy(name, element->GetText());
       else if (tag == "propername")
-         strcpy(propername,xml.GetData());
+      {
+         strcpy(propername, element->GetText());
+      }
       else if (tag == "gender_conservative")
-         gender_conservative = atoi(xml.GetData());
+         gender_conservative = std::stoi(element->GetText());
       else if (tag == "gender_liberal")
-         gender_liberal = atoi(xml.GetData());
+         gender_liberal = std::stoi(element->GetText());
       else if (tag == "squadid")
-         squadid = atoi(xml.GetData());
+         squadid = std::stoi(element->GetText());
       else if (tag == "age")
-         age = atoi(xml.GetData());
+         age = std::stoi(element->GetText());
       else if (tag == "birthday_month")
-         birthday_month = atoi(xml.GetData());
+         birthday_month = std::stoi(element->GetText());
       else if (tag == "birthday_day")
-         birthday_day = atoi(xml.GetData());
+         birthday_day = std::stoi(element->GetText());
       else if (tag == "exists")
-         exists = atoi(xml.GetData());
+         exists = std::stoi(element->GetText());
       else if (tag == "align")
-         align = atoi(xml.GetData());
+         from_string(element->GetText(), align);
       else if (tag == "alive")
-         alive = atoi(xml.GetData());
+         alive = std::stoi(element->GetText());
       else if (tag == "type")
-         type = atoi(xml.GetData());
+         type = std::stoi(element->GetText());
       else if (tag == "type_idname")
-         type_idname = xml.GetData();
+         type_idname = element->GetText();
       else if (tag == "infiltration")
-         infiltration = atof(xml.GetData());
+         infiltration = std::stof(element->GetText());
       else if (tag == "animalgloss")
-         animalgloss = atoi(xml.GetData());
+         animalgloss = std::stoi(element->GetText());
       else if (tag == "specialattack")
-         specialattack = atoi(xml.GetData());
+         specialattack = std::stoi(element->GetText());
       else if (tag == "clinic")
-         clinic = atoi(xml.GetData());
+         clinic = std::stoi(element->GetText());
       else if (tag == "dating")
-         dating = atoi(xml.GetData());
+         dating = std::stoi(element->GetText());
       else if (tag == "hiding")
-         hiding = atoi(xml.GetData());
+         hiding = std::stoi(element->GetText());
       else if (tag == "trainingtime")
-         trainingtime = atoi(xml.GetData());
+         trainingtime = std::stoi(element->GetText());
       else if (tag == "trainingsubject")
-         trainingsubject = atoi(xml.GetData());
+         trainingsubject = std::stoi(element->GetText());
       else if (tag == "prisoner")
       {
-         xml.IntoElem();
-         prisoner = new Creature(xml.GetSubDoc());
-         xml.OutOfElem();
+        auto e = element->FirstChildElement();
+        tinyxml2::XMLPrinter printer;
+        e->Accept(&printer);
+        prisoner = new Creature(printer.CStr());
       }
-      else if (tag == "sentence")
-         sentence = atoi(xml.GetData());
+     else if (tag == "sentence")
+         sentence = std::stoi(element->GetText());
       else if (tag == "confessions")
-         confessions = atoi(xml.GetData());
+         confessions = std::stoi(element->GetText());
       else if (tag == "deathpenalty")
-         deathpenalty = atoi(xml.GetData());
+         deathpenalty = std::stoi(element->GetText());
       else if (tag == "joindays")
-         joindays = atoi(xml.GetData());
+         joindays = std::stoi(element->GetText());
       else if (tag == "deathdays")
-         deathdays = atoi(xml.GetData());
+         deathdays = std::stoi(element->GetText());
       else if (tag == "id")
-         id = atoi(xml.GetData());
+         id = std::stoi(element->GetText());
       else if (tag == "hireid")
-         hireid = atoi(xml.GetData());
+         hireid = std::stoi(element->GetText());
       else if (tag == "meetings")
-         meetings = atoi(xml.GetData());
+         meetings = std::stoi(element->GetText());
       else if (tag == "forceinc")
-         forceinc = atoi(xml.GetData());
+         forceinc = std::stoi(element->GetText());
       else if (tag == "stunned")
-         stunned = atoi(xml.GetData());
+         stunned = std::stoi(element->GetText());
       else if (tag == "clip")
       {
-         Clip* c = new Clip(xml.GetSubDoc());
-         if (getcliptype(c->get_itemtypename()) != -1)
-            clips.push_back(c);
-         else
-            delete c;
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        Clip* c = new Clip(printer.CStr());
+        if (getcliptype(c->get_itemtypename()) != -1)
+          clips.push_back(c);
+        else
+          delete c;
       }
       else if (tag == "has_thrown_weapon")
-         has_thrown_weapon = atoi(xml.GetData());
+         has_thrown_weapon = std::stoi(element->GetText());
       else if (tag == "money")
-         money = atoi(xml.GetData());
+         money = std::stoi(element->GetText());
       else if (tag == "juice")
-         juice = atoi(xml.GetData());
+         juice = std::stoi(element->GetText());
       else if (tag == "income")
-         income = atoi(xml.GetData());
+         income = std::stoi(element->GetText());
       else if (tag == "wound" && woundi < BODYPARTNUM)
-         wound[woundi++] = atoi(xml.GetData());
+         wound[woundi++] = std::stoi(element->GetText());
       else if (tag == "blood")
-         blood = atoi(xml.GetData());
+         blood = std::stoi(element->GetText());
       else if (tag == "special" && speciali < SPECIALWOUNDNUM)
-         special[speciali++] = atoi(xml.GetData());
+         special[speciali++] = std::stoi(element->GetText());
       else if (tag == "crimes_suspected" && crimesi < LAWFLAGNUM)
-         crimes_suspected[crimesi++] = atoi(xml.GetData());
+         crimes_suspected[crimesi++] = std::stoi(element->GetText());
       else if (tag == "heat")
-         heat = atoi(xml.GetData());
+         heat = std::stoi(element->GetText());
       else if (tag == "location")
-         location = atoi(xml.GetData());
+         location = std::stoi(element->GetText());
       else if (tag == "worklocation")
-         worklocation = atoi(xml.GetData());
+         worklocation = std::stoi(element->GetText());
       else if (tag == "cantbluff")
-         cantbluff = atoi(xml.GetData());
+         cantbluff = std::stoi(element->GetText());
       else if (tag == "base")
-         base = atoi(xml.GetData());
+         base = std::stoi(element->GetText());
       else if (tag == "activity")
       {
-         xml.IntoElem();
-         while(xml.FindElem())
-         {
-            tag = xml.GetTagName();
-            if (tag == "type")
-               activity.type = atoi(xml.GetData());
-            else if (tag == "arg")
-               activity.arg = atoi(xml.GetData());
-            else if (tag == "arg2")
-               activity.arg2 = atoi(xml.GetData());
-         }
-         xml.OutOfElem();
+        for (auto e = element->FirstChildElement(); e; e = e->NextSiblingElement())
+        {
+          std::string ename = e->Name();
+          if (ename == "type")
+            activity.type = std::stoi(e->GetText());
+          else if (ename == "arg")
+            activity.arg = std::stoi(e->GetText());
+          else if (ename == "arg2")
+            activity.arg2 = std::stoi(e->GetText());
+        }
       }
       else if (tag == "carid")
-         carid = atoi(xml.GetData());
+         carid = std::stoi(element->GetText());
       else if (tag == "is_driver")
-         is_driver = atoi(xml.GetData());
+         is_driver = std::stoi(element->GetText());
       else if (tag == "pref_carid")
-         pref_carid = atoi(xml.GetData());
+         pref_carid = std::stoi(element->GetText());
       else if (tag == "pref_is_driver")
-         pref_is_driver = atoi(xml.GetData());
+         pref_is_driver = std::stoi(element->GetText());
       else if (tag == "flag")
-         flag = atoi(xml.GetData());
+         flag = std::stoi(element->GetText());
       else if (tag == "dontname")
-         dontname = atoi(xml.GetData());
-   }
+         dontname = std::stoi(element->GetText());
+    }
+  }
 }
 
-string Creature::showXml() const
+string
+Creature::showXml() const
 {
-   CMarkup xml;
-   xml.AddElem("creature");
-   xml.IntoElem();
+  std::ostringstream ostr;
+  ostr << "<creature>";
 
-   for(int i=0;i<ATTNUM;i++)
-      xml.AddSubDoc(attributes[i].showXml());
-   for(int i=0;i<SKILLNUM;i++)
-      xml.AddSubDoc(skills[i].showXml());
-   for(int i=0;i<SKILLNUM;i++)
-      xml.AddElem("skill_experience", skill_experience[i]); //Bad, relies on their order in the xml file. -XML 
-   if(weapon) xml.AddSubDoc(weapon->showXml());
-   if(armor) xml.AddSubDoc(armor->showXml());
-   for(const auto &aug:augmentations)
-      xml.AddSubDoc(aug.showXml());
+   for (int i=0; i<ATTNUM; i++)
+     ostr << attributes[i].showXml();
+   for (int i=0; i<SKILLNUM; i++)
+     ostr << skills[i].showXml();
+   for (int i=0; i<SKILLNUM; i++)
+     ostr << "<skill_experience>" << skill_experience[i] << "</skill_experience>"; //Bad, relies on their order in the xml file.
+   if (weapon)
+     ostr << weapon->showXml();
+   if (armor)
+     ostr << armor->showXml();
+   for (const auto &aug:augmentations)
+      ostr << aug.showXml();
 
-   xml.AddElem("name", name);
-   xml.AddElem("propername", propername);
-   xml.AddElem("gender_conservative", gender_conservative);
-   xml.AddElem("gender_liberal", gender_liberal);
-   xml.AddElem("squadid", squadid);
-   xml.AddElem("age", age);
-   xml.AddElem("birthday_month", birthday_month);
-   xml.AddElem("birthday_day", birthday_day);
-   xml.AddElem("exists", exists);
-   xml.AddElem("align", align);
-   xml.AddElem("alive", alive);
-   xml.AddElem("type", type);
-   xml.AddElem("type_idname", type_idname);
+  ostr << "<name>" << name << "</name>";
+  ostr << "<propername>" << propername << "</propername>";
+  ostr << "<gender_conservative>" <<  (int)gender_conservative << "</gender_conservative>";
+  ostr << "<gender_liberal>" <<  (int)gender_liberal << "</gender_liberal>";
+  ostr << "<squadid>" <<  squadid << "</squadid>";
+  ostr << "<age>" <<  age << "</age>";
+  ostr << "<birthday_month>" <<  birthday_month << "</birthday_month>";
+  ostr << "<birthday_day>" <<  birthday_day << "</birthday_day>";
+  ostr << "<exists>" <<  exists << "</exists>";
+  ostr << "<align>" <<  to_string(align) << "</align>";
+  ostr << "<alive>" <<  alive << "</alive>";
+  ostr << "<type>" <<  type << "</type>";
+  ostr << "<type_idname>" <<  type_idname << "</type_idname>";
 
-   char buf[256];
-   snprintf (buf, 255, "%f", infiltration);
-   xml.AddElem("infiltration", buf);
+  char buf[256];
+  snprintf(buf, 255, "%f", infiltration);
+  ostr << "<infiltration>" <<  buf << "</infiltration>";
 
-   xml.AddElem("animalgloss", animalgloss);
-   xml.AddElem("specialattack", specialattack);
-   xml.AddElem("clinic", clinic);
-   xml.AddElem("dating", dating);
-   xml.AddElem("hiding", hiding);
-   xml.AddElem("trainingtime", trainingtime);
-   xml.AddElem("trainingsubject", trainingsubject);
-   if(prisoner) //Should never be true when saving.
-   {
-      xml.AddElem("prisoner");
-      xml.IntoElem();
-      xml.AddSubDoc(prisoner->showXml());
-      xml.OutOfElem();
-   }
-   xml.AddElem("sentence", sentence);
-   xml.AddElem("confessions", confessions);
-   xml.AddElem("deathpenalty", deathpenalty);
-   xml.AddElem("joindays", joindays);
-   xml.AddElem("deathdays", deathdays);
-   xml.AddElem("id", id);
-   xml.AddElem("hireid", hireid);
-   xml.AddElem("meetings", meetings);
-   xml.AddElem("forceinc", forceinc);
-   xml.AddElem("stunned", stunned);
-   for(int i=0;i<len(extra_throwing_weapons);i++)
-      xml.AddSubDoc(extra_throwing_weapons[i]->showXml());
-   for(int i=0;i<len(clips);i++)
-      xml.AddSubDoc(clips[i]->showXml());
-   xml.AddElem("has_thrown_weapon", has_thrown_weapon);
-   xml.AddElem("money", money);
-   xml.AddElem("juice", juice);
-   xml.AddElem("income", income);
-   for(int i=0;i<BODYPARTNUM;i++) //Bad, relies on their order in the xml file. -XML
-      xml.AddElem("wound",wound[i]);
-   xml.AddElem("blood", blood);
-   for(int i=0;i<SPECIALWOUNDNUM;i++) //Bad, relies on their order in the xml file. -XML
-      xml.AddElem("special",special[i]);
-   for(int i=0;i<LAWFLAGNUM;i++) //Bad, relies on their order in the xml file. -XML
-      xml.AddElem("crimes_suspected",crimes_suspected[i]);
-   xml.AddElem("heat", heat);
-   xml.AddElem("location", location);
-   xml.AddElem("worklocation", worklocation);
-   xml.AddElem("cantbluff", cantbluff);
-   xml.AddElem("base", base);
+  ostr << "<animalgloss>" <<  animalgloss << "</animalgloss>";
+  ostr << "<specialattack>" <<  specialattack << "</specialattack>";
+  ostr << "<clinic>" <<  clinic << "</clinic>";
+  ostr << "<dating>" <<  dating << "</dating>";
+  ostr << "<hiding>" <<  hiding << "</hiding>";
+  ostr << "<trainingtime>" <<  trainingtime << "</trainingtime>";
+  ostr << "<trainingsubject>" <<  trainingsubject << "</trainingsubject>";
+  if (prisoner) //Should never be true when saving.
+  {
+     ostr << "<prisoner>" << prisoner->showXml() << "</prisoner>";
+  }
+  ostr << "<sentence>" <<  sentence << "</sentence>";
+  ostr << "<confessions>" <<  confessions << "</confessions>";
+  ostr << "<deathpenalty>" <<  deathpenalty << "</deathpenalty>";
+  ostr << "<joindays>" <<  joindays << "</joindays>";
+  ostr << "<deathdays>" <<  deathdays << "</deathdays>";
+  ostr << "<id>" <<  id << "</id>";
+  ostr << "<hireid>" <<  hireid << "</hireid>";
+  ostr << "<meetings>" <<  meetings << "</meetings>";
+  ostr << "<forceinc>" <<  forceinc << "</forceinc>";
+  ostr << "<stunned>" <<  stunned << "</stunned>";
+  for (int i=0; i<len(extra_throwing_weapons); i++)
+    ostr << extra_throwing_weapons[i]->showXml();
+  for (int i=0; i<len(clips); i++)
+    ostr << clips[i]->showXml();
+  ostr << "<has_thrown_weapon>" <<  has_thrown_weapon << "</has_thrown_weapon>";
+  ostr << "<money>" <<  money << "</money>";
+  ostr << "<juice>" <<  juice << "</juice>";
+  ostr << "<income>" <<  income << "</income>";
+  for (int i=0; i<BODYPARTNUM; i++) //Bad, relies on their order in the xml file. -XML
+    ostr << "<wound>" << (int)wound[i] << "</wound>";
+  ostr << "<blood>" <<  blood << "</blood>";
+  for (int i=0; i<SPECIALWOUNDNUM; i++) //Bad, relies on their order in the xml file. -XML
+    ostr << "<special>" << (int)special[i] << "</special>";
+  for (int i=0; i<LAWFLAGNUM; i++) //Bad, relies on their order in the xml file. -XML
+    ostr << "<crimes_suspected>" << crimes_suspected[i] << "</crimes_suspected>";
+  ostr << "<heat>" <<  heat << "</heat>";
+  ostr << "<location>" <<  location << "</location>";
+  ostr << "<worklocation>" <<  worklocation << "</worklocation>";
+  ostr << "<cantbluff>" <<  (int)cantbluff << "</cantbluff>";
+  ostr << "<base>" <<  base << "</base>";
 
-   xml.AddElem("activity");
-   xml.IntoElem();
-   xml.AddElem("type",activity.type);
-   xml.AddElem("arg",activity.arg);
-   xml.AddElem("arg2",activity.arg2);
-   xml.OutOfElem();
+  ostr << "<activity>";
+  ostr << "<type>" << activity.type << "</type>";
+  ostr << "<arg>" << activity.arg << "</arg>";
+  ostr << "<arg2>" << activity.arg2 << "</arg2>";
+  ostr << "</activity>";
 
-   xml.AddElem("carid", carid);
-   xml.AddElem("is_driver", is_driver);
-   xml.AddElem("pref_carid", pref_carid);
-   xml.AddElem("pref_is_driver", pref_is_driver);
-   xml.AddElem("flag", flag);
-   xml.AddElem("dontname", dontname);
-
-   return xml.GetDoc();
+  ostr << "<carid>" <<  carid << "</carid>";
+  ostr << "<is_driver>" <<  (int)is_driver << "</is_driver>";
+  ostr << "<pref_carid>" <<  pref_carid << "</pref_carid>";
+  ostr << "<pref_is_driver>" <<  (int)pref_is_driver << "</pref_is_driver>";
+  ostr << "<flag>" <<  flag << "</flag>";
+  ostr << "<dontname>" <<  dontname << "</dontname>";
+  ostr << "</creature>";
+  return ostr.str();
 }
 
 int Creature::get_attribute(int attribute, bool usejuice) const
@@ -835,8 +788,8 @@ int Creature::get_attribute(int attribute, bool usejuice) const
    if(!usejuice)return ret;
 
    // Never use juice to increase stats for the opposite ideology!
-   if(attribute==ATTRIBUTE_WISDOM && align!=ALIGN_CONSERVATIVE)usejuice=false;
-   if(attribute==ATTRIBUTE_HEART  && align!=ALIGN_LIBERAL)usejuice=false;
+   if(attribute==ATTRIBUTE_WISDOM && align!=Alignment::CONSERVATIVE)usejuice=false;
+   if(attribute==ATTRIBUTE_HEART  && align!=Alignment::LIBERAL)usejuice=false;
 
    // Effects of juice on the character's attributes
    if(usejuice)
@@ -877,57 +830,6 @@ int Creature::get_attribute(int attribute, bool usejuice) const
    return ret;
 }
 
-int Creature::roll_check(int skill)
-{
-   // This die rolling system (and the associated difficulty
-   // ratings) is adapted from EABA, which uses a system of
-   // rolling a number of six-sided dice equal to the ability
-   // score divided by three. The top three dice are used,
-   // the rest discarded. Finally, any additional points that
-   // didn't divide evenly into creating a die contribute to
-   // odd-shaped dice that don't exist in the real world. This
-   // system gives diminishing returns for high skill levels.
-   // EABA actually just adds the remainder to the die total,
-   // but there are some statistical problems with that system.
-
-   // It is not possible to roll above an 18 using this system.
-
-   // It is possible to roll below a 3, if you don't have at
-   // least 9 skill.
-
-   int dice    = skill/3;
-   int total   = 0;
-   int roll[3] = {0,0,0};
-
-   for(int i=0;i<dice+1;i++)
-   {
-      int newroll = 0;
-
-      // Roll d6 for every three skill
-      if(i<dice)
-         newroll = LCSrandom(6)+1;
-      // Partial dice for the remainder -- d3 for +1, d5 for +2
-      else if(skill%3)
-         newroll = LCSrandom((skill%3)*2+1)+1;
-
-      // Keep the top three dice
-      if(i<3)
-         roll[i]=newroll;
-      else
-         for(int j=0;j<3;j++)
-            if(newroll>roll[j])
-            {
-               int temp=roll[j];
-               roll[j]=newroll;
-               newroll=temp;
-            }
-   }
-
-   for(int i=0;i<3;i++)
-      total += roll[i];
-
-   return total;
-}
 
 int Creature::attribute_roll(int attribute) const
 {
@@ -1008,7 +910,7 @@ int Creature::skill_roll(int skill) const
    switch(pseudoskill)
    {
       case PSEUDOSKILL_ESCAPEDRIVE:
-         if (v != NULL)
+         if (v != nullptr)
          {
             skill_value = v->modifieddriveskill(skill_value+adjusted_attribute_value); // combine values and modify by vehicle stats
             adjusted_attribute_value = 0;
@@ -1019,7 +921,7 @@ int Creature::skill_roll(int skill) const
          }
          break;
       case PSEUDOSKILL_DODGEDRIVE:
-         if (v != NULL)
+         if (v != nullptr)
          {
             skill_value = v->modifieddodgeskill(skill_value+adjusted_attribute_value); // combine values and modify by vehicle stats
             adjusted_attribute_value = 0;
@@ -1088,7 +990,7 @@ int Creature::skill_roll(int skill) const
          if(get_armor().is_damaged()) { return_value>>=1; }
 
          // Carrying corpses or having hostages is very bad for disguise
-         if(prisoner!=NULL) { return_value>>=2; break; }
+         if(prisoner!=nullptr) { return_value>>=2; break; }
       }
    }
    #ifdef SHOWMECHANICS
@@ -1133,7 +1035,7 @@ bool Creature::skill_check(int skill, int difficulty) const
 
 void Creature::stop_hauling_me()
 {
-   for(int p=0;p<len(pool);p++) if(pool[p]->prisoner==this) pool[p]->prisoner=NULL;
+   for(int p=0;p<len(pool);p++) if(pool[p]->prisoner==this) pool[p]->prisoner=nullptr;
 }
 
 void Creature::train(int trainedskill, int experience, int upto)
@@ -1176,9 +1078,9 @@ void Creature::skill_up()
 
 bool Creature::enemy() const
 {
-   if(align==ALIGN_CONSERVATIVE)
+   if(align==Alignment::CONSERVATIVE)
       return true;
-   else if(type==CREATURE_COP && align==ALIGN_MODERATE)
+   else if(type==CREATURE_COP && align==Alignment::MODERATE)
    {
       for(int i=0;i<len(pool);i++)
          if(pool[i]==this)
@@ -1191,9 +1093,9 @@ bool Creature::enemy() const
 /* turns a creature into a conservative */
 void conservatise(Creature &cr)
 {
-   if(cr.align==ALIGN_LIBERAL && cr.juice>0)cr.juice=0;
+   if(cr.align==Alignment::LIBERAL && cr.juice>0)cr.juice=0;
 
-   cr.align=ALIGN_CONSERVATIVE;
+   cr.align=Alignment::CONSERVATIVE;
 
    switch(cr.type)
    {
@@ -1209,9 +1111,9 @@ void conservatise(Creature &cr)
 /* turns a creature into a liberal */
 void liberalize(Creature &cr,bool rename)
 {
-   if(cr.align==ALIGN_CONSERVATIVE && cr.juice>0)cr.juice=0;
+   if(cr.align==Alignment::CONSERVATIVE && cr.juice>0)cr.juice=0;
 
-   cr.align=ALIGN_LIBERAL;
+   cr.align=Alignment::LIBERAL;
 
    if(cr.id == uniqueCreatures.CEO().id)
       uniqueCreatures.newCEO();
@@ -1332,84 +1234,130 @@ void Creature::die()
    }
 }
 
-void UniqueCreatures::newCEO()
+
+UniqueCreatures::
+UniqueCreatures()
+: CEO_ID(-1)
+, Pres_ID(-1)
 {
-   makecreature(CEO_,CREATURE_CORPORATE_CEO);
-   CEO_ID=CEO_.id,CEO_state=UNIQUECREATURE_ALIVE;
 }
 
-void UniqueCreatures::newPresident()
+
+void UniqueCreatures::
+newCEO()
 {
-   makecreature(Pres_, CREATURE_POLITICIAN);
-   Pres_ID=Pres_.id,Pres_state=UNIQUECREATURE_ALIVE,Pres_.dontname=true;
-   //Turn into President (not just random pol)
-   std::string pres_name=execname[EXEC_PRESIDENT];
-   strcpy(Pres_.name,"President "+pres_name.substr(pres_name.find(' ')+1));
-   strcpy(Pres_.propername,execname[EXEC_PRESIDENT]);
-   switch(exec[EXEC_PRESIDENT])
-   { // we don't do anything for ALIGN_ARCHCONSERVATIVE or ALIGN_CONSERVATIVE so having them here is unnecessary
-   case ALIGN_MODERATE:
-      Pres_.align=ALIGN_MODERATE;
-      Pres_.set_attribute(ATTRIBUTE_WISDOM,Pres_.get_attribute(ATTRIBUTE_WISDOM,false)/2);
-      Pres_.set_attribute(ATTRIBUTE_HEART,Pres_.get_attribute(ATTRIBUTE_WISDOM,false));
-      break;
-   case ALIGN_LIBERAL:
-   case ALIGN_ELITELIBERAL:
-      Pres_.align=ALIGN_LIBERAL;
-      Pres_.set_attribute(ATTRIBUTE_HEART,Pres_.get_attribute(ATTRIBUTE_WISDOM,false));
-      Pres_.set_attribute(ATTRIBUTE_WISDOM,1);
-      break;
-   }
+   makecreature(CEO_, CREATURE_CORPORATE_CEO);
+   CEO_ID = CEO_.id;
+   CEO_state = UNIQUECREATURE_ALIVE;
 }
 
-UniqueCreatures::UniqueCreatures(const std::string& inputXml)
+
+void UniqueCreatures::
+newPresident()
 {
-   CMarkup xml;
-   xml.SetDoc(inputXml);
-   xml.FindElem();
-   xml.IntoElem();
+  makecreature(Pres_, CREATURE_POLITICIAN);
+  Pres_ID = Pres_.id;
+  Pres_state = UNIQUECREATURE_ALIVE;
+  Pres_.dontname = true;
 
-   while(xml.FindElem())
-   {
-      std::string tag = xml.GetTagName();
+  //Turn into President (not just random pol)
+  std::string pres_name = execname[EXEC_PRESIDENT];
+  strcpy(Pres_.name, "President "+pres_name.substr(pres_name.find(' ')+1));
+  strcpy(Pres_.propername, execname[EXEC_PRESIDENT]);
+  switch(exec[EXEC_PRESIDENT])
+  { // we don't do anything for Alignment::ARCH_CONSERVATIVE or Alignment::CONSERVATIVE so having them here is unnecessary
+  case Alignment::MODERATE:
+    Pres_.align=Alignment::MODERATE;
+    Pres_.set_attribute(ATTRIBUTE_WISDOM, Pres_.get_attribute(ATTRIBUTE_WISDOM,false)/2);
+    Pres_.set_attribute(ATTRIBUTE_HEART, Pres_.get_attribute(ATTRIBUTE_WISDOM,false));
+    break;
+  case Alignment::LIBERAL:
+  case Alignment::ELITE_LIBERAL:
+    Pres_.align=Alignment::LIBERAL;
+    Pres_.set_attribute(ATTRIBUTE_HEART, Pres_.get_attribute(ATTRIBUTE_WISDOM,false));
+    Pres_.set_attribute(ATTRIBUTE_WISDOM, 1);
+    break;
+  }
+}
 
+static const std::string UNIQUE_CREATURE_XML_TAG{"uniquecreatures"};
+
+UniqueCreatures::
+UniqueCreatures(const std::string& xml)
+{
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLError err = doc.Parse(xml.c_str());
+  if (err != tinyxml2::XML_SUCCESS)
+  {
+    doc.PrintError();
+    return;
+  }
+
+  auto e = doc.FirstChildElement();
+  if ((e != nullptr) && (e->Name() == UNIQUE_CREATURE_XML_TAG))
+  {
+    for (auto element = e->FirstChildElement(); element; element = element->NextSiblingElement())
+    {
+      string tag = element->Name();
       if (tag == "CEO" || tag == "Pres")
       {
-         xml.IntoElem();
-         xml.FindElem();
-         if(tag == "CEO")
-            CEO_ = Creature(xml.GetSubDoc());
-         else
-            Pres_ = Creature(xml.GetSubDoc());
-         xml.OutOfElem();
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        if (tag == "CEO")
+          CEO_ = Creature(printer.CStr());
+        else
+          Pres_ = Creature(printer.CStr());
       }
       else if (tag == "CEO_ID")
-         CEO_ID = atoi(xml.GetData());
+      {
+         CEO_ID = std::stoi(element->GetText());
+      }
       else if (tag == "CEO_state")
-         CEO_state = atoi(xml.GetData());
+      {
+         int val = std::stoi(element->GetText());
+         if (val != UNIQUECREATURE_ALIVE
+          && val != UNIQUECREATURE_DEAD
+          && val != UNIQUECREATURE_LIBERAL)
+         {
+           throw std::invalid_argument(tag);
+         }
+         CEO_state = val;
+      }
       else if (tag == "Pres_ID")
-         Pres_ID = atoi(xml.GetData());
+      {
+         Pres_ID = std::stoi(element->GetText());
+      }
       else if (tag == "Pres_state")
-         Pres_state = atoi(xml.GetData());
-
-   }
+      {
+         int val = std::stoi(element->GetText());
+         if (val != UNIQUECREATURE_ALIVE
+          && val != UNIQUECREATURE_DEAD
+          && val != UNIQUECREATURE_LIBERAL)
+         {
+           throw std::invalid_argument(tag);
+         }
+         Pres_state = val;
+      }
+    }
+  }
 }
 
-string UniqueCreatures::showXml() const
+
+string UniqueCreatures::
+showXml() const
 {
-   CMarkup xml;
-   xml.AddElem("uniquecreatures");
-   xml.IntoElem();
-   xml.AddElem("CEO_ID", CEO_ID);
-   xml.AddElem("CEO_state", CEO_state);
-   xml.AddElem("CEO");
-   xml.AddChildSubDoc(CEO_.showXml());
-   xml.AddElem("Pres_ID", CEO_ID);
-   xml.AddElem("Pres_state", CEO_state);
-   xml.AddElem("Pres");
-   xml.AddChildSubDoc(Pres_.showXml());
-   return xml.GetDoc();
+  return std::string{
+    "<" + UNIQUE_CREATURE_XML_TAG + ">"
+      "<CEO_ID>" + std::to_string(this->CEO_ID) +"</CEO_ID>"
+      "<CEO_state>" + std::to_string(this->CEO_state) + "</CEO_state>"
+      "<CEO>" + this->CEO_.showXml() + "</CEO>"
+      "<Pres_ID>" + std::to_string(this->Pres_ID) +"</Pres_ID>"
+      "<Pres_state>" + std::to_string(this->Pres_state) + "</Pres_state>"
+      "<Pres>" + this->Pres_.showXml() + "</Pres>"
+    "</" + UNIQUE_CREATURE_XML_TAG + ">"
+  };
 }
+
 
 const char* Creature::heshe(bool capitalize) const
 {  // subject pronoun (nominative case)
@@ -1441,12 +1389,17 @@ const char* Creature::hisher(bool capitalize) const
    case GENDER_MALE: return capitalize?"His":"his";
    case GENDER_FEMALE: return capitalize?"Her":"her";
    default: return capitalize?"Xyr":"xyr"; // Elite Liberal gender-neutral pronoun... it is pronounced "zur" rhyming with "her"
-   // see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html (great reference on this)
-   // or http://en.wiktionary.org/wiki/xyr or http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary (wiki references)
-   // or http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it being used in text)
+   // see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html
+   // (great reference on this) or http://en.wiktionary.org/wiki/xyr or
+   // http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary
+   // (wiki references) or
+   // http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it
+   // being used in text)
 
-   // the possessive pronoun is based on this pronominal adjective in all standard third-person pronouns (so "xyrs" is correct):
-   // his -> his, her -> hers, their -> theirs, and likewise xyr -> xyrs... just add "s" at the end if it doesn't already have an "s" at the end
+   // the possessive pronoun is based on this pronominal adjective in all
+   // standard third-person pronouns (so "xyrs" is correct): his -> his, her ->
+   // hers, their -> theirs, and likewise xyr -> xyrs... just add "s" at the end
+   // if it doesn't already have an "s" at the end
    }
 }
 const char* Creature::himher(bool capitalize) const
@@ -1456,29 +1409,35 @@ const char* Creature::himher(bool capitalize) const
    case GENDER_MALE: return capitalize?"Him":"him";
    case GENDER_FEMALE: return capitalize?"Her":"her";
    default: return capitalize?"Xem":"xem"; // Elite Liberal gender-neutral pronoun... it is pronounced "zem" rhyming with "them"
-   // see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html (great reference on this)
-   // or http://en.wiktionary.org/wiki/xem or http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary (wiki references)
-   // or http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it being used in text)
+   // see http://homepage.ntlworld.com/jonathan.deboynepollard/FGA/sex-neutral-pronouns.html
+   // (great reference on this) or http://en.wiktionary.org/wiki/xem or
+   // http://en.wikipedia.org/wiki/Gender-specific_and_gender-neutral_pronouns#Summary
+   // (wiki references) or
+   // http://genderneutralpronoun.wordpress.com/about/alice/xe/ (examples of it
+   // being used in text)
 
-   // the reflexive pronoun is based on this object pronoun in all standard third-person pronouns (so "xemself" is correct):
-   // him -> himself, her -> herself, them -> themselves, it -> itself, one -> oneself, and likewise xem -> xemself... just add "self" unless plural in which case add "selves"
+   // the reflexive pronoun is based on this object pronoun in all standard
+   // third-person pronouns (so "xemself" is correct): him -> himself, her ->
+   // herself, them -> themselves, it -> itself, one -> oneself, and likewise
+   // xem -> xemself... just add "self" unless plural in which case add "selves"
 
-   // some people mistakenly use xyrself instead of xemself but this is wrong as it doesn't follow the pattern used by ALL standard third-person pronouns,
-   // instead following the first-and-second-person pronoun pattern (my -> myself, your -> yourself/yourselves, our -> ourselves, thy -> thyself, and likewise xyr -> xyrself)
-   }
-}
+   // some people mistakenly use xyrself instead of xemself but this is wrong as
+   // it doesn't follow the pattern used by ALL standard third-person pronouns,
+   // instead following the first-and-second-person pronoun pattern (my ->
+   // myself, your -> yourself/yourselves, our -> ourselves, thy -> thyself, and
+   // likewise xyr -> xyrself)
+   } }
 
-Weapon& Creature::weapon_none()
-{
-   static Weapon unarmed(*weapontype[getweapontype("WEAPON_NONE")]);
-   return unarmed;
-}
 
-Armor& Creature::armor_none()
-{
-   static Armor naked(*armortype[getarmortype("ARMOR_NONE")]);
-   return naked;
-}
+Weapon& Creature::
+get_weapon() const
+{ return is_armed() ? *weapon : weapon_none(); }
+
+
+Armor& Creature::
+get_armor() const
+{ return is_naked() ? armor_none() : *armor; }
+
 
 bool Creature::will_do_ranged_attack(bool force_ranged,bool force_melee) const
 {
@@ -1641,7 +1600,7 @@ void Creature::drop_weapons_and_clips(vector<Item*>* lootpile)
    {
       if(lootpile) lootpile->push_back(weapon);
       else delete weapon;
-      weapon=NULL;
+      weapon=nullptr;
    }
    while(len(extra_throwing_weapons))
    {
@@ -1665,7 +1624,7 @@ void Creature::drop_weapon(vector<Item*>* lootpile)
    {
       if(lootpile) lootpile->push_back(weapon);
       else delete weapon;
-      weapon=NULL;
+      weapon=nullptr;
    }
 }
 
@@ -1697,38 +1656,63 @@ void Creature::strip(vector<Item*>* lootpile)
 {
    if(armor)
    {
-      if(!lootpile) delete armor;
-      else lootpile->push_back(armor);
-      armor=NULL;
+      if (!lootpile)
+        delete armor;
+      else
+        lootpile->push_back(armor);
+      armor=nullptr;
    }
 }
 
-int Creature::get_weapon_skill() const {
-   int wsk = SKILL_HANDTOHAND;
-   if(get_weapon().has_musical_attack())
-      wsk=SKILL_MUSIC;
-   else if (has_thrown_weapon && len(extra_throwing_weapons))
-      wsk=extra_throwing_weapons[0]->get_attack(false,false,false)->skill;
-   else wsk=get_weapon().get_attack(false,false,false)->skill;
-   return get_skill(wsk);
+int Creature::
+get_weapon_skill() const
+{
+  int wsk = SKILL_HANDTOHAND;
+  if (get_weapon().has_musical_attack())
+    wsk = SKILL_MUSIC;
+  else if (has_thrown_weapon && len(extra_throwing_weapons))
+    wsk = extra_throwing_weapons[0]->get_attack(false,false,false)->skill;
+  else
+    wsk = get_weapon().get_attack(false,false,false)->skill;
+  return get_skill(wsk);
 }
 
-string Creature::get_weapon_string(int subtype) const
+
+bool Creature::
+weapon_is_concealed() const
+{ return is_armed() && get_armor().conceals_weapon(*weapon); }
+
+
+string Creature::
+get_weapon_string(int subtype) const
 {
    string r;
    if(is_armed())
    {
       r = weapon->get_name(subtype);
       if(weapon->uses_ammo())
-         r += " (" + tostring(weapon->get_ammoamount()) + "/" + tostring(count_clips()) + ")";
+         r += " (" + std::to_string(weapon->get_ammoamount()) + "/" + std::to_string(count_clips()) + ")";
       else if(weapon->is_throwable())
-         r += " (1/" + tostring(count_weapons()-1) + ")"; // -1 so not to count weapon in hands.
+         r += " (1/" + std::to_string(count_weapons()-1) + ")"; // -1 so not to count weapon in hands.
    }
    else if(len(extra_throwing_weapons))
    {
       r = extra_throwing_weapons[0]->get_name(subtype);
-      r += " (0/" + tostring(count_weapons()) + ")";
+      r += " (0/" + std::to_string(count_weapons()) + ")";
    }
    else r = "None";
    return r;
 }
+
+std::string Creature::
+get_armor_string(bool fullname) const
+{ return get_armor().equip_title(fullname); }
+
+
+std::string Creature::
+get_type_name() const
+{
+  extern CreatureTypeCache creature_type_cache;
+  return creature_type_cache.get_by_idname(type_idname)->get_type_name();
+}
+

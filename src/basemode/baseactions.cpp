@@ -1,30 +1,29 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-//
-This file is part of Liberal Crime Squad.                                             //
-//
-Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-it under the terms of the GNU General Public License as published by            //
-the Free Software Foundation; either version 2 of the License, or               //
-(at your option) any later version.                                             //
-//
-Liberal Crime Squad is distributed in the hope that it will be useful,          //
-but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-GNU General Public License for more details.                                    //
-//
-You should have received a copy of the GNU General Public License               //
-along with Liberal Crime Squad; if not, write to the Free Software              //
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webB@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-This file was created by Chris Johnson (grundee@users.sourceforge.net)
-by copying code from game.cpp.
-To see descriptions of files and functions, see the list at
-the bottom of includes.h in the top src folder.
-*/
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
 
 #include <externs.h>
 
@@ -341,7 +340,7 @@ void stopevil()
                set_color(COLOR_RED,COLOR_BLACK,1);
             else
                set_color(COLOR_GREEN,COLOR_BLACK,1);
-            addstr(" ($"+tostring(ticketprice)+")");
+            addstr(" ($"+std::to_string(ticketprice)+")");
          }
          if(this_location->siege.siege > 0) {
             set_color(COLOR_RED,COLOR_BLACK,0);
@@ -389,7 +388,7 @@ void stopevil()
             if(ledger.get_funds() < ticketprice)
                set_color(COLOR_RED,COLOR_BLACK,1);
             else set_color(COLOR_GREEN,COLOR_BLACK,1);
-            addstr(" ($"+tostring(ticketprice)+")");
+            addstr(" ($"+std::to_string(ticketprice)+")");
          }
          temploc.push_back(-1);
       }
@@ -530,7 +529,7 @@ void investlocation()
 
       if(!(location[loc]->compound_walls & COMPOUND_AAGUN))
       {
-         if(law[LAW_GUNCONTROL]==ALIGN_ARCHCONSERVATIVE)
+         if (law[LAW_GUNCONTROL] == Alignment::ARCH_CONSERVATIVE)
          {
             if(ledger.get_funds()>=35000) set_color(COLOR_WHITE,COLOR_BLACK,0);
             move(13,1);
@@ -621,7 +620,7 @@ void investlocation()
       if(c=='a')
       {
          int aagunPrice = 200000;
-         if(law[LAW_GUNCONTROL]==ALIGN_ARCHCONSERVATIVE)
+         if (law[LAW_GUNCONTROL] == Alignment::ARCH_CONSERVATIVE)
             aagunPrice = 35000;
 
          if(!(location[loc]->compound_walls & COMPOUND_AAGUN)&&ledger.get_funds()>=aagunPrice)

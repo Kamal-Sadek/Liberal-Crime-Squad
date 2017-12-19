@@ -1,32 +1,33 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
-*/
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
 
-#include <externs.h>
+#include "externs.h"
+#include "locations/world.h"
+
 
 /* select new game options */
 void setup_newgame()
@@ -127,37 +128,37 @@ void setup_newgame()
    if(nightmarelaws)
    {
       for(int l=0;l<LAWNUM;l++)
-         law[l]=ALIGN_ARCHCONSERVATIVE;
+         law[l]=Alignment::ARCH_CONSERVATIVE;
       for(int a=0;a<VIEWNUM-3;a++)
          attitude[a]=LCSrandom(20);
       for(int s=0;s<SENATENUM;s++)
       {
-         if(s<55) senate[s]=ALIGN_ARCHCONSERVATIVE;
-         else if(s<70) senate[s]=ALIGN_CONSERVATIVE;
-         else if(s<80) senate[s]=ALIGN_MODERATE;
-         else if(s<97) senate[s]=ALIGN_LIBERAL;
-         else senate[s]=ALIGN_ELITELIBERAL;
+         if(s<55) senate[s]=Alignment::ARCH_CONSERVATIVE;
+         else if(s<70) senate[s]=Alignment::CONSERVATIVE;
+         else if(s<80) senate[s]=Alignment::MODERATE;
+         else if(s<97) senate[s]=Alignment::LIBERAL;
+         else senate[s]=Alignment::ELITE_LIBERAL;
       }
 
       for(int h=0;h<HOUSENUM;h++)
       {
-         if(h<220) house[h]=ALIGN_ARCHCONSERVATIVE;
-         else if(h<350) house[h]=ALIGN_CONSERVATIVE;
-         else if(h<400) house[h]=ALIGN_MODERATE;
-         else if(h<425) house[h]=ALIGN_LIBERAL;
-         else house[h]=ALIGN_ELITELIBERAL;
+         if(h<220) house[h]=Alignment::ARCH_CONSERVATIVE;
+         else if(h<350) house[h]=Alignment::CONSERVATIVE;
+         else if(h<400) house[h]=Alignment::MODERATE;
+         else if(h<425) house[h]=Alignment::LIBERAL;
+         else house[h]=Alignment::ELITE_LIBERAL;
       }
 
       for(int c=0;c<COURTNUM;c++)
       {
-         if(c<5) court[c]=ALIGN_ARCHCONSERVATIVE;
-         else if(c<7) court[c]=ALIGN_CONSERVATIVE;
-         else if(c<8) court[c]=ALIGN_MODERATE;
-         else if(c<8) court[c]=ALIGN_LIBERAL;
-         else court[c]=ALIGN_ELITELIBERAL;
+         if(c<5) court[c]=Alignment::ARCH_CONSERVATIVE;
+         else if(c<7) court[c]=Alignment::CONSERVATIVE;
+         else if(c<8) court[c]=Alignment::MODERATE;
+         else if(c<8) court[c]=Alignment::LIBERAL;
+         else court[c]=Alignment::ELITE_LIBERAL;
          do
          {
-            if(court[c]==ALIGN_ARCHCONSERVATIVE)
+            if(court[c]==Alignment::ARCH_CONSERVATIVE)
                generate_name(courtname[c],GENDER_WHITEMALEPATRIARCH);
             else generate_name(courtname[c]);
          } while(len(courtname[c])>20);
@@ -269,7 +270,7 @@ enum recruits
 void makecharacter()
 {
    Creature *newcr=new Creature;
-   newcr->align=1;
+   newcr->align = Alignment::LIBERAL;
 
 #ifdef BLIND
    newcr->special[SPECIALWOUND_RIGHTEYE]=1;
@@ -1319,7 +1320,7 @@ void makecharacter()
                   recruit->reload(false);
                }
 
-               recruit->align=ALIGN_LIBERAL;
+               recruit->align=Alignment::LIBERAL;
                recruit->set_attribute(ATTRIBUTE_HEART,
                                       recruit->get_attribute(ATTRIBUTE_HEART,false)+
                                       recruit->get_attribute(ATTRIBUTE_WISDOM,false)/2);
@@ -1391,7 +1392,7 @@ void makecharacter()
       lawyer->namecreature();
       lawyer->flag|=CREATUREFLAG_SLEEPER;
       lawyer->flag|=CREATUREFLAG_LOVESLAVE;
-      lawyer->align=ALIGN_LIBERAL;
+      lawyer->align=Alignment::LIBERAL;
       lawyer->infiltration=0.3f;
       lawyer->age=28;
 

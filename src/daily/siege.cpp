@@ -1,31 +1,28 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
-*/
-
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
 // Certain special characters won't display correctly unless your text editor is
@@ -60,7 +57,14 @@ This file is part of Liberal Crime Squad.                                       
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
-#include <externs.h>
+#include "daily/siege.h"
+
+#include "daily/daily.h"
+#include "externs.h"
+#include "locations/locations.h"
+#include "locations/world.h"
+#include "politics/politics.h"
+
 
 /* TODO
 make it less likely to be raided based on:
@@ -78,7 +82,8 @@ make it more likely to be raided:
 /* siege - gives up on sieges with empty locations */
 /* Work in progress. It works, but needs to be called in more places. */
 /* Currently, it only works when you confront a siege and then fail. */
-void resolvesafehouses()
+static void
+resolvesafehouses()
 {
    for(int l=0;l<len(location);l++)
    {
@@ -92,8 +97,286 @@ void resolvesafehouses()
 }
 
 
+/* siege - "you are wanted for _______ and other crimes..." */
+static void
+statebrokenlaws(int loc)
+{
+   music.play(MUSIC_SIEGE);
+   short breakercount[LAWFLAGNUM]={0};
+   int typenum=0,criminalcount=0,kidnapped=0;
+   char kname[100];
+
+   for(int p=0;p<len(pool);p++)
+   {
+      if(!pool[p]->alive||pool[p]->location!=loc) continue;
+
+      if(pool[p]->flag&CREATUREFLAG_KIDNAPPED)
+      {
+         strcpy(kname,pool[p]->propername);
+         kidnapped++;
+      }
+
+      if(iscriminal(*pool[p])) criminalcount++;
+
+      for(int i=0;i<LAWFLAGNUM;i++) if(pool[p]->crimes_suspected[i]) breakercount[i]++;
+   }
+   for(int i=0;i<LAWFLAGNUM;i++) if(breakercount[i]) typenum++;
+
+   erase();
+
+   set_color(COLOR_WHITE,COLOR_BLACK,1);
+   move(1,1);
+   if(location[loc]->siege.underattack) addstr("You hear shouts:", gamelog);
+   else addstr("You hear a blaring voice on a loudspeaker:", gamelog);
+   gamelog.newline();
+
+   move(3,1);
+   if(location[loc]->siege.escalationstate>=2&&publicmood(-1)<20)
+      addstr("In the name of God, your campaign of terror ends here!", gamelog);
+   else addstr("Surrender yourselves!", gamelog);
+   gamelog.newline();
+
+   move(4,1);
+
+   //KIDNAP VICTIM
+   if(kidnapped)
+   {
+      addstr("Release ", gamelog);
+      addstr(kname, gamelog);
+      if(kidnapped>1) addstr(" and the others", gamelog);
+      addstr(" unharmed!", gamelog);
+   }
+   //TREASON
+   else if(breakercount[LAWFLAG_TREASON])
+      addstr("You are wanted for treason", gamelog);
+   //TERRORISM
+   else if(breakercount[LAWFLAG_TERRORISM])
+      addstr("You are wanted for terrorism", gamelog);
+   //MURDERER
+   else if(breakercount[LAWFLAG_MURDER])
+      addstr("You are wanted for first degree murder", gamelog);
+   //KIDNAPPER
+   else if(breakercount[LAWFLAG_KIDNAPPING])
+      addstr("You are wanted for kidnapping", gamelog);
+   //BANK ROBBER
+   else if(breakercount[LAWFLAG_BANKROBBERY])
+      addstr("You are wanted for bank robbery", gamelog);
+   //ARSONIST
+   else if(breakercount[LAWFLAG_ARSON])
+      addstr("You are wanted for arson", gamelog);
+   //BURN FLAG
+   else if(breakercount[LAWFLAG_BURNFLAG])
+   {
+      if(law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE)addstr("You are wanted for Flag Murder", gamelog);
+      else if(law[LAW_FLAGBURNING] == Alignment::CONSERVATIVE)addstr("You are wanted for felony flag burning", gamelog);
+      else addstr("You are wanted for flag burning", gamelog);
+   }
+   //SPEECH
+   else if(breakercount[LAWFLAG_SPEECH])
+      addstr("You are wanted for sedition", gamelog);
+   //BROWNIES
+   else if(breakercount[LAWFLAG_BROWNIES])
+      addstr("You are wanted for sale and distribution of a controlled substance", gamelog);
+   //ESCAPED
+   else if(breakercount[LAWFLAG_ESCAPED])
+      addstr("You are wanted for escaping prison", gamelog);
+   //HELP ESCAPED
+   else if(breakercount[LAWFLAG_HELPESCAPE])
+      addstr("You are wanted for aiding a prison escape", gamelog);
+   //JURY
+   else if(breakercount[LAWFLAG_JURY])
+      addstr("You are wanted for jury tampering", gamelog);
+   //RACKETEERING
+   else if(breakercount[LAWFLAG_RACKETEERING])
+      addstr("You are wanted for racketeering", gamelog);
+   //EXTORTION
+   else if(breakercount[LAWFLAG_EXTORTION])
+      addstr("You are wanted for extortion", gamelog);
+   //ASSAULT
+   else if(breakercount[LAWFLAG_ARMEDASSAULT])
+      addstr("You are wanted for assault with a deadly weapon", gamelog);
+   //ASSAULT
+   else if(breakercount[LAWFLAG_ASSAULT])
+      addstr("You are wanted for misdemeanor assault", gamelog);
+   //CAR THEFT
+   else if(breakercount[LAWFLAG_CARTHEFT])
+      addstr("You are wanted for grand theft auto", gamelog);
+   //CC FRAUD
+   else if(breakercount[LAWFLAG_CCFRAUD])
+      addstr("You are wanted for credit card fraud", gamelog);
+   //THIEF
+   else if(breakercount[LAWFLAG_THEFT])
+      addstr("You are wanted for petty larceny", gamelog);
+   //PROSTITUTION
+   else if(breakercount[LAWFLAG_PROSTITUTION])
+      addstr("You are wanted for prostitution", gamelog);
+   //HIRE ILLEGAL
+   else if(breakercount[LAWFLAG_HIREILLEGAL])
+      addstr((to_right_of(law[LAW_IMMIGRATION], Alignment::LIBERAL)?"You are wanted for hiring an illegal alien":"You are wanted for hiring an undocumented worker"), gamelog);
+   //GUN USE
+   /*else if(breakercount[LAWFLAG_GUNUSE])
+      addstr("You are wanted for firing an illegal weapon", gamelog);
+   //GUN CARRY
+   else if(breakercount[LAWFLAG_GUNCARRY])
+      addstr("You are wanted for possession of an illegal weapon", gamelog);*/
+   //COMMERCE
+   else if(breakercount[LAWFLAG_COMMERCE])
+      addstr("You are wanted for interference with interstate commerce", gamelog);
+   //INFORMATION
+   else if(breakercount[LAWFLAG_INFORMATION])
+      addstr("You are wanted for unlawful access of an information system", gamelog);
+   //UNLAWFUL BURIAL
+   else if(breakercount[LAWFLAG_BURIAL])
+      addstr("You are wanted for unlawful burial", gamelog);
+   //BREAKING
+   else if(breakercount[LAWFLAG_BREAKING])
+      addstr("You are wanted for breaking and entering", gamelog);
+   //VANDALISM
+   else if(breakercount[LAWFLAG_VANDALISM])
+      addstr("You are wanted for vandalism", gamelog);
+   //RESIST
+   else if(breakercount[LAWFLAG_RESIST])
+      addstr("You are wanted for resisting arrest", gamelog);
+   //DISTURBANCE
+   else if(breakercount[LAWFLAG_DISTURBANCE])
+      addstr("You are wanted for disturbing the peace", gamelog);
+   //PUBLIC NUDITY
+   else if(breakercount[LAWFLAG_PUBLICNUDITY])
+      addstr("You are wanted for indecent exposure", gamelog);
+   //LOITERING
+   else if(breakercount[LAWFLAG_LOITERING])
+      addstr("You are wanted for loitering", gamelog);
+   //THEY WERE LOOKING FOR SOMEONE ELSE
+   else addstr("You are wanted for harboring a fugitive from justice", gamelog);
+
+   if(!kidnapped)
+   {
+      if(typenum>1) addstr(" and other crimes", gamelog);
+      addstr(".", gamelog);
+   }
+   gamelog.nextMessage();
+
+   getkey();
+}
+
+
+void
+statebrokenlaws(Creature const& cr)
+{
+   bool kidnapped=(cr.flag&CREATUREFLAG_KIDNAPPED),criminal=false,breakercount[LAWFLAGNUM];
+
+   for(int i=0;i<LAWFLAGNUM;i++)
+      if(cr.crimes_suspected[i]) breakercount[i]=true,criminal=true;
+      else breakercount[i]=false;
+
+   if(!criminal&&!kidnapped) return;
+
+   set_color(COLOR_YELLOW,COLOR_BLACK,1);
+   addstr("WANTED FOR ");
+
+   //KIDNAP VICTIM
+   if(kidnapped)
+      addstr("REHABILITATION");
+   //TREASON
+   else if(breakercount[LAWFLAG_TREASON])
+      addstr("TREASON");
+   //TERRORISM
+   else if(breakercount[LAWFLAG_TERRORISM])
+      addstr("TERRORISM");
+   //MURDERER
+   else if(breakercount[LAWFLAG_MURDER])
+      addstr("MURDER");
+   //KIDNAPPER
+   else if(breakercount[LAWFLAG_KIDNAPPING])
+      addstr("KIDNAPPING");
+   //BANK ROBBER
+   else if(breakercount[LAWFLAG_BANKROBBERY])
+      addstr("BANK ROBBERY");
+   //ARSONIST
+   else if(breakercount[LAWFLAG_BANKROBBERY])
+      addstr("ARSON");
+   //BURN FLAG
+   else if(breakercount[LAWFLAG_BURNFLAG])
+      addstr(law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE?"FLAG MURDER":"FLAG BURNING");
+   //SPEECH
+   else if(breakercount[LAWFLAG_SPEECH])
+      addstr("HARMFUL SPEECH");
+   //BROWNIES
+   else if(breakercount[LAWFLAG_BROWNIES])
+      addstr("DRUG DEALING");
+   //ESCAPED
+   else if(breakercount[LAWFLAG_ESCAPED])
+      addstr("ESCAPING PRISON");
+   //HELP ESCAPED
+   else if(breakercount[LAWFLAG_HELPESCAPE])
+      addstr("RELEASING PRISONERS");
+   //JURY
+   else if(breakercount[LAWFLAG_JURY])
+      addstr("JURY TAMPERING");
+   //RACKETEERING
+   else if(breakercount[LAWFLAG_RACKETEERING])
+      addstr("RACKETEERING");
+   //EXTORTION
+   else if(breakercount[LAWFLAG_EXTORTION])
+      addstr("EXTORTION");
+   //ASSAULT
+   else if(breakercount[LAWFLAG_ARMEDASSAULT])
+      addstr("ARMED ASSAULT");
+   //ASSAULT
+   else if(breakercount[LAWFLAG_ASSAULT])
+      addstr("ASSAULT");
+   //CAR THEFT
+   else if(breakercount[LAWFLAG_CARTHEFT])
+      addstr("GRAND THEFT AUTO");
+   //CC FRAUD
+   else if(breakercount[LAWFLAG_CCFRAUD])
+      addstr("CREDIT CARD FRAUD");
+   //THIEF
+   else if(breakercount[LAWFLAG_THEFT])
+      addstr("THEFT");
+   //PROSTITUTION
+   else if(breakercount[LAWFLAG_PROSTITUTION])
+      addstr("PROSTITUTION");
+   //HIRE ILLEGAL
+   else if(breakercount[LAWFLAG_HIREILLEGAL])
+      addstr(to_right_of(law[LAW_IMMIGRATION], Alignment::LIBERAL)?"HIRING ILLEGAL ALIENS":"HIRING UNDOCUMENTED WORKERS");
+   //GUN USE
+   /*else if(breakercount[LAWFLAG_GUNUSE])
+      addstr("FIRING ILLEGAL WEAPONS");
+   //GUN CARRY
+   else if(breakercount[LAWFLAG_GUNCARRY])
+      addstr("CARRYING ILLEGAL WEAPONS");*/
+   //COMMERCE
+   else if(breakercount[LAWFLAG_COMMERCE])
+      addstr("ELECTRONIC SABOTAGE");
+   //INFORMATION
+   else if(breakercount[LAWFLAG_INFORMATION])
+      addstr("HACKING");
+   //UNLAWFUL BURIAL
+   else if(breakercount[LAWFLAG_BURIAL])
+      addstr("UNLAWFUL BURIAL");
+   //BREAKING
+   else if(breakercount[LAWFLAG_BREAKING])
+      addstr("BREAKING AND ENTERING");
+   //VANDALISM
+   else if(breakercount[LAWFLAG_VANDALISM])
+      addstr("VANDALISM");
+   //RESIST
+   else if(breakercount[LAWFLAG_RESIST])
+      addstr("RESISTING ARREST");
+   //DISTURBANCE
+   else if(breakercount[LAWFLAG_DISTURBANCE])
+      addstr("DISTURBING THE PEACE");
+   //PUBLIC NUDITY
+   else if(breakercount[LAWFLAG_PUBLICNUDITY])
+      addstr("PUBLIC NUDITY");
+   //LOITERING
+   else if(breakercount[LAWFLAG_LOITERING])
+      addstr("LOITERING");
+}
+
 /* siege - updates upcoming sieges */
-void siegecheck(char canseethings)
+void siegecheck(bool canseethings)
 {
    if(disbanding)return;
 
@@ -102,12 +385,17 @@ void siegecheck(char canseethings)
   // Cleanse record on things that aren't illegal right now
   for(int p=0;p<len(pool);p++)
   {
-    if(law[LAW_FLAGBURNING]>0)pool[p]->crimes_suspected[LAWFLAG_BURNFLAG]=0;
-    if(law[LAW_DRUGS]>0)pool[p]->crimes_suspected[LAWFLAG_BROWNIES]=0;
-    if(law[LAW_IMMIGRATION]==2)pool[p]->flag &= ~CREATUREFLAG_ILLEGALALIEN;
-    if(law[LAW_FREESPEECH]>-2)pool[p]->crimes_suspected[LAWFLAG_SPEECH]=0;
+    if (to_left_of(law[LAW_FLAGBURNING], Alignment::MODERATE))
+       pool[p]->crimes_suspected[LAWFLAG_BURNFLAG] = 0;
+    if (to_left_of(law[LAW_DRUGS], Alignment::MODERATE))
+      pool[p]->crimes_suspected[LAWFLAG_BROWNIES]=0;
+    if (to_left_of(law[LAW_IMMIGRATION], Alignment::MODERATE))
+      pool[p]->flag &= ~CREATUREFLAG_ILLEGALALIEN;
+    if (to_left_of(law[LAW_FREESPEECH], Alignment::ARCH_CONSERVATIVE))
+      pool[p]->crimes_suspected[LAWFLAG_SPEECH]=0;
   }
-  if(law[LAW_FREESPEECH]>-2)offended_firemen=0;
+  if (to_left_of(law[LAW_FREESPEECH], Alignment::ARCH_CONSERVATIVE))
+    offended_firemen = 0;
 
    //FIRST, THE COPS
    int numpres;
@@ -121,7 +409,7 @@ void siegecheck(char canseethings)
       if(location[l]->renting==RENTING_NOCONTROL)continue;
       numpres=0;
 
-      if(location[l]->siege.timeuntillocated==-2)
+      if(location[l]->siege.timeuntillocated == -2)
       {
          //IF JUST SIEGED, BUY SOME TIME
          location[l]->siege.timeuntillocated=-1;
@@ -131,7 +419,7 @@ void siegecheck(char canseethings)
          //HUNTING
          if(location[l]->siege.timeuntillocated>0)
          {
-            if(location[l]->front_business==-1||LCSrandom(2))
+            if(location[l]->front_business == -1 || LCSrandom(2))
             {
                location[l]->siege.timeuntillocated--;
                // Hunt faster if location is extremely hot
@@ -161,12 +449,13 @@ void siegecheck(char canseethings)
                crimes += 5;
                continue;
             }
-            if(pool[p]->flag & CREATUREFLAG_KIDNAPPED && pool[p]->align!=1)
+            if (pool[p]->flag & CREATUREFLAG_KIDNAPPED && pool[p]->align != Alignment::LIBERAL)
             {
                crimes += 5*pool[p]->joindays; // Kidnapped persons increase heat
                continue;
             }
-            if(pool[p]->align!=1)continue; // Non-liberals don't count other than that
+            if (pool[p]->align != Alignment::LIBERAL)
+              continue; // Non-liberals don't count other than that
             numpres++;
 
             // Accumulate heat from liberals who have it, but let them bleed it off in the process
@@ -347,7 +636,7 @@ void siegecheck(char canseethings)
                      delete_and_remove(pool,p);
                      continue;
                   }
-                  if(pool[p]->align!=1)
+                  if (pool[p]->align != Alignment::LIBERAL)
                   {
                      move(y,1);y++;
                      addstr(pool[p]->name, gamelog);
@@ -373,7 +662,11 @@ void siegecheck(char canseethings)
 
          //OTHER OFFENDABLE ENTITIES
             //CORPS
-         if(location[l]->heat&&location[l]->siege.timeuntilcorps==-1&&!location[l]->siege.siege&&offended_corps&&!LCSrandom(600)&&numpres>0)
+         if (location[l]->heat&&location[l]->siege.timeuntilcorps == -1
+             && !location[l]->siege.siege
+             && offended_corps
+             && !LCSrandom(600)
+             && numpres>0)
          {
             location[l]->siege.timeuntilcorps=LCSrandom(3)+1;
             // *JDS* CEO sleepers may give a warning before corp raids
@@ -709,7 +1002,7 @@ void siegecheck(char canseethings)
             offended_cablenews=0;
          }
          //Firemen
-         if(law[LAW_FREESPEECH]==-2 && location[l]->siege.timeuntilfiremen==-1 && !location[l]->siege.siege &&
+         if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE && location[l]->siege.timeuntilfiremen==-1 && !location[l]->siege.siege &&
             offended_firemen && numpres>0 && location[l]->compound_walls & COMPOUND_PRINTINGPRESS && !LCSrandom(90))
          {
             location[l]->siege.timeuntilfiremen=LCSrandom(3)+1;
@@ -738,7 +1031,7 @@ void siegecheck(char canseethings)
             }
 
          } else if(location[l]->siege.timeuntilfiremen>0) location[l]->siege.timeuntilfiremen--;
-         else if(law[LAW_FREESPEECH]==-2 && location[l]->siege.timeuntilfiremen==0 && !location[l]->siege.siege&&numpres>0)
+         else if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE && location[l]->siege.timeuntilfiremen==0 && !location[l]->siege.siege&&numpres>0)
          {
             music.play(MUSIC_SIEGE);
             location[l]->siege.timeuntilfiremen=-1;
@@ -786,7 +1079,7 @@ void siegecheck(char canseethings)
             location[l]->siege.cameras_off=0;
             offended_firemen=0;
          }
-         else if(law[LAW_FREESPEECH]==-2 && location[l]->siege.timeuntilfiremen==0)
+         else if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE && location[l]->siege.timeuntilfiremen==0)
          {
             location[l]->siege.timeuntilfiremen=-1;
             erase();
@@ -817,7 +1110,7 @@ void siegecheck(char canseethings)
                   delete_and_remove(pool,p);
                   continue;
                }
-               if(pool[p]->align!=1)
+               if (pool[p]->align != Alignment::LIBERAL)
                {
                   move(y++,1);
                   addstr(pool[p]->name, gamelog);
@@ -850,7 +1143,7 @@ void siegecheck(char canseethings)
             }
             gamelog.newline();
          }
-         else if (law[LAW_FREESPEECH]<=-1 && location[l]->siege.timeuntilfiremen==0)
+         else if (to_right_of(law[LAW_FREESPEECH], Alignment::MODERATE) && location[l]->siege.timeuntilfiremen==0)
             location[l]->siege.timeuntilfiremen=-1,offended_firemen=0;
       }
    }
@@ -859,24 +1152,19 @@ void siegecheck(char canseethings)
 
 
 /* siege - updates sieges in progress */
-void siegeturn(char clearformess)
+void siegeturn(bool clearformess)
 {
    if(disbanding)return;
 
    // Count people at each location
    int l;
    //int hs=-1;
-   int* liberalcount = new int[len(location)];
-   char* food_prep   = new char[len(location)];
-
-   // Clear food_prep and liberalcount lists
-   std::memset(food_prep,0,len(location));
-   std::memset(liberalcount,0,sizeof(int)*len(location));
+   std::vector<int> liberalcount(len(location), 0);
 
    for(int p=0;p<len(pool);p++)
    {
       if(!pool[p]->alive)continue; // Dead people don't count
-      if(pool[p]->align!=1)continue; // Non-liberals don't count
+      if(pool[p]->align!=Alignment::LIBERAL)continue; // Non-liberals don't count
       if(pool[p]->location==-1)continue; // Vacationers don't count
       liberalcount[pool[p]->location]++;
    }
@@ -917,7 +1205,7 @@ void siegeturn(char clearformess)
                   delete_and_remove(pool,p);
                   continue;
                }
-               if(pool[p]->align!=1)
+               if(pool[p]->align!=Alignment::LIBERAL)
                {
                   move(y++,1);
                   addstr(pool[p]->name);
@@ -1048,7 +1336,7 @@ void siegeturn(char clearformess)
                         addstr("!", gamelog);
                         gamelog.newline();
 
-                        if(pool[targ]->align==1) stat_dead++,liberalcount[l]--;
+                        if(pool[targ]->align == Alignment::LIBERAL) stat_dead++,liberalcount[l]--;
 
                         removesquadinfo(*pool[targ]);
 
@@ -1197,7 +1485,7 @@ void siegeturn(char clearformess)
                               addstr(" was killed in the bombing!", gamelog);
                               gamelog.newline();
 
-                              if(pool[targ]->align==1) stat_dead++,liberalcount[l]--;
+                              if(pool[targ]->align == Alignment::LIBERAL) stat_dead++,liberalcount[l]--;
 
                               removesquadinfo(*pool[targ]);
 
@@ -1318,7 +1606,7 @@ void siegeturn(char clearformess)
                   int best=0;
                   for(int p=0,bestvalue=-1000;p<len(pool);p++)
                   {
-                     if(!pool[p]->alive||pool[p]->align!=1||pool[p]->location!=l) continue;
+                     if (!pool[p]->alive || pool[p]->align != Alignment::LIBERAL || pool[p]->location != l) continue;
 
                      int sum=pool[p]->get_attribute(ATTRIBUTE_INTELLIGENCE, true)
                             +pool[p]->get_attribute(ATTRIBUTE_HEART, true)
@@ -1358,8 +1646,10 @@ void siegeturn(char clearformess)
                      switch(LCSrandom(11))
                      {
                         case 0: addstr("Flaming", gamelog); break;
-                        case 1: if(law[LAW_FREESPEECH]==-2) addstr("Dumb", gamelog);
-                                else addstr("Retarded", gamelog); break;
+                        case 1: if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
+                                  addstr("Dumb", gamelog);
+                                else
+                                  addstr("Retarded", gamelog); break;
                         case 2: addstr("Insane", gamelog); break;
                         case 3: addstr("Crazy", gamelog); break;
                         case 4: addstr("Loopy", gamelog); break;
@@ -1442,8 +1732,6 @@ void siegeturn(char clearformess)
             gamelog.newline(); // single blank line after every siege day
          } // end if(!location[l]->siege.underattack)
       } // end for(l=0;l<len(location);l++) if(location[l]->siege.siege)
-   delete[] liberalcount;
-   delete[] food_prep;
 }
 
 
@@ -1485,7 +1773,7 @@ void giveup()
 
          if(pool[p]->flag&CREATUREFLAG_ILLEGALALIEN) icount++;
 
-         if(pool[p]->flag&CREATUREFLAG_MISSING&&pool[p]->align==-1)
+         if(pool[p]->flag&CREATUREFLAG_MISSING&&pool[p]->align == Alignment::CONSERVATIVE)
          {
             kcount++;
             strcpy(kname,pool[p]->propername);
@@ -1508,7 +1796,7 @@ void giveup()
       {
          if(pool[p]->location!=loc||!pool[p]->alive) continue;
 
-         if(iscriminal(*pool[p])&&!(pool[p]->flag&CREATUREFLAG_MISSING&&pool[p]->align==-1))
+         if(iscriminal(*pool[p])&&!(pool[p]->flag&CREATUREFLAG_MISSING&&pool[p]->align == Alignment::CONSERVATIVE))
          {
             pcount++;
             strcpy(pname,pool[p]->propername);
@@ -1647,7 +1935,7 @@ void giveup()
       {
          if(pool[p]->location!=loc) continue;
 
-         if(pool[p]->alive&&pool[p]->align==1) stat_dead++;
+         if(pool[p]->alive&&pool[p]->align == Alignment::LIBERAL) stat_dead++;
 
          killnumber++;
          removesquadinfo(*pool[p]);
@@ -1712,7 +2000,7 @@ int numbereating(int loc)
 {
    int eaters=0;
    for(int p=0;p<len(pool);p++) //Must be here, alive, Liberal, and not a sleeper, to count as an eater
-      if(pool[p]->location==loc&&pool[p]->alive&&pool[p]->align==1&&!(pool[p]->flag&CREATUREFLAG_SLEEPER)) eaters++;
+      if(pool[p]->location==loc&&pool[p]->alive&&pool[p]->align == Alignment::LIBERAL&&!(pool[p]->flag&CREATUREFLAG_SLEEPER)) eaters++;
    return eaters;
 }
 
@@ -1759,7 +2047,7 @@ char sally_forth_aux(int loc)
    {
       // Count heroes
       int partysize=0,partyalive=0;
-      for(p=0;p<len(pool);p++) if(pool[p]->align==1&&pool[p]->location==cursite&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
+      for(p=0;p<len(pool);p++) if(pool[p]->align == Alignment::LIBERAL&&pool[p]->location==cursite&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
       {
          partysize++;
          if(pool[p]->alive) partyalive++;
@@ -1788,8 +2076,10 @@ char sally_forth_aux(int loc)
          else set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(9,40);
          addstr("O - Change the squad's Liberal order");
-         if(partysize>0&&(party_status==-1||partysize>1))set_color(COLOR_WHITE,COLOR_BLACK,0);
-         else set_color(COLOR_BLACK,COLOR_BLACK,1);
+         if (partysize > 0 && (party_status == -1 || partysize > 1))
+           set_color(COLOR_WHITE,COLOR_BLACK,0);
+         else
+           set_color(COLOR_BLACK,COLOR_BLACK,1);
          move(10,40);
          addstr("# - Check the status of a squad Liberal");
          if(party_status!=-1)set_color(COLOR_WHITE,COLOR_BLACK,0);
@@ -1875,7 +2165,7 @@ char sally_forth_aux(int loc)
 
          // Check for victory
          partysize=0,partyalive=0;
-         for(p=0;p<len(pool);p++) if(pool[p]->align==1&&pool[p]->location==cursite&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
+         for(p=0;p<len(pool);p++) if(pool[p]->align == Alignment::LIBERAL&&pool[p]->location==cursite&&!(pool[p]->flag&CREATUREFLAG_SLEEPER))
          {
             partysize++;
             if(pool[p]->alive) partyalive++;
@@ -1952,7 +2242,7 @@ void sally_forth()
    int loc=-1;
    if(selectedsiege!=-1)loc=selectedsiege;
    if(activesquad!=NULL)loc=activesquad->squad[0]->location;
-   if(loc==-1)return;
+   if(loc == -1)return;
 
    set_color(COLOR_RED,COLOR_BLACK,1);
    move(23,11);
@@ -1995,7 +2285,7 @@ void sally_forth()
       strcat(squad.back()->name," Defense");
       int i=0;
       for(int p=0;p<len(pool);p++)
-         if(pool[p]->location==selectedsiege&&pool[p]->alive&&pool[p]->align==1)
+         if(pool[p]->location==selectedsiege&&pool[p]->alive&&pool[p]->align == Alignment::LIBERAL)
          {
             squad.back()->squad[i]=pool[p];
             pool[p]->squadid=squad.back()->id;
@@ -2072,7 +2362,7 @@ void escape_engage()
    int loc=-1;
    if(selectedsiege!=-1) loc=selectedsiege;
    if(activesquad!=NULL) loc=activesquad->squad[0]->location;
-   if(loc==-1) return;
+   if(loc == -1) return;
 
    if(location[loc]->compound_walls&COMPOUND_CAMERAS)
    {
@@ -2125,7 +2415,7 @@ void escape_engage()
       strcpy(squad.back()->name,location[selectedsiege]->getname(true));
       strcat(squad.back()->name," Defense");
       int i=0;
-      for(int p=0;p<len(pool);p++) if(pool[p]->location==selectedsiege&&pool[p]->alive&&pool[p]->align==1)
+      for(int p=0;p<len(pool);p++) if(pool[p]->location==selectedsiege&&pool[p]->alive&&pool[p]->align == Alignment::LIBERAL)
       {
          squad.back()->squad[i]=pool[p];
          pool[p]->squadid=squad.back()->id;
@@ -2217,7 +2507,7 @@ void escapesiege(char won)
          //BASE EVERYONE LEFT AT HOMELESS SHELTER
          removesquadinfo(*pool[p]);
          pool[p]->hiding=LCSrandom(3)+2;
-         if(pool[p]->align==1) // not a hostage
+         if(pool[p]->align == Alignment::LIBERAL) // not a hostage
             pool[p]->location=-1;
          else // hostages don't go into hiding, just shove em into the homeless shelter
             pool[p]->location=homes;
@@ -2368,279 +2658,3 @@ void conquertextccs()
 }
 
 
-
-/* siege - "you are wanted for _______ and other crimes..." */
-void statebrokenlaws(int loc)
-{
-   music.play(MUSIC_SIEGE);
-   short breakercount[LAWFLAGNUM]={0};
-   int typenum=0,criminalcount=0,kidnapped=0;
-   char kname[100];
-
-   for(int p=0;p<len(pool);p++)
-   {
-      if(!pool[p]->alive||pool[p]->location!=loc) continue;
-
-      if(pool[p]->flag&CREATUREFLAG_KIDNAPPED)
-      {
-         strcpy(kname,pool[p]->propername);
-         kidnapped++;
-      }
-
-      if(iscriminal(*pool[p])) criminalcount++;
-
-      for(int i=0;i<LAWFLAGNUM;i++) if(pool[p]->crimes_suspected[i]) breakercount[i]++;
-   }
-   for(int i=0;i<LAWFLAGNUM;i++) if(breakercount[i]) typenum++;
-
-   erase();
-
-   set_color(COLOR_WHITE,COLOR_BLACK,1);
-   move(1,1);
-   if(location[loc]->siege.underattack) addstr("You hear shouts:", gamelog);
-   else addstr("You hear a blaring voice on a loudspeaker:", gamelog);
-   gamelog.newline();
-
-   move(3,1);
-   if(location[loc]->siege.escalationstate>=2&&publicmood(-1)<20)
-      addstr("In the name of God, your campaign of terror ends here!", gamelog);
-   else addstr("Surrender yourselves!", gamelog);
-   gamelog.newline();
-
-   move(4,1);
-
-   //KIDNAP VICTIM
-   if(kidnapped)
-   {
-      addstr("Release ", gamelog);
-      addstr(kname, gamelog);
-      if(kidnapped>1) addstr(" and the others", gamelog);
-      addstr(" unharmed!", gamelog);
-   }
-   //TREASON
-   else if(breakercount[LAWFLAG_TREASON])
-      addstr("You are wanted for treason", gamelog);
-   //TERRORISM
-   else if(breakercount[LAWFLAG_TERRORISM])
-      addstr("You are wanted for terrorism", gamelog);
-   //MURDERER
-   else if(breakercount[LAWFLAG_MURDER])
-      addstr("You are wanted for first degree murder", gamelog);
-   //KIDNAPPER
-   else if(breakercount[LAWFLAG_KIDNAPPING])
-      addstr("You are wanted for kidnapping", gamelog);
-   //BANK ROBBER
-   else if(breakercount[LAWFLAG_BANKROBBERY])
-      addstr("You are wanted for bank robbery", gamelog);
-   //ARSONIST
-   else if(breakercount[LAWFLAG_ARSON])
-      addstr("You are wanted for arson", gamelog);
-   //BURN FLAG
-   else if(breakercount[LAWFLAG_BURNFLAG])
-   {
-      if(law[LAW_FLAGBURNING]==-2)addstr("You are wanted for Flag Murder", gamelog);
-      else if(law[LAW_FLAGBURNING]==-1)addstr("You are wanted for felony flag burning", gamelog);
-      else addstr("You are wanted for flag burning", gamelog);
-   }
-   //SPEECH
-   else if(breakercount[LAWFLAG_SPEECH])
-      addstr("You are wanted for sedition", gamelog);
-   //BROWNIES
-   else if(breakercount[LAWFLAG_BROWNIES])
-      addstr("You are wanted for sale and distribution of a controlled substance", gamelog);
-   //ESCAPED
-   else if(breakercount[LAWFLAG_ESCAPED])
-      addstr("You are wanted for escaping prison", gamelog);
-   //HELP ESCAPED
-   else if(breakercount[LAWFLAG_HELPESCAPE])
-      addstr("You are wanted for aiding a prison escape", gamelog);
-   //JURY
-   else if(breakercount[LAWFLAG_JURY])
-      addstr("You are wanted for jury tampering", gamelog);
-   //RACKETEERING
-   else if(breakercount[LAWFLAG_RACKETEERING])
-      addstr("You are wanted for racketeering", gamelog);
-   //EXTORTION
-   else if(breakercount[LAWFLAG_EXTORTION])
-      addstr("You are wanted for extortion", gamelog);
-   //ASSAULT
-   else if(breakercount[LAWFLAG_ARMEDASSAULT])
-      addstr("You are wanted for assault with a deadly weapon", gamelog);
-   //ASSAULT
-   else if(breakercount[LAWFLAG_ASSAULT])
-      addstr("You are wanted for misdemeanor assault", gamelog);
-   //CAR THEFT
-   else if(breakercount[LAWFLAG_CARTHEFT])
-      addstr("You are wanted for grand theft auto", gamelog);
-   //CC FRAUD
-   else if(breakercount[LAWFLAG_CCFRAUD])
-      addstr("You are wanted for credit card fraud", gamelog);
-   //THIEF
-   else if(breakercount[LAWFLAG_THEFT])
-      addstr("You are wanted for petty larceny", gamelog);
-   //PROSTITUTION
-   else if(breakercount[LAWFLAG_PROSTITUTION])
-      addstr("You are wanted for prostitution", gamelog);
-   //HIRE ILLEGAL
-   else if(breakercount[LAWFLAG_HIREILLEGAL])
-      addstr((law[LAW_IMMIGRATION]<1?"You are wanted for hiring an illegal alien":"You are wanted for hiring an undocumented worker"), gamelog);
-   //GUN USE
-   /*else if(breakercount[LAWFLAG_GUNUSE])
-      addstr("You are wanted for firing an illegal weapon", gamelog);
-   //GUN CARRY
-   else if(breakercount[LAWFLAG_GUNCARRY])
-      addstr("You are wanted for possession of an illegal weapon", gamelog);*/
-   //COMMERCE
-   else if(breakercount[LAWFLAG_COMMERCE])
-      addstr("You are wanted for interference with interstate commerce", gamelog);
-   //INFORMATION
-   else if(breakercount[LAWFLAG_INFORMATION])
-      addstr("You are wanted for unlawful access of an information system", gamelog);
-   //UNLAWFUL BURIAL
-   else if(breakercount[LAWFLAG_BURIAL])
-      addstr("You are wanted for unlawful burial", gamelog);
-   //BREAKING
-   else if(breakercount[LAWFLAG_BREAKING])
-      addstr("You are wanted for breaking and entering", gamelog);
-   //VANDALISM
-   else if(breakercount[LAWFLAG_VANDALISM])
-      addstr("You are wanted for vandalism", gamelog);
-   //RESIST
-   else if(breakercount[LAWFLAG_RESIST])
-      addstr("You are wanted for resisting arrest", gamelog);
-   //DISTURBANCE
-   else if(breakercount[LAWFLAG_DISTURBANCE])
-      addstr("You are wanted for disturbing the peace", gamelog);
-   //PUBLIC NUDITY
-   else if(breakercount[LAWFLAG_PUBLICNUDITY])
-      addstr("You are wanted for indecent exposure", gamelog);
-   //LOITERING
-   else if(breakercount[LAWFLAG_LOITERING])
-      addstr("You are wanted for loitering", gamelog);
-   //THEY WERE LOOKING FOR SOMEONE ELSE
-   else addstr("You are wanted for harboring a fugitive from justice", gamelog);
-
-   if(!kidnapped)
-   {
-      if(typenum>1) addstr(" and other crimes", gamelog);
-      addstr(".", gamelog);
-   }
-   gamelog.nextMessage();
-
-   getkey();
-}
-
-
-void statebrokenlaws(Creature & cr)
-{
-   bool kidnapped=(cr.flag&CREATUREFLAG_KIDNAPPED),criminal=false,breakercount[LAWFLAGNUM];
-
-   for(int i=0;i<LAWFLAGNUM;i++)
-      if(cr.crimes_suspected[i]) breakercount[i]=true,criminal=true;
-      else breakercount[i]=false;
-
-   if(!criminal&&!kidnapped) return;
-
-   set_color(COLOR_YELLOW,COLOR_BLACK,1);
-   addstr("WANTED FOR ");
-
-   //KIDNAP VICTIM
-   if(kidnapped)
-      addstr("REHABILITATION");
-   //TREASON
-   else if(breakercount[LAWFLAG_TREASON])
-      addstr("TREASON");
-   //TERRORISM
-   else if(breakercount[LAWFLAG_TERRORISM])
-      addstr("TERRORISM");
-   //MURDERER
-   else if(breakercount[LAWFLAG_MURDER])
-      addstr("MURDER");
-   //KIDNAPPER
-   else if(breakercount[LAWFLAG_KIDNAPPING])
-      addstr("KIDNAPPING");
-   //BANK ROBBER
-   else if(breakercount[LAWFLAG_BANKROBBERY])
-      addstr("BANK ROBBERY");
-   //ARSONIST
-   else if(breakercount[LAWFLAG_BANKROBBERY])
-      addstr("ARSON");
-   //BURN FLAG
-   else if(breakercount[LAWFLAG_BURNFLAG])
-      addstr(law[LAW_FLAGBURNING]==-2?"FLAG MURDER":"FLAG BURNING");
-   //SPEECH
-   else if(breakercount[LAWFLAG_SPEECH])
-      addstr("HARMFUL SPEECH");
-   //BROWNIES
-   else if(breakercount[LAWFLAG_BROWNIES])
-      addstr("DRUG DEALING");
-   //ESCAPED
-   else if(breakercount[LAWFLAG_ESCAPED])
-      addstr("ESCAPING PRISON");
-   //HELP ESCAPED
-   else if(breakercount[LAWFLAG_HELPESCAPE])
-      addstr("RELEASING PRISONERS");
-   //JURY
-   else if(breakercount[LAWFLAG_JURY])
-      addstr("JURY TAMPERING");
-   //RACKETEERING
-   else if(breakercount[LAWFLAG_RACKETEERING])
-      addstr("RACKETEERING");
-   //EXTORTION
-   else if(breakercount[LAWFLAG_EXTORTION])
-      addstr("EXTORTION");
-   //ASSAULT
-   else if(breakercount[LAWFLAG_ARMEDASSAULT])
-      addstr("ARMED ASSAULT");
-   //ASSAULT
-   else if(breakercount[LAWFLAG_ASSAULT])
-      addstr("ASSAULT");
-   //CAR THEFT
-   else if(breakercount[LAWFLAG_CARTHEFT])
-      addstr("GRAND THEFT AUTO");
-   //CC FRAUD
-   else if(breakercount[LAWFLAG_CCFRAUD])
-      addstr("CREDIT CARD FRAUD");
-   //THIEF
-   else if(breakercount[LAWFLAG_THEFT])
-      addstr("THEFT");
-   //PROSTITUTION
-   else if(breakercount[LAWFLAG_PROSTITUTION])
-      addstr("PROSTITUTION");
-   //HIRE ILLEGAL
-   else if(breakercount[LAWFLAG_HIREILLEGAL])
-      addstr(law[LAW_IMMIGRATION]<1?"HIRING ILLEGAL ALIENS":"HIRING UNDOCUMENTED WORKERS");
-   //GUN USE
-   /*else if(breakercount[LAWFLAG_GUNUSE])
-      addstr("FIRING ILLEGAL WEAPONS");
-   //GUN CARRY
-   else if(breakercount[LAWFLAG_GUNCARRY])
-      addstr("CARRYING ILLEGAL WEAPONS");*/
-   //COMMERCE
-   else if(breakercount[LAWFLAG_COMMERCE])
-      addstr("ELECTRONIC SABOTAGE");
-   //INFORMATION
-   else if(breakercount[LAWFLAG_INFORMATION])
-      addstr("HACKING");
-   //UNLAWFUL BURIAL
-   else if(breakercount[LAWFLAG_BURIAL])
-      addstr("UNLAWFUL BURIAL");
-   //BREAKING
-   else if(breakercount[LAWFLAG_BREAKING])
-      addstr("BREAKING AND ENTERING");
-   //VANDALISM
-   else if(breakercount[LAWFLAG_VANDALISM])
-      addstr("VANDALISM");
-   //RESIST
-   else if(breakercount[LAWFLAG_RESIST])
-      addstr("RESISTING ARREST");
-   //DISTURBANCE
-   else if(breakercount[LAWFLAG_DISTURBANCE])
-      addstr("DISTURBING THE PEACE");
-   //PUBLIC NUDITY
-   else if(breakercount[LAWFLAG_PUBLICNUDITY])
-      addstr("PUBLIC NUDITY");
-   //LOITERING
-   else if(breakercount[LAWFLAG_LOITERING])
-      addstr("LOITERING");
-}

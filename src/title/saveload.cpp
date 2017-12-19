@@ -1,32 +1,33 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                          //
-                                                                                    //
-This file is part of Liberal Crime Squad.                                           //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
-*/
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
 
-#include <externs.h>
+#include "externs.h"
+#include "items/money.h"
+#include <sys/stat.h>
+#pragma GCC diagnostic ignored "-Wunused-result"
 
 // TODO: It would be really cool to be able to "export" characters.
 
@@ -101,7 +102,7 @@ void savegame(const string& filename)
       fwrite(&offended_amradio,sizeof(short),1,h);
       fwrite(&offended_cablenews,sizeof(short),1,h);
       fwrite(&offended_firemen,sizeof(short),1,h);
-      fwrite(attorneyseed,sizeof(unsigned long),RNG_SIZE,h);
+      //fwrite(attorneyseed,sizeof(unsigned long),RNG_SIZE,h);
       //fwrite(&selectedsiege,sizeof(long),1,h);
       fwrite(lcityname,sizeof(char),CITY_NAMELEN,h);
       fwrite(&newscherrybusted,sizeof(char),1,h);
@@ -111,12 +112,12 @@ void savegame(const string& filename)
       fwrite(&party_status,sizeof(short),1,h);
 
       fwrite(attitude,sizeof(short),VIEWNUM,h);
-      fwrite(law,sizeof(short),LAWNUM,h);
-      fwrite(house,sizeof(short),HOUSENUM,h);
-      fwrite(senate,sizeof(short),SENATENUM,h);
-      fwrite(court,sizeof(short),COURTNUM,h);
+      fwrite(law,sizeof(Alignment),LAWNUM,h);
+      fwrite(house,sizeof(Alignment),HOUSENUM,h);
+      fwrite(senate,sizeof(Alignment),SENATENUM,h);
+      fwrite(court,sizeof(Alignment),COURTNUM,h);
       fwrite(courtname,sizeof(char)*POLITICIAN_NAMELEN,9,h);
-      fwrite(exec,sizeof(char),EXECNUM,h);
+      fwrite(exec,sizeof(Alignment),EXECNUM,h);
       fwrite(execname,sizeof(char)*POLITICIAN_NAMELEN,EXECNUM,h);
       fwrite(oldPresidentName,sizeof(char),POLITICIAN_NAMELEN,h);
 
@@ -194,7 +195,7 @@ void savegame(const string& filename)
          fwrite(creatureStr.c_str(),creatureSize,1,h);
          //fwrite(pool[pl],sizeof(Creature),1,h);
          //write extra interrogation data if applicable
-         if(pool[pl]->align==-1 && pool[pl]->alive)
+         if (pool[pl]->align == Alignment::CONSERVATIVE && pool[pl]->alive)
          {
             interrogation* &intr = pool[pl]->activity.intr();
             fwrite(intr->techniques,sizeof(bool[6]),1,h);
@@ -336,28 +337,6 @@ void savegame(const string& filename)
 }
 
 
-/* Used by load() to create items of the correct class. */
-Item* create_item(const std::string& inputXml)
-{
-   Item* it = NULL;
-   CMarkup xml;
-   xml.SetDoc(inputXml);
-   xml.FindElem();
-   string itemclass = xml.GetTagName();
-   if (itemclass == "clip")
-      it = new Clip(inputXml);
-   else if (itemclass == "weapon")
-      it = new Weapon(inputXml);
-   else if (itemclass == "armor")
-      it = new Armor(inputXml);
-   else if (itemclass == "loot")
-      it = new Loot(inputXml);
-   else if (itemclass == "money")
-      it = new Money(inputXml);
-
-   return it;
-}
-
 /* loads the game from save.dat */
 char load(const string& filename)
 {
@@ -425,7 +404,7 @@ char load(const string& filename)
          fread(&offended_amradio,sizeof(short),1,h);
          fread(&offended_cablenews,sizeof(short),1,h);
          fread(&offended_firemen,sizeof(short),1,h);
-         fread(attorneyseed,sizeof(unsigned long),RNG_SIZE,h);
+         //fread(attorneyseed,sizeof(unsigned long),RNG_SIZE,h);
          //fread(&selectedsiege,sizeof(long),1,h);
          fread(lcityname,sizeof(char),CITY_NAMELEN,h);
          fread(&newscherrybusted,sizeof(char),1,h);
@@ -435,12 +414,12 @@ char load(const string& filename)
          fread(&party_status,sizeof(short),1,h);
 
          fread(attitude,sizeof(short),VIEWNUM,h);
-         fread(law,sizeof(short),LAWNUM,h);
-         fread(house,sizeof(short),HOUSENUM,h);
-         fread(senate,sizeof(short),SENATENUM,h);
-         fread(court,sizeof(short),COURTNUM,h);
+         fread(law,sizeof(Alignment),LAWNUM,h);
+         fread(house,sizeof(Alignment),HOUSENUM,h);
+         fread(senate,sizeof(Alignment),SENATENUM,h);
+         fread(court,sizeof(Alignment),COURTNUM,h);
          fread(courtname,sizeof(char)*POLITICIAN_NAMELEN,COURTNUM,h);
-         fread(exec,sizeof(char),EXECNUM,h);
+         fread(exec,sizeof(Alignment),EXECNUM,h);
          fread(execname,sizeof(char)*POLITICIAN_NAMELEN,EXECNUM,h);
          fread(oldPresidentName,sizeof(char),POLITICIAN_NAMELEN,h);
 
@@ -461,9 +440,9 @@ char load(const string& filename)
                fread(&vec[0], itemLen, 1, h);
                vec[itemLen] = '\0';
 
-               Item* it = create_item(&vec[0]);
-               if(it!=NULL)
-                  location[l]->loot[l2] = it;
+               Item::OwningPtr it = Item::create_from_xml(&vec[0]);
+               if (it)
+                 location[l]->loot[l2] = it.release(); // @TODO make loot own the item
             }
             //Remove items of unknown type.
             for(int l2=len(location[l]->loot)-1; l2>=0; l2--)
@@ -549,7 +528,7 @@ char load(const string& filename)
             //pool[pl]=new Creature;
             //fread(pool[pl],sizeof(Creature),1,h);
             //read extra interrogation data if applicable
-            if(pool[pl]->align==-1 && pool[pl]->alive)
+            if (pool[pl]->align == Alignment::CONSERVATIVE && pool[pl]->alive)
             {
                interrogation* &intr = pool[pl]->activity.intr();
                intr = new interrogation;
@@ -673,9 +652,9 @@ char load(const string& filename)
                fread(&vec[0], itemLen, 1, h);
                vec[itemLen] = '\0';
 
-               Item* it = create_item(&vec[0]);
-               //if(it!=NULL) //Assume save file is correct? -XML
-                  squad[sq]->loot[l2] = it;
+               Item::OwningPtr it = Item::create_from_xml(&vec[0]);
+               if (it)
+                  squad[sq]->loot[l2] = it.release();
                /*else
                   squad[sq]->loot.erase(loot.begin()+l2--);*/
             }

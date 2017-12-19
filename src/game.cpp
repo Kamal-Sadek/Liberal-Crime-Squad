@@ -1,24 +1,23 @@
-//////////////////////////////////////////////////////////////////////////////////////////
-//                                                                                      //
-//Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-//                                                                                      //
-//////////////////////////////////////////////////////////////////////////////////////////
-//This file is part of Liberal Crime Squad.                                             //
-//                                                                                      //
-//      Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-//      it under the terms of the GNU General Public License as published by            //
-//      the Free Software Foundation; either version 2 of the License, or               //
-//      (at your option) any later version.                                             //
-//                                                                                      //
-//      Liberal Crime Squad is distributed in the hope that it will be useful,          //
-//      but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-//      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-//      GNU General Public License for more details.                                    //
-//                                                                                      //
-//      You should have received a copy of the GNU General Public License               //
-//      along with Liberal Crime Squad; if not, write to the Free Software              //
-//      Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-//////////////////////////////////////////////////////////////////////////////////////////
+/*
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 //outstanding issues
    //site trucker-type bug still happens (latte-stand)
@@ -65,192 +64,46 @@
 //somebody claims saving works only 3/4 of the time (no confirmation)
 //somebody claims squads don't move (sounds like older version bug, they haven't told me version)
 
-#include <includes.h>
+#include <cerrno>
+#include <cstring>
 #include <ctime>
+#include <externs.h>
+#include "creature/creaturetypecache.h"
+#include "news/news.h"
+#include <sstream>
+#include "tinyxml2.h"
 
-Log gamelog; //The gamelog.
-Log xmllog; // Log for xml errors or bad values.
-
-CursesMoviest movie;
-unsigned char bigletters[27][5][7][4];
-unsigned char newstops[6][80][5][4];
-unsigned char newspic[20][78][18][4];
-
-MusicClass music;
-
-char homedir[MAX_PATH_SIZE];
-char artdir[MAX_PATH_SIZE];
-
-vector<configSiteMap *> sitemaps; // stores site map info read in from config file
-
-bool multipleCityMode;
-unsigned long seed[RNG_SIZE];
-
-vector<ClipType *> cliptype;
-vector<WeaponType *> weapontype;
-vector<ArmorType *> armortype;
-vector<LootType *> loottype;
-vector<CreatureType *> creaturetype;
-vector<AugmentType *> augmenttype;
-vector<VehicleType *> vehicletype;
 
 template<class Type>
-bool populate_from_xml(vector<Type*>& types,string file,Log& log);
-bool populate_masks_from_xml(vector<ArmorType*>& masks,string file,Log& log);
+  bool
+  populate_from_xml(vector<Type*>& types, std::string const& file, Log& log);
 
-long curcreatureid=0;
-vector<Item *> groundloot;
-vector<Location *> location;
+extern CreatureTypeCache creature_type_cache; // @TODO remove me
 
-vector<Vehicle *> vehicle;
-char showcarprefs=1;
+void
+populate_from_xml2(CreatureTypeCache& ctc, string const& file, Log& log);
 
-int oldMapMode=0; // -1 if we're using the old map generation functions.
+bool
+populate_masks_from_xml(vector<ArmorType*>& masks, std::string const& file, Log& log);
 
-siteblockst levelmap[MAPX][MAPY][MAPZ];
-
-chaseseqst chaseseq;
-
-char slogan[SLOGAN_LEN];
-
-vector<Creature *> pool;
-
-vector<squadst *> squad;
-squadst *activesquad=NULL;
-long cursquadid=0;
-
-char disbanding=0;
-int disbandtime=0;
-char cantseereason;
-
-short activesortingchoice[SORTINGCHOICENUM];
-
-Creature encounter[ENCMAX];
-
-short mode=GAMEMODE_TITLE;
-
-short offended_corps=0;
-short offended_cia=0;
-short offended_amradio=0;
-short offended_cablenews=0;
-short offended_firemen=0;
-int police_heat=0;
-unsigned long attorneyseed[RNG_SIZE];
-int selectedsiege=-1;
-char lcityname[CITY_NAMELEN];
-char newscherrybusted=0;
-
-int month=1;
-
-#ifdef THEFUTURE
-int year=2100;
-#else
-int year=2009;
-#endif
-int amendnum=28;
-
-bool termlimits=false;
-bool deagle=false;
-bool m249=false;
-
-UniqueCreatures uniqueCreatures;
-
-short attitude[VIEWNUM];
-
-short public_interest[VIEWNUM];
-short background_liberal_influence[VIEWNUM];
-
-short law[LAWNUM];
-
-short house[HOUSENUM];
-short senate[SENATENUM];
-short court[COURTNUM];
-char courtname[COURTNUM][POLITICIAN_NAMELEN];
-
-signed char exec[EXECNUM];
-short execterm=1;
-char execname[EXECNUM][POLITICIAN_NAMELEN];
-short presparty=CONSERVATIVE_PARTY;
-char oldPresidentName[POLITICIAN_NAMELEN];
-
-int stat_recruits=0;
-int stat_kidnappings=0;
-int stat_dead=0;
-int stat_kills=0;
-int stat_buys=0;
-int stat_burns=0;
-
-int ustat_recruits=0;
-int ustat_kidnappings=0;
-int ustat_dead=0;
-int ustat_kills=0;
-int ustat_funds=0;
-int ustat_spent=0;
-int ustat_buys=0;
-int ustat_burns=0;
-
-int locx;
-int locy;
-int locz;
-
-short sitetype;
-short sitealienate;
-short sitealarm;
-short sitealarmtimer;
-short postalarmtimer;
-short siteonfire;
-int sitecrime;
-short cursite;
-bool mapshowing=false;
-
-bool encounterwarnings=false;
-
-char foughtthisround=0;
-
-short interface_pgup='[';
-short interface_pgdn=']';
+void
+end_game();
 
 bool autosave;
-string savefile_name;
 
-int day=1;
-
-class Ledger ledger;
-
-short party_status=-1;
-
-short wincondition=WINCONDITION_ELITE;
-short fieldskillrate=FIELDSKILLRATE_FAST;
-
-bool notermlimit;           //These determine if ELAs can take place --kviiri
-bool nocourtpurge;
-bool stalinmode;
-
-char endgamestate=ENDGAME_NONE;
-char ccsexposure=CCSEXPOSURE_NONE;
-char ccs_kills=0;
-int ccs_siege_kills=0;
-int ccs_boss_kills=0;
-
-vector<datest *> date;
-vector<recruitst *> recruit;
-
-vector<newsstoryst *> newsstory;
-newsstoryst *sitestory=NULL;
-
-#define SCORENUM 5
-highscorest score[SCORENUM];
-int yourscore=-1;
-
-#ifdef WIN32
+#ifdef _WIN32
 bool fixcleartype=false;
 #endif
 
-int main(int argc, char* argv[])
+int
+main(int argc, char* argv[])
 {
    init_console(); // do this FIRST
    //start curses
    initscr();
+
+   // register cleanup
+   atexit(end_game);
 
    gamelog.initialize(GAMELOG_FILEPATH, OVERWRITE_GAMELOG, NEWLINEMODE_GAMELOG); //Initialize the gamelog (and also initialize artdir and homedir)
 
@@ -358,28 +211,28 @@ int main(int argc, char* argv[])
       attitude[v]=100;
 #endif
 
-   law[LAW_ABORTION]=1;
-   law[LAW_ANIMALRESEARCH]=-1;
-   law[LAW_POLICEBEHAVIOR]=-1;
-   law[LAW_PRIVACY]=-1;
-   law[LAW_DEATHPENALTY]=-1;
-   law[LAW_NUCLEARPOWER]=-1;
-   law[LAW_POLLUTION]=-1;
-   law[LAW_LABOR]=0;
-   law[LAW_GAY]=1;
-   law[LAW_CORPORATE]=0;
-   law[LAW_FREESPEECH]=0;
-   law[LAW_FLAGBURNING]=1;
-   law[LAW_GUNCONTROL]=-1;
-   law[LAW_TAX]=0;
-   law[LAW_WOMEN]=1;
-   law[LAW_CIVILRIGHTS]=1;
-   law[LAW_DRUGS]=-1;
-   law[LAW_IMMIGRATION]=0;
-   law[LAW_ELECTIONS]=0;
-   law[LAW_MILITARY]=-1;
-   law[LAW_PRISONS]=0;
-   law[LAW_TORTURE]=-1;
+   law[LAW_ABORTION] = Alignment::LIBERAL;
+   law[LAW_ANIMALRESEARCH] = Alignment::CONSERVATIVE;
+   law[LAW_POLICEBEHAVIOR] = Alignment::CONSERVATIVE;
+   law[LAW_PRIVACY] = Alignment::CONSERVATIVE;
+   law[LAW_DEATHPENALTY] = Alignment::CONSERVATIVE;
+   law[LAW_NUCLEARPOWER] = Alignment::CONSERVATIVE;
+   law[LAW_POLLUTION] = Alignment::CONSERVATIVE;
+   law[LAW_LABOR] = Alignment::MODERATE;
+   law[LAW_GAY] = Alignment::LIBERAL;
+   law[LAW_CORPORATE] = Alignment::MODERATE;
+   law[LAW_FREESPEECH] = Alignment::MODERATE;
+   law[LAW_FLAGBURNING] = Alignment::LIBERAL;
+   law[LAW_GUNCONTROL] = Alignment::CONSERVATIVE;
+   law[LAW_TAX] = Alignment::MODERATE;
+   law[LAW_WOMEN] = Alignment::LIBERAL;
+   law[LAW_CIVILRIGHTS] = Alignment::LIBERAL;
+   law[LAW_DRUGS] = Alignment::CONSERVATIVE;
+   law[LAW_IMMIGRATION] = Alignment::MODERATE;
+   law[LAW_ELECTIONS] = Alignment::MODERATE;
+   law[LAW_MILITARY] = Alignment::CONSERVATIVE;
+   law[LAW_PRISONS] = Alignment::MODERATE;
+   law[LAW_TORTURE] = Alignment::CONSERVATIVE;
 
 #ifdef SHITLAWS
    for(int l=0;l<LAWNUM;l++) law[l]=-2;
@@ -389,45 +242,46 @@ int main(int argc, char* argv[])
    for(int l=0;l<LAWNUM;l++) law[l]=2;
 #endif
 
-   for(int s=0;s<SENATENUM;s++)
+   for(int s=0; s<SENATENUM; s++)
    {
-      if(s<25) senate[s]=-2;
-      else if(s<60) senate[s]=-1;
-      else if(s<80) senate[s]=0;
-      else if(s<95) senate[s]=1;
-      else senate[s]=2;
+      if      (s<25) senate[s] = Alignment::ARCH_CONSERVATIVE;
+      else if (s<60) senate[s] = Alignment::CONSERVATIVE;
+      else if (s<80) senate[s] = Alignment::MODERATE;
+      else if (s<95) senate[s] = Alignment::LIBERAL;
+      else           senate[s] = Alignment::ELITE_LIBERAL;
    }
 
-   for(int h=0;h<HOUSENUM;h++)
+   for(int h=0; h<HOUSENUM; h++)
    {
-      if(h<50) house[h]=-2;
-      else if(h<250) house[h]=-1;
-      else if(h<350) house[h]=0;
-      else if(h<400) house[h]=1;
-      else house[h]=2;
+      if      (h<50)  house[h] = Alignment::ARCH_CONSERVATIVE;
+      else if (h<250) house[h] = Alignment::CONSERVATIVE;
+      else if (h<350) house[h] = Alignment::MODERATE;
+      else if (h<400) house[h] = Alignment::LIBERAL;
+      else            house[h] = Alignment::ELITE_LIBERAL;
    }
 
-   for(int c=0;c<COURTNUM;c++)
+   for(int c=0; c<COURTNUM; c++)
    {
-      if(c<3) court[c]=-2;
-      else if(c<5) court[c]=-1;
-      else if(c<5) court[c]=0;
-      else if(c<8) court[c]=1;
-      else court[c]=2;
+      if      (c<3) court[c] = Alignment::ARCH_CONSERVATIVE;
+      else if (c<5) court[c] = Alignment::CONSERVATIVE;
+      else if (c<5) court[c] = Alignment::MODERATE;
+      else if (c<8) court[c] = Alignment::LIBERAL;
+      else          court[c] = Alignment::ELITE_LIBERAL;
       do
       {
-         if(court[c]==-2) generate_name(courtname[c],GENDER_WHITEMALEPATRIARCH);
-         else generate_name(courtname[c]);
+         if (to_right_of(court[c], Alignment::MODERATE))
+             generate_name(courtname[c],GENDER_WHITEMALEPATRIARCH);
+         else
+         generate_name(courtname[c]);
       } while(len(courtname[c])>20);
    }
 
    for(int e=0;e<EXECNUM;e++)
    {
-      exec[e]=-2;
+      exec[e] = Alignment::ARCH_CONSERVATIVE;
       generate_name(execname[e],GENDER_WHITEMALEPATRIARCH);
    }
 
-   initOtherRNG(attorneyseed);
    strcpy(lcityname,cityname());
 
    xmllog.initialize("xmllog",true,1);
@@ -438,9 +292,10 @@ int main(int argc, char* argv[])
    xml_loaded_ok&=populate_from_xml(armortype,"armors.xml",xmllog);
    xml_loaded_ok&=populate_masks_from_xml(armortype,"masks.xml",xmllog);
    xml_loaded_ok&=populate_from_xml(loottype,"loot.xml",xmllog);
-   xml_loaded_ok&=populate_from_xml(creaturetype,"creatures.xml",xmllog);
    xml_loaded_ok&=populate_from_xml(augmenttype,"augmentations.xml",xmllog);
-   if(!xml_loaded_ok) end_game(EXIT_FAILURE);
+   if(!xml_loaded_ok) exit(EXIT_FAILURE);
+
+   populate_from_xml2(creature_type_cache, "creatures.xml", xmllog);
 
    //addstr("Attempting to load saved game... ");
    //getkey();
@@ -449,19 +304,16 @@ int main(int argc, char* argv[])
    //getkey();
 
    clear();
-
    mode_title();
-
-   //deinitialize curses
-   end_game();
 
    return EXIT_SUCCESS;
 }
 
 /* Free memory and exit the game */
-void end_game(int err)
+void
+end_game()
 {
-   #ifdef WIN32
+   #ifdef _WIN32
    end_cleartype_fix(); // won't do anything unless fixcleartype is true
    #endif
 
@@ -471,7 +323,6 @@ void end_game(int err)
    delete_and_clear(cliptype);
    delete_and_clear(armortype);
    delete_and_clear(loottype);
-   delete_and_clear(creaturetype);
    delete_and_clear(augmenttype);
    delete_and_clear(vehicletype);
    delete_and_clear(vehicle);
@@ -484,67 +335,139 @@ void end_game(int err)
    music.quit(); // shut down music
 
    endwin();
-   exit(err);
 }
+
 
 template<class Type>
-bool populate_from_xml(vector<Type*>& types,string file,Log& log)
-{
-   CMarkup xml;
-   if(!xml.Load(string(artdir)+file))
-   { // File is missing or not valid XML.
-      addstr("Failed to load "+file+"!",log);
-
+  bool
+  populate_from_xml(vector<Type*>& types, std::string const& file, Log& log)
+  {
+    std::string filename{artdir + file};
+    std::ifstream istr(filename);
+    if (!istr)
+    {
+      std::ostringstream ostr;
+      ostr << "error " << errno << " opening '" << filename << "': " << std::strerror(errno);
+      addstr(ostr.str(), log);
       getkey();
-
-      // Will cause abort here or else if file is missing all unrecognized types
-      // loaded from a saved game will be deleted. Also, you probably don't want
-      // to play with a whole category of things missing anyway. If the file
-      // does not have valid xml, then behaviour is kind of undefined so it's
-      // best to abort then too.
       return false;
-   }
+    }
+    std::string xml((std::istreambuf_iterator<char>(istr)),
+                     std::istreambuf_iterator<char>());
 
-   xml.FindElem();
-   xml.IntoElem();
-   while(xml.FindElem()) types.push_back(new Type(xml.GetSubDoc()));
-   return true;
+    tinyxml2::XMLDocument doc;
+    tinyxml2::XMLError err = doc.Parse(xml.c_str());
+    if (err != tinyxml2::XML_SUCCESS)
+    {
+      std::ostringstream ostr;
+      ostr << "error " << doc.ErrorID() << " parsing '" << filename << "'"
+           << " at line " << doc.GetErrorLineNum() << ": "
+           << doc.GetErrorStr1() << " / " << doc.GetErrorStr2();
+      addstr(ostr.str(), log);
+      getkey();
+      return false;
+    }
+
+    auto toplevel = doc.FirstChildElement();
+    if (toplevel)
+    {
+      for (auto element = toplevel->FirstChildElement(); element; element = element->NextSiblingElement())
+      {
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        types.push_back(new Type(printer.CStr()));
+      }
+    }
+
+     return true;
+  }
+
+
+void
+populate_from_xml2(CreatureTypeCache& ctc, string const& file, Log& log)
+{
+  std::string filename{artdir + file};
+  std::ifstream istr(filename);
+  if (!istr)
+  {
+    std::ostringstream ostr;
+    ostr << "error " << errno << " opening '" << filename << "': " << std::strerror(errno);
+    addstr(ostr.str(), log);
+    getkey();
+    return;
+  }
+  std::string xml((std::istreambuf_iterator<char>(istr)),
+                   std::istreambuf_iterator<char>());
+
+  ctc.load_from_xml_string(xml);
 }
 
-bool populate_masks_from_xml(vector<ArmorType*>& masks,string file,Log& log)
+
+/** @TODO move this into a Masks submodule. */
+bool
+populate_masks_from_xml(vector<ArmorType*>& masks, std::string const& file, Log& log)
 {
-   CMarkup xml;
-   if(!xml.Load(string(artdir)+file))
-   { //File is missing or not valid XML.
-      addstr("Failed to load "+file+"!",log);
+  std::string filename{artdir + file};
+  std::ifstream istr(filename);
+  if (!istr)
+  {
+    std::ostringstream ostr;
+    ostr << "error " << errno << " opening '" << filename << "': " << std::strerror(errno);
+    addstr(ostr.str(), log);
+    getkey();
+    return false;
+  }
+  std::string xml((std::istreambuf_iterator<char>(istr)),
+                   std::istreambuf_iterator<char>());
 
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLError err = doc.Parse(xml.c_str());
+  if (err != tinyxml2::XML_SUCCESS)
+  {
+    std::ostringstream ostr;
+    ostr << "error " << doc.ErrorID() << " parsing '" << filename << "'"
+         << " at line " << doc.GetErrorLineNum() << ": "
+         << doc.GetErrorStr1() << " / " << doc.GetErrorStr2();
+    addstr(ostr.str(), log);
+    getkey();
+    return false;
+  }
+
+  auto toplevel = doc.FirstChildElement();
+  if ((toplevel != nullptr) && (toplevel->Name() == std::string("masks")))
+  {
+    int defaultindex = -1;
+    for (auto element = toplevel->FirstChildElement(); element; element = element->NextSiblingElement())
+    {
+      std::string tag = element->Name();
+
+      if (tag == "default")
+      {
+        defaultindex = getarmortype(element->GetText());
+        break;
+      }
+    }
+    if (defaultindex == -1)
+    {
+      std::ostringstream ostr;
+      ostr << "error: missing <default> element in '" << filename << "'";
+      addstr(ostr.str(), log);
       getkey();
+      return false;
+    }
 
-      return false; //Abort.
-   }
+    for (auto element = toplevel->FirstChildElement(); element; element = element->NextSiblingElement())
+    {
+      std::string tag = element->Name();
 
-   xml.FindElem();
-   xml.IntoElem();
-   int defaultindex;
-   if(xml.FindElem("default")) defaultindex=getarmortype(xml.GetData());
-   else
-   {
-      addstr("Default missing for masks!",log);
+      if (tag == "masktyoe")
+      {
+        tinyxml2::XMLPrinter printer;
+        element->Accept(&printer);
+        armortype.push_back(new ArmorType(*armortype[defaultindex], printer.CStr()));
+      }
+    }
+  }
 
-      getkey();
-
-      return false; //Abort.
-   }
-   if(defaultindex==-1)
-   {
-      addstr("Default for masks is not a known armor type!",log);
-
-      getkey();
-
-      return false; //Abort.
-   }
-
-   xml.ResetMainPos();
-   while(xml.FindElem("masktype")) armortype.push_back(new ArmorType(*armortype[defaultindex],xml.GetSubDoc()));
-   return true;
+  return true;
 }

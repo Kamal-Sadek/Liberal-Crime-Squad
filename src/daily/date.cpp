@@ -1,32 +1,33 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
-*/
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
+#include "daily/date.h"
+#include "externs.h"
+#include "locations/world.h"
 
-#include <externs.h>
 
 enum DateResults
 {
@@ -64,7 +65,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
          int num_relationships=loveslaves(*pool[p]);
          if(pool[p]->flag&CREATUREFLAG_LOVESLAVE) num_relationships++;
          if(num_relationships==1) addstr("someone!", gamelog);
-         else addstr(tostring(num_relationships)+" people!", gamelog);
+         else addstr(std::to_string(num_relationships)+" people!", gamelog);
          gamelog.newline();
          move(y++,0);
          addstr(pool[p]->name, gamelog);
@@ -134,7 +135,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
       }
       else
       {
-         if(d.date[e]->align == ALIGN_CONSERVATIVE && d.date[e]->get_attribute(ATTRIBUTE_WISDOM,false)>3)
+         if(d.date[e]->align == Alignment::CONSERVATIVE && d.date[e]->get_attribute(ATTRIBUTE_WISDOM,false)>3)
          {
             set_color(COLOR_GREEN,COLOR_BLACK,1);
             y++;
@@ -201,7 +202,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
       case 3: addstr(s+" to catch "+d.date[e]->hisher()+" favourite TV show.", gamelog); break;
       case 4:
          addstr(s+" to take care of "+d.date[e]->hisher()+" pet",gamelog);
-         switch(LCSrandom(3+(law[LAW_ANIMALRESEARCH]==-2)))
+         switch (LCSrandom(3 + (law[LAW_ANIMALRESEARCH]==Alignment::ARCH_CONSERVATIVE)))
          {
          case 0: addstr(" cat.",gamelog); break;
          case 1: addstr(" dog.",gamelog); break;
@@ -223,7 +224,7 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
    else
    {
       //WISDOM POSSIBLE INCREASE
-      if(d.date[e]->align==-1&&aroll<troll/2)
+      if (d.date[e]->align == Alignment::CONSERVATIVE && aroll < troll/2)
       {
          set_color(COLOR_RED,COLOR_BLACK,1);
          move(y++,0);
@@ -372,7 +373,8 @@ static int dateresult(int aroll,int troll,datest &d,int e,int p,int y)
 }
 
 /* daily - date - dater p gets back from vacation */
-char completevacation(datest &d,int p,char &clearformess)
+bool
+completevacation(datest& d, int p, char& clearformess)
 {
    music.play(MUSIC_DATING);
    int e=0;
@@ -387,14 +389,14 @@ char completevacation(datest &d,int p,char &clearformess)
    gamelog.nextMessage();
 
    // Temporarily make the date Conservative so that high-juice liberals aren't trivial to seduce
-   int datealignment=d.date[e]->align;
-   d.date[e]->align=-1;
+   Alignment datealignment = d.date[e]->align;
+   d.date[e]->align = Alignment::CONSERVATIVE;
 
    short aroll=pool[p]->skill_roll(SKILL_SEDUCTION)*2;
    short troll=d.date[e]->attribute_roll(ATTRIBUTE_WISDOM);
 
    // Attribute roll over; reset date's alignment to what it should be
-   d.date[e]->align=datealignment;
+   d.date[e]->align = datealignment;
 
    pool[p]->train(SKILL_SEDUCTION,LCSrandom(11)+15);
 
@@ -443,7 +445,8 @@ char completevacation(datest &d,int p,char &clearformess)
 
 
 /* daily - date - dater p goes on some dates */
-char completedate(datest &d,int p,char &clearformess)
+bool
+completedate(datest& d, int p, char& clearformess)
 {
    music.play(MUSIC_DATING);
    int e;
@@ -610,7 +613,7 @@ char completedate(datest &d,int p,char &clearformess)
       set_color(COLOR_WHITE,COLOR_BLACK,0);
       move(14,0);
       addstr("D - Break it off.");
-      if(d.date[e]->align==-1&&!pool[p]->clinic)
+      if (d.date[e]->align == Alignment::CONSERVATIVE && !pool[p]->clinic)
       {
          set_color(COLOR_WHITE,COLOR_BLACK,0);
          move(15,0);
@@ -629,10 +632,10 @@ char completedate(datest &d,int p,char &clearformess)
 
          short aroll=pool[p]->skill_roll(SKILL_SEDUCTION);
          short troll=d.date[e]->attribute_roll(ATTRIBUTE_WISDOM);
-         if(d.date[e]->align==ALIGN_CONSERVATIVE)
+         if(d.date[e]->align==Alignment::CONSERVATIVE)
             troll+=troll*(d.date[e]->juice/100);
          // Even liberals and moderates shouldn't be TOO easy to seduce! -- SlatersQuest
-         else if(d.date[e]->align==ALIGN_MODERATE)
+         else if(d.date[e]->align==Alignment::MODERATE)
             troll+=troll*(d.date[e]->juice/150);
          else troll+=troll*(d.date[e]->juice/200);
 
@@ -700,7 +703,7 @@ char completedate(datest &d,int p,char &clearformess)
             delete_and_remove(d.date,e);
             break;
          }
-         if(c=='e'&&d.date[e]->align==-1&&!pool[p]->clinic)
+         if (c=='e' && d.date[e]->align == Alignment::CONSERVATIVE && !pool[p]->clinic)
          {
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
             int bonus=0;
@@ -731,7 +734,7 @@ char completedate(datest &d,int p,char &clearformess)
             {
                addstr(" seizes the Conservative swine from behind and warns it", gamelog);
                move(18,0);
-               if(law[LAW_FREESPEECH]!=-2)
+               if (law[LAW_FREESPEECH] != Alignment::ARCH_CONSERVATIVE)
                   addstr("not to fuck around!", gamelog);
                else
                   addstr("not to [resist]!", gamelog);

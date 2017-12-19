@@ -1,11 +1,43 @@
+/**
+ * Interface for the ArmorType class.
+ */
+/*
+ * Copyright 2010 Carlos Gustavos  <blomkvist>
+ * Copyright 2014 Rich McGrew (yetisyny)
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 #ifndef ARMORTYPE_H
 #define ARMORTYPE_H
 
-class ArmorType : public ItemType
+#include "items/itemtype.h"
+
+
+class WeaponType;
+
+
+class ArmorType
+: public ItemType
 {
    public:
-      explicit ArmorType(MCD_STR xmlstring);
-      ArmorType(const ArmorType& base, MCD_STR xmlstring);
+      explicit ArmorType(std::string const& xmlstring);
+      ArmorType(const ArmorType& base, std::string const& xmlstring);
       
       bool is_armor() const { return true; }
       
@@ -33,7 +65,7 @@ class ArmorType : public ItemType
       // Returns the stealth bonus given by the armor
       int get_stealth_value() const { return stealth_value_; }
 
-      const string& get_shortname() const;
+      const std::string& get_shortname() const;
 
       int get_interrogation_basepower() const { return interrogation_basepower_; }
       int get_interrogation_assaultbonus() const { return interrogation_assaultbonus_; }
@@ -45,23 +77,20 @@ class ArmorType : public ItemType
       // Returns the largest weapon size concealed by the armor type.
       int get_weaponsize_concealment() const { return conceal_weaponsize_; }
       // Checks if the armor type conceals the given weapon.
-      bool conceals_weapon(const WeaponType& weapon) const { return conceals_weaponsize(weapon.get_size()); }
+      bool conceals_weapon(const WeaponType& weapon) const;
       bool conceals_weaponsize(int weaponsize) const;
       /*const vector<string>& get_appropriate_weapons() const { return appropriate_weapon_; }
-      const string& get_appropriate_weapon(int index) const;*/
-      
+      const std::string& get_appropriate_weapon(int index) const;*/
       
       //For masks:
       bool is_mask() const { return mask_; }
       bool is_surprise_mask() const { return surprise_mask_; }
-      const string& get_description() const { return description_; }
+      const std::string& get_description() const { return description_; }
       
-      
-   
    private:
+      void init(std::string const& xmlstring);
       
-      void init(const MCD_STR& xmlstring);
-      
+   private:
       int make_difficulty_;
       int make_price_;
       bool deathsquad_legality_;
@@ -80,8 +109,8 @@ class ArmorType : public ItemType
       bool cover_legs_;
       bool conceal_face_;
 
-      string shortname_;
-      string shortname_future_;
+      std::string shortname_;
+      std::string shortname_future_;
       bool shortname_defined_;
       bool shortname_future_defined_;
       
@@ -98,7 +127,7 @@ class ArmorType : public ItemType
       //For masks:
       bool mask_;
       bool surprise_mask_;
-      string description_;
+      std::string description_;
       
       int quality_levels_;
       int durability_;

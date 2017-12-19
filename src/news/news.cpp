@@ -1,457 +1,52 @@
+/**
+ * The main news module.
+ */
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
-*/
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp.
+ */
 
 //TODO: Add logging for this file? --Addictgamer
 
-#include <externs.h>
+#include "externs.h"
+#include "locations/world.h"
+#include "news/news.h"
+#include "politics/alignment.h"
+#pragma GCC diagnostic ignored "-Wunused-result"
 
-/* news - major newspaper reporting on lcs and other topics */
-void majornewspaper(char &clearformess,char canseethings)
-{
-   clearformess = true;
 
-   int n=0;
+unsigned char bigletters[27][5][7][4];
+unsigned char newstops[6][80][5][4];
+unsigned char newspic[20][78][18][4];
 
-   generate_random_event_news_stories();
 
-   clean_up_empty_news_stories();
-
-   if(canseethings) run_television_news_stories();
-
-   assign_page_numbers_to_newspaper_stories();
-   if(canseethings) display_newspaper();
-
-   //DELETE STORIES
-   for(n=0;n<len(newsstory);n++)
-      handle_public_opinion_impact(*newsstory[n]);
-   delete_and_clear(newsstory);
-}
-
-void display_newspaper()
-{
-   int writers = liberal_guardian_writing_power();
-
-   for(int n=0;n<len(newsstory);n++)
-   {
-      bool liberalguardian=0;
-      int header = -1;
-      if(writers&&newsstory[n]->type!=NEWSSTORY_MAJOREVENT)
-         liberalguardian=1;
-
-      switch(newsstory[n]->type)
-      {
-         case NEWSSTORY_SQUAD_SITE:
-         case NEWSSTORY_SQUAD_KILLED_SITE:
-            switch(location[newsstory[n]->loc]->type)
-            {
-            case SITE_LABORATORY_COSMETICS:
-               header=VIEW_ANIMALRESEARCH;
-               break;
-            case SITE_LABORATORY_GENETIC:
-               header=VIEW_GENETICS;
-               break;
-            case SITE_GOVERNMENT_POLICESTATION:
-               header=VIEW_POLICEBEHAVIOR;
-               break;
-            case SITE_GOVERNMENT_COURTHOUSE:
-               header=VIEW_JUSTICES;
-               break;
-            case SITE_GOVERNMENT_PRISON:
-               header=VIEW_DEATHPENALTY;
-               break;
-            case SITE_GOVERNMENT_INTELLIGENCEHQ:
-               header=VIEW_INTELLIGENCE;
-               break;
-            case SITE_INDUSTRY_SWEATSHOP:
-               header=VIEW_SWEATSHOPS;
-               break;
-            case SITE_INDUSTRY_POLLUTER:
-               header=VIEW_POLLUTION;
-               break;
-            case SITE_INDUSTRY_NUCLEAR:
-               header=VIEW_NUCLEARPOWER;
-               break;
-            case SITE_CORPORATE_HEADQUARTERS:
-               header=VIEW_CORPORATECULTURE;
-               break;
-            case SITE_CORPORATE_HOUSE:
-               header=VIEW_CEOSALARY;
-               break;
-            case SITE_MEDIA_AMRADIO:
-               header=VIEW_AMRADIO;
-               break;
-            case SITE_MEDIA_CABLENEWS:
-               header=VIEW_CABLENEWS;
-               break;
-            case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-            case SITE_BUSINESS_CIGARBAR:
-            case SITE_BUSINESS_BANK:
-               header=VIEW_TAXES;
-               break;
-            }
-            break;
-         case NEWSSTORY_SQUAD_ESCAPED:
-         case NEWSSTORY_SQUAD_FLEDATTACK:
-         case NEWSSTORY_SQUAD_DEFENDED:
-         case NEWSSTORY_SQUAD_BROKESIEGE:
-         case NEWSSTORY_SQUAD_KILLED_SIEGEATTACK:
-         case NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE:
-            break;
-         case NEWSSTORY_CCS_NOBACKERS:
-         case NEWSSTORY_CCS_DEFEATED:
-            break;
-      }
-      if(liberalguardian)
-      {
-         if(newsstory[n]->type==NEWSSTORY_CCS_SITE||
-            newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE)
-         {
-            newsstory[n]->positive=0;
-         }
-         displaystory(*newsstory[n],liberalguardian,header);
-         if(newsstory[n]->positive)newsstory[n]->positive+=1;
-      }
-      else displaystory(*newsstory[n],0,-1);
-   }
-}
-
-void generate_random_event_news_stories()
-{
-   //Conservative Crime Squad Strikes!
-   if(endgamestate < ENDGAME_CCS_DEFEATED &&
-      LCSrandom(30) < endgamestate)
-   {
-      newsstory.push_back(ccs_strikes_story());
-   }
-
-   // The slow defeat of the conservative crime squad...
-   if(endgamestate < ENDGAME_CCS_DEFEATED &&
-      ccsexposure >= CCSEXPOSURE_EXPOSED &&
-      !LCSrandom(60))
-   {
-      advance_ccs_defeat_storyline();
-   }
-
-   // Random major event news stories
-   if(!LCSrandom(60)) {
-      newsstory.push_back(new_major_event());
-   }
-}
-
-void advance_ccs_defeat_storyline()
-{
-   switch(ccsexposure)
-   {
-   default:
-   case CCSEXPOSURE_NONE:
-   case CCSEXPOSURE_LCSGOTDATA:
-      break;
-   case CCSEXPOSURE_EXPOSED:
-      newsstory.push_back(ccs_exposure_story());
-      break;
-   case CCSEXPOSURE_NOBACKERS:
-      newsstory.push_back(ccs_fbi_raid_story());
-      break;
-   }
-}
-
-void clean_up_empty_news_stories()
-{
-   // Delete stories that have no content or shouldn't be reported on
-   for(int n=len(newsstory)-1;n>=0;n--)
-   {
-      // Squad site action stories without crimes
-      if(newsstory[n]->type==NEWSSTORY_SQUAD_SITE&&
-        !len(newsstory[n]->crime))
-      {
-         delete_and_remove(newsstory,n);
-         continue;
-      }
-
-      // Police killed stories without police being killed
-      if(newsstory[n]->type==NEWSSTORY_CARTHEFT ||
-         newsstory[n]->type==NEWSSTORY_NUDITYARREST ||
-         newsstory[n]->type==NEWSSTORY_WANTEDARREST ||
-         newsstory[n]->type==NEWSSTORY_DRUGARREST ||
-         newsstory[n]->type==NEWSSTORY_GRAFFITIARREST ||
-         newsstory[n]->type==NEWSSTORY_BURIALARREST)
-      {
-         char conf=0;
-         for(int c=0;c<len(newsstory[n]->crime);c++)
-         {
-            if(newsstory[n]->crime[c]==CRIME_KILLEDSOMEBODY)
-            {
-               conf=1;
-               break;
-            }
-         }
-         if(!conf)
-         {
-            delete_and_remove(newsstory,n);
-            continue;
-         }
-      }
-
-      // Sieges that aren't police actions
-      if((newsstory[n]->type==NEWSSTORY_SQUAD_ESCAPED||
-          newsstory[n]->type==NEWSSTORY_SQUAD_FLEDATTACK||
-          newsstory[n]->type==NEWSSTORY_SQUAD_DEFENDED||
-          newsstory[n]->type==NEWSSTORY_SQUAD_BROKESIEGE||
-          newsstory[n]->type==NEWSSTORY_SQUAD_KILLED_SIEGEATTACK||
-          newsstory[n]->type==NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE)&&
-          newsstory[n]->siegetype!=SIEGE_POLICE)
-      {
-         delete_and_remove(newsstory,n);
-         continue;
-      }
-   }
-}
-
-void assign_page_numbers_to_newspaper_stories()
-{
-   for(int n=len(newsstory)-1;n>=0;n--)
-   {
-      setpriority(*newsstory[n]);
-      // Suppress squad actions that aren't worth a story
-      if(newsstory[n]->type==NEWSSTORY_SQUAD_SITE &&
-       ((newsstory[n]->priority<50 &&
-         newsstory[n]->claimed==0)||
-         newsstory[n]->priority<4))
-      {
-         delete_and_remove(newsstory,n);
-         continue;
-      }
-      newsstory[n]->page=-1;
-   }
-   char acted;
-   int curpage=1,curguardianpage=1;
-   do
-   {
-      acted=0;
-      // Sort the major newspapers
-      int maxn=-1,maxp=-1;
-      for(int n=0;n<len(newsstory);n++)
-      {
-         if(newsstory[n]->priority>maxp&&
-            newsstory[n]->page==-1)
-         {
-            maxn=n;
-            maxp=newsstory[n]->priority;
-         }
-      }
-      if(maxn!=-1)
-      {
-         if(newsstory[maxn]->priority<30&&curpage==1) curpage=2;
-         if(newsstory[maxn]->priority<25&&curpage<3) curpage=3+LCSrandom(2);
-         if(newsstory[maxn]->priority<20&&curpage<5) curpage=5+LCSrandom(5);
-         if(newsstory[maxn]->priority<15&&curpage<10) curpage=10+LCSrandom(10);
-         if(newsstory[maxn]->priority<10&&curpage<20) curpage=20+LCSrandom(10);
-         if(newsstory[maxn]->priority<5&&curpage<30) curpage=30+LCSrandom(20);
-
-         newsstory[maxn]->page=curpage;
-         newsstory[maxn]->guardianpage=curguardianpage;
-         curpage++;
-         curguardianpage++;
-         acted=1;
-      }
-   } while(acted);
-}
-
-void handle_public_opinion_impact(const newsstoryst &ns)
-{
-   // Check if this function is meant to handle public opinion impact
-   // for this type of news story (primarily deals with squad/site actions)
-   int okay_types[] = { NEWSSTORY_SQUAD_SITE, NEWSSTORY_SQUAD_ESCAPED, NEWSSTORY_SQUAD_FLEDATTACK,
-      NEWSSTORY_SQUAD_DEFENDED, NEWSSTORY_SQUAD_BROKESIEGE, NEWSSTORY_SQUAD_KILLED_SIEGEATTACK,
-      NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE, NEWSSTORY_SQUAD_KILLED_SITE, NEWSSTORY_WANTEDARREST,
-      NEWSSTORY_GRAFFITIARREST, NEWSSTORY_CCS_SITE, NEWSSTORY_CCS_KILLED_SITE };
-   int okay_type_num = len(okay_types);
-
-   int i;
-   for(i=0; i < okay_type_num; i++)
-   {
-      if(okay_types[i] == ns.type)
-         break;
-   }
-   if(i == okay_type_num) return; // No impact for this news story type
-
-   int impact = ns.priority;
-
-   // Magnitude of impact will be affected by which page of the newspaper the story appears on
-   if(ns.page==1) impact*=5;
-   else if(ns.page==2) impact*=3;
-   else if(ns.page==3) impact*=2;
-
-   int maxpower = 1;
-   if(ns.page==1) maxpower=100;
-   else if(ns.page<5) maxpower=100-10*ns.page;
-   else if(ns.page<10) maxpower=40;
-   else if(ns.page<20) maxpower=20;
-   else if(ns.page<30) maxpower=10;
-   else if(ns.page<40) maxpower=5;
-   else maxpower=1;
-
-   // Five times effectiveness with the Liberal Guardian
-   if(ns.positive==2)
-      impact*=5;
-   // Cap power
-   if(impact>maxpower)
-      impact=maxpower;
-
-   impact/=10;
-   impact++;
-
-   // Account for squad responsible, rampages, and Liberal Guardian bias
-   int impact_direction = ALIGN_LIBERAL;
-   if(ns.type==NEWSSTORY_CCS_SITE || ns.type==NEWSSTORY_CCS_KILLED_SITE)
-   {
-      impact_direction = ALIGN_CONSERVATIVE;
-      if(ns.positive)
-         change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD,impact,0);
-      else
-         change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD,-impact,0);
-   }
-   else
-   {
-      change_public_opinion(VIEW_LIBERALCRIMESQUAD,2+impact);
-      impact_direction = ALIGN_LIBERAL;
-      if(ns.positive)
-         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,impact);
-      else
-         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,-impact);
-   }
-   impact *= impact_direction;
-   int squad_responsible = impact_direction;
-   if(!ns.positive) impact /= 4;
-
-   // Impact gun control issue
-   change_public_opinion(VIEW_GUNCONTROL, ABS(impact)/10, 0, ABS(impact)*10);
-
-   if(ns.loc == -1) return;
-
-   // Location-specific issue impact
-   std::vector<int> issues;
-   switch(location[ns.loc]->type)
-   {
-   case SITE_LABORATORY_COSMETICS:
-      issues.push_back(VIEW_ANIMALRESEARCH);
-      issues.push_back(VIEW_WOMEN);
-      break;
-   case SITE_LABORATORY_GENETIC:
-      issues.push_back(VIEW_ANIMALRESEARCH);
-      issues.push_back(VIEW_GENETICS);
-      break;
-   case SITE_GOVERNMENT_POLICESTATION:
-      issues.push_back(VIEW_POLICEBEHAVIOR);
-      issues.push_back(VIEW_PRISONS);
-      issues.push_back(VIEW_DRUGS);
-      break;
-   case SITE_GOVERNMENT_COURTHOUSE:
-      issues.push_back(VIEW_DEATHPENALTY);
-      issues.push_back(VIEW_JUSTICES);
-      issues.push_back(VIEW_FREESPEECH);
-      issues.push_back(VIEW_GAY);
-      issues.push_back(VIEW_WOMEN);
-      issues.push_back(VIEW_CIVILRIGHTS);
-      break;
-   case SITE_GOVERNMENT_PRISON:
-      issues.push_back(VIEW_DEATHPENALTY);
-      issues.push_back(VIEW_DRUGS);
-      issues.push_back(VIEW_TORTURE);
-      issues.push_back(VIEW_PRISONS);
-      break;
-   case SITE_GOVERNMENT_ARMYBASE:
-      issues.push_back(VIEW_TORTURE);
-      issues.push_back(VIEW_MILITARY);
-      break;
-   case SITE_GOVERNMENT_WHITE_HOUSE:
-      break;
-   case SITE_GOVERNMENT_INTELLIGENCEHQ:
-      issues.push_back(VIEW_INTELLIGENCE);
-      issues.push_back(VIEW_TORTURE);
-      issues.push_back(VIEW_PRISONS);
-      break;
-   case SITE_INDUSTRY_SWEATSHOP:
-      issues.push_back(VIEW_SWEATSHOPS);
-      issues.push_back(VIEW_IMMIGRATION);
-      break;
-   case SITE_INDUSTRY_POLLUTER:
-      issues.push_back(VIEW_SWEATSHOPS);
-      issues.push_back(VIEW_POLLUTION);
-      break;
-   case SITE_INDUSTRY_NUCLEAR:
-      issues.push_back(VIEW_NUCLEARPOWER);
-      break;
-   case SITE_CORPORATE_HEADQUARTERS:
-      issues.push_back(VIEW_TAXES);
-      issues.push_back(VIEW_CORPORATECULTURE);
-      issues.push_back(VIEW_WOMEN);
-      break;
-   case SITE_CORPORATE_HOUSE:
-      issues.push_back(VIEW_TAXES);
-      issues.push_back(VIEW_CEOSALARY);
-      break;
-   case SITE_MEDIA_AMRADIO:
-      issues.push_back(VIEW_AMRADIO);
-      issues.push_back(VIEW_FREESPEECH);
-      issues.push_back(VIEW_GAY);
-      issues.push_back(VIEW_WOMEN);
-      issues.push_back(VIEW_CIVILRIGHTS);
-      break;
-   case SITE_MEDIA_CABLENEWS:
-      issues.push_back(VIEW_CABLENEWS);
-      issues.push_back(VIEW_FREESPEECH);
-      issues.push_back(VIEW_GAY);
-      issues.push_back(VIEW_WOMEN);
-      issues.push_back(VIEW_CIVILRIGHTS);
-      break;
-   case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
-      issues.push_back(VIEW_TAXES);
-      issues.push_back(VIEW_CEOSALARY);
-      issues.push_back(VIEW_GUNCONTROL);
-      break;
-   case SITE_BUSINESS_CIGARBAR:
-      issues.push_back(VIEW_TAXES);
-      issues.push_back(VIEW_CEOSALARY);
-      issues.push_back(VIEW_WOMEN);
-      break;
-   case SITE_BUSINESS_BANK:
-      issues.push_back(VIEW_TAXES);
-      issues.push_back(VIEW_CEOSALARY);
-      issues.push_back(VIEW_CORPORATECULTURE);
-      break;
-   }
-   for(i=0; i<len(issues); i++)
-      change_public_opinion(issues[i],impact,squad_responsible,impact*10);
-}
-
-/* news - determines the priority of a news story */
-void setpriority(newsstoryst &ns)
+/**
+ * Determine the priority of a news story.
+ */
+static void
+setpriority(newsstoryst &ns)
 {
    // Priority is set differently based on the type of the news story
    switch(ns.type)
@@ -479,8 +74,7 @@ void setpriority(newsstoryst &ns)
       {
          ns.priority=0;
 
-         int crime[CRIMENUM];
-         memset(crime,0,CRIMENUM*sizeof(int));
+         int crime[CRIMENUM] = { 0 };
          // Record all the crimes in this story
          for(int c=0;c<len(ns.crime);c++)
             crime[ns.crime[c]]++;
@@ -742,9 +336,11 @@ void setpriority(newsstoryst &ns)
 }
 
 
-
-/* news - show major news story */
-void displaystory(newsstoryst &ns,bool liberalguardian,int header)
+/**
+ * Show major news story.
+ */
+static void
+displaystory(newsstoryst &ns, bool liberalguardian, int header)
 {
    music.play(MUSIC_NEWSPAPER);
    int it2;
@@ -843,13 +439,12 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
             case NEWSSTORY_WANTEDARREST:
             case NEWSSTORY_GRAFFITIARREST:
             {
-               int crime[CRIMENUM];
-               std::memset(crime,0,sizeof(int)*CRIMENUM);
+               int crime[CRIMENUM] = { 0 };
                for(int c=0;c<len(ns.crime);c++)
                   crime[ns.crime[c]]++;
                if(crime[CRIME_KILLEDSOMEBODY]>1)
                {
-                  if(crime[CRIME_KILLEDSOMEBODY]==2)
+                  if (crime[CRIME_KILLEDSOMEBODY] == 2)
                      strcat(story,"Two");
                   else
                      strcat(story,"Several");
@@ -877,8 +472,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
             case NEWSSTORY_DRUGARREST:
             case NEWSSTORY_BURIALARREST:
             {
-               int crime[CRIMENUM];
-               std::memset(crime,0,sizeof(int)*CRIMENUM);
+               int crime[CRIMENUM] = { 0 };
                for(int c=0;c<len(ns.crime);c++)
                   crime[ns.crime[c]]++;
                strcat(story,"A routine arrest went horribly wrong yesterday, ");
@@ -974,8 +568,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
 
                squadstory_text_opening(ns,liberalguardian,ccs,story);
 
-               int crime[CRIMENUM];
-               memset(crime,0,sizeof(int)*CRIMENUM);
+               int crime[CRIMENUM] = { 0 };
                int typesum=0;
                for(int c=0;c<len(ns.crime);c++)
                {
@@ -1006,7 +599,7 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
 
                if(crime[CRIME_SHUTDOWNREACTOR])
                {
-                  if(law[LAW_NUCLEARPOWER]==2)
+                  if(law[LAW_NUCLEARPOWER] == Alignment::ELITE_LIBERAL)
                   {
                      if(!liberalguardian)
                      {
@@ -1508,8 +1101,8 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
                   if(ns.crime[1]>1)strcat(story,"The bodies had no faces or ");
                   else strcat(story,"The body had no face or ");
                   strcat(story,"fingerprints.  Like, it was all smooth.  ");
-                  if(law[LAW_FREESPEECH]==-2)strcat(story,"[Craziest] thing I've ever seen");
-                  else if(law[LAW_FREESPEECH]==2)strcat(story,"Damnedest thing I've ever seen");
+                  if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"[Craziest] thing I've ever seen");
+                  else if(law[LAW_FREESPEECH] == Alignment::ELITE_LIBERAL)strcat(story,"Damnedest thing I've ever seen");
                   else strcat(story,"D*mnd*st thing I've ever seen");
                }
                else
@@ -1667,6 +1260,427 @@ void displaystory(newsstoryst &ns,bool liberalguardian,int header)
 
    int c;
    do c=getkey(); while(c!='x'&&c!=ESC&&c!=ENTER&&c!=SPACEBAR);
+}
+
+
+/* news - major newspaper reporting on lcs and other topics */
+void majornewspaper(char &clearformess,char canseethings)
+{
+   clearformess = true;
+
+   int n=0;
+
+   generate_random_event_news_stories();
+
+   clean_up_empty_news_stories();
+
+   if(canseethings) run_television_news_stories();
+
+   assign_page_numbers_to_newspaper_stories();
+   if(canseethings) display_newspaper();
+
+   //DELETE STORIES
+   for(n=0;n<len(newsstory);n++)
+      handle_public_opinion_impact(*newsstory[n]);
+   delete_and_clear(newsstory);
+}
+
+void display_newspaper()
+{
+   int writers = liberal_guardian_writing_power();
+
+   for(int n=0;n<len(newsstory);n++)
+   {
+      bool liberalguardian=0;
+      int header = -1;
+      if(writers&&newsstory[n]->type!=NEWSSTORY_MAJOREVENT)
+         liberalguardian=1;
+
+      switch(newsstory[n]->type)
+      {
+         case NEWSSTORY_SQUAD_SITE:
+         case NEWSSTORY_SQUAD_KILLED_SITE:
+            switch(location[newsstory[n]->loc]->type)
+            {
+            case SITE_LABORATORY_COSMETICS:
+               header=VIEW_ANIMALRESEARCH;
+               break;
+            case SITE_LABORATORY_GENETIC:
+               header=VIEW_GENETICS;
+               break;
+            case SITE_GOVERNMENT_POLICESTATION:
+               header=VIEW_POLICEBEHAVIOR;
+               break;
+            case SITE_GOVERNMENT_COURTHOUSE:
+               header=VIEW_JUSTICES;
+               break;
+            case SITE_GOVERNMENT_PRISON:
+               header=VIEW_DEATHPENALTY;
+               break;
+            case SITE_GOVERNMENT_INTELLIGENCEHQ:
+               header=VIEW_INTELLIGENCE;
+               break;
+            case SITE_INDUSTRY_SWEATSHOP:
+               header=VIEW_SWEATSHOPS;
+               break;
+            case SITE_INDUSTRY_POLLUTER:
+               header=VIEW_POLLUTION;
+               break;
+            case SITE_INDUSTRY_NUCLEAR:
+               header=VIEW_NUCLEARPOWER;
+               break;
+            case SITE_CORPORATE_HEADQUARTERS:
+               header=VIEW_CORPORATECULTURE;
+               break;
+            case SITE_CORPORATE_HOUSE:
+               header=VIEW_CEOSALARY;
+               break;
+            case SITE_MEDIA_AMRADIO:
+               header=VIEW_AMRADIO;
+               break;
+            case SITE_MEDIA_CABLENEWS:
+               header=VIEW_CABLENEWS;
+               break;
+            case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
+            case SITE_BUSINESS_CIGARBAR:
+            case SITE_BUSINESS_BANK:
+               header=VIEW_TAXES;
+               break;
+            }
+            break;
+         case NEWSSTORY_SQUAD_ESCAPED:
+         case NEWSSTORY_SQUAD_FLEDATTACK:
+         case NEWSSTORY_SQUAD_DEFENDED:
+         case NEWSSTORY_SQUAD_BROKESIEGE:
+         case NEWSSTORY_SQUAD_KILLED_SIEGEATTACK:
+         case NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE:
+            break;
+         case NEWSSTORY_CCS_NOBACKERS:
+         case NEWSSTORY_CCS_DEFEATED:
+            break;
+      }
+      if(liberalguardian)
+      {
+         if(newsstory[n]->type==NEWSSTORY_CCS_SITE||
+            newsstory[n]->type==NEWSSTORY_CCS_KILLED_SITE)
+         {
+            newsstory[n]->positive=0;
+         }
+         displaystory(*newsstory[n],liberalguardian,header);
+         if(newsstory[n]->positive)newsstory[n]->positive+=1;
+      }
+      else displaystory(*newsstory[n],0,-1);
+   }
+}
+
+void generate_random_event_news_stories()
+{
+   //Conservative Crime Squad Strikes!
+   if(endgamestate < ENDGAME_CCS_DEFEATED &&
+      LCSrandom(30) < endgamestate)
+   {
+      newsstory.push_back(ccs_strikes_story());
+   }
+
+   // The slow defeat of the conservative crime squad...
+   if(endgamestate < ENDGAME_CCS_DEFEATED &&
+      ccsexposure >= CCSEXPOSURE_EXPOSED &&
+      !LCSrandom(60))
+   {
+      advance_ccs_defeat_storyline();
+   }
+
+   // Random major event news stories
+   if(!LCSrandom(60)) {
+      newsstory.push_back(new_major_event());
+   }
+}
+
+void advance_ccs_defeat_storyline()
+{
+   switch(ccsexposure)
+   {
+   default:
+   case CCSEXPOSURE_NONE:
+   case CCSEXPOSURE_LCSGOTDATA:
+      break;
+   case CCSEXPOSURE_EXPOSED:
+      newsstory.push_back(ccs_exposure_story());
+      break;
+   case CCSEXPOSURE_NOBACKERS:
+      newsstory.push_back(ccs_fbi_raid_story());
+      break;
+   }
+}
+
+void clean_up_empty_news_stories()
+{
+   // Delete stories that have no content or shouldn't be reported on
+   for(int n=len(newsstory)-1;n>=0;n--)
+   {
+      // Squad site action stories without crimes
+      if(newsstory[n]->type==NEWSSTORY_SQUAD_SITE&&
+        !len(newsstory[n]->crime))
+      {
+         delete_and_remove(newsstory,n);
+         continue;
+      }
+
+      // Police killed stories without police being killed
+      if(newsstory[n]->type==NEWSSTORY_CARTHEFT ||
+         newsstory[n]->type==NEWSSTORY_NUDITYARREST ||
+         newsstory[n]->type==NEWSSTORY_WANTEDARREST ||
+         newsstory[n]->type==NEWSSTORY_DRUGARREST ||
+         newsstory[n]->type==NEWSSTORY_GRAFFITIARREST ||
+         newsstory[n]->type==NEWSSTORY_BURIALARREST)
+      {
+         char conf=0;
+         for(int c=0;c<len(newsstory[n]->crime);c++)
+         {
+            if(newsstory[n]->crime[c]==CRIME_KILLEDSOMEBODY)
+            {
+               conf=1;
+               break;
+            }
+         }
+         if(!conf)
+         {
+            delete_and_remove(newsstory,n);
+            continue;
+         }
+      }
+
+      // Sieges that aren't police actions
+      if((newsstory[n]->type==NEWSSTORY_SQUAD_ESCAPED||
+          newsstory[n]->type==NEWSSTORY_SQUAD_FLEDATTACK||
+          newsstory[n]->type==NEWSSTORY_SQUAD_DEFENDED||
+          newsstory[n]->type==NEWSSTORY_SQUAD_BROKESIEGE||
+          newsstory[n]->type==NEWSSTORY_SQUAD_KILLED_SIEGEATTACK||
+          newsstory[n]->type==NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE)&&
+          newsstory[n]->siegetype!=SIEGE_POLICE)
+      {
+         delete_and_remove(newsstory,n);
+         continue;
+      }
+   }
+}
+
+void assign_page_numbers_to_newspaper_stories()
+{
+   for(int n=len(newsstory)-1;n>=0;n--)
+   {
+      setpriority(*newsstory[n]);
+      // Suppress squad actions that aren't worth a story
+      if(newsstory[n]->type==NEWSSTORY_SQUAD_SITE &&
+       ((newsstory[n]->priority<50 &&
+         newsstory[n]->claimed==0)||
+         newsstory[n]->priority<4))
+      {
+         delete_and_remove(newsstory,n);
+         continue;
+      }
+      newsstory[n]->page=-1;
+   }
+   char acted;
+   int curpage=1,curguardianpage=1;
+   do
+   {
+      acted=0;
+      // Sort the major newspapers
+      int maxn=-1,maxp=-1;
+      for(int n=0;n<len(newsstory);n++)
+      {
+         if(newsstory[n]->priority>maxp&&
+            newsstory[n]->page==-1)
+         {
+            maxn=n;
+            maxp=newsstory[n]->priority;
+         }
+      }
+      if(maxn!=-1)
+      {
+         if(newsstory[maxn]->priority<30&&curpage==1) curpage=2;
+         if(newsstory[maxn]->priority<25&&curpage<3) curpage=3+LCSrandom(2);
+         if(newsstory[maxn]->priority<20&&curpage<5) curpage=5+LCSrandom(5);
+         if(newsstory[maxn]->priority<15&&curpage<10) curpage=10+LCSrandom(10);
+         if(newsstory[maxn]->priority<10&&curpage<20) curpage=20+LCSrandom(10);
+         if(newsstory[maxn]->priority<5&&curpage<30) curpage=30+LCSrandom(20);
+
+         newsstory[maxn]->page=curpage;
+         newsstory[maxn]->guardianpage=curguardianpage;
+         curpage++;
+         curguardianpage++;
+         acted=1;
+      }
+   } while(acted);
+}
+
+void handle_public_opinion_impact(const newsstoryst &ns)
+{
+   // Check if this function is meant to handle public opinion impact
+   // for this type of news story (primarily deals with squad/site actions)
+   int okay_types[] = { NEWSSTORY_SQUAD_SITE, NEWSSTORY_SQUAD_ESCAPED, NEWSSTORY_SQUAD_FLEDATTACK,
+      NEWSSTORY_SQUAD_DEFENDED, NEWSSTORY_SQUAD_BROKESIEGE, NEWSSTORY_SQUAD_KILLED_SIEGEATTACK,
+      NEWSSTORY_SQUAD_KILLED_SIEGEESCAPE, NEWSSTORY_SQUAD_KILLED_SITE, NEWSSTORY_WANTEDARREST,
+      NEWSSTORY_GRAFFITIARREST, NEWSSTORY_CCS_SITE, NEWSSTORY_CCS_KILLED_SITE };
+   int okay_type_num = len(okay_types);
+
+   int i;
+   for(i=0; i < okay_type_num; i++)
+   {
+      if(okay_types[i] == ns.type)
+         break;
+   }
+   if(i == okay_type_num) return; // No impact for this news story type
+
+   int impact = ns.priority;
+
+   // Magnitude of impact will be affected by which page of the newspaper the story appears on
+   if(ns.page==1) impact*=5;
+   else if(ns.page==2) impact*=3;
+   else if(ns.page==3) impact*=2;
+
+   int maxpower = 1;
+   if(ns.page==1) maxpower=100;
+   else if(ns.page<5) maxpower=100-10*ns.page;
+   else if(ns.page<10) maxpower=40;
+   else if(ns.page<20) maxpower=20;
+   else if(ns.page<30) maxpower=10;
+   else if(ns.page<40) maxpower=5;
+   else maxpower=1;
+
+   // Five times effectiveness with the Liberal Guardian
+   if(ns.positive==2)
+      impact*=5;
+   // Cap power
+   if(impact>maxpower)
+      impact=maxpower;
+
+   impact/=10;
+   impact++;
+
+   // Account for squad responsible, rampages, and Liberal Guardian bias
+   Alignment impact_direction = Alignment::LIBERAL;
+   if(ns.type==NEWSSTORY_CCS_SITE || ns.type==NEWSSTORY_CCS_KILLED_SITE)
+   {
+      impact_direction = Alignment::CONSERVATIVE;
+      if(ns.positive)
+         change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD,impact,0);
+      else
+         change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD,-impact,0);
+   }
+   else
+   {
+      change_public_opinion(VIEW_LIBERALCRIMESQUAD,2+impact);
+      impact_direction = Alignment::LIBERAL;
+      if(ns.positive)
+         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,impact);
+      else
+         change_public_opinion(VIEW_LIBERALCRIMESQUADPOS,-impact);
+   }
+   impact *= (to_index(impact_direction) - 2);
+   int squad_responsible = (to_index(impact_direction) - 2);
+   if(!ns.positive) impact /= 4;
+
+   // Impact gun control issue
+   change_public_opinion(VIEW_GUNCONTROL, ABS(impact)/10, 0, ABS(impact)*10);
+
+   if(ns.loc == -1) return;
+
+   // Location-specific issue impact
+   std::vector<int> issues;
+   switch(location[ns.loc]->type)
+   {
+   case SITE_LABORATORY_COSMETICS:
+      issues.push_back(VIEW_ANIMALRESEARCH);
+      issues.push_back(VIEW_WOMEN);
+      break;
+   case SITE_LABORATORY_GENETIC:
+      issues.push_back(VIEW_ANIMALRESEARCH);
+      issues.push_back(VIEW_GENETICS);
+      break;
+   case SITE_GOVERNMENT_POLICESTATION:
+      issues.push_back(VIEW_POLICEBEHAVIOR);
+      issues.push_back(VIEW_PRISONS);
+      issues.push_back(VIEW_DRUGS);
+      break;
+   case SITE_GOVERNMENT_COURTHOUSE:
+      issues.push_back(VIEW_DEATHPENALTY);
+      issues.push_back(VIEW_JUSTICES);
+      issues.push_back(VIEW_FREESPEECH);
+      issues.push_back(VIEW_GAY);
+      issues.push_back(VIEW_WOMEN);
+      issues.push_back(VIEW_CIVILRIGHTS);
+      break;
+   case SITE_GOVERNMENT_PRISON:
+      issues.push_back(VIEW_DEATHPENALTY);
+      issues.push_back(VIEW_DRUGS);
+      issues.push_back(VIEW_TORTURE);
+      issues.push_back(VIEW_PRISONS);
+      break;
+   case SITE_GOVERNMENT_ARMYBASE:
+      issues.push_back(VIEW_TORTURE);
+      issues.push_back(VIEW_MILITARY);
+      break;
+   case SITE_GOVERNMENT_WHITE_HOUSE:
+      break;
+   case SITE_GOVERNMENT_INTELLIGENCEHQ:
+      issues.push_back(VIEW_INTELLIGENCE);
+      issues.push_back(VIEW_TORTURE);
+      issues.push_back(VIEW_PRISONS);
+      break;
+   case SITE_INDUSTRY_SWEATSHOP:
+      issues.push_back(VIEW_SWEATSHOPS);
+      issues.push_back(VIEW_IMMIGRATION);
+      break;
+   case SITE_INDUSTRY_POLLUTER:
+      issues.push_back(VIEW_SWEATSHOPS);
+      issues.push_back(VIEW_POLLUTION);
+      break;
+   case SITE_INDUSTRY_NUCLEAR:
+      issues.push_back(VIEW_NUCLEARPOWER);
+      break;
+   case SITE_CORPORATE_HEADQUARTERS:
+      issues.push_back(VIEW_TAXES);
+      issues.push_back(VIEW_CORPORATECULTURE);
+      issues.push_back(VIEW_WOMEN);
+      break;
+   case SITE_CORPORATE_HOUSE:
+      issues.push_back(VIEW_TAXES);
+      issues.push_back(VIEW_CEOSALARY);
+      break;
+   case SITE_MEDIA_AMRADIO:
+      issues.push_back(VIEW_AMRADIO);
+      issues.push_back(VIEW_FREESPEECH);
+      issues.push_back(VIEW_GAY);
+      issues.push_back(VIEW_WOMEN);
+      issues.push_back(VIEW_CIVILRIGHTS);
+      break;
+   case SITE_MEDIA_CABLENEWS:
+      issues.push_back(VIEW_CABLENEWS);
+      issues.push_back(VIEW_FREESPEECH);
+      issues.push_back(VIEW_GAY);
+      issues.push_back(VIEW_WOMEN);
+      issues.push_back(VIEW_CIVILRIGHTS);
+      break;
+   case SITE_RESIDENTIAL_APARTMENT_UPSCALE:
+      issues.push_back(VIEW_TAXES);
+      issues.push_back(VIEW_CEOSALARY);
+      issues.push_back(VIEW_GUNCONTROL);
+      break;
+   case SITE_BUSINESS_CIGARBAR:
+      issues.push_back(VIEW_TAXES);
+      issues.push_back(VIEW_CEOSALARY);
+      issues.push_back(VIEW_WOMEN);
+      break;
+   case SITE_BUSINESS_BANK:
+      issues.push_back(VIEW_TAXES);
+      issues.push_back(VIEW_CEOSALARY);
+      issues.push_back(VIEW_CORPORATECULTURE);
+      break;
+   }
+   for(i=0; i<len(issues); i++)
+      change_public_opinion(issues[i],impact,squad_responsible,impact*10);
 }
 
 
@@ -1974,21 +1988,39 @@ newsstoryst* new_major_event()
       // News stories that don't apply when the law is extreme -- covering
       // nuclear power when it's banned, police corruption when it doesn't
       // exist, out of control pollution when it's under control, etc.
-      if(ns->positive) {
-         if(ns->view==VIEW_WOMEN&&law[LAW_ABORTION]==-2)continue; // Abortion banned
-         if(ns->view==VIEW_DEATHPENALTY&&law[LAW_DEATHPENALTY]==2)continue; // Death penalty banned
-         if(ns->view==VIEW_NUCLEARPOWER&&law[LAW_NUCLEARPOWER]==2)continue; // Nuclear power banned
-         if(ns->view==VIEW_ANIMALRESEARCH&&law[LAW_ANIMALRESEARCH]==2)continue; // Animal research banned
-         if(ns->view==VIEW_POLICEBEHAVIOR&&law[LAW_POLICEBEHAVIOR]==2)continue; // Police corruption eliminated
-         if(ns->view==VIEW_INTELLIGENCE&&law[LAW_PRIVACY]==2)continue; // Privacy rights respected
-         if(ns->view==VIEW_SWEATSHOPS&&law[LAW_LABOR]==2)continue; // Sweatshops nonexistant
-         if(ns->view==VIEW_POLLUTION&&law[LAW_POLLUTION]>=1)continue; // Pollution under control
-         if(ns->view==VIEW_CORPORATECULTURE&&law[LAW_CORPORATE]==2)continue; // Regulation controls corporate corruption
-         if(ns->view==VIEW_CEOSALARY&&law[LAW_CORPORATE]==2)continue; // CEOs aren't rich
+      if (ns->positive) {
+         if (ns->view==VIEW_WOMEN&&law[LAW_ABORTION] == Alignment::ARCH_CONSERVATIVE)
+           continue; // Abortion banned
+         if (ns->view==VIEW_DEATHPENALTY&&law[LAW_DEATHPENALTY] == Alignment::ELITE_LIBERAL)
+           continue; // Death penalty banned
+         if (ns->view==VIEW_NUCLEARPOWER&&law[LAW_NUCLEARPOWER] == Alignment::ELITE_LIBERAL)
+           continue; // Nuclear power banned
+         if (ns->view==VIEW_ANIMALRESEARCH&&law[LAW_ANIMALRESEARCH] == Alignment::ELITE_LIBERAL)
+           continue; // Animal research banned
+         if (ns->view==VIEW_POLICEBEHAVIOR&&law[LAW_POLICEBEHAVIOR] == Alignment::ELITE_LIBERAL)
+           continue; // Police corruption eliminated
+         if (ns->view==VIEW_INTELLIGENCE&&law[LAW_PRIVACY] == Alignment::ELITE_LIBERAL)
+           continue; // Privacy rights respected
+         if (ns->view==VIEW_SWEATSHOPS&&law[LAW_LABOR] == Alignment::ELITE_LIBERAL)
+           continue; // Sweatshops nonexistant
+         if (ns->view==VIEW_POLLUTION
+          && (law[LAW_POLLUTION] == Alignment::LIBERAL
+           || law[LAW_POLLUTION] == Alignment::ELITE_LIBERAL))
+           continue; // Pollution under control
+         if (ns->view==VIEW_CORPORATECULTURE&&law[LAW_CORPORATE] == Alignment::ELITE_LIBERAL)
+           continue; // Regulation controls corporate corruption
+         if (ns->view==VIEW_CEOSALARY&&law[LAW_CORPORATE] == Alignment::ELITE_LIBERAL)
+           continue; // CEOs aren't rich
       } else {
-         if(ns->view==VIEW_WOMEN&&law[LAW_ABORTION]<2)continue; // Partial birth abortion banned
-         if(ns->view==VIEW_AMRADIO&&law[LAW_FREESPEECH]==-2)continue; // AM Radio is censored to oblivion
-         if(ns->view==VIEW_ANIMALRESEARCH&&law[LAW_ANIMALRESEARCH]==2)continue; // Animal research banned
+         if (ns->view==VIEW_WOMEN
+           && (law[LAW_ABORTION] == Alignment::ARCH_CONSERVATIVE
+            || law[LAW_ABORTION] == Alignment::CONSERVATIVE
+            || law[LAW_ABORTION] == Alignment::MODERATE))
+           continue; // Partial birth abortion banned
+         if (ns->view==VIEW_AMRADIO&&law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
+           continue; // AM Radio is censored to oblivion
+         if (ns->view==VIEW_ANIMALRESEARCH&&law[LAW_ANIMALRESEARCH] == Alignment::ELITE_LIBERAL)
+           continue; // Animal research banned
       }
 
       break;
@@ -2048,9 +2080,9 @@ newsstoryst* ccs_exposure_story()
    int arrestsleft = 8;
    for(int i=0; i<SENATENUM; i++)
    {
-      if((senate[i]==-2 || senate[i]==-1)&&!LCSrandom(4))
+      if ((senate[i] == Alignment::ARCH_CONSERVATIVE || senate[i] == Alignment::CONSERVATIVE) && !LCSrandom(4))
       {
-         senate[i]=ALIGN_ELITELIBERAL;
+         senate[i]=Alignment::ELITE_LIBERAL;
          arrestsleft--;
          if(arrestsleft<=0) break;
       }
@@ -2058,19 +2090,17 @@ newsstoryst* ccs_exposure_story()
    arrestsleft = 17;
    for(int i=0; i<HOUSENUM; i++)
    {
-      if((house[i]==-2 || house[i]==-1)&&!LCSrandom(4))
+      if ((house[i] == Alignment::ARCH_CONSERVATIVE || house[i] == Alignment::CONSERVATIVE) && !LCSrandom(4))
       {
-         house[i]=ALIGN_ELITELIBERAL;
+         house[i]=Alignment::ELITE_LIBERAL;
          arrestsleft--;
          if(arrestsleft<=0) break;
       }
    }
    // change police regulation issue to be more liberal
-   law[LAW_POLICEBEHAVIOR] += 2;
-   if(law[LAW_POLICEBEHAVIOR] > ALIGN_ELITELIBERAL)
-      law[LAW_POLICEBEHAVIOR] = ALIGN_ELITELIBERAL;
-   change_public_opinion(VIEW_POLICEBEHAVIOR,50);
-   change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD,50);
+   law[LAW_POLICEBEHAVIOR] = shift_left(law[LAW_POLICEBEHAVIOR], 2);
+   change_public_opinion(VIEW_POLICEBEHAVIOR, 50);
+   change_public_opinion(VIEW_CONSERVATIVECRIMESQUAD, 50);
 
    return ns;
 }

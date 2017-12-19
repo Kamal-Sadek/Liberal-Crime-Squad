@@ -1,30 +1,29 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-//
-This file is part of Liberal Crime Squad.                                             //
-//
-Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-it under the terms of the GNU General Public License as published by            //
-the Free Software Foundation; either version 2 of the License, or               //
-(at your option) any later version.                                             //
-//
-Liberal Crime Squad is distributed in the hope that it will be useful,          //
-but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-GNU General Public License for more details.                                    //
-//
-You should have received a copy of the GNU General Public License               //
-along with Liberal Crime Squad; if not, write to the Free Software              //
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-This file was created by Chris Johnson (grundee@users.sourceforge.net)
-by copying code from game.cpp.
-To see descriptions of files and functions, see the list at
-the bottom of includes.h in the top src folder.
-*/
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
 
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
@@ -61,6 +60,7 @@ the bottom of includes.h in the top src folder.
 // it out for yourself.
 
 #include <externs.h>
+#include "monthly/monthly.h"
 
 /* base - review and reorganize liberals */
 void review()
@@ -80,7 +80,7 @@ void review()
       for(int p=0;p<len(pool);p++)
       {
          if(pool[p]->is_active_liberal()) n[0]++; // Active Liberals
-         if(pool[p]->align!=ALIGN_LIBERAL && pool[p]->alive) n[1]++; // Hostages
+         if(pool[p]->align!=Alignment::LIBERAL && pool[p]->alive) n[1]++; // Hostages
          if(pool[p]->clinic && pool[p]->alive) n[2]++; // Hospital
          if(pool[p]->is_imprisoned()) n[3]++; // Justice System
          if(pool[p]->is_lcs_sleeper()) n[4]++; // Sleepers
@@ -138,42 +138,42 @@ void review()
          else if(p==len(squad))
          {
             set_color(COLOR_GREEN,COLOR_BLACK,1);
-            mvaddstr(y,0,"1 - Active Liberals ("+tostring(n[0])+')');
+            mvaddstr(y,0,"1 - Active Liberals ("+std::to_string(n[0])+')');
          }
          else if(p==len(squad)+1)
          {
             set_color(COLOR_RED,COLOR_BLACK,1);
-            mvaddstr(y,0,"2 - Hostages ("+tostring(n[1])+')');
+            mvaddstr(y,0,"2 - Hostages ("+std::to_string(n[1])+')');
          }
          else if(p==len(squad)+2)
          {
             set_color(COLOR_WHITE,COLOR_BLACK,1);
-            mvaddstr(y,0,"3 - Hospital ("+tostring(n[2])+')');
+            mvaddstr(y,0,"3 - Hospital ("+std::to_string(n[2])+')');
          }
          else if(p==len(squad)+3)
          {
             set_color(COLOR_YELLOW,COLOR_BLACK,1);
-            mvaddstr(y,0,"4 - Justice System ("+tostring(n[3])+')');
+            mvaddstr(y,0,"4 - Justice System ("+std::to_string(n[3])+')');
          }
          else if(p==len(squad)+4)
          {
             set_color(COLOR_MAGENTA,COLOR_BLACK,1);
-            mvaddstr(y,0,"5 - Sleepers ("+tostring(n[4])+')');
+            mvaddstr(y,0,"5 - Sleepers ("+std::to_string(n[4])+')');
          }
          else if(p==len(squad)+5)
          {
             set_color(COLOR_BLACK,COLOR_BLACK,1);
-            mvaddstr(y,0,"6 - The Dead ("+tostring(n[5])+')');
+            mvaddstr(y,0,"6 - The Dead ("+std::to_string(n[5])+')');
          }
          else if(p==len(squad)+6)
          {
             set_color(COLOR_BLUE,COLOR_BLACK,1);
-            mvaddstr(y,0,"7 - Away ("+tostring(n[6])+')');
+            mvaddstr(y,0,"7 - Away ("+std::to_string(n[6])+')');
          }
          else if(p==len(squad)+7)
          {
             set_color(COLOR_CYAN,COLOR_BLACK,1);
-            mvaddstr(y,0,"8 - Review and Move Equipment ("+tostring(n[7])+')');
+            mvaddstr(y,0,"8 - Review and Move Equipment ("+std::to_string(n[7])+')');
          }
       }
 
@@ -243,7 +243,7 @@ void review_mode(short mode)
             temppool.push_back(pool[p]);
          break;
       case REVIEWMODE_HOSTAGES:
-         if(pool[p]->align!=ALIGN_LIBERAL && pool[p]->alive)
+         if(pool[p]->align!=Alignment::LIBERAL && pool[p]->alive)
             temppool.push_back(pool[p]);
          break;
       case REVIEWMODE_CLINIC:
@@ -450,9 +450,11 @@ void review_mode(short mode)
             }
          case REVIEWMODE_SLEEPERS:
             {
-               if(temppool[p]->align==-1)set_color(COLOR_RED,COLOR_BLACK,1);
-               else if(temppool[p]->align==0)set_color(COLOR_WHITE,COLOR_BLACK,1);
-               else set_color(COLOR_GREEN,COLOR_BLACK,1);
+               if (temppool[p]->align == Alignment::CONSERVATIVE)
+                 set_color(COLOR_RED, COLOR_BLACK, 1);
+               else if(temppool[p]->align == Alignment::MODERATE)
+                 set_color(COLOR_WHITE, COLOR_BLACK, 1);
+               else set_color(COLOR_GREEN, COLOR_BLACK, 1);
                addstr(temppool[p]->get_type_name());
                break;
             }
@@ -512,9 +514,9 @@ void review_mode(short mode)
                erase();
 
                move(0,0);
-               if(temppool[p]->align!=1)
+               if(temppool[p]->align != Alignment::LIBERAL)
                {
-                  set_color(COLOR_RED,COLOR_BLACK,1);
+                  set_color(COLOR_RED, COLOR_BLACK, 1);
                   addstr("Profile of an Automaton");
                }
                else
@@ -541,7 +543,8 @@ void review_mode(short mode)
 
                move(23,0);
 
-               if(temppool[p]->align!=1) addstr("Press N to change this Automaton's Code Name");
+               if (temppool[p]->align != Alignment::LIBERAL)
+                 addstr("Press N to change this Automaton's Code Name");
                else addstr("N - Change Code Name      G - Fix Gender Label");
                if(len(temppool)>1) addstr("    LEFT/RIGHT - View Others");
                move(24,0);
@@ -580,7 +583,7 @@ void review_mode(short mode)
 
                   enter_name(24,0,temppool[p]->name,CREATURE_NAMELEN,temppool[p]->propername);
                }
-               else if(c=='g' && temppool[p]->align==1)
+               else if (c=='g' && temppool[p]->align == Alignment::LIBERAL)
                {
                   temppool[p]->gender_liberal++;
                   if(temppool[p]->gender_liberal > 2)
@@ -936,9 +939,11 @@ void assemblesquad(squadst *cursquad)
             }
          }
 
-         if(temppool[p]->align==-1) set_color(COLOR_RED,COLOR_BLACK,1);
-         else if(temppool[p]->align==0) set_color(COLOR_WHITE,COLOR_BLACK,1);
-         else set_color(COLOR_GREEN,COLOR_BLACK,1);
+         if (temppool[p]->align == Alignment::CONSERVATIVE)
+           set_color(COLOR_RED, COLOR_BLACK, 1);
+         else if (temppool[p]->align == Alignment::MODERATE)
+           set_color(COLOR_WHITE, COLOR_BLACK, 1);
+         else set_color(COLOR_GREEN, COLOR_BLACK, 1);
          move(y,50);
          addstr(temppool[p]->get_type_name());
          y++;
@@ -950,7 +955,7 @@ void assemblesquad(squadst *cursquad)
       move(23,0);
       addpagestr();
       addstr(" T to sort people.");
-		move(23,50);
+      move(23,50);
       addstr("V - View a Liberal");
       move(24,0);
       if(partysize>0) addstr("Enter - The squad is ready.");
@@ -1081,7 +1086,7 @@ void assemblesquad(squadst *cursquad)
          for(int p=0;p<6;p++)
             if(cursquad->squad[p])
             {  // It is good if either there is at least one Liberal, or if the squad is completely empty
-               if(cursquad->squad[p]->align==1)
+               if(cursquad->squad[p]->align == Alignment::LIBERAL)
                {  good=true; break; } // We found a Liberal, it's good
                else good=false; // We found a non-Liberal, this is bad unless we can find a Liberal too
             }
@@ -1348,7 +1353,7 @@ void promoteliberals()
    vector<Creature *> temppool;
    vector<int> level;
    for(int p=0;p<len(pool);p++)
-      if(pool[p]->alive&&pool[p]->align==1)
+      if (pool[p]->alive && pool[p]->align == Alignment::LIBERAL)
          temppool.push_back(pool[p]);
 
    if(!len(temppool)) return;

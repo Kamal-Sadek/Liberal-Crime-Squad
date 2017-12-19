@@ -1,24 +1,26 @@
 /*
-This file handles the loading of init.txt
+ * Handle the loading of init.txt.
+ */
+/*
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
-This file is part of Liberal Crime Squad.
-
-    Liberal Crime Squad is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Liberal Crime Squad is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Liberal Crime Squad; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA
-
-*/
-
+#include <algorithm>
 #include <externs.h>
 
 void setconfigoption(std::string name, std::string value)
@@ -51,7 +53,7 @@ void setconfigoption(std::string name, std::string value)
          autosave=true;
 
    }
-   #ifdef WIN32
+   #ifdef _WIN32
    else if(name == "fixcleartype") // this setting is only true if set in the file AND running Windows XP or later, otherwise it's false
    {
       if(stringtobool(value)==1)
@@ -94,7 +96,7 @@ void loadinitfile()
    }
    file.close();
 
-   #ifdef WIN32
+   #ifdef _WIN32
    begin_cleartype_fix(); // won't do anything unless fixcleartype is true
    #endif
 }

@@ -4,25 +4,30 @@ This file is a complete rewrite of the LCS I/O system.
 
 The original lcsio.h can be found in lcsio-old.h in the sourceforge Subversion
 repository.
-
-This file is part of Liberal Crime Squad.
-
-    Liberal Crime Squad is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
-    (at your option) any later version.
-
-    Liberal Crime Squad is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Liberal Crime Squad; if not, write to the Free Software
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA
 */
+/*
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 #include <externs.h>
+#include "tinydir.h"
+
+char homedir[MAX_PATH_SIZE];
 
 const char* arttest="newspic.cpc";
 bool initialized=false;
@@ -31,7 +36,7 @@ const char *art_search_paths[]=
    #ifdef INSTALL_DATA_DIR
    INSTALL_DATA_DIR "/lcs/art/",
    #endif
-   #ifndef WIN32
+   #ifndef _WIN32
    "/usr/local/share/lcs/art/",
    "/usr/share/lcs/art/",
    "/usr/games/share/lcs/art/",
@@ -55,7 +60,7 @@ bool LCSFileExists(const char* filename)
 //Create the home directory if it does not exist.
 bool LCSInitHomeDir()
 {
-   #ifndef WIN32
+   #ifndef _WIN32
    char* homeenv=getenv("HOME");
    #else
    char* homeenv=(char*)"./";
@@ -66,14 +71,14 @@ bool LCSInitHomeDir()
    if(str[len(str)-1]!='/')
       str+="/";
 
-   #ifndef WIN32
+   #ifndef _WIN32
    str+=".lcs/";
    #endif
 
    strncpy(homedir,str,MAX_PATH_SIZE);
    if((!LCSFileExists(homedir)) && (strncmp(homedir,".",1)!=0))
    {
-      #ifdef WIN32
+      #ifdef _WIN32
       if(_mkdir(homedir)!=0)
          return false;
       #else

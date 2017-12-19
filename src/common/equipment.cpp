@@ -1,30 +1,29 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-    This file was created by Chris Johnson (grundee@users.sourceforge.net)
-    by copying code from game.cpp.
-    To see descriptions of files and functions, see the list at
-    the bottom of includes.h in the top src folder.
-*/
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
 
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
@@ -60,6 +59,7 @@ This file is part of Liberal Crime Squad.                                       
 // your favorite text editor. If you're on Mac OS X, well that's UNIX-based, figure
 // it out for yourself.
 
+#include <algorithm>
 #include <externs.h>
 
 /* prompt user to enter an amount of items to equip, move, or sell */
@@ -119,7 +119,7 @@ void equip(vector<Item *> &loot,int loc)
          string s=loot[l]->equip_title();
 
          if(loot[l]->get_number()>1)
-            s+=" x"+tostring(loot[l]->get_number());
+            s+=" x"+std::to_string(loot[l]->get_number());
          str[0]=l-page*18+'A';
          str[1]='\x0';
          strcat(str," - ");
@@ -415,9 +415,9 @@ void moveloot(vector<Item *> &dest,vector<Item *> &source)
          if(source[l]->get_number()>1)
          {
             s+=" ";
-            if(selected[l]>0) s+=tostring(selected[l])+"/";
+            if(selected[l]>0) s+=std::to_string(selected[l])+"/";
             else s+="x";
-            s+=tostring(source[l]->get_number());
+            s+=std::to_string(source[l]->get_number());
          }
 
          str[0]=l-page*18+'A';

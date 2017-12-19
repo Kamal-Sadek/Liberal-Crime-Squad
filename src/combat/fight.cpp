@@ -1,32 +1,34 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
-*/
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
+#include "externs.h"
 
-#include <externs.h>
+#include "items/money.h"
+#include "locations/world.h"
+
 
 bool goodguyattack = false;
 
@@ -59,7 +61,7 @@ void youattack()
                   encounter[e].stunned==0)
                   super_enemies.push_back(e);
                else if((encounter[e].is_armed()||
-                       (encounter[e].type==CREATURE_COP&&encounter[e].align==ALIGN_MODERATE)||
+                       (encounter[e].type==CREATURE_COP&&encounter[e].align==Alignment::MODERATE)||
                         encounter[e].type==CREATURE_SCIENTIST_EMINENT||
                         encounter[e].type==CREATURE_JUDGE_LIBERAL||
                         encounter[e].type==CREATURE_JUDGE_CONSERVATIVE||
@@ -114,7 +116,7 @@ void youattack()
 
       char actual;
       short beforeblood=encounter[target].blood;
-      if(encounter[target].align==1) mistake=1;
+      if(encounter[target].align == Alignment::LIBERAL) mistake=1;
       attack(*activesquad->squad[p],encounter[target],mistake,actual);
 
       if(actual)
@@ -170,10 +172,10 @@ void youattack()
    {
       for(int p=0;p<len(pool);p++)
       {
-         if(!pool[p]->alive) continue;
-         if(pool[p]->align!=1) continue;
-         if(pool[p]->squadid!=-1) continue;
-         if(pool[p]->location!=cursite) continue;
+         if (!pool[p]->alive) continue;
+         if (pool[p]->align != Alignment::LIBERAL) continue;
+         if (pool[p]->squadid != -1) continue;
+         if (pool[p]->location != cursite) continue;
 
          // Juice check to engage in cover fire
          // 10% chance for every 10 juice, starting at
@@ -288,7 +290,7 @@ void enemyattack()
       if(!encounter[e].exists) continue;
       if(!encounter[e].alive) continue;
 
-      if(sitealarm==1&&encounter[e].type==CREATURE_BOUNCER&&encounter[e].align!=ALIGN_LIBERAL)
+      if(sitealarm==1&&encounter[e].type==CREATURE_BOUNCER&&encounter[e].align!=Alignment::LIBERAL)
          conservatise(encounter[e]);
       if(encounter[e].enemy()) encounter[e].cantbluff=2;
 
@@ -370,9 +372,9 @@ void enemyattack()
       {
          for(e2=0;e2<ENCMAX;e2++)
          {
-            if(!encounter[e2].exists) continue;
-            if(!encounter[e2].alive) continue;
-            if(encounter[e2].align!=-1) continue;
+            if (!encounter[e2].exists) continue;
+            if (!encounter[e2].alive) continue;
+            if (encounter[e2].align != Alignment::CONSERVATIVE) continue;
 
             goodtarg.push_back(e2);
          }
@@ -502,7 +504,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    for(int e=0;e<ENCMAX;e++) if(encounter[e].exists) encnum++;
 
    if(!force_melee &&
-    (((a.type==CREATURE_COP&&a.align==ALIGN_MODERATE&&a.enemy())||
+    (((a.type==CREATURE_COP&&a.align==Alignment::MODERATE&&a.enemy())||
        a.type==CREATURE_SCIENTIST_EMINENT||
        a.type==CREATURE_JUDGE_LIBERAL||
        a.type==CREATURE_JUDGE_CONSERVATIVE||
@@ -512,9 +514,9 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
        a.type==CREATURE_NEWSANCHOR||
        a.type==CREATURE_MILITARYOFFICER||
        a.get_weapon().has_musical_attack()) &&
-      (a.get_weapon().has_musical_attack() || !a.is_armed() || a.align!=1)))
+      (a.get_weapon().has_musical_attack() || !a.is_armed() || a.align != Alignment::LIBERAL)))
    {
-      if(a.align==1||encnum<ENCMAX)
+      if(a.align == Alignment::LIBERAL||encnum<ENCMAX)
       {
          specialattack(a, t, actual);
          return;
@@ -602,7 +604,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
    }
    else
    {
-      if(attack_used->can_backstab && a.align==ALIGN_LIBERAL && !mistake)
+      if(attack_used->can_backstab && a.align==Alignment::LIBERAL && !mistake)
       {
          if(t.cantbluff<1 && sitealarm<1)
          {
@@ -889,7 +891,7 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
          case 3: strcat(str," three times"); break;
          case 4: strcat(str," four times"); break;
          case 5: strcat(str," five times"); break;
-         default: strcat(str," "+tostring(bursthits)+" times"); break;
+         default: strcat(str," "+std::to_string(bursthits)+" times"); break;
          }
       }
       else if(attack_used->always_describe_hit)
@@ -1139,15 +1141,19 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
             {
                target->die();
 
+#if 0
+               // NB work out how to do this
                if(t.align==-a.align)
                   addjuice(a,5+t.juice/20,1000); // Instant juice
                else addjuice(a,-(5+t.juice/20),-50);
+#endif
 
                if(target->squadid!=-1)
                {
-                  if(target->align==1) stat_dead++;
+                  if(target->align == Alignment::LIBERAL) stat_dead++;
                }
-               else if(target->enemy()&&(t.animalgloss!=ANIMALGLOSS_ANIMAL||law[LAW_ANIMALRESEARCH]==2))
+               else if (target->enemy()
+                     &&(t.animalgloss != ANIMALGLOSS_ANIMAL || law[LAW_ANIMALRESEARCH] == Alignment::ELITE_LIBERAL))
                {
                   stat_kills++;
                   if(location[cursite]->siege.siege) location[cursite]->siege.kills++;
@@ -1158,9 +1164,9 @@ void attack(Creature &a,Creature &t,char mistake,char &actual,bool force_melee)
                      ccs_siege_kills++;
                   }
                }
-               if(target->squadid==-1 &&
-                 (target->animalgloss!=ANIMALGLOSS_ANIMAL||law[LAW_ANIMALRESEARCH]==2) &&
-                 !sneak_attack)
+               if (target->squadid == -1
+               && (target->animalgloss != ANIMALGLOSS_ANIMAL || law[LAW_ANIMALRESEARCH] == Alignment::ELITE_LIBERAL)
+               && !sneak_attack)
                {
                   sitecrime+=10;
                   sitestory->crime.push_back(CRIME_KILLEDSOMEBODY);
@@ -1927,9 +1933,9 @@ void specialattack(Creature &a, Creature &t, char &actual)
    strcat(str," ");
 
    int attack=0;
-   if(a.align!=1)
+   if (a.align != Alignment::LIBERAL)
       attack=a.attribute_roll(ATTRIBUTE_WISDOM)+t.get_attribute(ATTRIBUTE_WISDOM,false);
-   else if(a.align==1)
+   else if (a.align == Alignment::LIBERAL)
       attack=a.attribute_roll(ATTRIBUTE_HEART)+t.get_attribute(ATTRIBUTE_HEART,false);
 
    switch(a.type)
@@ -1940,7 +1946,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
-         if(t.align==1)
+         if(t.align == Alignment::LIBERAL)
             resist=t.skill_roll(SKILL_LAW)+
                    t.attribute_roll(ATTRIBUTE_HEART);
          else
@@ -1952,14 +1958,14 @@ void specialattack(Creature &a, Creature &t, char &actual)
          switch(LCSrandom(3))
          {
             case 0:strcat(str,"debates scientific ethics with");break;
-            case 1:if(a.align==-1)strcat(str,"explains the benefits of research to");
+            case 1:if(a.align == Alignment::CONSERVATIVE)strcat(str,"explains the benefits of research to");
                    else strcat(str,"explains ethical research to");break;
             case 2:strcat(str,"discusses the scientific method with");break;
          }
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
-         if(t.align==1)
+         if(t.align == Alignment::LIBERAL)
             resist=t.skill_roll(SKILL_SCIENCE)+
                    t.attribute_roll(ATTRIBUTE_HEART);
          else
@@ -1968,14 +1974,14 @@ void specialattack(Creature &a, Creature &t, char &actual)
          attack+=a.skill_roll(SKILL_SCIENCE);
          break;
       case CREATURE_POLITICIAN:
-         if(a.align==-1)
+         if(a.align == Alignment::CONSERVATIVE)
             strcat(str,pickrandom(conservative_politician_debate));
          else
             strcat(str,pickrandom(other_politician_debate));
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
-         if(t.align==1)
+         if(t.align == Alignment::LIBERAL)
             resist=t.skill_roll(SKILL_LAW)+
                    t.attribute_roll(ATTRIBUTE_HEART);
          else
@@ -1984,14 +1990,14 @@ void specialattack(Creature &a, Creature &t, char &actual)
          attack+=a.skill_roll(SKILL_LAW);
          break;
       case CREATURE_CORPORATE_CEO:
-         if(a.align==-1)
+         if(a.align == Alignment::CONSERVATIVE)
             strcat(str,pickrandom(conservative_ceo_debate));
          else
             strcat(str,pickrandom(other_ceo_debate));
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
-         if(t.align==1)
+         if(t.align == Alignment::LIBERAL)
             resist=t.skill_roll(SKILL_BUSINESS)+
                    t.attribute_roll(ATTRIBUTE_HEART);
          else
@@ -2005,7 +2011,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
-         if(t.align==1)
+         if(t.align == Alignment::LIBERAL)
             resist=t.attribute_roll(ATTRIBUTE_HEART);
          else
             resist=t.attribute_roll(ATTRIBUTE_WISDOM);
@@ -2016,7 +2022,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
          strcat(str," ");
          strcat(str,t.name);
          strcat(str,"!");
-         if(t.align==1)
+         if(t.align == Alignment::LIBERAL)
             resist=t.attribute_roll(ATTRIBUTE_HEART);
          else
             resist=t.attribute_roll(ATTRIBUTE_WISDOM);
@@ -2050,7 +2056,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
                       else // let's use a small enough instrument for anyone to carry in their pocket
                          strcat(str,"blows a harmonica");
                       strcat(str," at");break;
-               case 3:if(a.align==1)strcat(str,"plays protest songs at");
+               case 3:if(a.align == Alignment::LIBERAL)strcat(str,"plays protest songs at");
                       else strcat(str,"plays country songs at");
                       break;
                case 4:strcat(str,"rocks out at");break;
@@ -2061,7 +2067,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
 
             attack=a.skill_roll(SKILL_MUSIC);
 
-            if(t.align==1)
+            if(t.align == Alignment::LIBERAL)
                resist=t.attribute_roll(ATTRIBUTE_HEART);
             else resist=t.attribute_roll(ATTRIBUTE_WISDOM);
             if(resist>0)
@@ -2075,7 +2081,7 @@ void specialattack(Creature &a, Creature &t, char &actual)
    addstr(str, gamelog);
    gamelog.newline();
 
-   if((t.animalgloss==ANIMALGLOSS_TANK||(t.animalgloss==ANIMALGLOSS_ANIMAL&&law[LAW_ANIMALRESEARCH]!=2))
+   if((t.animalgloss==ANIMALGLOSS_TANK||(t.animalgloss==ANIMALGLOSS_ANIMAL&&law[LAW_ANIMALRESEARCH]!=Alignment::ELITE_LIBERAL))
     ||(a.enemy() && t.flag & CREATUREFLAG_BRAINWASHED))
    {
       move(17,1);
@@ -2103,14 +2109,14 @@ void specialattack(Creature &a, Creature &t, char &actual)
             addstr(s+t.name+" is tainted with Wisdom!", gamelog);
             t.adjust_attribute(ATTRIBUTE_WISDOM,+1);
          }
-         else if(t.align==ALIGN_LIBERAL && t.flag & CREATUREFLAG_LOVESLAVE)
+         else if(t.align==Alignment::LIBERAL && t.flag & CREATUREFLAG_LOVESLAVE)
          {
             move(17,1);
             addstr(s+t.name+" can't bear to leave!", gamelog);
          }
          else
          {
-            if(a.align==-1)
+            if(a.align == Alignment::CONSERVATIVE)
             {
                move(17,1);
                addstr(s+t.name+" is turned Conservative", gamelog);
@@ -2135,7 +2141,8 @@ void specialattack(Creature &a, Creature &t, char &actual)
                {
                   encounter[e]=t;
                   encounter[e].exists=1;
-                  if(a.align==-1)conservatise(encounter[e]);
+                  if (a.align == Alignment::CONSERVATIVE)
+                    conservatise(encounter[e]);
                   encounter[e].cantbluff=2;
                   encounter[e].squadid=-1;
                   break;
@@ -2435,7 +2442,7 @@ char incapacitated(Creature &a,char noncombat,char &printed)
             switch(LCSrandom(3))
             {
             case 0: addstr(" yelps in pain...", gamelog); break;
-            case 1: if(law[LAW_FREESPEECH]==-2) addstr(" [makes a stinky].", gamelog);
+            case 1: if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) addstr(" [makes a stinky].", gamelog);
                     else addstr(" soils the floor.", gamelog); break;
             case 2: addstr(" yowls pitifully...", gamelog); break;
             }
@@ -2463,7 +2470,7 @@ char incapacitated(Creature &a,char noncombat,char &printed)
          switch(LCSrandom(54))
          {
          case 0: addstr(" desperately cries out to Jesus."); break;
-         case 1: if(law[LAW_FREESPEECH]==-2) addstr(" [makes a stinky].");
+         case 1: if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) addstr(" [makes a stinky].");
                  else addstr(" soils the floor."); break;
          case 2: addstr(" whimpers in a corner."); break;
          case 3: addstr(" begins to weep."); break;
@@ -2485,7 +2492,7 @@ char incapacitated(Creature &a,char noncombat,char &printed)
          case 18: addstr(" shouts \"Why have you forsaken me?\""); break;
          case 19: addstr(" murmurs \"Why Lord?   Why?\""); break;
          case 20: addstr(" whispers \"Am I dead?\""); break;
-         case 21: if(law[LAW_FREESPEECH]==-2) addstr(" [makes a mess], moaning.");
+         case 21: if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) addstr(" [makes a mess], moaning.");
                   else addstr(" pisses on the floor, moaning."); break;
          case 22: addstr(" whispers incoherently."); break;
          case 23: if(a.special[SPECIALWOUND_RIGHTEYE]&&a.special[SPECIALWOUND_LEFTEYE])
@@ -2521,9 +2528,9 @@ char incapacitated(Creature &a,char noncombat,char &printed)
          case 39: addstr(" muses quietly about death."); break;
          case 40: addstr(" asks for a blanket."); break;
          case 41: addstr(" shivers softly."); break;
-         case 42: if(law[LAW_FREESPEECH]==-2)addstr(" [makes a mess].");
+         case 42: if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)addstr(" [makes a mess].");
                   else addstr(" vomits up a clot of blood."); break;
-         case 43: if(law[LAW_FREESPEECH]==-2)addstr(" [makes a mess].");
+         case 43: if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)addstr(" [makes a mess].");
                   else addstr(" spits up a cluster of bloody bubbles."); break;
          case 44: addstr(" pleads for mercy."); break;
          case 45: addstr(" quietly asks for coffee."); break;
@@ -2638,7 +2645,7 @@ void adddeathmessage(Creature &cr)
          break;
       case 2:
          strcat(str," squirts ");
-         if(law[LAW_FREESPEECH]==-2)strcat(str,"[red water]");
+         if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(str,"[red water]");
          else strcat(str,"blood");
          strcat(str," out of the ");
          addstr(str, gamelog);
@@ -2681,7 +2688,7 @@ void adddeathmessage(Creature &cr)
          strcat(str," gasps a last breath and ");
          addstr(str, gamelog);
          move(17,1);
-         if(law[LAW_FREESPEECH]==-2)addstr("[makes a mess].", gamelog);
+         if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)addstr("[makes a mess].", gamelog);
          else addstr("soils the floor.", gamelog);
          break;
       case 2:
@@ -2718,7 +2725,7 @@ void adddeathmessage(Creature &cr)
          strcat(str," sweats profusely, murmurs ");
          addstr(str, gamelog);
          move(17,1);
-         if(law[LAW_FREESPEECH]==-2)addstr("something [good] about Jesus, and dies.", gamelog);
+         if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)addstr("something [good] about Jesus, and dies.", gamelog);
          else addstr("something about Jesus, and dies.", gamelog);
          break;
       case 8:
@@ -2739,10 +2746,10 @@ void adddeathmessage(Creature &cr)
          move(17,1);
          switch(cr.align)
          {
-         case ALIGN_LIBERAL:
-         case ALIGN_ELITELIBERAL:
+         case Alignment::LIBERAL:
+         case Alignment::ELITE_LIBERAL:
             addstr(slogan, gamelog); break;
-         case ALIGN_MODERATE:
+         case Alignment::MODERATE:
             addstr("\"A plague on both your houses...\"", gamelog); break;
          default:
             addstr("\"Better dead than liberal...\"", gamelog); break;
@@ -2766,8 +2773,10 @@ void autopromote(int loc)
 
    for(int pl=0;pl<len(pool);pl++)
    {
-      if(pool[pl]->location!=loc) continue;
-      if(pool[pl]->alive&&pool[pl]->align==1) libnum++;
+      if (pool[pl]->location != loc)
+        continue;
+      if (pool[pl]->alive && pool[pl]->align == Alignment::LIBERAL)
+        libnum++;
    }
 
    if(partysize==libnum) return;
@@ -2785,7 +2794,7 @@ void autopromote(int loc)
          {
             if(pool[pl]->location!=loc) continue;
             if(pool[pl]->alive&&pool[pl]->squadid==-1&&
-               pool[pl]->align==1)
+               pool[pl]->align == Alignment::LIBERAL)
             {
                if(activesquad->squad[p]!=NULL) activesquad->squad[p]->squadid=-1;
                activesquad->squad[p]=pool[pl];

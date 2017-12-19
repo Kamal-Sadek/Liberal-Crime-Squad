@@ -74,7 +74,9 @@
 
 //PACKAGE_VERSION must be defined here or the game won't compile on Windows! Don't remove it!!!
 // -- yetisyny
-#define PACKAGE_VERSION "4.10.1"
+#ifndef HAVE_CONFIG_H
+# define PACKAGE_VERSION "4.10.1"
+#endif
 
 const int version=41010;
 const int lowestloadversion=40100;
@@ -86,12 +88,6 @@ const int lowestloadscoreversion=31203;
 #include "compat.h"
 #include "cursesmovie.h"
 #include "cursesgraphics.h"
-#include "politics/law.h"
-#include "politics/alignment.h"
-
-#ifndef NDEBUG
-#define NDEBUG
-#endif
 
 #define TAB 9
 #define ENTER 10
@@ -398,49 +394,21 @@ public:
    }
 };
 
-class Interval
-{
-public:
-   int min,max;
-   Interval() : min(0),max(0) { }
-   Interval(int value) : min(value),max(value) { }
-   Interval(int low, int high) : min(low),max(high) { }
-   void set_interval(int low, int high) { min=low,max=high; }
-   // Sets the interval according to a string that is either a number or two
-   // number separated by a dash. Returns false and does not change the
-   // interval if the given string is not a valid interval.
-   bool set_interval(const string& interval); // implemented in misc.cpp
-   int roll() const { return LCSrandom(max-min+1)+min; }
-private:
-   // Checks if a string is a number. Assumes non-numeric characters other
-   // than dashes have already been checked for.
-   bool valid(const string& v)
-   { return len(v) &&                       // Blank string is invalid.
-           (len(v)!=1||v[0]!='-') &&        // Just a dash is invalid.
-            v.find('-', 1)==string::npos; } // A dash after the first char is invalid.
-};
-
-#include "items/itemtype.h"
 #include "items/cliptype.h"
 #include "items/weapontype.h"
 #include "items/armortype.h"
 #include "items/loottype.h"
-#include "items/item.h"
 #include "items/clip.h"
 #include "items/weapon.h"
 #include "items/armor.h"
 #include "items/loot.h"
-#include "items/money.h"
 #include "creature/creature.h"
-#include "creature/creaturetype.h"
 #include "creature/augmentation.h"
 #include "creature/augmenttype.h"
 #include "vehicle/vehicletype.h"
 #include "vehicle/vehicle.h"
 #include "locations/locations.h"
-#include "configfile.h"
 #include "sitemode/sitemap.h"
-#include "tinydir.h"
 
 enum CarChaseObstacles
 {
@@ -491,8 +459,6 @@ struct squadst
 
 #define ENCMAX 18
 // ENCMAX _HAS_ to be 26 or less, or else there aren't enough letters
-
-#include "sitemode/shop.h"
 
 enum GameModes
 {
@@ -783,8 +749,6 @@ struct newsstoryst
    newsstoryst() : claimed(1),politics_level(0),violence_level(0),cr(NULL),loc(-1) { }
 };
 
-#include "news/news.h"
-
 #define SLOGAN_LEN 80
 
 struct highscorest
@@ -920,13 +884,6 @@ enum ActiveSortingChoices
    Created by jonathansfox.
 */
 
-/* This is declared again lower down, just needed here for this header. */
-std::string tostring(long i);
-
-/* end the game and clean up */
-void end_game(int err=EXIT_SUCCESS);
-
-
 /*******************************************************************************
 *
 *                             Logging Stuff
@@ -962,7 +919,8 @@ void end_game(int err=EXIT_SUCCESS);
 // Sets the text color to the thematic color for the given alignment
 // extended_range forces colors to be set on a 5 point scale instead
 // of just basic liberal-moderate-conservative
-void set_alignment_color(signed char alignment,bool extended_range=false);
+#include "politics/alignment.h" // @todo remove me
+void set_alignment_color(Alignment alignment, bool extended_range=false);
 /* Sets the text color per activity type */
 void set_activity_color(long activity_type);
 /* location and squad header */
@@ -1002,9 +960,11 @@ inline int addchar(char ch,Log &log) { log.record(ch); return addchar(ch); }
 inline int mvaddchar(int y,int x,char ch,Log &log) { log.record(ch); return mvaddchar(y,x,ch); }
 /* Redefining addstr() and mvaddstr() so they use addchar() and mvaddchar(), fixing display of extended characters */
 #undef addstr
-inline int addstr(const char* text) { int ret=ERR; for(int i=0;i<len(text);i++) ret=addchar(text[i]); return ret; }
 #undef mvaddstr
+#if defined(NCURSES_VERSION_MAJOR) && (NCURSES_VERSION_MAJOR < 6)
+inline int addstr(const char* text) { int ret=ERR; for(int i=0;i<len(text);i++) ret=addchar(text[i]); return ret; }
 inline int mvaddstr(int y,int x,const char* text) { int ret=move(y,x); if(ret!=ERR) ret=addstr(text); return ret; }
+#endif
 /* Various wrappers to addstr() and mvaddstr() which handle permutations of:
    - Including or not including the gamelog for external message logging
    - std::string or c-style char arrays */
@@ -1015,10 +975,10 @@ inline int addstr(const std::string& text, Log &log) { log.record(text); return 
 inline int mvaddstr(int y,int x,const std::string& text) { int ret=move(y,x); if(ret!=ERR) ret=addstr(text); return ret; }
 inline int mvaddstr(int y,int x,const std::string& text,Log &log) { log.record(text); return mvaddstr(y,x,text); }
 /* These wrappers convert numbers to text */
-inline int addstr(long num) { return addstr(tostring(num)); }
-inline int addstr(long num,Log &log) { return addstr(tostring(num),log); }
-inline int mvaddstr(int y,int x,long num) { return mvaddstr(y,x,tostring(num)); }
-inline int mvaddstr(int y,int x,long num,Log &log) { return mvaddstr(y,x,tostring(num),log); }
+inline int addstr(long num) { return addstr(std::to_string(num)); }
+inline int addstr(long num,Log &log) { return addstr(std::to_string(num),log); }
+inline int mvaddstr(int y,int x,long num) { return mvaddstr(y,x,std::to_string(num)); }
+inline int mvaddstr(int y,int x,long num,Log &log) { return mvaddstr(y,x,std::to_string(num),log); }
 /* addstr with formatted output */
 int addstr_f(const char * format,...);
 /* mvaddstr with formatted output */
@@ -1085,7 +1045,7 @@ void sleeperize_prompt(Creature &converted,Creature &recruiter,int y);
 void sortliberals(std::vector<Creature *>& liberals,short sortingchoice,bool dosortnone=false);
 /* common - Functions used when sorting vectors of creatures. */
 bool sort_none(const Creature* first,const Creature* second);
-inline bool sort_name(const Creature* first,const Creature* second) { return strcmp(first->name,second->name)<0; }
+bool sort_name(const Creature* first,const Creature* second);
 bool sort_locationandname(const Creature* first,const Creature* second);
 bool sort_squadorname(const Creature* first,const Creature* second);
 /* common - Prompt to decide how to sort liberals.*/
@@ -1127,7 +1087,7 @@ int checkkey_cap();
 #endif
 void set_title (char *c);
 void init_console();
-#ifdef WIN32
+#ifdef _WIN32
 void begin_cleartype_fix();
 void end_cleartype_fix();
 #endif
@@ -1144,7 +1104,6 @@ std::string cityname(); /* random city name */
 void enter_name(int y,int x,char *name,int len,const char *defname=NULL);
 std::string getlawflag(int type);
 std::string getmonth(int month,bool shortname=false);
-std::string getalign(signed char alignment,bool capitalize=false);
 
 /*
  translateid.cpp
@@ -1175,10 +1134,6 @@ int getarmortype(const string &idname);
 int getloottype(int id);
 /* transforms a loot type name into the index of that loot type in the global vector */
 int getloottype(const string &idname);
-/* transforms a CreatureTypes value into a pointer to that creature type */
-const CreatureType* getcreaturetype(short crtype);
-/* transforms a creature type name into a pointer to that creature type */
-const CreatureType* getcreaturetype(const std::string& crtype);
 
 /*
  equipment.cpp
@@ -1201,8 +1156,7 @@ char squadhasitem(squadst &sq,int type,int subtype);
 /*
  stringconversion.cpp
 */
-std::string tostring(long i);
-inline const char* toCstring(long i) { return tostring(i).c_str(); }
+inline const char* toCstring(long i) { return std::to_string(i).c_str(); }
 /* Tries to determine boolean value of a string. Returns 1 for true, 0 for false
    and -1 if unable to determine. */
 int stringtobool(std::string boolstr);
@@ -1211,8 +1165,8 @@ inline char* strcpy(char* dest, const std::string& src) { return strcpy(dest,src
 inline char* strncpy(char* dest, const std::string& src, size_t maxlen) { return strncpy(dest,src.c_str(),maxlen); }
 inline char* strcat(char* dest, const std::string& src) { return strcat(dest,src.c_str()); }
 /* These strcpy and strcat wrappers handle numbers */
-inline char* strcpy(char* dest, long src) { return strcpy(dest,tostring(src)); }
-inline char* strcat(char* dest, long src) { return strcat(dest,tostring(src)); }
+inline char* strcpy(char* dest, long src) { return strcpy(dest,std::to_string(src)); }
+inline char* strcat(char* dest, long src) { return strcat(dest,std::to_string(src)); }
 /* This wrapper allows atoi to handle std::strings */
 inline int atoi(const std::string& str) { return atoi(str.c_str()); }
 /* This wrapper allows atof to handle std::strings */
@@ -1228,6 +1182,7 @@ int severtype_string_to_enum(const std::string& severtype);
 /*
  creature.cpp
 */
+#include "creature/gender.h" // @TODO remove me
 // Add an age estimate to a person's name
 void add_age(Creature& person);
 /* rolls up a creature's stats and equipment */
@@ -1236,6 +1191,7 @@ void makecreature(Creature &cr,short type);
 void generate_name(char *str, char gender = GENDER_NEUTRAL);
 /* get a first and last name for the same person */
 void generate_name(char *first, char *last, char gender = GENDER_NEUTRAL);
+std::string generate_name(char gender = GENDER_NEUTRAL);
 /* get a first, middle, and last name for the same person */
 void generate_long_name(char *first, char *middle, char *last, char gender = GENDER_NEUTRAL);
 /* gets a random first name */
@@ -1272,7 +1228,6 @@ void plate(char *str);
 const char* statename(int state=-1);
 /* endgame - converts an integer into a roman numeral for amendments */
 void romannumeral(int amendnum);
-/* code for bool Interval::set_interval(const string& interval); is also in misc.cpp */
 
 
 /*
@@ -1445,8 +1400,6 @@ void knowmap(int locx,int locy,int locz);
 void prepareencounter(short type,char sec);
 /* generates a new siege encounter */
 char addsiegeencounter(char type);
-/* rolls up a random creature type according to the passed weighting array */
-int getrandomcreaturetype(int cr[CREATURENUM]);
 
 /*
  sitedisplay.cpp
@@ -1518,6 +1471,20 @@ void special_oval_office();
 */
 /* bluff, date, issues */
 char talk(Creature &a,int t);
+
+enum CheckDifficulty
+{
+   DIFFICULTY_AUTOMATIC    = 1,
+   DIFFICULTY_VERYEASY     = 3,
+   DIFFICULTY_EASY         = 5,
+   DIFFICULTY_AVERAGE      = 7,
+   DIFFICULTY_CHALLENGING  = 9,
+   DIFFICULTY_HARD         = 11,
+   DIFFICULTY_FORMIDABLE   = 13,
+   DIFFICULTY_HEROIC       = 15,
+   DIFFICULTY_SUPERHEROIC  = 17,
+   DIFFICULTY_IMPOSSIBLE   = 19
+};
 
 /*
  stealth.cpp
@@ -1618,243 +1585,5 @@ void freehostage(Creature &cr,char situation);
 void squadgrab_immobile(char dead);
 /* names the new hostage and stashes them in your base */
 void kidnaptransfer(Creature &cr);
-
-/*******************************************************************************
-*
-*              End of Day Events
-*              Folder: "daily"
-*
-*******************************************************************************/
-
-/*
- daily.cpp
-*/
-void advanceday(char &clearformess,char canseethings);
-/* squad members with no chain of command lose contact */
-void dispersalcheck(char &clearformess);
-/* promote a subordinate to maintain chain of command when boss is lost */
-bool promotesubordinates(Creature &cr,char &clearformess);
-/* daily - manages too hot timer and when a site map should be re-seeded and renamed */
-void advancelocations();
-/* daily - returns true if the site type supports high security */
-char securityable(int type);
-/* daily - seeds and names a site (will re-seed and rename if used after start) */
-void initlocation(Location &loc);
-/* daily - returns the number of days in the current month */
-int monthday();
-
-/*
- activities.cpp
-*/
-/* adjust blog power */
-void adjustblogpower(int &power);
-/* hostage tending */
-void tendhostage(Creature *cr,char &clearformess);
-/* armor repair */
-void repairarmor(Creature &cr,char &clearformess);
-/* armor manufacture */
-void makearmor(Creature &cr,char &clearformess);
-/* search for polls */
-void survey(Creature *cr);
-/* misc activation related things */
-void funds_and_trouble(char &clearformess);
-/* steal a car */
-bool stealcar(Creature &cr,char &clearformess);
-bool carselect(Creature &cr,short &cartype);
-/* get a wheelchair */
-void getwheelchair(Creature &cr,char &clearformess);
-void augment(Creature &cr,char &clearformess);
-
-/*
- shopsnstuff.cpp
-*/
-/* active squad visits the hospital */
-void hospital(int loc);
-/* active squad visits the pawn shop */
-void pawnshop(int loc);
-/* active squad visits the car dealership */
-void dealership(int loc);
-/* active squad visits the arms dealer */
-void armsdealer(int loc);
-/* active squad visits the department store */
-void deptstore(int loc);
-/* active squad visits the oubliette */
-void halloweenstore(int loc);
-/* choose buyer */
-void choose_buyer(short &buyer);
-
-/*
- date.cpp
-*/
-/* daily - date - dater p gets back from vacation */
-char completevacation(datest &d,int p,char &clearformess);
-/* daily - date - dater p goes on some dates */
-char completedate(datest &d,int p,char &clearformess);
-
-/*
- recruit.cpp
-*/
-/* automatic finding recruits from the activity screen */
-char recruitment_activity(Creature &cr,char &clearformess);
-/* daily - recruit - recruit meeting*/
-char completerecruitmeeting(recruitst &d,int p,char &clearformess);
-
-/*
- siege.cpp
-*/
-/* siege - updates upcoming sieges */
-void siegecheck(char canseethings);
-/* siege - updates sieges in progress */
-void siegeturn(char clearformess);
-/* siege - handles giving up */
-void giveup();
-/* siege - checks how many days of food left at the site */
-int fooddaysleft(int loc);
-/* siege - checks how many people are eating at the site */
-int numbereating(int loc);
-/* siege - prepares for massed combat outside the safehouse */
-void sally_forth();
-/* siege - prepares for entering site mode to fight the siege */
-void escape_engage();
-/* siege - what happens when you escaped the siege */
-void escapesiege(char won);
-/* siege - flavor text when you fought off the raid */
-void conquertext();
-/* siege - flavor text when you crush a CCS safe house */
-void conquertextccs();
-/* siege - "you are wanted for _______ and other crimes..." */
-void statebrokenlaws(int loc);
-void statebrokenlaws(Creature &cr);
-
-/*******************************************************************************
-*
-*                             End of Day News Stories
-*                             Folder: "news"
-*
-*******************************************************************************/
-/* news - determines the priority of a news story */
-void setpriority(newsstoryst &ns);
-/* news - show major news story */
-void displaystory(newsstoryst &ns,bool liberalguardian,int header);
-/* news - graphics */
-void loadgraphics();
-void displaycenterednewsfont(const std::string& str,int y);
-void displaycenteredsmallnews(const std::string& str,int y);
-void displaynewspicture(int p,int y);
-/* news - constructs non-LCS related event stories */
-void constructeventstory(char *story,short view,char positive);
-/* news - draws the specified block of text to the screen */
-void displaynewsstory(char *story,short *storyx_s,short *storyx_e,int y);
-/* news - shows animated news stories */
-void run_television_news_stories();
-/* news - make some filler junk */
-void generatefiller(char *story,int amount);
-/* news - major newspaper reporting on lcs and other topics */
-void majornewspaper(char &clearformess,char canseethings);
-
-/*******************************************************************************
-*
-*                             End of Month Events
-*                             Folder: "monthly"
-*
-*******************************************************************************/
-
-/*
- monthly.cpp
-*/
-/* does end of month actions */
-void passmonth(char &clearformess,char canseethings);
-/* rename prison according to the new laws (add more buildings to this) */
-void updateworld_laws(short *law,short *oldlaw);
-
-/*
- lcsmonthly.cpp
-*/
-/* monthly - reports the guardian's power to the player */
-void guardianupdate(char size,int power);
-/* monthly - lets the player choose a special edition for the guardian */
-int choosespecialedition(char &clearformess);
-/* monthly - guardian - prints liberal guardian special editions */
-void printnews(short l,short newspaper);
-/* monthly - LCS finances report */
-void fundreport(char &clearformess);
-
-/*
- sleeper_update.cpp
-*/
-/* monthly - sleeper behavior */
-void sleepereffect(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM]);
-/* assistant functions for specific sleeper tasks */
-void sleeper_recruit(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM]);
-void sleeper_influence(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM]);
-void sleeper_spy(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM]);
-void sleeper_scandal(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM]);
-void sleeper_embezzle(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM]);
-void sleeper_steal(Creature &cr,char &clearformess,char canseethings,int (&libpower)[VIEWNUM]);
-
-/*
- justice.cpp
-*/
-/* monthly - hold trial on a liberal */
-void trial(Creature &g);
-/* monthly - sentence a liberal */
-void penalize(Creature &g,char lenient);
-/* monthly - move a liberal to jail */
-void imprison(Creature &g);
-/* monthly - advances a liberal's prison time or executes them */
-char prison(Creature &g);
-/* monthly - subjects a liberal to liberal therapy */
-void reeducation(Creature &g);
-/* monthly - subjects a liberal to hard labor */
-void laborcamp(Creature &g);
-/* monthly - subjects a liberal to normal prison */
-void prisonscene(Creature &g);
-
-/*
- politics.cpp
-*/
-/* politics - calculate presidential approval */
-int presidentapproval();
-/* politics -- gets the leaning of an issue voter for an election */
-int getswingvoter(bool stalin);
-/* politics -- gets the leaning of a partyline voter for an election */
-int getsimplevoter(int leaning);
-/* politics -- promotes the Vice President to President, and replaces VP */
-void promoteVP();
-/* politics -- appoints a figure to an executive office, based on the President's alignment */
-void fillCabinetPost(int position);
-/* politics - causes the people to vote (presidential, congressional, propositions) */
-void elections(char clearformess,char canseethings);
-void elections_senate(int senmod,char canseethings);
-void elections_house(char canseethings);
-/* politics - causes the supreme court to hand down decisions */
-void supremecourt(char clearformess,char canseethings);
-/* politics - causes congress to act on legislation */
-void congress(char clearformess,char canseethings);
-// letter of amnesty to the LCS from the President (you win)
-void amnesty();
-/* politics - checks if the game is won */
-char wincheck();
-/* politics - checks the prevailing attitude on a specific law, or overall */
-int publicmood(int l);
-/* returns true if Stalinists agree with Elite Liberals on a view/law, false if they strongly disagree with libs  *
- * the input bool islaw, if true, returns Stalinist opinion on laws, if false, returns Stalinist opinion on views */
-bool stalinview(short view,bool islaw);
-
-/*
- endgame.cpp
-*/
-/* endgame - attempts to pass a constitutional amendment to help win the game */
-void tossjustices(char canseethings);
-/* endgame - attempts to pass a constitutional amendment to help win the game */
-void amendment_termlimits(char canseethings);
-/* endgame - attempts to pass a constitutional amendment to lose the game */
-void reaganify(char canseethings);
-/* endgame - attempts to pass a constitutional amendment to lose the game */
-void stalinize(char canseethings);
-/* endgame - checks if a constitutional amendment is ratified */
-char ratify(int level,int view,int lawview,char congress,char canseethings);
-/* endgame - header for announcing constitutional amendments */
-void amendmentheading();
 
 #endif // INCLUDES_H_INCLUDED

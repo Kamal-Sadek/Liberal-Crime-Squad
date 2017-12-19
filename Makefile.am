@@ -1,4 +1,24 @@
-SUBDIRS = src
+#
+# This file is part of Liberal Crime Squad.
+#
+# Liberal Crime Squad is free software: you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation, either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+ACLOCAL_AMFLAGS = -I config.m4
+AM_MAKEFLAGS = --no-print-directory
+SUBDIRS = lib src tests
+
 lcsdir = $(datadir)/lcs
 artdir = $(lcsdir)/art
 mididir = $(artdir)/midi
@@ -53,7 +73,12 @@ dist_app_DATA = crimesquad.desktop
 
 #man_MANS = man/crimesquad.6
 dist_man_MANS = man/crimesquad.6
-EXTRA_DIST = TODO workspaces/game.dsp workspaces/game.dsw workspaces/game.ncb\
- workspaces/game.sln workspaces/game.suo workspaces/game.vcxproj\
- LINUX_README.txt docs/CrimeSquadManual.txt workspaces/game.cbp\
- docs/cpcimageformat.txt docs/conventions.txt README COPYING
+EXTRA_DIST = \
+ AUTHORS \
+ COPYING \
+ INSTALL \
+ README.md \
+ docs/conventions.txt \
+ docs/cpcimageformat.txt \
+ docs/CrimeSquadManual.txt \
+ config.aux/tap-driver.sh

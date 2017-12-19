@@ -1,30 +1,29 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-//
-This file is part of Liberal Crime Squad.                                             //
-//
-Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-it under the terms of the GNU General Public License as published by            //
-the Free Software Foundation; either version 2 of the License, or               //
-(at your option) any later version.                                             //
-//
-Liberal Crime Squad is distributed in the hope that it will be useful,          //
-but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-GNU General Public License for more details.                                    //
-//
-You should have received a copy of the GNU General Public License               //
-along with Liberal Crime Squad; if not, write to the Free Software              //
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-This file was created by Chris Johnson (grundee@users.sourceforge.net)
-by copying code from game.cpp.
-To see descriptions of files and functions, see the list at
-the bottom of includes.h in the top src folder.
-*/
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
 
 // Note: this file is encoded in the PC-8 / Code Page 437 / OEM-US character set
 // (The same character set used by Liberal Crime Squad when it is running)
@@ -174,11 +173,11 @@ std::string getactivity(activityst &act)
 
 std::string gettitle(Creature &cr)
 {
-   if(cr.align==-1)
+   if (cr.align == Alignment::CONSERVATIVE)
    {
       if(cr.juice<=-50)
       {
-         if(law[LAW_FREESPEECH]==-2) return "[Darn] Worthless";
+         if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) return "[Darn] Worthless";
          else return "Damn Worthless";
       }
       else if(cr.juice<=-10) return "Conservative Dregs";
@@ -187,23 +186,23 @@ std::string gettitle(Creature &cr)
       else if(cr.juice<50) return "Wrong-Thinker";
       else if(cr.juice<100)
       {
-         if(law[LAW_FREESPEECH]==-2) return "Stubborn as [Heck]";
+         if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) return "Stubborn as [Heck]";
          else return "Stubborn as Hell";
       }
       else if(cr.juice<200)
       {
-         if(law[LAW_FREESPEECH]==-2) return "Heartless [Jerk]";
+         if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) return "Heartless [Jerk]";
          else return "Heartless Bastard";
       }
       else if(cr.juice<500) return "Insane Vigilante";
       else if(cr.juice<1000) return "Arch-Conservative";
       else return "Evil Incarnate";
    }
-   else if(cr.align==0)
+   else if (cr.align == Alignment::MODERATE)
    {
       if(cr.juice<=-50)
       {
-         if(law[LAW_FREESPEECH]==-2) return "[Darn] Worthless";
+         if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) return "[Darn] Worthless";
          else return "Damn Worthless";
       }
       else if(cr.juice<=-10) return "Society's Dregs";
@@ -220,7 +219,7 @@ std::string gettitle(Creature &cr)
    {
       if(cr.juice<=-50)
       {
-         if(law[LAW_FREESPEECH]==-2) return "[Darn] Worthless";
+         if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) return "[Darn] Worthless";
          else return "Damn Worthless";
       }
       else if(cr.juice<=-10) return "Society's Dregs";
@@ -768,7 +767,7 @@ std::string getlawflag(int type)
    case LAWFLAG_KIDNAPPING:return "Kidnapping";
    case LAWFLAG_BANKROBBERY:return "Bank robbery";
    case LAWFLAG_ARSON:return "Arson";
-   case LAWFLAG_BURNFLAG:return(law[LAW_FLAGBURNING]==-2?"Flag Murder":"Flag burning");
+   case LAWFLAG_BURNFLAG:return(law[LAW_FLAGBURNING] == Alignment::ARCH_CONSERVATIVE?"Flag Murder":"Flag burning");
    case LAWFLAG_SPEECH:return "Harmful speech";
    case LAWFLAG_BROWNIES:return "Drug dealing";
    case LAWFLAG_ESCAPED:return "Escaping prison";
@@ -782,7 +781,7 @@ std::string getlawflag(int type)
    case LAWFLAG_CCFRAUD:return "Credit card fraud";
    case LAWFLAG_THEFT:return "Theft";
    case LAWFLAG_PROSTITUTION:return "Prostitution";
-   case LAWFLAG_HIREILLEGAL:return(law[LAW_IMMIGRATION]<1?"Hiring illegal aliens":"Hiring undocumented workers");
+   case LAWFLAG_HIREILLEGAL:return(to_right_of(law[LAW_IMMIGRATION],Alignment::LIBERAL)?"Hiring illegal aliens":"Hiring undocumented workers");
    //case LAWFLAG_GUNUSE:return "Firing illegal weapons";
    //case LAWFLAG_GUNCARRY:return "Carrying illegal weapons";
    case LAWFLAG_COMMERCE:return "Electronic sabotage";
@@ -819,16 +818,3 @@ std::string getmonth(int month, bool shortname)
    }
 }
 
-std::string getalign(signed char alignment,bool capitalize)
-{
-   switch(alignment)
-   {
-   case ALIGN_ARCHCONSERVATIVE: return "Arch-Conservative";
-   case ALIGN_CONSERVATIVE: return "Conservative";
-   case ALIGN_MODERATE: return (capitalize?"Moderate":"moderate");
-   case ALIGN_LIBERAL: return "Liberal";
-   case ALIGN_ELITELIBERAL: return "Elite Liberal";
-   case ALIGN_STALINIST: return "Stalinist";
-   default: return "Buggy";
-   }
-}

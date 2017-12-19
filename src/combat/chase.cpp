@@ -1,32 +1,33 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ * Copyright 2017 Stephen M. Webb
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
-*/
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
 
-#include <externs.h>
+#include "externs.h"
+#include "locations/world.h"
+
 
 enum CarChaseStatus
 {
@@ -936,7 +937,7 @@ void evasiverun()
             {
             case CREATURE_COP:
                addstr(" is seized, ", gamelog);
-               if(law[LAW_POLICEBEHAVIOR]>=ALIGN_LIBERAL)
+               if (to_left_of(law[LAW_POLICEBEHAVIOR], Alignment::MODERATE))
                {
                   addstr("pushed to the ground, and handcuffed!", gamelog);
                   gamelog.newline(); //...Newline.
@@ -1251,10 +1252,16 @@ void makechasers(long sitetype,long sitecrime)
             if(pnum>6)pnum=6;
             for(n=0;n<pnum;n++)
             {
-               if(law[LAW_DEATHPENALTY]==-2&&
-                  law[LAW_POLICEBEHAVIOR]==-2){makecreature(encounter[encslot++],CREATURE_DEATHSQUAD);chaseseq.canpullover=0;}
-               else if(law[LAW_POLICEBEHAVIOR]<=-1)makecreature(encounter[encslot++],CREATURE_GANGUNIT);
-               else makecreature(encounter[encslot++],CREATURE_COP);
+               if(law[LAW_DEATHPENALTY] == Alignment::ARCH_CONSERVATIVE 
+               && law[LAW_POLICEBEHAVIOR] == Alignment::ARCH_CONSERVATIVE)
+               {
+                 makecreature(encounter[encslot++],CREATURE_DEATHSQUAD);
+                 chaseseq.canpullover=0;
+               }
+               else if (to_right_of(law[LAW_POLICEBEHAVIOR], Alignment::MODERATE))
+                 makecreature(encounter[encslot++],CREATURE_GANGUNIT);
+               else
+                 makecreature(encounter[encslot++],CREATURE_COP);
             }
             break;
       }
@@ -1578,8 +1585,9 @@ void crashfriendlycar(int v)
             // Record death if living Liberal is hauled
             if(activesquad->squad[p]->prisoner->squadid!=-1)
             {
-               if(activesquad->squad[p]->prisoner->alive&&
-                  activesquad->squad[p]->prisoner->align==1)stat_dead++;
+               if (activesquad->squad[p]->prisoner->alive
+                && activesquad->squad[p]->prisoner->align == Alignment::LIBERAL)
+                 stat_dead++;
 
                activesquad->squad[p]->prisoner->die();
                activesquad->squad[p]->prisoner->location=-1;
@@ -1615,7 +1623,7 @@ void crashfriendlycar(int v)
             victimsum++;
 
             // Account for deaths for high score
-            if(activesquad->squad[p]->align == ALIGN_LIBERAL)stat_dead++;
+            if(activesquad->squad[p]->align == Alignment::LIBERAL)stat_dead++;
 
             // Remove dead Liberal from squad
             activesquad->squad[p]=NULL;

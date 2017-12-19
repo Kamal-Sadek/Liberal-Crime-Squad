@@ -1,6 +1,6 @@
 #include <iostream>
 #include "lcsio.h"
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #include "curses.h"
 #define CH_USE_CP437

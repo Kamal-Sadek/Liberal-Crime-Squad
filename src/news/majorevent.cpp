@@ -33,6 +33,8 @@
 // it out for yourself.
 
 #include <externs.h>
+#include "news/news.h"
+
 
 /* news - constructs non-LCS related event stories */
 void constructeventstory(char *story,short view,char positive)
@@ -48,9 +50,9 @@ void constructeventstory(char *story,short view,char positive)
             char str[200],str2[200],gen[50];
             strcpy(story,cityname());
             strcat(story," - ");
-            if(law[LAW_ABORTION]==-2) strcat(story,"A doctor that routinely performed illegal abortion-murders was ruthlessly ");
-            else if(law[LAW_ABORTION]==-1) strcat(story,"A doctor that routinely performed illegal abortions was ruthlessly ");
-            else if(law[LAW_ABORTION]==0) strcat(story,"A doctor that routinely performed semi-legal abortions was ruthlessly ");
+            if(law[LAW_ABORTION] == Alignment::ARCH_CONSERVATIVE) strcat(story,"A doctor that routinely performed illegal abortion-murders was ruthlessly ");
+            else if(law[LAW_ABORTION] == Alignment::CONSERVATIVE) strcat(story,"A doctor that routinely performed illegal abortions was ruthlessly ");
+            else if(law[LAW_ABORTION] == Alignment::MODERATE) strcat(story,"A doctor that routinely performed semi-legal abortions was ruthlessly ");
             else strcat(story,"A doctor that routinely performed abortions was ruthlessly ");
             strcat(story,"gunned down outside of the ");
             lastname(str,true); strcat(story,str);
@@ -82,7 +84,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"verses of the Bible at the stunned onlookers.  Someone ");
             strcat(story,"called the police on a cellphone and they arrived shortly thereafter.  ");
             strcat(story,str2);
-            if(law[LAW_WOMEN]==-2)
+            if(law[LAW_WOMEN] == Alignment::ARCH_CONSERVATIVE)
             {
                strcat(story," later admitted to being a rogue FBI vigilante, hunting down ");
                strcat(story," abortion doctors as opposed to arresting them.&r");
@@ -98,7 +100,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,gen);
             strcat(story," ");
             char spouse=(LCSrandom(2)?GENDER_MALE:GENDER_FEMALE);
-            if(law[LAW_GAY]<=1)
+            if (to_right_of(law[LAW_GAY], Alignment::LIBERAL))
                spouse=(gn==GENDER_FEMALE?GENDER_MALE:GENDER_FEMALE);
             strcat(story,(spouse==GENDER_FEMALE?"wife":"husband"));
             strcat(story," and ");
@@ -121,8 +123,8 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,dstr);
             strcat(story," ");
             strcat(story,dstr2);
-            if(law[LAW_GAY]==-2) strcat(story,", a known sexual deviant, was ");
-            else if(law[LAW_GAY]==-1) strcat(story,", a known homosexual, was ");
+            if(law[LAW_GAY] == Alignment::ARCH_CONSERVATIVE) strcat(story,", a known sexual deviant, was ");
+            else if(law[LAW_GAY] == Alignment::CONSERVATIVE) strcat(story,", a known homosexual, was ");
             else strcat(story,", a homosexual, was ");
             switch(LCSrandom(3))
             {
@@ -140,12 +142,12 @@ void constructeventstory(char *story,short view,char positive)
             switch(LCSrandom(3))
             {
             case 0:
-               if(law[LAW_FREESPEECH]==-2) strcat(story,"throwing [juice boxes]");
+               if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) strcat(story,"throwing [juice boxes]");
                else strcat(story,"throwing beer bottles");
                break;
             case 1:
-               if(law[LAW_FREESPEECH]==-2) strcat(story,"[relieving themselves] out the window");
-               else if(law[LAW_FREESPEECH]==2) strcat(story,"pissing out the window");
+               if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) strcat(story,"[relieving themselves] out the window");
+               else if(law[LAW_FREESPEECH] == Alignment::ELITE_LIBERAL) strcat(story,"pissing out the window");
                else strcat(story,"urinating out the window");
                break;
             case 2: strcat(story,"taking swipes"); break;
@@ -165,7 +167,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"  Authorities have stated that they will vigorously ");
             strcat(story,"prosecute this case as a hate crime, due to the ");
             strcat(story,"aggravated nature of the offense");
-            if(law[LAW_GAY]==-2&&law[LAW_FREESPEECH]!=-2)
+            if (law[LAW_GAY] == Alignment::ARCH_CONSERVATIVE && law[LAW_FREESPEECH] != Alignment::ARCH_CONSERVATIVE)
             {
                strcat(story,", despite the fact that ");
                strcat(story,dstr);
@@ -173,7 +175,7 @@ void constructeventstory(char *story,short view,char positive)
                strcat(story,dstr2);
                strcat(story," is a known faggot");
             }
-            else if(law[LAW_GAY]==-2)strcat(story,", even though being gay is deviant, as we all know.");
+            else if(law[LAW_GAY] == Alignment::ARCH_CONSERVATIVE)strcat(story,", even though being gay is deviant, as we all know.");
             else strcat(story,".");
             strcat(story,"&r");
             break;
@@ -402,7 +404,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,dstr);
             strcat(story," ");
             strcat(story,dstr2);
-            if(law[LAW_FREESPEECH]==-2) strcat(story," has resigned in disgrace after being caught with a [civil servant].");
+            if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) strcat(story," has resigned in disgrace after being caught with a [civil servant].");
             else strcat(story," has resigned in disgrace after being caught with a prostitute.");
             strcat(story,"&r");
             strcat(story,"  ");
@@ -426,11 +428,11 @@ void constructeventstory(char *story,short view,char positive)
             {
             case 0:strcat(story,"\"the most perverse and spine-tingling debauchery imaginable, at least with only two people.\""); break;
             case 1:
-               if(law[LAW_FREESPEECH]==-2)strcat(story,"the judge [going to the bathroom in the vicinity of] the [civil servant].");
-               else if(law[LAW_FREESPEECH]==2)strcat(story,"the judge pissing on the prostitute.");
+               if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"the judge [going to the bathroom in the vicinity of] the [civil servant].");
+               else if(law[LAW_FREESPEECH] == Alignment::ELITE_LIBERAL)strcat(story,"the judge pissing on the prostitute.");
                else strcat(story,"the judge relieving himself on the prostitute."); break; // Himself? Maybe themselves would work better? -- LK
             case 2:                                                                        // No, the judge is a white male Arch-Conservative patriarch. -- yetisyny
-               if(law[LAW_FREESPEECH]==-2)strcat(story,"the [civil servant] hollering like a cowboy [at a respectable distance from] the judge.");
+               if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"the [civil servant] hollering like a cowboy [at a respectable distance from] the judge.");
                else strcat(story,"the prostitute hollering like a cowboy astride the judge."); break;
             }
             strcat(story,"  ");
@@ -514,8 +516,8 @@ void constructeventstory(char *story,short view,char positive)
                strcat(story,"lost ");
                strcat(story,"his"); // the AM personality's a white male patriarch
 
-               if(law[LAW_FREESPEECH]==2)strcat(story," goddamn mind");
-               else if(law[LAW_FREESPEECH]==-2)strcat(story," [gosh darn] mind");
+               if(law[LAW_FREESPEECH] == Alignment::ELITE_LIBERAL)strcat(story," goddamn mind");
+               else if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story," [gosh darn] mind");
                else strcat(story," g*dd*mn mind");
                break;
             case 1: strcat(story,"maybe gone a little off the deep end"); break;
@@ -541,7 +543,7 @@ void constructeventstory(char *story,short view,char positive)
             strcpy(story,cityname());
             strcat(story," - ");
             strcat(story,"A student has gone on a ");
-            if(law[LAW_FREESPEECH]==-2) strcat(story,"[hurting spree]");
+            if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) strcat(story,"[hurting spree]");
             else strcat(story,"shooting rampage");
             strcat(story, " at a local ");
             switch(schtype)
@@ -552,8 +554,8 @@ void constructeventstory(char *story,short view,char positive)
             case 3: strcat(story,"university"); break;
             }
             strcat(story,".  ");
-            char dstr[200],dstr2[200],dg;
-            dg = (LCSrandom(2)==1?GENDER_MALE:GENDER_FEMALE);
+            char dstr[200],dstr2[200];
+            char dg = (LCSrandom(2) == 1)?GENDER_MALE:GENDER_FEMALE;
             generate_name(dstr,dstr2,dg);
             strcat(story,dstr);
             strcat(story," ");
@@ -562,7 +564,7 @@ void constructeventstory(char *story,short view,char positive)
             //6->11,10->15,14->19,18->23
             strcat(story,6+(schtype*4)+LCSrandom(6)); //generate an age that would roughly correspond to the schtype
             strcat(story, ", used a variety of guns to ");
-            if(law[LAW_FREESPEECH]==-2)strcat(story,"[scare]");
+            if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"[scare]");
             else strcat(story,"mow down");
             strcat(story," more than a dozen classmates and two teachers at ");
             char jstr[200];
@@ -582,17 +584,17 @@ void constructeventstory(char *story,short view,char positive)
             else strcat(story,"university ");
             strcat(story, " while classes were in session, then systematically started breaking into ");
             strcat(story, "classrooms, ");
-            if(law[LAW_FREESPEECH]==-2) strcat(story,"[scaring]");
+            if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) strcat(story,"[scaring]");
             else strcat(story,"spraying bullets at");
             strcat(story," students and teachers inside.  ");
             strcat(story,"When other students tried to wrestle the weapons away from ");
             strcat(story,(dg==GENDER_FEMALE?"her":"him"));
             strcat(story,", they were ");
-            if(law[LAW_FREESPEECH]==-2) strcat(story,"[unfortunately harmed]");
+            if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) strcat(story,"[unfortunately harmed]");
             else strcat(story,"shot");
             strcat(story," as well.&r");
             strcat(story, "  When the police arrived, the student had already ");
-            if(law[LAW_FREESPEECH]==-2) strcat(story, "[hurt some people].  ");
+            if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) strcat(story, "[hurt some people].  ");
             else
             {
                strcat(story, "killed ");
@@ -600,7 +602,7 @@ void constructeventstory(char *story,short view,char positive)
                strcat(story, " and wounded dozens more.  ");
             }
             strcat(story,dstr);
-            if(law[LAW_FREESPEECH]==-2)strcat(story, " [feel deeply asleep]");
+            if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story, " [feel deeply asleep]");
             else strcat(story, " committed suicide");
             strcat(story," shortly afterwards.&r");
             strcat(story,"  Investigators are currently searching the student's belongings, and initial ");
@@ -643,7 +645,7 @@ void constructeventstory(char *story,short view,char positive)
             case 5: strcat(story,"Shank"); break;
             case 6: strcat(story,"Lockdown"); break;
             case 7:
-               if(law[LAW_FREESPEECH]==-2) strcat(story,"[Bum]lord");
+               if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) strcat(story,"[Bum]lord");
                else strcat(story,"Buttlord"); break;
             case 8:strcat(story,"Shower"); break;
             }
@@ -655,10 +657,10 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"with dark glares of bare lust, as football players might stare at a stupefied, drunken, helpless teenager.  ");
             strcat(story,"My shank's under the mattress.  Better to be brave and fight or chicken out and let them take it?  ");
             strcat(story,"Maybe lose an eye the one way, maybe catch ");
-            if(law[LAW_GAY]==-2)strcat(story,"GRIDS");// Gay Related Immunodeficiency Syndrome, an obsoleted/politically incorrect name for "AIDS".
+            if(law[LAW_GAY] == Alignment::ARCH_CONSERVATIVE)strcat(story,"GRIDS");// Gay Related Immunodeficiency Syndrome, an obsoleted/politically incorrect name for "AIDS".
             else strcat(story,"AIDS");
             strcat(story," the other.  A ");
-            if(law[LAW_FREESPEECH]==-2)strcat(story,"[difficult]");
+            if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"[difficult]");
             else strcat(story,"helluva");
             strcat(story," choice, and I would only have a few seconds before they made it for me");
             strcat(story,".\"");
@@ -696,7 +698,7 @@ void constructeventstory(char *story,short view,char positive)
             }
             strcat(story,".  Over twenty children in the past two years have gone missing, ");
             strcat(story,"only to turn up later");
-            if(law[LAW_FREESPEECH]==-2)
+            if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
                strcat(story," [in a better place]");
             else
             {
@@ -723,7 +725,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"&r");
             strcat(story,"   The district attorney's office has already repeatedly said it will be ");
             strcat(story,"seeking ");
-            if(law[LAW_DEATHPENALTY]==2)
+            if(law[LAW_DEATHPENALTY] == Alignment::ELITE_LIBERAL)
                strcat(story,"life imprisonment in this case.");
             else
                strcat(story,"the death penalty in this case.");
@@ -734,7 +736,7 @@ void constructeventstory(char *story,short view,char positive)
          {
             strcpy(story,cityname());
             strcat(story," - Researchers ");
-            if(law[LAW_ANIMALRESEARCH]==2)
+            if(law[LAW_ANIMALRESEARCH] == Alignment::ELITE_LIBERAL)
             {
                strcat(story,"from ");
                switch(LCSrandom(5))
@@ -753,7 +755,7 @@ void constructeventstory(char *story,short view,char positive)
             switch(LCSrandom(5))
             {
             case 0:
-               if(law[LAW_FREESPEECH]==-2)strcat(story,"Bum-Bum");
+               if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"Bum-Bum");
                else strcat(story,"Anal");break;
             case 1:strcat(story,"Colo");break;
             case 2:strcat(story,"Lacta");break;
@@ -773,7 +775,7 @@ void constructeventstory(char *story,short view,char positive)
             {
             case 0:strcat(story,"boosts intelligence in chimpanzees");break;
             case 1:
-               if(law[LAW_FREESPEECH]==-2)strcat(story,"[helps chimpanzees reproduce]");
+               if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"[helps chimpanzees reproduce]");
                else strcat(story,"corrects erectile dysfunction in chimpanzees");break;
             case 2:strcat(story,"allows chimpanzees to move blocks with their minds");break;
             case 3:strcat(story,"allows chimpanzees to fly short distances");break;
@@ -816,31 +818,31 @@ void constructeventstory(char *story,short view,char positive)
             switch(LCSrandom(9))
             {
             case 0:
-               if(law[LAW_FREESPEECH]==-2)strcat(story,"[land] planes [on apartment buildings]");
+               if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"[land] planes [on apartment buildings]");
                else strcat(story,"fly planes into skyscrapers");break;
             case 1:
-               if(law[LAW_FREESPEECH]==-2)strcat(story,"[put] fertilizer [on plants] at a federal building");
+               if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"[put] fertilizer [on plants] at a federal building");
                else strcat(story,"detonate a fertilizer bomb at a federal building");break;
             case 2:
-               if(law[LAW_FREESPEECH]==-2)strcat(story,"[show up uninvited on] a warship");
+               if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"[show up uninvited on] a warship");
                else strcat(story,"ram a motorboat loaded with explosives into a warship");break;
             case 3:
-               if(law[LAW_FREESPEECH]==-2)strcat(story,"[give children owies and boo-boos]");
+               if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"[give children owies and boo-boos]");
                else strcat(story,"detonate explosives on a school bus");break;
             case 4:
-               if(law[LAW_FREESPEECH]==-2)strcat(story,"[cause a traffic jam on] a major bridge");
+               if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"[cause a traffic jam on] a major bridge");
                else strcat(story,"blow out a section of a major bridge");break;
             case 5:
-               if(law[LAW_FREESPEECH]==-2)strcat(story,"[take] the president [on vacation]");
+               if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"[take] the president [on vacation]");
                else strcat(story,"kidnap the president");break;
             case 6:
-               if(law[LAW_FREESPEECH]==-2)strcat(story,"[hurt] the president");
+               if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"[hurt] the president");
                else strcat(story,"assassinate the president");break;
             case 7:
-               if(law[LAW_FREESPEECH]==-2)strcat(story,"[vandalize] the Capitol Building");
+               if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"[vandalize] the Capitol Building");
                else strcat(story,"destroy the Capitol Building");break;
             case 8:
-               if(law[LAW_FREESPEECH]==-2)strcat(story,"detonate [fireworks] in New York");
+               if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"detonate [fireworks] in New York");
                else strcat(story,"detonate a nuclear bomb in New York");break;
             }
             strcat(story,".  However, intelligence garnered from deep within the mysterious ");
@@ -928,7 +930,7 @@ void constructeventstory(char *story,short view,char positive)
             case 3:strcat(story,"gal having a ruptured intestine");break;
             }
             strcat(story," is just a load of ");
-            if(law[LAW_FREESPEECH]==-2) switch(LCSrandom(5))
+            if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) switch(LCSrandom(5))
             {
             case 0:strcat(story,"hooey");break;
             case 1:strcat(story,"poppycock");break;
@@ -963,7 +965,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story," was overturned by a federal judge yesterday.  ");
             strcat(story,"Justice ");
             char jstr[200],jstr2[200];
-            char gn=(LCSrandom(2)==1?GENDER_MALE:GENDER_FEMALE);
+            char gn = (LCSrandom(2) == 1)?GENDER_MALE:GENDER_FEMALE;
             generate_name(jstr,jstr2,gn);
             strcat(story,jstr);
             strcat(story," ");
@@ -1183,41 +1185,54 @@ void constructeventstory(char *story,short view,char positive)
             switch(LCSrandom(5))
             {
             case 0:
-               if(law[LAW_FREESPEECH]==-2)strcat(story,"[had consensual intercourse in the missionary position]");
-               else if(law[LAW_FREESPEECH]==2)strcat(story,"fucked");
-               else strcat(story,"had intercourse");break;
+               if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
+                 strcat(story,"[had consensual intercourse in the missionary position]");
+               else if (law[LAW_FREESPEECH] == Alignment::ELITE_LIBERAL)
+                 strcat(story,"fucked");
+               else
+                 strcat(story,"had intercourse");break;
             case 1:
-               if(law[LAW_FREESPEECH]==-2)strcat(story,"encouraged listeners to call in and [urinate]");
-               else if(law[LAW_FREESPEECH]==2)strcat(story,"encouraged listeners to call in and take a piss");
-               else strcat(story,"encouraged listeners to call in and relieve themselves");break;
+               if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
+                 strcat(story,"encouraged listeners to call in and [urinate]");
+               else if (law[LAW_FREESPEECH] == Alignment::ELITE_LIBERAL)
+                 strcat(story,"encouraged listeners to call in and take a piss");
+               else
+                 strcat(story,"encouraged listeners to call in and relieve themselves");break;
             case 2:
-               if(law[LAW_FREESPEECH]==2)strcat(story,"screamed \"fuck the police those goddamn motherfuckers.  I got a fucking ticket this morning and I'm fucking pissed as shit.\"");
-               else if(law[LAW_FREESPEECH]==-2)strcat(story,"screamed \"[darn] the police those [big dumb jerks]. I got a [stupid] ticket this morning and I'm [so angry].\"");
-               else strcat(story,"screamed \"f*ck the police those g*dd*mn m*th*f*ck*rs.  I got a f*cking ticket this morning and I'm f*cking p*ss*d as sh*t.\"");break;
+               if (law[LAW_FREESPEECH] == Alignment::ELITE_LIBERAL)
+                 strcat(story,"screamed \"fuck the police those goddamn motherfuckers.  I got a fucking ticket this morning and I'm fucking pissed as shit.\"");
+               else if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
+                 strcat(story,"screamed \"[darn] the police those [big dumb jerks]. I got a [stupid] ticket this morning and I'm [so angry].\"");
+               else
+                 strcat(story,"screamed \"f*ck the police those g*dd*mn m*th*f*ck*rs.  I got a f*cking ticket this morning and I'm f*cking p*ss*d as sh*t.\"");break;
             case 3:
-               if(law[LAW_FREESPEECH]==-2 && law[LAW_WOMEN]==-2)strcat(story,"[fed] from [an indecent] woman");
-               else if(law[LAW_FREESPEECH]!=-2 && law[LAW_WOMEN]==-2)strcat(story,"breastfed from an exposed woman");
-               else if(law[LAW_FREESPEECH]==-2 && law[LAW_WOMEN]!=-2)strcat(story,"[fed] from a [woman]");
-               else strcat(story,"breastfed from a lactating woman");break;
+               if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE && law[LAW_WOMEN] == Alignment::ARCH_CONSERVATIVE)
+                 strcat(story,"[fed] from [an indecent] woman");
+               else if (law[LAW_FREESPEECH] != Alignment::ARCH_CONSERVATIVE && law[LAW_WOMEN] == Alignment::ARCH_CONSERVATIVE)
+                 strcat(story,"breastfed from an exposed woman");
+               else if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE && law[LAW_WOMEN] != Alignment::ARCH_CONSERVATIVE)
+                 strcat(story,"[fed] from a [woman]");
+               else
+                 strcat(story,"breastfed from a lactating woman");break;
             case 4:
-               if(law[LAW_FREESPEECH]==-2)strcat(story,"[had fun]");
+               if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"[had fun]");
                else strcat(story,"masturbated");break;
             }
             strcat(story," on the air.  Although ");
             strcat(story,dstr2);
             strcat(story," later apologized, ");
             strcat(story,"the FCC received ");
-            if(law[LAW_FREESPEECH]==-2) strcat(story,"thousands of");
-            else if(law[LAW_FREESPEECH]==-1) strcat(story,"several hundred");
-            else if(law[LAW_FREESPEECH]==0) strcat(story,"hundreds of");
-            else if(law[LAW_FREESPEECH]==1) strcat(story,"dozens of");
+            if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) strcat(story,"thousands of");
+            else if(law[LAW_FREESPEECH] == Alignment::CONSERVATIVE) strcat(story,"several hundred");
+            else if(law[LAW_FREESPEECH] == Alignment::MODERATE) strcat(story,"hundreds of");
+            else if(law[LAW_FREESPEECH] == Alignment::LIBERAL) strcat(story,"dozens of");
             else strcat(story,"some");
             strcat(story," complaints ");
             strcat(story,"from irate listeners ");
-            if(law[LAW_FREESPEECH]==-2) strcat(story,"across the nation. ");
-            else if(law[LAW_FREESPEECH]==-1) strcat(story,"from all over the state. ");
-            else if(law[LAW_FREESPEECH]==0) strcat(story,"within the county. ");
-            else if(law[LAW_FREESPEECH]==1) strcat(story,"in neighboring towns. ");
+            if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) strcat(story,"across the nation. ");
+            else if(law[LAW_FREESPEECH] == Alignment::CONSERVATIVE) strcat(story,"from all over the state. ");
+            else if(law[LAW_FREESPEECH] == Alignment::MODERATE) strcat(story,"within the county. ");
+            else if(law[LAW_FREESPEECH] == Alignment::LIBERAL) strcat(story,"in neighboring towns. ");
             else strcat(story,"within the town. ");
             strcat(story," A spokesperson for the FCC ");
             strcat(story,"stated that the incident is under investigation.");
@@ -1233,7 +1248,7 @@ void constructeventstory(char *story,short view,char positive)
             generate_long_name(jstr,jstr2,jstr3,jg1);
             generate_name(jstr4,jstr5,jg2);
             strcat(story," - In a surprising turn, a ");
-            if (law[LAW_FREESPEECH]==-2) strcat(story, "[hurting spree]"); else strcat(story,"mass shooting");
+            if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) strcat(story, "[hurting spree]"); else strcat(story,"mass shooting");
             strcat(story," was prevented by a bystander with a gun.");
             strcat(story," After ");
             strcat(story,jstr);
@@ -1260,7 +1275,7 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"  Initially, ");
             if(jg2==GENDER_FEMALE)
             {
-               if(LCSrandom(4)<law[LAW_WOMEN]+2) // 0% chance at law[LAW_WOMEN]==-2, 100% chance at law[LAW_WOMEN]==2
+               if(LCSrandom(4) < to_index(law[LAW_WOMEN])) // 0% chance at law[LAW_WOMEN] == Alignment::ARCH_CONSERVATIVE, 100% chance at law[LAW_WOMEN] == Alignment::ELITE_LIBERAL
                   strcpy(tg2,"Ms. ");
                else
                   strcpy(tg2,(LCSrandom(2)?"Mrs. ":"Miss "));
@@ -1271,13 +1286,13 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story," attempted to talk down the shooter, but as ");
             strcat(story,jstr2);
             strcat(story," became more agitated, the heroic citizen was forced to engage the shooter in a ");
-            if(law[LAW_FREESPEECH]==-2) strcat(story, "firefight, [putting the attacker to sleep] ");
+            if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) strcat(story, "firefight, [putting the attacker to sleep] ");
             else strcat(story,"firefight, killing the attacker ");
             strcat(story,"before ");
             strcat(story,(jg1==GENDER_FEMALE?"she ":"he "));
             strcat(story,"could hurt anyone else.&r");
             strcat(story,"  The spokesperson for the police department said, \"We'd have a yet another ");
-            if(law[LAW_FREESPEECH]==-2) strcat(story,"[hurting spree]");
+            if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE) strcat(story,"[hurting spree]");
             else strcat(story,"mass shooting");
             strcat(story," if not for ");
             strcat(story,tg2);
@@ -1294,14 +1309,14 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,jstr);
             strcat(story," Correctional Facility ended tragically yesterday with the ");
             strcat(story,"death of both the prison guard being held hostage and ");
-            char ggn=(LCSrandom(2)==1?GENDER_MALE:GENDER_FEMALE);
+            char ggn = (LCSrandom(2) == 1)?GENDER_MALE:GENDER_FEMALE;
             strcat(story,(ggn==GENDER_FEMALE?"her":"his"));
             strcat(story," captor.");
             strcat(story,"&r");
-            if(law[LAW_FREESPEECH]==-2)strcat(story,"   Two weeks ago, convicted [reproduction fiend] ");
+            if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"   Two weeks ago, convicted [reproduction fiend] ");
             else strcat(story,"   Two weeks ago, convicted rapist ");
             char dstr[200],dstr2[200];
-            char dgn=(LCSrandom(2)==1?GENDER_MALE:GENDER_FEMALE);
+            char dgn = (LCSrandom(2) == 1)?GENDER_MALE:GENDER_FEMALE;
             generate_name(dstr,dstr2,dgn);
             strcat(story,dstr);
             strcat(story," ");
@@ -1326,23 +1341,23 @@ void constructeventstory(char *story,short view,char positive)
             switch(LCSrandom(4))
             {
             case 0:
-               if(law[LAW_FREESPEECH]==2)strcat(story,"Ah, fuck this shit.  This punk bitch is fuckin' dead!");
-               else if(law[LAW_FREESPEECH]==-2)strcat(story,"Ah, [no way.]  This [police officer will be harmed!]");
+               if(law[LAW_FREESPEECH] == Alignment::ELITE_LIBERAL)strcat(story,"Ah, fuck this shit.  This punk bitch is fuckin' dead!");
+               else if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"Ah, [no way.]  This [police officer will be harmed!]");
                else strcat(story,"Ah, f*ck this sh*t.  This punk b*tch is f*ckin' dead!");
                break;
             case 1:
-               if(law[LAW_FREESPEECH]==2)strcat(story,"Fuck a muthafuckin' bull.  I'm killin' this pig shit.");
-               else if(law[LAW_FREESPEECH]==-2)strcat(story,"[Too late.]  [I am going to harm this police officer.]");
+               if(law[LAW_FREESPEECH] == Alignment::ELITE_LIBERAL)strcat(story,"Fuck a muthafuckin' bull.  I'm killin' this pig shit.");
+               else if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"[Too late.]  [I am going to harm this police officer.]");
                else strcat(story,"F*ck a m*th*f*ck*n' bull.  I'm killin' this pig sh*t.");
                break;
             case 2:
-               if(law[LAW_FREESPEECH]==2)strcat(story,"Why the fuck am I talkin' to you?  I'd rather kill this pig.");
-               else if(law[LAW_FREESPEECH]==-2)strcat(story,"Why [am I] talkin' to you?  I'd rather [harm this police officer.]");
+               if(law[LAW_FREESPEECH] == Alignment::ELITE_LIBERAL)strcat(story,"Why the fuck am I talkin' to you?  I'd rather kill this pig.");
+               else if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"Why [am I] talkin' to you?  I'd rather [harm this police officer.]");
                else strcat(story,"Why the f*ck am I talkin' to you?  I'd rather kill this pig.");
                break;
              case 3:
-               if(law[LAW_FREESPEECH]==2)strcat(story,"Imma kill all you bitches, startin' with this mothafucker here.");
-               else if(law[LAW_FREESPEECH]==-2)strcat(story,"[I will harm all police officers], startin' with this [one] here.");
+               if(law[LAW_FREESPEECH] == Alignment::ELITE_LIBERAL)strcat(story,"Imma kill all you bitches, startin' with this mothafucker here.");
+               else if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"[I will harm all police officers], startin' with this [one] here.");
                else strcat(story,"Imma kill all you b*tches, startin' with this m*th*f*ck*r here.");
                break;
            }
@@ -1351,8 +1366,8 @@ void constructeventstory(char *story,short view,char positive)
             strcat(story,"the hostage, but ");
             strcat(story,dstr2);
             strcat(story," had already ");
-            if(law[LAW_FREESPEECH]==-2)strcat(story,"[harmed] the guard");
-            else if(law[LAW_FREESPEECH]==-1)strcat(story,"killed the guard");
+            if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"[harmed] the guard");
+            else if(law[LAW_FREESPEECH] == Alignment::CONSERVATIVE)strcat(story,"killed the guard");
             else switch(LCSrandom(15))
             {
             case 0:strcat(story,"slit the guard's throat with a shank");break;
@@ -1381,7 +1396,7 @@ void constructeventstory(char *story,short view,char positive)
                     strcat(story," altar");break;
             }
             strcat(story,".  The prisoner was ");
-            if(law[LAW_FREESPEECH]==-2)strcat(story,"[also harmed]");
+            if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)strcat(story,"[also harmed]");
             else strcat(story,"beaten to death");
             strcat(story," while \"resisting capture\", according to a prison spokesperson.");
             strcat(story,"&r");
@@ -1534,8 +1549,12 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             switch(LCSrandom(10))
             {
                case 0:
-                  if(law[LAW_FREESPEECH]==-2&&law[LAW_WOMEN]!=-2)strcat(str,"regularly visits [working women].");
-                  else if(law[LAW_FREESPEECH]==-2&&law[LAW_WOMEN]==-2)strcat(str,"regularly [donates to sperm banks].");
+                  if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE
+                      && law[LAW_WOMEN] != Alignment::ARCH_CONSERVATIVE)
+                    strcat(str,"regularly visits [working women].");
+                  else if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE
+                          && law[LAW_WOMEN] == Alignment::ARCH_CONSERVATIVE)
+                    strcat(str,"regularly [donates to sperm banks].");
                   else strcat(str,"regularly visits prostitutes.");
                   break;
                case 1:
@@ -1652,7 +1671,7 @@ void displaymajoreventstory(newsstoryst& ns,char* story,short* storyx_s,short* s
             displaynewsstory(story,storyx_s,storyx_e,13);
             break;
          case VIEW_POLICEBEHAVIOR:
-            if(law[LAW_FREESPEECH]==-2)displaycenterednewsfont("[JERKS]",5);
+            if(law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)displaycenterednewsfont("[JERKS]",5);
             else displaycenterednewsfont("BASTARDS",5);
             displaynewspicture(PICTURE_TERRORISTS,13);
             break;

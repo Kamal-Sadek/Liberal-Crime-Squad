@@ -1,23 +1,28 @@
 /*
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
+/*
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
 #include <externs.h>
 
 // Macro dumps interrogation data to screen for debug
@@ -528,7 +533,7 @@ void tendhostage(Creature *cr,char &clearformess)
                else
                {
                   addstr(doctor->name, gamelog);
-                  if(law[LAW_FREESPEECH]==-2)
+                  if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
                      addstr(" has a panic attack and [makes a stinky].", gamelog);
                   else
                   {
@@ -1548,12 +1553,13 @@ void tendhostage(Creature *cr,char &clearformess)
       }
    }
 
-   if(cr->align==1||!cr->alive) for(int p=0;p<len(pool);p++)
-   {
-      if(!pool[p]->alive) continue;
-      if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING&&pool[p]->activity.arg==cr->id)
-         pool[p]->activity.type=ACTIVITY_NONE;
-   }
+   if (cr->align==Alignment::LIBERAL || !cr->alive)
+     for(int p=0;p<len(pool);p++)
+     {
+        if(!pool[p]->alive) continue;
+        if(pool[p]->activity.type==ACTIVITY_HOSTAGETENDING&&pool[p]->activity.arg==cr->id)
+           pool[p]->activity.type=ACTIVITY_NONE;
+     }
 
    gamelog.nextMessage();
 

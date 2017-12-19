@@ -1,43 +1,103 @@
+/**
+ * Implementation of the Weapon class.
+ */
+/*
+ * Copyright 2010, 2013 Carlos Gustavos  <blomkvist>
+ * Copyright 2013, 2014 Rich McGrew (yetisyny)
+ * Copyright 2017 Stephen M. Webb  <stephen.webb@bregmasoft.ca>
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 #include <externs.h>
+#include <sstream>
+#include "tinyxml2.h"
 
-Weapon::Weapon(const WeaponType& seed, int number) : Item(seed, number), ammo_(0)
+
+namespace
+{
+  const std::string WEAPON_XML_WEAPON_ELEMENT{"weapon"};
+  const std::string WEAPON_XML_CLIPTYPE_ELEMENT{"loaded_cliptype"};
+  const std::string WEAPON_XML_AMMO_ELEMENT{"ammo"};
+} // anonymous namespace
+
+
+Weapon::Weapon(WeaponType const& type, int number)
+: Item(type, number)
 { }
 
-Weapon::Weapon(const std::string& inputXml) : Item(inputXml)
+
+Weapon::Weapon(const std::string& xml)
+: Item(xml)
 {
-   CMarkup xml;
-   xml.SetDoc(inputXml);
-   xml.FindElem();
-   xml.IntoElem();
-   while(xml.FindElem())
-   {
-      std::string tag=xml.GetTagName();
-      if(tag=="loaded_cliptype")
-         loaded_cliptype_=xml.GetData();
-      else if(tag=="ammo")
-         ammo_=atoi(xml.GetData());
-   }
+  tinyxml2::XMLDocument doc;
+  tinyxml2::XMLError err = doc.Parse(xml.c_str());
+  if (err != tinyxml2::XML_SUCCESS)
+  {
+    std::ostringstream ostr;
+    ostr << "error " << doc.ErrorID() << " parsing weapon XML"
+         << " at line " << doc.GetErrorLineNum() << ": "
+         << doc.GetErrorStr1() << " / " << doc.GetErrorStr2();
+    addstr(ostr.str(), xmllog);
+    getkey();
+    return;
+  }
+
+  auto toplevel = doc.FirstChildElement();
+  if ((toplevel != nullptr) && (toplevel->Name() == WEAPON_XML_WEAPON_ELEMENT))
+  {
+    for (auto element = toplevel->FirstChildElement(); element; element = element->NextSiblingElement())
+    {
+      std::string tag = element->Name();
+      if (tag == WEAPON_XML_CLIPTYPE_ELEMENT)
+         this->loaded_cliptype_ = element->GetText();
+      else if (tag == WEAPON_XML_AMMO_ELEMENT)
+         this->ammo_ = std::stoi(element->GetText());
+    }
+  }
 }
 
-string Weapon::showXml() const
+
+std::string Weapon::
+item_class() const
+{ return WEAPON_XML_WEAPON_ELEMENT; }
+
+
+std::string Weapon::
+xml_details() const
 {
-   CMarkup xml;
-   xml.AddElem("weapon");
-   xml.IntoElem();
-   addBaseValues(xml);
-   xml.AddElem("loaded_cliptype",loaded_cliptype_);
-   xml.AddElem("ammo",tostring(ammo_));
-   return xml.GetDoc();
+  return std::string{
+    "<" + WEAPON_XML_CLIPTYPE_ELEMENT + ">" + this->loaded_cliptype_ + "</" + WEAPON_XML_CLIPTYPE_ELEMENT + ">"
+    "<" + WEAPON_XML_AMMO_ELEMENT + ">" + std::to_string(this->ammo_) + "</" + WEAPON_XML_AMMO_ELEMENT + ">"
+  };
 }
 
-string Weapon::equip_title() const
+
+string Weapon::
+equip_title() const
 {
    string et=get_name();
-   if(ammo_>0) et+=" ("+tostring(ammo_)+")";
+   if(ammo_>0) et+=" ("+std::to_string(ammo_)+")";
    return et;
 }
 
-bool Weapon::reload(Clip& clip)
+
+bool Weapon::
+reload(Clip& clip)
 {
    if(acceptable_ammo(clip)&&!clip.empty())
    {
@@ -65,7 +125,9 @@ bool Weapon::reload(Clip& clip)
    return numtaken;
 }*/
 
-Weapon* Weapon::split(int number)
+
+Weapon* Weapon::
+split(int number)
 {
    if(number>number_) number=number_;
    Weapon* newi=clone();
@@ -74,7 +136,9 @@ Weapon* Weapon::split(int number)
    return newi;
 }
 
-bool Weapon::merge(Item& i)
+
+bool Weapon::
+merge(Item& i)
 {
    if(i.is_weapon()&&is_same_type(i))
    {
@@ -89,7 +153,9 @@ bool Weapon::merge(Item& i)
    return false;
 }
 
-bool Weapon::sort_compare_special(Item* other) const
+
+bool Weapon::
+sort_compare_special(Item* other) const
 {
    if(other)
    {
@@ -108,7 +174,8 @@ bool Weapon::sort_compare_special(Item* other) const
 }
 
 
-const attackst* Weapon::get_attack(bool force_ranged, bool force_melee, bool force_no_reload) const
+const attackst* Weapon::
+get_attack(bool force_ranged, bool force_melee, bool force_no_reload) const
 {
    const vector<attackst*>& attacks=weapontype[getweapontype(itemtypename())]->get_attacks();
    for(int i=0;i<len(attacks);i++)

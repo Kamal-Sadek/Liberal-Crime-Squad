@@ -4,8 +4,14 @@
 
 #ifndef CREATURE_H_INCLUDED
 #define CREATURE_H_INCLUDED
-#include "common.h"
 #include "augmentation.h"
+#include "common.h"
+#include <deque>
+#include "creature/attributes.h"
+#include "creature/gender.h"
+#include "creature/skill.h"
+#include "includes.h"
+#include "politics/alignment.h"
 
 #define CREATUREFLAG_WHEELCHAIR BIT1
 #define CREATUREFLAG_JUSTESCAPED BIT2
@@ -23,85 +29,6 @@
 
 // MAXATTRIBUTE is maximum value for both attributes & skills, set to 99 to limit it to 2 digits on screen
 #define MAXATTRIBUTE 99
-
-enum CreatureGender
-{
-   GENDER_NEUTRAL,
-   GENDER_MALE,
-   GENDER_FEMALE,
-
-   // Used to get some more specific names.
-   GENDER_WHITEMALEPATRIARCH,
-
-   // Used in creature creation.
-   GENDER_MALE_BIAS,
-   GENDER_FEMALE_BIAS,
-   GENDER_RANDOM
-};
-
-enum CheckDifficulty
-{
-   DIFFICULTY_AUTOMATIC    = 1,
-   DIFFICULTY_VERYEASY     = 3,
-   DIFFICULTY_EASY         = 5,
-   DIFFICULTY_AVERAGE      = 7,
-   DIFFICULTY_CHALLENGING  = 9,
-   DIFFICULTY_HARD         = 11,
-   DIFFICULTY_FORMIDABLE   = 13,
-   DIFFICULTY_HEROIC       = 15,
-   DIFFICULTY_SUPERHEROIC  = 17,
-   DIFFICULTY_IMPOSSIBLE   = 19
-};
-
-enum CreatureAttribute
-{
-   ATTRIBUTE_STRENGTH,
-   ATTRIBUTE_INTELLIGENCE,
-   ATTRIBUTE_WISDOM,
-   ATTRIBUTE_AGILITY,
-   ATTRIBUTE_HEALTH,
-   ATTRIBUTE_CHARISMA,
-   ATTRIBUTE_HEART,
-   ATTNUM
-};
-
-enum CreatureSkill
-{
-   PSEUDOSKILL_ESCAPEDRIVE = -2,
-   PSEUDOSKILL_DODGEDRIVE,
-   SKILL_ART = 0,
-   SKILL_AXE,
-   SKILL_BUSINESS,
-   SKILL_CLUB,
-   SKILL_COMPUTERS,
-   SKILL_DISGUISE,
-   SKILL_DODGE,
-   SKILL_DRIVING,
-   SKILL_FIRSTAID,
-   SKILL_HEAVYWEAPONS,
-   SKILL_KNIFE,
-   SKILL_LAW,
-   SKILL_HANDTOHAND, // actually this is called "Martial Arts"
-   SKILL_MUSIC,
-   SKILL_PERSUASION,
-   SKILL_PISTOL,
-   SKILL_PSYCHOLOGY,
-   SKILL_RELIGION,
-   SKILL_RIFLE,
-   SKILL_SCIENCE,
-   SKILL_SECURITY,
-   SKILL_SEDUCTION,
-   SKILL_SHOTGUN,
-   SKILL_SMG,
-   SKILL_STEALTH,
-   SKILL_STREETSENSE,
-   SKILL_SWORD,
-   SKILL_TAILORING,
-   SKILL_TEACHING,
-   SKILL_THROWING,
-   SKILL_WRITING,
-   SKILLNUM
-};
 
 enum CreatureTypes
 {
@@ -259,113 +186,63 @@ enum SpecialWounds
 #define WOUND_NASTYOFF BIT7
 #define WOUND_CLEANOFF BIT8
 
-class Skill
-{
-private:
-   int associated_attribute;
-   int skill;
-public:
-   Skill() { }
-   Skill(const std::string& inputXml);
-   string showXml() const;
-   int value;
-   int get_attribute() const { return associated_attribute; }
-   static std::string get_name(int skill_type);
-   static CreatureAttribute get_associated_attribute(int skill_type);
-   void set_type(int skill_type) { skill=skill_type,associated_attribute=get_associated_attribute(skill); }
-};
 
-class Attribute
-{
-private:
-   int attribute;
-public:
-   Attribute() { }
-   Attribute(const std::string& inputXml);
-   string showXml() const;
-   int value;
-   void set_type(int attribute_type) { attribute=attribute_type; }
-   static std::string get_name(int attribute_type);
-};
+class activityst;
+class Armor;
+class ArmorType;
+class Clip;
+class ClipType;
+class Item;
+class Weapon;
+class WeaponType;
+
 
 class Creature
 {
-private:
-   void copy(const Creature& org);
-   class Attribute attributes[ATTNUM];
-   class Skill skills[SKILLNUM];
-   class Augmentation augmentations[AUGMENTATIONNUM];
-   int skill_experience[SKILLNUM];
-   static int roll_check(int skill);
-   static Weapon& weapon_none();
-   static Armor& armor_none();
-   Weapon* weapon;
-   Armor* armor;
 public:
+   Creature()
+   { creatureinit(); }
+
+   Creature(const Creature& org)
+   { copy(org); }
+
+   explicit Creature(const std::string& inputXml);
+
+   ~Creature();
+
+   Creature&
+    operator=(const Creature& rhs);
+
+   void
+   creatureinit();
+
    void set_attribute(int attribute, int amount) { attributes[attribute].value=MIN(amount,MAXATTRIBUTE); }
    int get_attribute(int attribute, bool use_juice) const;
    void adjust_attribute(int attribute, int amount) { set_attribute(attribute,attributes[attribute].value+amount); }
    int attribute_roll(int attribute) const;
    bool attribute_check(int attribute, int difficulty) const;
 
-   void set_skill(int skill, int amount) { skills[skill].value=MIN(amount,MAXATTRIBUTE); }
-   int get_skill(int skill) const { return MIN(skills[skill].value,MAXATTRIBUTE); }
+   void set_skill(int skill, int amount) { skills[skill].value=MIN(amount,MAX_SKILL_LEVEL); }
+   int get_skill(int skill) const { return MIN(skills[skill].value,MAX_SKILL_LEVEL); }
    int skill_roll(int skill) const;
    bool skill_check(int skill, int difficulty) const;
    int get_weapon_skill() const;
 
    Augmentation& get_augmentation(int aug_num) { return augmentations[aug_num]; }
    
-   char name[CREATURE_NAMELEN];
-   char propername[CREATURE_NAMELEN];
-   char gender_conservative;
-   char gender_liberal;
-   int squadid;//REMEMBER, THIS IS ID NUMBER, NOT ARRAY INDEX
-   int age;
-   int birthday_month;
-   int birthday_day;
-   bool exists;
-   char align;
-   bool alive;
    void die();
-   short type;
-   std::string type_idname;
-   float infiltration;
-   char animalgloss;
-   short specialattack;
-   short clinic;
-   short dating;
-   short hiding;
-   short trainingtime;
-   short trainingsubject;
-   Creature* prisoner;
-   short sentence;
-   char confessions;
-   char deathpenalty;
-   int joindays;
-   int deathdays;
-   int id;
-   int hireid;
-   int meetings;
 
-   char forceinc;
-
-   void train(int trainedskill, int experience, int upto=MAXATTRIBUTE);
+   void train(int trainedskill, int experience, int upto=MAX_SKILL_LEVEL);
    void skill_up();
    int get_skill_ip(int skill) const { return skill_experience[skill]; }
    std::string get_type_name() const; // this function is implemented inline in creaturetype.h (can't do it here since CreatureType has to be defined after Creature)
 
    bool enemy() const;
 
-   int stunned;
-
-   deque<Weapon*> extra_throwing_weapons;
-   deque<Clip*> clips;
-   bool has_thrown_weapon;
    bool is_armed() const { return weapon; }
    bool is_naked() const { return !armor; }
-   Weapon& get_weapon() const { return is_armed()?*weapon:weapon_none(); }
-   Armor& get_armor() const { return is_naked()?armor_none():*armor; }
+   Weapon& get_weapon() const;
+   Armor& get_armor() const;
    bool will_do_ranged_attack(bool force_ranged,bool force_melee) const; //force_melee is likely unnecessary. -XML
    bool can_reload() const;
    bool will_reload(bool force_ranged, bool force_melee) const;
@@ -383,45 +260,12 @@ public:
    void give_armor(Armor& a, vector<Item*>* lootpile);
    void give_armor(const ArmorType& at, vector<Item*>* lootpile);
    void strip(vector<Item*>* lootpile);
-   bool weapon_is_concealed() const { return is_armed()&&get_armor().conceals_weapon(*weapon); }
+   bool weapon_is_concealed() const;
    string get_weapon_string(int subtype) const;
-   string get_armor_string(bool fullname) const { return get_armor().equip_title(fullname); }
-
-   int money;
-   short juice;
-   short income;
-
-   unsigned char wound[BODYPARTNUM];
-   short blood;
-   char special[SPECIALWOUNDNUM];
-
-   //int crimes_committed[LAWFLAGNUM];
-   int crimes_suspected[LAWFLAGNUM];
-   //int crimes_convicted[LAWFLAGNUM];
-
-   int heat;
-   int location;
-   int worklocation;
-
-   char cantbluff;
-
-   int base;
-   activityst activity;
-
-   int carid;
-   char is_driver;
-   int pref_carid;
-   char pref_is_driver;
-   short flag;
+   string get_armor_string(bool fullname) const;
 
    void stop_hauling_me();
 
-   void creatureinit();
-   Creature() { creatureinit(); }
-   Creature(const Creature& org) { copy(org); }
-   Creature& operator=(const Creature& rhs);
-   ~Creature();
-   explicit Creature(const std::string& inputXml);
    string showXml() const;
 
    bool is_active_liberal() const;
@@ -436,7 +280,6 @@ public:
    bool can_date(const Creature &a) const;
    /* rolls up a proper name for a creature */
    void namecreature();
-   bool dontname;
    /* can turn the tables on datenapping */
    bool kidnap_resistant() const;
    bool reports_to_police() const;
@@ -445,7 +288,75 @@ public:
    const char* heshe(bool capitalize=false) const;
    const char* hisher(bool capitalize=false) const;
    const char* himher(bool capitalize=false) const;
+
+public:
+   char name[CREATURE_NAMELEN];
+   char propername[CREATURE_NAMELEN];
+   char gender_conservative;
+   char gender_liberal;
+   int squadid;//REMEMBER, THIS IS ID NUMBER, NOT ARRAY INDEX
+   int age;
+   int birthday_month;
+   int birthday_day;
+   bool exists;
+   Alignment  align;
+   bool alive;
+   short type;
+   std::string type_idname;
+   float infiltration;
+   short animalgloss;
+   short specialattack;
+   short clinic;
+   short dating;
+   short hiding;
+   short trainingtime;
+   short trainingsubject;
+   Creature* prisoner;
+   short sentence;
+   short confessions;
+   short deathpenalty;
+   int joindays;
+   int deathdays;
+   int id;
+   int hireid;
+   int meetings;
+   short forceinc;
+   deque<Weapon*> extra_throwing_weapons;
+   deque<Clip*> clips;
+   bool has_thrown_weapon;
+   int stunned;
+   int money;
+   short juice;
+   short income;
+   unsigned char wound[BODYPARTNUM];
+   short blood;
+   char special[SPECIALWOUNDNUM];
+   //int crimes_committed[LAWFLAGNUM];
+   int crimes_suspected[LAWFLAGNUM];
+   //int crimes_convicted[LAWFLAGNUM];
+   int heat;
+   int location;
+   int worklocation;
+   char cantbluff;
+   int base;
+   activityst activity;
+   int carid;
+   char is_driver;
+   int pref_carid;
+   char pref_is_driver;
+   short flag;
+   bool dontname;
+
+private:
+   void copy(const Creature& org);
+   class Attribute attributes[ATTNUM];
+   class Skill skills[SKILLNUM];
+   class Augmentation augmentations[AUGMENTATIONNUM];
+   int skill_experience[SKILLNUM];
+   Weapon* weapon;
+   Armor*  armor;
 };
+
 
 enum uniqueCreatureData
 {
@@ -453,6 +364,7 @@ enum uniqueCreatureData
    UNIQUECREATURE_DEAD,
    UNIQUECREATURE_LIBERAL
 };
+
 
 class UniqueCreatures
 {
@@ -463,9 +375,9 @@ private:
    int Pres_ID;
 
 public:
-   int CEO_state;
-   int Pres_state;
-   UniqueCreatures() : CEO_ID(-1), Pres_ID(-1) { }
+   int CEO_state{UNIQUECREATURE_ALIVE};
+   int Pres_state{UNIQUECREATURE_ALIVE};
+   UniqueCreatures();
    explicit UniqueCreatures(const std::string& inputXml);
    string showXml() const;
 

@@ -1,0 +1,62 @@
+sudo: false
+dist: trusty
+language: generic
+
+git:
+  depth: 3
+
+branches:
+  only:
+  - master
+
+matrix:
+  include:
+    - compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env:
+        - BUILD_TARGET=linux
+        - COMPILER=g++-5
+    - compiler: clang
+      env: BUILD_TARGET=linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-4.0
+          packages:
+            - g++-5
+            - clang-4.0
+      env:
+        - BUILD_TARGET=linux
+        - COMPILER=clang++-4.0
+    - compiler: x86_64-w64-mingw
+      addons:
+        apt:
+          packages:
+            - g++-mingw-w64-x86-64 
+      env:
+        - BUILD_TARGET=win64
+
+before_script:
+  - mkdir build
+  - cd build
+  - if [ "$BUILD_TARGET" = "linux" ]; then
+      ../bootstrap CXX=$COMPILER --disable-silent-rules;
+    elif [ "$BUILD_TARGET" = "win64" ]; then
+      ../bootstrap --host=x86_64-w64-mingw32  --disable-silent-rules;
+    fi
+
+script:
+  - make -j2
+  - if [ "$BUILD_TARGET" = "linux" ]; then
+      make check;
+    fi
+
+notifications:
+  email:
+    - bregma@users.noreply.github.com

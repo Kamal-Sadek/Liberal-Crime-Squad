@@ -5,13 +5,10 @@
 
 extern string savefile_name;
 
-extern char homedir[MAX_PATH_SIZE];
 extern char artdir[MAX_PATH_SIZE];
 
 extern CursesMoviest movie;
-extern unsigned char bigletters[27][5][7][4];
 extern unsigned char newstops[6][80][5][4];
-extern unsigned char newspic[20][78][18][4];
 
 extern MusicClass music;
 
@@ -20,14 +17,14 @@ extern vector<configSiteMap *> sitemaps; // stores site map info read in from co
 extern bool multipleCityMode;
 extern int oldMapMode;
 extern unsigned long seed[RNG_SIZE];
-extern short law[LAWNUM];
+extern Alignment law[LAWNUM];
 
-extern short house[HOUSENUM];
-extern short senate[SENATENUM];
-extern short court[COURTNUM];
+extern Alignment house[HOUSENUM];
+extern Alignment senate[SENATENUM];
+extern Alignment court[COURTNUM];
 extern char courtname[COURTNUM][POLITICIAN_NAMELEN];
 
-extern signed char exec[EXECNUM];
+extern Alignment exec[EXECNUM];
 extern short execterm;
 extern char execname[EXECNUM][POLITICIAN_NAMELEN];
 extern short presparty;
@@ -74,7 +71,7 @@ extern short interface_pgdn;
 
 extern bool autosave;
 
-#ifdef WIN32
+#ifdef _WIN32
 extern bool fixcleartype;
 #endif
 
@@ -157,7 +154,6 @@ extern vector<ClipType *> cliptype;
 extern vector<WeaponType *> weapontype;
 extern vector<ArmorType *> armortype;
 extern vector<LootType *> loottype;
-extern vector<CreatureType *> creaturetype;
 extern vector<AugmentType *> augmenttype;
 
 extern vector<VehicleType *> vehicletype;

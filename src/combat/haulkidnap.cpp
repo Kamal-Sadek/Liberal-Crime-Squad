@@ -1,31 +1,28 @@
 /*
-
-Copyright (c) 2002,2003,2004 by Tarn Adams                                            //
-                                                                                      //
-This file is part of Liberal Crime Squad.                                             //
-                                                                                    //
-    Liberal Crime Squad is free software; you can redistribute it and/or modify     //
-    it under the terms of the GNU General Public License as published by            //
-    the Free Software Foundation; either version 2 of the License, or               //
-    (at your option) any later version.                                             //
-                                                                                    //
-    Liberal Crime Squad is distributed in the hope that it will be useful,          //
-    but WITHOUT ANY WARRANTY; without even the implied warranty of                  //
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   See the                  //
-    GNU General Public License for more details.                                    //
-                                                                                    //
-    You should have received a copy of the GNU General Public License               //
-    along with Liberal Crime Squad; if not, write to the Free Software              //
-    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA   02111-1307   USA     //
-*/
+ * Copyright (c) 2002,2003,2004 by Tarn Adams
+ *
+ * This file is part of Liberal Crime Squad.
+ *
+ * Liberal Crime Squad is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
+ * 02110-1301, USA.
+ */
 
 /*
-        This file was created by Chris Johnson (grundee@users.sourceforge.net)
-        by copying code from game.cpp.
-        To see descriptions of files and functions, see the list at
-        the bottom of includes.h in the top src folder.
-*/
-
+ * This file was created by Chris Johnson (grundee@users.sourceforge.net)
+ * by copying code from game.cpp into monthly/endgame.cpp.
+ */
 //TODO: This file probably shouldn't have any nextMessage calls in it.
 //That will depend on the chase and fight code, I think...And the code that
 //handles the squad moving around the site. For now, this'll do. I must remember
@@ -81,10 +78,11 @@ void kidnapattempt()
    vector<int> target;
 
    for(int e=0;e<ENCMAX;e++)
-      if(encounter[e].exists&&encounter[e].alive&&encounter[e].align==-1&&
-        (encounter[e].animalgloss==ANIMALGLOSS_NONE||law[LAW_ANIMALRESEARCH]==2)&&
-       (!encounter[e].get_weapon().protects_against_kidnapping()||
-         encounter[e].blood<=20)&&encounter[e].animalgloss!=ANIMALGLOSS_TANK)
+      if (encounter[e].exists&&encounter[e].alive
+       && encounter[e].align == Alignment::CONSERVATIVE
+       && (encounter[e].animalgloss==ANIMALGLOSS_NONE || law[LAW_ANIMALRESEARCH] == Alignment::ELITE_LIBERAL)
+       && (!encounter[e].get_weapon().protects_against_kidnapping()
+        || encounter[e].blood<=20)&&encounter[e].animalgloss!=ANIMALGLOSS_TANK)
          target.push_back(e);
 
    if(len(target))
@@ -186,7 +184,9 @@ void releasehostage()
    char availslot[6]={0,0,0,0,0,0};
    for(int p=0;p<6;p++)
       if(activesquad->squad[p]!=NULL)
-         if(activesquad->squad[p]->alive&&activesquad->squad[p]->prisoner!=NULL&&activesquad->squad[p]->prisoner->align!=ALIGN_LIBERAL)
+         if (activesquad->squad[p]->alive
+          && activesquad->squad[p]->prisoner != NULL
+          && activesquad->squad[p]->prisoner->align != Alignment::LIBERAL)
             available++,availslot[p]=1;
 
    if(!available)
@@ -317,8 +317,10 @@ bool kidnap(Creature &a,Creature &t,bool &amateur)
       move(17,1);
       addstr("and says, ", gamelog);
       set_color(COLOR_GREEN,COLOR_BLACK,1);
-      if(law[LAW_FREESPEECH]==-2)addstr("\"[Please], be cool.\"", gamelog);
-      else addstr("\"Bitch, be cool.\"", gamelog);
+      if (law[LAW_FREESPEECH] == Alignment::ARCH_CONSERVATIVE)
+        addstr("\"[Please], be cool.\"", gamelog);
+      else
+        addstr("\"Bitch, be cool.\"", gamelog);
 
       a.prisoner=new Creature;
       *a.prisoner=t;
