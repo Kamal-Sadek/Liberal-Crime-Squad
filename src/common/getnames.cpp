@@ -132,23 +132,38 @@ std::string getactivity(activityst &act)
    case ACTIVITY_CLINIC:
       return "Going to Free CLINIC";
    case ACTIVITY_STUDY_DEBATING:
+      return "Studying Public Policy";
    case ACTIVITY_STUDY_MARTIAL_ARTS:
+      return "Studying Martial Arts";
    case ACTIVITY_STUDY_DRIVING:
+      return "Studying Driving";
    case ACTIVITY_STUDY_PSYCHOLOGY:
+      return "Studying Psychology";
    case ACTIVITY_STUDY_FIRST_AID:
+      return "Studying First Aid";
    case ACTIVITY_STUDY_LAW:
+      return "Studying Criminal Law";
    case ACTIVITY_STUDY_DISGUISE:
+      return "Studying Theatre";
    case ACTIVITY_STUDY_SCIENCE:
+      return "Studying Science";
    case ACTIVITY_STUDY_BUSINESS:
+      return "Studying Economics";
    //case ACTIVITY_STUDY_COOKING:
    case ACTIVITY_STUDY_GYMNASTICS:
+      return "Studying Gymnastics";
    case ACTIVITY_STUDY_ART:
+      return "Studying Art";
    case ACTIVITY_STUDY_MUSIC:
+      return "Studying Music";
    case ACTIVITY_STUDY_TEACHING:
+      return "Studying Teaching";
    case ACTIVITY_STUDY_WRITING:
+      return "Studying Writing";
    case ACTIVITY_STUDY_LOCKSMITHING:
+      return "Studying Locksmithing";
    case ACTIVITY_STUDY_COMPUTERS:
-      return "Attending Classes";
+      return "Studying Computers";
    case ACTIVITY_SLEEPER_LIBERAL:
       return "Promoting Liberalism";
    case ACTIVITY_SLEEPER_CONSERVATIVE:
